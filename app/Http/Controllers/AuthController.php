@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -25,11 +26,15 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (!$token = auth()->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+        $user = Auth::user();
+        $userProfile = $user->profile()->get();
+        $returnData['auth'] = $this->respondWithToken($token);
+        $returnData['user'] = $userProfile;
 
-        return $this->respondWithToken($token);
+        return $returnData;
     }
 
     /**
@@ -50,7 +55,6 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-
         return response()->json(['message' => 'Successfully logged out']);
     }
 

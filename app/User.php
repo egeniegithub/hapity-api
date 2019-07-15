@@ -49,6 +49,10 @@ class User extends Authenticatable implements JWTSubject
         return null !== $this->roles()->where('role_id', $role_id)->first();
     }
 
+    public function profile()
+    {
+        return $this->belongsTo('App\UserProfile', 'id', 'user_id');
+    }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
