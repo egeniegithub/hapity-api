@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
+use App\Broadcast;
+
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -23,6 +26,10 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // $data = Broadcast::find(1);
+        // echo "<pre>";
+        // print_r($data);
+        // exit;
         return view('home');
     }
 }

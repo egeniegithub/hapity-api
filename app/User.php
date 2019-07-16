@@ -54,9 +54,9 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo('App\UserProfile', 'id', 'user_id');
     }
 
-    public function broadcast()
+    public function broadcasts()
     {
-        return $this->belongsToMany('App\Broadcast', 'id', 'user_id');
+        return $this->hasMany('App\Broadcast', 'id', 'user_id');
     }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
