@@ -31,13 +31,17 @@ class Facebook extends Controller
             return response()->json($messages);
         }
 
-        $User = User::with("social")->find(1);
+        $input = $request->all();
 
-        if ($User['social']->isEmpty()) {
-            return 'empty';
+        $checkUserExist = User::with("social")->find(1);
+        
+        if ($checkUserExist['social']->isEmpty()) {
+            // user not register to facebook social account
+            $user = new User();
+            $user->email = $input['email'];
         }
         else {
-            return 'fill';
+           
         }
 
 
