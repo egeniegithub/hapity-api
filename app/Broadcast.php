@@ -13,4 +13,8 @@ class Broadcast extends Model
     {
         return $this->belongsTo('App\User', 'user_id');
     }
+
+    public function likes() {
+        return $this->belongsToMany('App\User', 'broadcast_likes', 'broadcast_id', 'user_id');
+    }
 }

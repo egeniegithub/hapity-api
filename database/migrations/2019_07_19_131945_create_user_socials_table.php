@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateBroadcastCommentsTable extends Migration
+class CreateUserSocialsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,12 @@ class CreateBroadcastCommentsTable extends Migration
      */
     public function up()
     {
-        Schema::create('broadcast_comments', function (Blueprint $table) {
+        Schema::create('user_socials', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('broadcast_id');
             $table->bigInteger('user_id');
-            $table->string('comment', 512);
-            $table->enum('comment_status', ['read', 'unread'])->default('unread');
+            $table->bigInteger('social_id');
+            $table->string('platform', 512);
+            $table->text('signup_request');
             $table->timestamps();
         });
     }
@@ -30,6 +30,6 @@ class CreateBroadcastCommentsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('broadcast_comments');
+        Schema::dropIfExists('user_socials');
     }
 }

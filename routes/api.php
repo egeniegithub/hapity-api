@@ -21,4 +21,5 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+    Route::post('facebook_login', 'Facebook@facebook_login');
 });
