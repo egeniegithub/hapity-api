@@ -26,15 +26,27 @@ class AuthController extends Controller
     {
         $credentials = request(['username', 'password']);
 
-        if (!$token = auth()->attempt($credentials)) {
+        if(filter_var($credentials['username'], FILTER_VALIDATE_EMAIL)) {
+            $loginRequest['email'] = $credentials['username'];
+            $loginRequest['password'] = $credentials['password'];
+
+        } else {
+            $loginRequest = $credentials;
+        }
+        
+        if ($token = auth()->attempt($loginRequest)) {
+            $user = Auth::user();
+            $userProfile = $user->profile()->get();
+            $returnData['auth'] = $this->respondWithToken($token);
+            $returnData['user'] = $userProfile;
+    
+            return $returnData;
+        }
+        else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
-        $user = Auth::user();
-        $userProfile = $user->profile()->get();
-        $returnData['auth'] = $this->respondWithToken($token);
-        $returnData['user'] = $userProfile;
 
-        return $returnData;
+        
     }
 
     /**

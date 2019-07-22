@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -27,6 +28,8 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/home';
 
+    protected $username;
+
     /**
      * Create a new controller instance.
      *
@@ -36,9 +39,42 @@ class LoginController extends Controller
     {
         $this->middleware('guest')->except('logout');
     }
+    
 
-    public function username()
+    public function login(Request $request)
     {
-        return 'username';
-    }
+        echo '<pre>';
+        print_r($_POST);
+       
+        $credentials = request(['username', 'password']);
+
+        $rules = [
+            'username'    => 'required',
+            'password' => 'required',
+        ];
+        $messages = [
+            '*.required' => 'This is required field.'
+        ];
+        $this->validate($request, $rules, $messages);
+
+        if(filter_var($credentials['username'], FILTER_VALIDATE_EMAIL)) {
+            $loginRequest['email'] = $credentials['username'];
+            $loginRequest['password'] = $credentials['password'];
+
+        } else {
+            $loginRequest = $credentials;
+        }
+        
+        if (auth()->attempt($loginRequest)) {
+            
+            return redirect()->intended($this->redirectPath());
+        }
+
+        return redirect()->back()
+            ->withInput()
+            ->withErrors([
+                'username' => 'These credentials do not match our records.',
+            ]);
+    } 
+
 }

@@ -17,6 +17,7 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
@@ -76,5 +77,7 @@
             @yield('content')
         </main>
     </div>
+
+    <script src="{{ url('assets/js/bootstrap.min.js')}}"></script>
 </body>
 </html>
