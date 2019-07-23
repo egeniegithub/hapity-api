@@ -14,6 +14,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
+        auth()->setDefaultDriver('api');
         $this->middleware('auth:api', ['except' => ['login']]);
     }
 

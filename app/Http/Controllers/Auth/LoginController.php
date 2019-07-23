@@ -43,9 +43,6 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        echo '<pre>';
-        print_r($_POST);
-       
         $credentials = request(['username', 'password']);
 
         $rules = [
