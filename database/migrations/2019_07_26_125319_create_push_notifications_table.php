@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCommentStatusesTable extends Migration
+class CreatePushNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateCommentStatusesTable extends Migration
      */
     public function up()
     {
-        Schema::create('comment_status', function (Blueprint $table) {
+        Schema::create('push_notifications', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('comment_id');
-            $table->bigInteger('user_id');
-            $table->enum('comment_status', ['read', 'unread'])->default('unread');
+            $table->bigInteger('uid')->nullable();
+            $table->longText('token')->nullable();
+            $table->longText('type')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -28,6 +29,6 @@ class CreateCommentStatusesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comment_status');
+        Schema::dropIfExists('push_notifications');
     }
 }

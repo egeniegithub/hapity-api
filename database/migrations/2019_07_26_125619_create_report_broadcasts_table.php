@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUserSocialsTable extends Migration
+class CreateReportBroadcastsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateUserSocialsTable extends Migration
      */
     public function up()
     {
-        Schema::create('user_socials', function (Blueprint $table) {
+        Schema::create('report_broadcasts', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('user_id');
-            $table->bigInteger('social_id');
-            $table->string('email', 512);
-            $table->string('platform', 512);
-            $table->text('signup_request')->nullable();
+            $table->bigInteger('reporter_user_id')->nullable();
+            $table->bigInteger('broadcast_id')->nullable();
+            $table->enum('status', ['pending', 'active', 'inActive'])->default('pending');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateUserSocialsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_socials');
+        Schema::dropIfExists('report_broadcasts');
     }
 }
