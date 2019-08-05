@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -13,6 +14,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
+        auth()->setDefaultDriver('api');
         $this->middleware('auth:api', ['except' => ['login']]);
     }
 
@@ -23,13 +25,29 @@ class AuthController extends Controller
      */
     public function login()
     {
-        $credentials = request(['email', 'password']);
+        $credentials = request(['username', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if(filter_var($credentials['username'], FILTER_VALIDATE_EMAIL)) {
+            $loginRequest['email'] = $credentials['username'];
+            $loginRequest['password'] = $credentials['password'];
+
+        } else {
+            $loginRequest = $credentials;
+        }
+        
+        if ($token = auth()->attempt($loginRequest)) {
+            $user = Auth::user();
+            $userProfile = $user->profile()->get();
+            $returnData['auth'] = $this->respondWithToken($token);
+            $returnData['user'] = $userProfile;
+    
+            return $returnData;
+        }
+        else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        
     }
 
     /**
@@ -50,7 +68,6 @@ class AuthController extends Controller
     public function logout()
     {
         auth()->logout();
-
         return response()->json(['message' => 'Successfully logged out']);
     }
 

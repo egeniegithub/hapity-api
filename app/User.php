@@ -19,7 +19,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'name', 'email', 'password', 'username',
     ];
 
     /**
@@ -49,6 +49,23 @@ class User extends Authenticatable implements JWTSubject
         return null !== $this->roles()->where('role_id', $role_id)->first();
     }
 
+    public function profile()
+    {
+        return $this->belongsTo('App\UserProfile', 'id', 'user_id');
+    }
+
+    public function social() {
+        return $this->hasMany('App\UserSocial');
+    }
+
+    public function broadcasts()
+    {
+        return $this->hasMany('App\Broadcast', 'id', 'user_id');
+    }
+
+    public function likes() {
+        return $this->belongsToMany('App\Broadcast', 'broadcast_likes', 'user_id', 'broadcast_id');
+    }
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.
      *
