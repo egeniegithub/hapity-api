@@ -51,7 +51,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function profile()
     {
-        return $this->belongsTo('App\UserProfile', 'id', 'user_id');
+        return $this->hasOne('App\UserProfile', 'user_id');
     }
 
     public function social() {

@@ -15,7 +15,7 @@ class BroadcastController extends Controller
     public function __construct()
     {
         auth()->setDefaultDriver('api');
-        $this->middleware('auth:api', ['except' => ['uploadbroadcast', 'editBroadcast', 'deleteBroadcast', 'getAllBroadcastsforUser']]);
+        $this->middleware('auth:api', ['except' => ['uploadbroadcast', 'editBroadcast', 'deleteBroadcast']]);
     }
 
     function uploadbroadcast (Request $request) {
@@ -100,12 +100,12 @@ class BroadcastController extends Controller
         $input = $request->all();
 
         $rules = array(
-            'token' => 'required',
+//            'token' => 'required',
             'user_id' => 'required',
         );
         $messages = array(
-            'token.required' => 'Token is required.',
-            'user_id.required' => 'Useer ID is required.',
+//            'token.required' => 'Token is required.',
+            'user_id.required' => 'User ID is required.',
         );
 
         $validator=Validator::make($request->all(),$rules,$messages);
@@ -119,7 +119,6 @@ class BroadcastController extends Controller
 
         $response['status'] = "success";
         $response['broadcast'] = [];
-        $broadcast = array();
 
         foreach ($allUserBroadcast as $key => $broadcast) {
             $profilePicToGet = $broadcast['user']->profile()->first();
