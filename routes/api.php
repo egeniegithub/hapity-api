@@ -18,8 +18,11 @@ Route::group([
 ], function ($router) {
 
     Route::post('login', 'AuthController@login');
+    Route::post('register', 'AuthController@register');
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
+    Route::post('get_user_profile', 'AuthController@getUserProfile');
+    Route::post('edit_user_profile', 'AuthController@editUserProfile');
     Route::post('me', 'AuthController@me');
     Route::post('facebook_login', 'FacebookController@facebook_login');
     Route::post('twitter_login', 'TwitterController@twitter_login');

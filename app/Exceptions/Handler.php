@@ -46,7 +46,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        
+
         $response['status'] = "Error";
         $response['errorCode'] = $exception->getCode();
         $response['errorMessage'] = $exception->getMessage();
