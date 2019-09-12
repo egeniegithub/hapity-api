@@ -193,7 +193,7 @@ class AuthController extends Controller
     {
         $user_id        = $request->input('user_id');
         $rules = array(
-            'email'  => 'email|unique:users,email,'.$user_id,
+            'email'  => 'unique:users,email,'.$user_id,
             'username' => 'unique:users,username,'.$user_id
         );
         $validator = Validator::make(Input::all(), $rules);
@@ -212,8 +212,12 @@ class AuthController extends Controller
 
         //  Saving User Data
         $user = User::find(Auth::id());
-        $user->username  = $username;
-        $user->email     = $email;
+        if(!empty($username)) {
+            $user->username = $username;
+        }
+        if(!empty($email)) {
+            $user->email = $email;
+        }
         if(!empty($password)) {
             $user->password = bcrypt($password);
         }
@@ -232,15 +236,17 @@ class AuthController extends Controller
             \File::put(storage_path('app\public'). "\'" . $imageName, base64_decode($image));
             $update_array['profile_picture'] = $imageName;
         }
-        $update_array['email'] = $email;
+        if(!empty($email)) {
+            $update_array['email'] = $email;
+        }
         $user->profile()->update($update_array);
-        $profile = UserProfile::select('profile_picture','auth_key')->where(['user_id' => Auth::id()])->get()->toArray();
+        $profile = User::with('profile')->where('id', Auth::id())->first()->toArray();
         $user_info = array();
-        $user_info['user_id'] = $user->id;
-        $user_info['profile_picture'] = asset("storage/'".$profile[0]['profile_picture']);
-        $user_info['email'] = $user->email;
-        $user_info['username'] = $user->username;
-        $user_info['auth_key'] = $profile[0]['auth_key'];
+        $user_info['user_id'] = $profile['id'];
+        $user_info['profile_picture'] = asset("storage/'".$profile['profile']['profile_picture']);
+        $user_info['email'] = $profile['email'];
+        $user_info['username'] = $profile['username'];
+        $user_info['auth_key'] = $profile['profile']['auth_key'];
 
         $returnData['status'] = 'success';
         $returnData['profile_info'] = $user_info;
