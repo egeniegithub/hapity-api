@@ -29,5 +29,7 @@ Route::group([
     Route::post('uploadbroadcast', 'BroadcastController@uploadBroadcast');
     Route::post('editbroadcast', 'BroadcastController@editBroadcast');
     Route::post('deletebroadcast', 'BroadcastController@deleteBroadcast');
+    Route::post('update_timestamp_broadcast', 'BroadcastController@updateTimestampBroadcast');
     Route::post('getallbroadcastsforuser', 'BroadcastController@getAllBroadcastsforUser');
+    Route::post('startbroadcast', 'BroadcastController@startBroadcastz');
 });
