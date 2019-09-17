@@ -60,7 +60,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function broadcasts()
     {
-        return $this->hasMany('App\Broadcast', 'id', 'user_id');
+        return $this->hasMany('App\Broadcast', 'user_id');
     }
 
     public function likes() {
