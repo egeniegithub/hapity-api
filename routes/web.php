@@ -18,4 +18,4 @@ Route::get('/', function () {
 Auth::routes(['register' => false]);
 
 Route::get('/home', 'HomeController@index')->name('home');
-Route::get('/broadcasts/view/{id}', 'BroadcastsController@view')->name('view_broadcast');
+Route::get('/broadcasts/view/{id}', 'Web/BroadcastsController@view')->name('view_broadcast');
