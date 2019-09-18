@@ -49,7 +49,7 @@ class FacebookController extends Controller
         ->where('email', $input['email'])
         ->first();
 
-        if(empty($checkUserSocialAccountExist->toArray())){
+        if(empty($checkUserSocialAccountExist)){
             // User Not Register
             $User = new User();
             $User->email = $input['email'];
