@@ -26,10 +26,10 @@ Route::group([
     Route::post('me', 'AuthController@me');
     Route::post('facebook_login', 'FacebookController@facebook_login');
     Route::post('twitter_login', 'TwitterController@twitter_login');
-    Route::post('uploadbroadcast', 'BroadcastController@uploadBroadcast');
-    Route::post('editbroadcast', 'BroadcastController@editBroadcast');
-    Route::post('deletebroadcast', 'BroadcastController@deleteBroadcast');
-    Route::post('update_timestamp_broadcast', 'BroadcastController@updateTimestampBroadcast');
-    Route::post('getallbroadcastsforuser', 'BroadcastController@getAllBroadcastsforUser');
-    Route::post('startbroadcast', 'BroadcastController@startBroadcastz');
+    Route::post('uploadbroadcast', 'BroadcastControllers@uploadBroadcast');
+    Route::post('editbroadcast', 'BroadcastControllers@editBroadcast');
+    Route::post('deletebroadcast', 'BroadcastControllers@deleteBroadcast');
+    Route::post('update_timestamp_broadcast', 'BroadcastControllers@updateTimestampBroadcast');
+    Route::post('getallbroadcastsforuser', 'BroadcastControllers@getAllBroadcastsforUser');
+    Route::post('startbroadcast', 'BroadcastControllers@startBroadcastz');
 });

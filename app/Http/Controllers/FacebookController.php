@@ -79,7 +79,7 @@ class FacebookController extends Controller
             $response['user_info']['login_type'] = $UserSocial->platform;
             $response['user_info']['social_id'] = $UserSocial->social_id;
             $response['user_info']['join_date'] = date('Y-m-d',strtotime($User->created_at));
-            $response['user_info']['auth_key'] = $User->auth_key;
+            $response['user_info']['auth_key'] = $UserProfile->auth_key;
             $response['user_info']['token'] = $token;
 
         } else if(!empty($checkUserSocialAccountExist['social']->toArray()) && $checkUserSocialAccountExist['social'][0]['platform'] == "facebook"){
