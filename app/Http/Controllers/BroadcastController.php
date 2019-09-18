@@ -104,7 +104,7 @@ class BroadcastController extends Controller
         $broadcast->status = 'offline';
         $broadcast->video_name = $video_file->getClientOriginalName();
         $user->broadcasts()->save($broadcast);
-        $share_url = 'https://www.hapity.com/main/view_broadcast/' . $broadcast->id;
+        $share_url = route('broadcasts/view/'.$broadcast->id);
         $inserted_broadcast = Broadcast::find($broadcast->id);
         $inserted_broadcast->share_url = $share_url;
         $inserted_broadcast->save();
@@ -344,7 +344,7 @@ class BroadcastController extends Controller
         $broadcast->broadcast_image = $thumbnail_image;
         $broadcast->status = 'online';
         $user->broadcasts()->save($broadcast);
-        $share_url = 'https://www.hapity.com/main/view_broadcast/' . $broadcast->id;
+        $share_url = route('broadcasts/view/'.$broadcast->id);
         $inserted_broadcast = Broadcast::find($broadcast->id);
         $inserted_broadcast->share_url = $share_url;
         $inserted_broadcast->save();
