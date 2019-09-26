@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -17,7 +16,7 @@ class LoginController extends Controller
     | redirecting them to your home screen. The controller uses a trait
     | to conveniently provide its functionality to your applications.
     |
-    */
+     */
 
     use AuthenticatesUsers;
 
@@ -38,40 +37,29 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+
+        $this->username = $this->findUsername();
     }
-    
 
-    public function login(Request $request)
+    public function findUsername()
     {
-        $credentials = request(['username', 'password']);
+        $login = request()->input('login');
 
-        $rules = [
-            'username'    => 'required',
-            'password' => 'required',
-        ];
-        $messages = [
-            '*.required' => 'This is required field.'
-        ];
-        $this->validate($request, $rules, $messages);
+        $fieldType = filter_var($login, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
 
-        if(filter_var($credentials['username'], FILTER_VALIDATE_EMAIL)) {
-            $loginRequest['email'] = $credentials['username'];
-            $loginRequest['password'] = $credentials['password'];
+        request()->merge([$fieldType => $login]);
 
-        } else {
-            $loginRequest = $credentials;
-        }
-        
-        if (auth()->attempt($loginRequest)) {
-            
-            return redirect()->intended($this->redirectPath());
-        }
+        return $fieldType;
+    }
 
-        return redirect()->back()
-            ->withInput()
-            ->withErrors([
-                'username' => 'These credentials do not match our records.',
-            ]);
-    } 
+    /**
+     * Get username property.
+     *
+     * @return string
+     */
+    public function username()
+    {
+        return $this->username;
+    }
 
 }
