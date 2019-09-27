@@ -11,11 +11,12 @@
 |
  */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'Web\MainController@index')->name('home');
+// Route::get('/about', 'Web/MainController@about')->name('about');
+
+
+
 
 Auth::routes(['register' => false]);
-
 Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/broadcasts/view/{id}', 'Web/BroadcastsController@view')->name('view_broadcast');
