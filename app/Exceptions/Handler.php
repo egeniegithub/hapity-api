@@ -47,7 +47,7 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if (Request::wantsJson()) {
+        if (strpos(Request::url(), '/api/') !== false) {
 
             $response['status'] = "Error";
             $response['errorCode'] = $exception->getCode();

@@ -2,10 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
@@ -54,7 +53,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne('App\UserProfile', 'user_id');
     }
 
-    public function social() {
+    public function social()
+    {
         return $this->hasMany('App\UserSocial');
     }
 
@@ -63,7 +63,8 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany('App\Broadcast', 'user_id');
     }
 
-    public function likes() {
+    public function likes()
+    {
         return $this->belongsToMany('App\Broadcast', 'broadcast_likes', 'user_id', 'broadcast_id');
     }
     /**

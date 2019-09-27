@@ -13,3 +13,6 @@ yarn-error.log
 /storage
 
 .idea
+
+/public/images/profile_pictures/*
+
