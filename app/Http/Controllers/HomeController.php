@@ -16,7 +16,6 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth');
     }
 
     /**
@@ -26,10 +25,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        // $data = Broadcast::find(1);
-        // echo "<pre>";
-        // print_r($data);
-        // exit;
+
         return view('home');
     }
 }

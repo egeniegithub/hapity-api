@@ -1,0 +1,93 @@
+.wrapper{
+    -webkit-box-shadow: 0px 0px 29px -4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 29px -4px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 29px -4px rgba(0,0,0,0.75);
+    width: 400px;
+    height: 490px;
+    border-radius: 16px;
+    margin: 0 auto;
+    margin-top: 60px;
+}
+.input-text{
+    height: 30px;
+    width: 325px;
+    margin-top: 15px;
+    font-size: 20px;
+    text-align: center;
+}
+.login-form{
+    width: 325px;
+    margin: 0 auto;
+}
+.submit-button {
+    background: #68A93C;
+    border: 0 none;
+    cursor: pointer;
+    color: white;
+    width: 325px;
+    font-size: 20px;
+    height: 30px;
+    margin-top: 15px;
+}
+.heading{
+      font-size: 90px;
+  font-family: arial;
+  font-weight: bold;
+  text-align: center;
+  color: #616161;
+}
+.fb-login{
+    height: 75px;
+    margin-left: 30px;
+    margin-top: 14px;
+}
+.register-text{
+  margin: 0px auto;
+  font-family: arial;
+  width: 200px;
+}
+.register-button{
+  margin-left: 39px;
+  margin-top: 5px;
+  background-color: #696969;
+  color: white;
+  font-size: 18px;
+  font-family: arial;
+  text-decoration: none;
+  width: 324px;
+  text-align: center;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+.wrapper-broadcast{
+    height: auto;
+    padding-bottom: 20px;
+    width:1000px;
+}
+#respond {
+  margin-top: 40px;
+}
+
+#respond input[type='text'],
+#respond input[type='email'], 
+#respond textarea {
+  margin-bottom: 10px;
+  display: block;
+  width: 100%;
+
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -o-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -khtml-border-radius: 5px;
+  border-radius: 5px;
+    height: 100px;
+  line-height: 1.4em;
+}
+#comments{
+        font-family: arial;
+}
+#respond{
+        font-family: arial;
+}
