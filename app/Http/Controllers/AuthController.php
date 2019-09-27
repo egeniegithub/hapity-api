@@ -7,6 +7,7 @@ use App\User;
 use App\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Str;
 use JWTAuth;
@@ -55,23 +56,27 @@ class AuthController extends Controller
         $request->merge([$field => $login]);
         $credentials = $request->only($field, 'password');
 
-        Auth::attempt($credentials);        
+        if (Auth::attempt($credentials)) {
 
-        if ($token = JWTAuth::fromUser(Auth::user())) {
-            $userProfile = User::with('profile')->where('id', Auth::id())->first()->toArray();
-            $user_info = array();
-            $user_info['user_id'] = $userProfile['id'];
-            $user_info['profile_picture'] = $userProfile['profile']['profile_picture'];
-            $user_info['email'] = $userProfile['email'];
-            $user_info['username'] = $userProfile['username'];
-            $user_info['auth_key'] = $userProfile['profile']['auth_key'];
-            $user_info['token'] = $token;
-//            $user_info['expires_in'] = auth()->factory()->getTTL() * 60;
+            $user = User::with('profile')->find(Auth::id());
 
-            $returnData['status'] = 'success';
-            $returnData['user_info'] = $user_info;
+            if ($token = JWTAuth::fromUser($user)) {
+                $userProfile = $user->toArray();
+                $user_info = array();
+                $user_info['user_id'] = $userProfile['id'];
+                $user_info['profile_picture'] = asset('images/profile_pictures/' . $userProfile['profile']['profile_picture']);
+                $user_info['email'] = $userProfile['email'];
+                $user_info['username'] = $userProfile['username'];
+                $user_info['auth_key'] = $userProfile['profile']['auth_key'];
+                $user_info['token'] = $token;
 
-            return response()->json($returnData, 200);
+                $returnData['status'] = 'success';
+                $returnData['user_info'] = $user_info;
+
+                return response()->json($returnData, 200);
+            } else {
+                return response()->json(['status' => 'failure', 'message' => 'Invalid Credentials'], 401);
+            }
         } else {
             return response()->json(['status' => 'failure', 'message' => 'Invalid Credentials'], 401);
         }
@@ -116,35 +121,29 @@ class AuthController extends Controller
             $user->save();
 
             //  Upload Profile Picture if Exists
-            if (empty($profile_picture)) {
-                $imageName = 'null.png';
-            } else {
-                $pos = strpos($profile_picture, ';');
-                $type = explode(':image/', substr($profile_picture, 0, $pos))[1];
+            $imageName = $this->handle_base_64_profile_picture($user, $profile_picture);
 
-                $data_replace = 'data:image/' . $type . ';base64,';
-                $image = str_replace($data_replace, '', $profile_picture);
-                $image = str_replace(' ', '+', $image);
-                $imageName = Str::random(6) . '_' . now()->timestamp . '.' . $type;
-                \File::put(storage_path('app\public') . "\'" . $imageName, base64_decode($image));
-            }
-//            file_put_contents( public_path($imageName), base64_decode($image));
             //  Saving User Profile
             $profile = new UserProfile();
             $profile->email = $email;
             $profile->auth_key = bcrypt($username);
-            $profile->profile_picture = $imageName;
+
+            if (!empty($imageName)) {
+                $profile->profile_picture = $imageName;
+            }
+
             $user->profile()->save($profile);
 
             //  Logging In User and Make Response Array
             $token = auth()->attempt(['username' => $username, 'password' => $password]);
             $user_info = array();
             $user_info['user_id'] = $user->id;
-            $user_info['profile_picture'] = asset("storage/'" . $profile->profile_picture);
+            $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile->profile_picture);
             $user_info['email'] = $user->email;
             $user_info['username'] = $user->username;
             $user_info['auth_key'] = $profile->auth_key;
             $user_info['token'] = $token;
+            $user_info['join_date'] = $user->created_at;
 
             $returnData['status'] = 'success';
             $returnData['user_info'] = $user_info;
@@ -169,13 +168,15 @@ class AuthController extends Controller
      */
     public function getUserProfile(Request $request)
     {
-        $userProfile = User::with('profile')->where('id', Auth::id())->first()->toArray();
+        $userProfile = User::with(['profile', 'social'])->where('id', Auth::id())->first()->toArray();
         $user_info = array();
         $user_info['user_id'] = $userProfile['id'];
-        $user_info['profile_picture'] = asset("storage/'" . $userProfile['profile']['profile_picture']);
+        $user_info['profile_picture'] = asset("images/profile_pictures/" . $userProfile['profile']['profile_picture']);
         $user_info['email'] = $userProfile['email'];
         $user_info['username'] = $userProfile['username'];
         $user_info['auth_key'] = $userProfile['profile']['auth_key'];
+        $user_info['screen_name'] = $userProfile['profile']['screen_name'];
+        $user_info['join_date'] = $userProfile['created_at'];
 
         $returnData['status'] = 'success';
         $returnData['profile_info'] = $user_info;
@@ -224,25 +225,22 @@ class AuthController extends Controller
 
         $update_array = array();
         //  Upload Profile Picture if Exists
-        if (!empty($profile_picture)) {
-            $pos = strpos($profile_picture, ';');
-            $type = explode(':image/', substr($profile_picture, 0, $pos))[1];
 
-            $data_replace = 'data:image/' . $type . ';base64,';
-            $image = str_replace($data_replace, '', $profile_picture);
-            $image = str_replace(' ', '+', $image);
-            $imageName = Str::random(6) . '_' . now()->timestamp . '.' . $type;
-            \File::put(storage_path('app\public') . "\'" . $imageName, base64_decode($image));
+        $imageName = $this->handle_base_64_profile_picture($user, $profile_picture);
+
+        if (!empty($imageName)) {
             $update_array['profile_picture'] = $imageName;
         }
+
         if (!empty($email)) {
             $update_array['email'] = $email;
         }
         $user->profile()->update($update_array);
+
         $profile = User::with('profile')->where('id', Auth::id())->first()->toArray();
         $user_info = array();
         $user_info['user_id'] = $profile['id'];
-        $user_info['profile_picture'] = asset("storage/'" . $profile['profile']['profile_picture']);
+        $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile['profile']['profile_picture']);
         $user_info['email'] = $profile['email'];
         $user_info['username'] = $profile['username'];
         $user_info['auth_key'] = $profile['profile']['auth_key'];
@@ -251,6 +249,23 @@ class AuthController extends Controller
         $returnData['profile_info'] = $user_info;
 
         return response()->json($returnData, 200);
+    }
+
+    private function handle_base_64_profile_picture($user, $profile_picture)
+    {
+        $imageName = '';
+        if (!empty($profile_picture)) {
+            $pos = strpos($profile_picture, ';');
+            $type = explode(':image/', substr($profile_picture, 0, $pos))[1];
+
+            $data_replace = 'data:image/' . $type . ';base64,';
+            $image = str_replace($data_replace, '', $profile_picture);
+            $image = str_replace(' ', '+', $image);
+            $imageName = 'profile_picture_' . $user->id . '.' . $type;
+            File::put(public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR . $imageName), base64_decode($image));
+        }
+
+        return $imageName;
     }
 
     /**
