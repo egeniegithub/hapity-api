@@ -140,7 +140,11 @@ class AuthController extends Controller
             $token = auth()->attempt(['username' => $username, 'password' => $password]);
             $user_info = array();
             $user_info['user_id'] = $user->id;
-            $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile->profile_picture);
+
+            if (!empty($profile->profile_picture)) {
+                $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile->profile_picture);
+            }
+
             $user_info['email'] = $user->email;
             $user_info['username'] = $user->username;
             $user_info['auth_key'] = $profile->auth_key;
@@ -170,10 +174,15 @@ class AuthController extends Controller
      */
     public function getUserProfile(Request $request)
     {
-        $userProfile = User::with(['profile', 'social'])->where('id', Auth::id())->first()->toArray();
+        $userProfile = User::with(['profile', 'social', 'roles'])->where('id', Auth::id())->first()->toArray();
+
         $user_info = array();
         $user_info['user_id'] = $userProfile['id'];
-        $user_info['profile_picture'] = asset("images/profile_pictures/" . $userProfile['profile']['profile_picture']);
+
+        if (!empty($userProfile['profile']['profile_picture'])) {
+            $user_info['profile_picture'] = asset("images/profile_pictures/" . $userProfile['profile']['profile_picture']);
+        }
+
         $user_info['email'] = $userProfile['email'];
         $user_info['username'] = $userProfile['username'];
         $user_info['auth_key'] = $userProfile['profile']['auth_key'];
@@ -182,8 +191,6 @@ class AuthController extends Controller
 
         $returnData['status'] = 'success';
         $returnData['profile_info'] = $user_info;
-
-        $userProfile->roles()->attach(HAPITY_USER_ROLE_ID);
 
         return response()->json($returnData, 200);
     }
