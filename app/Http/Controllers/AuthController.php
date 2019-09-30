@@ -120,6 +120,8 @@ class AuthController extends Controller
             $user->password = bcrypt($password);
             $user->save();
 
+            $user->roles()->attach(HAPITY_USER_ROLE_ID);
+
             //  Upload Profile Picture if Exists
             $imageName = $this->handle_base_64_profile_picture($user, $profile_picture);
 
@@ -181,6 +183,8 @@ class AuthController extends Controller
         $returnData['status'] = 'success';
         $returnData['profile_info'] = $user_info;
 
+        $userProfile->roles()->attach(HAPITY_USER_ROLE_ID);
+
         return response()->json($returnData, 200);
     }
 
@@ -222,6 +226,8 @@ class AuthController extends Controller
             $user->password = bcrypt($password);
         }
         $user->save();
+
+        $user->roles()->attach(HAPITY_USER_ROLE_ID);
 
         $update_array = array();
         //  Upload Profile Picture if Exists
