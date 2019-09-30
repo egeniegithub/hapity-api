@@ -1,56 +1,56 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use App\User;
 use App\UserProfile;
 use App\UserSocial;
 
-class FacebookController extends Controller
+class TwitterController extends Controller
 {
-    //
+     //
 
     public function __construct()
     {
         auth()->setDefaultDriver('api');
-        $this->middleware('auth:api', ['except' => ['facebook_login']]);
+        $this->middleware('auth:api', ['except' => ['twitter_login']]);
     }
     
-    function facebook_login(Request $request) {
+    function twitter_login(Request $request) {
        
         $rules = array(
-            'facebook_id' => 'required',
+            'twitter_id' => 'required',
             'username' => 'required',
             'email' => 'required|email',
             'profile_picture' => 'required',
         );
         $messages = array(
-            'facebook_id.required' => 'Facebook id is required.',
+            'twitter_id.required' => 'Twitter id is required.',
             'username.required' => 'Username already registered.',
             'email.required' => 'Email is required.',
             'profile_picture.required' => 'Profile Picture is required.',
         );
 
-        $validator = Validator::make($request->all(),$rules,$messages);
+        $validator=Validator::make($request->all(),$rules,$messages);
         if($validator->fails())
         {
-            $messages = $validator->messages();
+            $messages=$validator->messages();
             return response()->json($messages);
         }
+        
 
         $input = $request->all();
 
         $checkUserSocialAccountExist = User::with('social')
-//        ->where('social_id', '=', $input['facebook_id'])
+//        ->where('social_id', '=', $input['twitter_id'])
         ->where('email', $input['email'])
         ->first();
 
-        if(empty($checkUserSocialAccountExist)){
+        if(empty($checkUserSocialAccountExist->toArray())){
             // User Not Register
             $User = new User();
             $User->email = $input['email'];
@@ -67,9 +67,9 @@ class FacebookController extends Controller
 
             $UserSocial = new UserSocial();
             $UserSocial->user_id = $User->id;
-            $UserSocial->social_id = $input['facebook_id'];
+            $UserSocial->social_id = $input['twitter_id'];
             $UserSocial->email = $input['email'];
-            $UserSocial->platform = "facebook";
+            $UserSocial->platform = "twitter";
             $UserSocial->save();
             $token = auth()->fromUser($User);
             $response['status'] = "success";
@@ -80,10 +80,10 @@ class FacebookController extends Controller
             $response['user_info']['login_type'] = $UserSocial->platform;
             $response['user_info']['social_id'] = $UserSocial->social_id;
             $response['user_info']['join_date'] = date('Y-m-d',strtotime($User->created_at));
-            $response['user_info']['auth_key'] = $UserProfile->auth_key;
+            $response['user_info']['auth_key'] = $User->auth_key;
             $response['user_info']['token'] = $token;
 
-        } else if(!empty($checkUserSocialAccountExist['social']->toArray()) && $checkUserSocialAccountExist['social'][0]['platform'] == "facebook"){
+        } else if(!empty($checkUserSocialAccountExist['social']->toArray()) && $checkUserSocialAccountExist['social'][0]['platform'] == "twitter"){
             if(!empty($input['profile_picture'])){
                 $user = User::find($checkUserSocialAccountExist['id']);
                 $user->profile()->update(['profile_picture' => $input['profile_picture']]);
@@ -105,9 +105,9 @@ class FacebookController extends Controller
 
             $UserSocial = new UserSocial();
             $UserSocial->user_id = $checkUserSocialAccountExist['id'];
-            $UserSocial->social_id = $input['facebook_id'];
+            $UserSocial->social_id = $input['twitter_id'];
             $UserSocial->email = $input['email'];
-            $UserSocial->platform = "facebook";
+            $UserSocial->platform = "twitter";
             $UserSocial->save();
 
             if(!empty($input['profile_picture'])){
@@ -128,9 +128,21 @@ class FacebookController extends Controller
             $response['user_info']['auth_key'] = $userProfileData['auth_key'];
             $response['user_info']['token'] = $token;
         }
-        
-//        if ($checkUserSocialAccountExist && $checkUserSocialAccountExist['platform'] == "facebook") {
-//            // user register to facebook social account
+
+
+
+        dd($response);
+
+
+
+
+
+
+
+
+
+//        if ($checkUserSocialAccountExist && $checkUserSocialAccountExist['platform'] == "twitter") {
+//            // user register to twitter social account
 //            $userProfileData = $checkUserSocialAccountExist->user->profile()->get()->first();
 //
 //            $response['status'] = "success";
@@ -144,15 +156,15 @@ class FacebookController extends Controller
 //            $response['user_info']['auth_key'] = $userProfileData['auth_key'];
 //            $response['user_info']['token'] = "";
 //        }
-//        else if ($checkUserSocialAccountExist && $checkUserSocialAccountExist['platform'] != "facebook") {
-//            // user not register to facebook social account
+//        else if ($checkUserSocialAccountExist && $checkUserSocialAccountExist['platform'] != "twitter") {
+//            // user not register to twitter social account
 //            $userProfileData = $checkUserSocialAccountExist->user->profile()->get()->first();
 //
 //            $UserSocial = new UserSocial();
 //            $UserSocial->user_id = $checkUserSocialAccountExist->user['id'];
-//            $UserSocial->social_id = $input['facebook_id'];
+//            $UserSocial->social_id = $input['twitter_id'];
 //            $UserSocial->email = $input['email'];
-//            $UserSocial->platform = "facebook";
+//            $UserSocial->platform = "twitter";
 //            $UserSocial->save();
 //
 //            $response['status'] = "success";
@@ -177,13 +189,12 @@ class FacebookController extends Controller
 //            $UserProfile = new UserProfile();
 //            $UserProfile->user_id = $User->id;
 //            $UserProfile->email = $input['email'];
-//            $UserProfile->auth_key = bcrypt($input['username']);
 //            $UserProfile->profile_picture = $input['profile_picture'];
 //            $UserProfile->save();
 //
 //            $UserSocial = new UserSocial();
 //            $UserSocial->user_id = $User->id;
-//            $UserSocial->social_id = $input['facebook_id'];
+//            $UserSocial->social_id = $input['twitter_id'];
 //            $UserSocial->email = $input['email'];
 //            $UserSocial->platform = "facebook";
 //            $UserSocial->save();
@@ -202,5 +213,4 @@ class FacebookController extends Controller
 
         return response()->json($response);
     }
-    
 }

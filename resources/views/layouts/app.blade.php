@@ -7,50 +7,125 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <?php
-//    print_r($broadcast);
-    //if(isset($broadcast)) {
-    ?>
-        <meta property="og:title" content="<?php //echo $broadcast['title']?>"/>
+    
+    @if(isset($broadcast) && count($broadcast)>0)
+    
+        <meta property="og:title" content="{{ $broadcast->title }}"/>
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="<?php// echo $broadcast['broadcast_image']?>" />
+        <meta property="og:image" content="{{ $broadcast->broadcast_image }}" />
         <meta property="og:url" content="<?php // echo base_url().'/main/view_broadcast/'.$broadcast['id'];?>" />
-        <meta property="og:description" content="<?php// echo $broadcast['title']?>" />
+        <meta property="og:description" content="{{ $broadcast->title }}" />
         <meta property="twitter:creator" content="gohapity" />
         <meta property="twitter:site" content="gohapity" />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:description" content="<?php// echo $broadcast['title']?>" />
-        <meta property="twitter:title" content="<?php //echo $broadcast['title']?>" />
-        <meta property="twitter:image:src" content="<?php //echo $broadcast['broadcast_image']?>" />
-    <?php //}?>
+        <meta property="twitter:description" content="{{ $broadcast->title }}" />
+        <meta property="twitter:title" content="{{ $broadcast->title }}" />
+        <meta property="twitter:image:src" content="{{ $broadcast->broadcast_image }}" />
+    @endif
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('assets/js/app.js') }}"></script>
 
     <!-- Fonts -->
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet">
-    <link href="assets/css/style.css" rel="stylesheet">
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{asset('/')}}assets/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{asset('/')}}assets/css/style.css" rel="stylesheet">
+    {{-- <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet"> --}}
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css')}}" >
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/tooltipster.css')}}" >
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/responsive.css')}}" >
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css')}}" >
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css')}}" >
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/tooltipster.css')}}" >
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css')}}" >
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/bootstrap.min.css')}}" >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ asset('js/bootstrap.min.js')}}"></script>
-    <link rel="stylesheet" href="{{ asset('js/css/alertify/alertify.rtl.css')}}">
-    <link rel="stylesheet" href="{{ asset('css/alertify/themes/default.css')}}">
-    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-    <script src="{{ asset('js/alertify.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('js/jquery-ias.min.js')}}"></script>
-    <script type="text/javascript" src="{{ asset('js/functions.js')}}"></script>
-    <script src="{{ asset('js/jquery.tooltipster.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
+    <link rel="stylesheet" href="{{ asset('assets/css/alertify/alertify.rtl.css')}}">
+    <link rel="stylesheet" href="{{ asset('assets/css/alertify/themes/default.css')}}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script src="{{ asset('assets/js/alertify.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/jquery-ias.min.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/functions.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery.tooltipster.js')}}"></script>
+
+    <script type="text/javascript">
+    // Load the SDK asynchronously
+    window.fbAsyncInit = function() {
+        FB.init({
+            // appId      : '1412967295699368',
+            appId      : '474375376243023',
+            cookie     : true,  // enable cookies to allow the server to access
+                                // the session
+            xfbml      : true,  // parse social plugins on this page
+            version    : 'v2.2' // use version 2.2
+        });
+
+        // Now that we've initialized the JavaScript SDK, we call
+        // FB.getLoginStatus().  This function gets the state of the
+        // person visiting this page and can return one of three states to
+        // the callback you provide.  They can be:
+        //
+        // 1. Logged into your app ('connected')
+        // 2. Logged into Facebook, but not your app ('not_authorized')
+        // 3. Not logged into Facebook and can't tell if they are logged into
+        //    your app or not.
+        //
+        // These three cases are handled in the callback function.
+
+//  FB.getLoginStatus(function(response) {
+//    statusChangeCallback(response);
+//  });
+
+    };
+    $(document).ready(function(){
+
+        (function(d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) return;
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    });
+
+  // Here we run a very simple test of the Graph API after login is
+  // successful.  See statusChangeCallback() for when this call is made.
+  function testAPI() {
+      FB.api('/me', {fields: 'id,email,name,picture'}, function (response) {
+          $.ajax({
+              url: "{{url('fbloginUser')}}",
+              type: 'POST',
+              data: {
+                  _token: "{{ csrf_token() }}",
+                  social_id: response.id,
+                  name: response.name,
+                  email: response.email,
+                  profile_picture: response.picture.data.url
+              },
+              success: function (msg) {
+                  if (msg == 'found') {
+                      window.location = '{{url("main")}}';
+                  }
+                  else if (msg == 'not found') {
+                      window.location = '{{route("register")}}';
+                  }
+
+              }
+          });
+      }); //fb-api-end
+  }
+    </script>
+    <script type="text/javascript" src="{{ asset('assets/js/fb.js')}}"></script>
+
+    <style type="text/css">
+      .error-test-color{
+        color:#fff;
+      }
+    </style>
+    @stack('css')
 </head>
 <body>
     <div id="app">
@@ -58,7 +133,8 @@
 <header class="header-wrapper">
     <div class="container">
       <div class="header-nav">
- <?php // if($this->session->userdata('user_id')==''){ ?>
+
+      
         <nav class="navbar navbar-default bg-color">
           <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
@@ -69,7 +145,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="">
+              <a class="navbar-brand" href="{{url('/')}}">
                 <img src="{{ url('assets/images/home-new/logo.png')}}" width="90px">
               </a>
             </div>
@@ -78,22 +154,31 @@
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-right nav-color">
 
-                <li><a href="<?php // echo base_url('home'); ?>">Home</a></li>
-                <li><a href="<?php // echo base_url('home/login'); ?>">Login</a></li>
-                <li><a href="<?php // echo base_url('register'); ?>">Register</a></li>
-                <!-- <li><a href="<?php // echo base_url('about'); ?>">Who we are</a></li> -->
+                <li><a href="{{url('home')}}">Home</a></li>
+                @if(Auth::check())
+                  <li><a href="{{url('settings')}}" class="sign_in">settings</a></li>
+                @else
+                <li><a href="{{url('/login')}}">Login</a></li>
+                <li><a href="{{url('register')}}">Register</a></li>
+                @endif
+                <!-- <li><a href="url('about'); ?>">Who we are</a></li> -->
                 <li><a href="http://blog.hapity.com/">Blog</a></li>
-                <li><a href="<?php // echo base_url('help'); ?>">Help</a></li>
-                <li><a href="<?php // echo base_url('about'); ?>#ContactFormSubmit">Contact</a></li>
+                <li><a href="{{url('help')}}">Help</a></li>
+                <li><a href="{{url('about')}}#ContactFormSubmit">Contact</a></li>
+
+                @if(Auth::check())
+                <li><a href="{{url('logout')}}" class="sign_in">Logout</a></li>
+                @endif
+
               </ul>
             </div><!-- /.navbar-collapse -->
           </div><!-- /.container-fluid -->
         </nav>
 <?php // } else { ?>
-
-<nav class="navbar navbar-default bg-color">
+  
+<!-- <nav class="navbar navbar-default bg-color">
           <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
+             {{-- Brand and toggle get grouped for better mobile display  --}}
             <div class="navbar-header">
               <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
@@ -106,7 +191,7 @@
               </a>
             </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
+             {{-- Collect the nav links, forms, and other content for toggling  --}}
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
               <ul class="nav navbar-nav navbar-right nav-color">
                 <li><a href="<?php // echo base_url('/main/'); ?>" class="sign_in">Home</a></li>
@@ -116,9 +201,9 @@
                 <li><a href="<?php // echo base_url('about'); ?>#ContactFormSubmit">Contact</a></li>
                 <li><a href="<?php // echo base_url('home/log_out'); ?>" class="sign_in">Logout</a></li>
               </ul>
-            </div><!-- /.navbar-collapse -->
-          </div><!-- /.container-fluid -->
-        </nav>
+            </div>
+          </div>
+</nav> -->
 
 <?php //} ?>
     </div>
@@ -152,23 +237,21 @@
               <div class="main-column-4-styling">
                 <h5 class="text-uppercase">Quick links</h5>
                 <ul>
-                  <?php // if($this->session->userdata('user_id')==''){ ?>
+                  <li><a href="{{url('home')}}">Home</a></li>
+                @if(Auth::check())
+                  <li><a href="{{url('main/settings')}}" class="sign_in">settings</a></li>
+                @else
+                <li><a href="{{url('/login')}}">Login</a></li>
+                <li><a href="{{url('register')}}">Register</a></li>
+                @endif
+                <!-- <li><a href="url('about'); ?>">Who we are</a></li> -->
+                <li><a href="http://blog.hapity.com/">Blog</a></li>
+                <li><a href="{{url('help')}}">Help</a></li>
+                <li><a href="{{url('about')}}#ContactFormSubmit">Contact</a></li>
 
-                  <li><a href="<?php // echo base_url('home'); ?>">Home</a></li>
-                  <li><a href="<?php // echo base_url('home/login'); ?>">Login</a></li>
-                  <li><a href="<?php // echo base_url('register'); ?>">Register</a></li>
-                  <!-- <li><a href="<?php // echo base_url('about'); ?>">Who we are</a></li> -->
-                  <li><a href="http://blog.hapity.com/">Blog</a></li>
-                  <li><a href="<?php // echo base_url('help'); ?>">Help</a></li>
-                  <li><a href="<?php // echo base_url('about'); ?>#ContactFormSubmit">Contact</a></li>
-            <?php // } else { ?>
-                  <li><a href="<?php // echo base_url('/main/'); ?>" class="sign_in">Home</a></li>
-                  <li><a href="<?php // echo base_url('main/settings'); ?>" class="sign_in">settings</a></li>
-                  <li><a href="http://blog.hapity.com/">Blog</a></li>
-                  <li><a href="<?php // echo base_url('help');?>" class="sign_in">Help</a></li>
-                  <li><a href="<?php // echo base_url('about'); ?>#ContactFormSubmit" class="sign_in">Contact</a></li>
-                  <li><a href="<?php // echo base_url('home/log_out'); ?>" class="sign_in">Logout</a></li>
-            <?php // }?>
+                @if(Auth::check())
+                <li><a href="{{route('logout')}}" class="sign_in">Logout</a></li>
+                @endif
                 </ul>
               </div>
             </div>
@@ -177,8 +260,8 @@
                 <h5 class="text-uppercase">links</h5>
                 <ul>
                   <!-- <li><a href="">Terms & Conditions</a></li> -->
-                  <li><a href="<?php // echo base_url('privacy-policy'); ?>">Privacy Policy</a></li>
-                  <li><a href="<?php // echo base_url('help'); ?>">How it Works</a></li>
+                  <li><a href="{{url('privacy-policy')}}">Privacy Policy</a></li>
+                  <li><a href="{{url('help')}}">How it Works</a></li>
                 </ul>
               </div>
             </div>
@@ -203,7 +286,7 @@
       <div class="row">
         <div class="col-md-5">
           <div class="copyrights-content">
-            <p>Hapity® is a registered trademark. <a href="<?php // echo base_url('privacy-policy'); ?>">Privacy and Terms</a><br> &copy;2019 All Rights Reserved. </p>
+            <p>Hapity® is a registered trademark. <a href="{{url('privacy-policy')}}">Privacy and Terms</a><br> &copy;2019 All Rights Reserved. </p>
           </div>
         </div>
       </div>
@@ -212,12 +295,22 @@
 
     </div>
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-    <!-- <script type="text/javascript" src="{{ url('assets/js/jquery-1.11.1.min.js')}}"></script> -->
+    <!-- <script type="text/javascript" src="assets/js/jquery-1.11.1.min.js')}}"></script> -->
     <script src="{{ url('assets/js/bootstrap.min.js')}}"></script>
     <script type="text/javascript" src="{{ url('assets/js/jquery.main.js')}}"></script>
     <script src="{{ url('assets/js/cropbox.js')}}"></script>
-    <script src="//js.pusher.com/2.2/pusher.min.js"></script>
+    <script src="https://js.pusher.com/2.2/pusher.min.js"></script>
     <script src="{{ url('assets/js/jquery.loader.js')}}"></script>
-    <script type="text/javascript" src="{{ url('assets/js/app.js')}}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/app.js')}}"></script>
+
+    {{-- <script src="https://www.google.com/recaptcha/api.js?render=6Lf9xLoUAAAAANkPex8syVDugeSH73EJeeTeqByn"></script> --}}
+   {{--  <script>
+    grecaptcha.ready(function() {
+        grecaptcha.execute('6Lf9xLoUAAAAANkPex8syVDugeSH73EJeeTeqByn', {action: "{{url('about')}}"}).then(function(token) {
+        });
+    });
+    </script> --}}
+    
+    @stack('script')
 </body>
 </html>

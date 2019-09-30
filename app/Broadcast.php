@@ -9,6 +9,8 @@ class Broadcast extends Model
 {
     use SoftDeletes;
 
+    protected $table = 'broadcasts';
+    
     public function user()
     {
         return $this->belongsTo('App\User', 'user_id');
