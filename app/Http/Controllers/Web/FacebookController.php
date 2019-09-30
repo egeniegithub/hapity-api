@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -46,7 +46,7 @@ class FacebookController extends Controller
         $input = $request->all();
 
         $checkUserSocialAccountExist = User::with('social')
-//        ->where('social_id', '=', $input['facebook_id'])
+		// ->where('social_id', '=', $input['facebook_id'])
         ->where('email', $input['email'])
         ->first();
 
@@ -128,6 +128,7 @@ class FacebookController extends Controller
             $response['user_info']['auth_key'] = $userProfileData['auth_key'];
             $response['user_info']['token'] = $token;
         }
+        dd($response);
         
 //        if ($checkUserSocialAccountExist && $checkUserSocialAccountExist['platform'] == "facebook") {
 //            // user register to facebook social account
@@ -202,5 +203,4 @@ class FacebookController extends Controller
 
         return response()->json($response);
     }
-    
 }

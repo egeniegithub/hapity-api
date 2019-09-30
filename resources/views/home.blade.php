@@ -1,201 +1,346 @@
+@php 
+  $b_id = '';
+  $status = '';
+  $video_file_name = '';
+  $b_image = '';
+  $get_token = '';
+
+@endphp
+
 @extends('layouts.app')
 
+@push('css')
+  <style type="text/css" media="screen">
+    .bordcast-active h3 a { cursor: default;  }
+  </style>
+@endpush
 @section('content')
-<section class="banner-section">
-    <div class="header-content">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="creating-livestream text-center">
-              <h1>Creating <strong>free livestreams</strong> has never<br> been so easy.</h1>
-            </div>
-          </div>
-        </div>
-        <div class="video-section">
-          <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
-              <div class="hapity-video">
-                <div class="embed-responsive embed-responsive-16by9">
-                  <video controls="" poster="{{ url('assets/images/home-new/hapity.png')}}" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="200" height="140"></video>
-                </div>
-              </div>
-              <div class="home-transcript">
-                <p><a href="<?php //echo base_url('assets/');?>/docs/Hapity Homepage Video Script.pdf" target="_blank">Transcript</a></p>
-              </div>
-            </div>
-            <div class="col-md-3"></div>
-          </div> <!-- row -->
-        </div><!-- video section -->
-      </div>
-    </div>
-  </section><!-- banner-section -->
-  <section class="main-content">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="your-content">
-            <h2>Your Content. Your Rules.</h2>
-            <p>Rapidly publish free livestreams direct from your phone to your website, keeping</p>
-            <p>full ownership of your videos.</p>
-            <div class="Discover-section">
-              <div class="row">
-                <div class="col-md-4">
-                  <div class="discover-content">
-                    <figure>
-                      <img src="{{ url('assets/images/home-new/free-livestream.png')}}">
-                    </figure>
-                    <strong>Free livestream plugins</strong>
-                    <p>On WordPress, Drupal, Joomla and</p>
-                    <p>more for easy integrations.</p>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="discover-button">
-                    <a href="<?php// echo base_url('help'); ?>" class="btn-green">Discover More</a>
-                  </div>
-                </div>
-                <div class="col-md-4">
-                  <div class="discover-content">
-                    <figure>
-                      <a href="https://itunes.apple.com/mt/app/hapity/id1068976447?mt=8" target="_blank"><img src="{{ url('assets/images/home-new/apple-new.png')}}"></a>
-                      <a href="https://play.google.com/store/apps/developer?id=hapity.com" target="_blank"><img src="{{ url('assets/images/home-new/play-store.png')}}"></a>
-                    </figure>
-                    <strong>Mobile apps</strong>
-                    <p>Available from the App Store and</p>
-                    <p>Google Play.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="broadcasting-Section">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="broadcasting-content">
-              <h2>One-click broadcasting</h2>
-              <img src="{{ url('assets/images/home-new/green-bar.png')}}">
-              <p>Get instantly video streaming from your site with just one-click.
-                Getting set up should be the least of your worries, which is why
-                you can install, enable and start sharing your message with the
-                world in under five minutes.
-              </p>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mobile-section">
-              <figure>
-                <img src="{{ url('assets/images/home-new/mobiles.png')}}" class="img-responsive">
-              </figure>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="reach-audience">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <div class="audience-img">
-              <figure>
-                <img src="{{ url('assets/images/home-new/mans.png')}}" class="img-responsive">
-              </figure>
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="broadcasting-content">
-              <h2>Reach every audience</h2>
-              <img src="{{ url('assets/images/home-new/green-bar.png')}}">
-              <p>No more scheduling headaches! One-click enables you to post
-                your livestreams on Twitter and Facebook at the same time, with
-                links back to your website. More traffic to your site, more leads
-                and more sales for you.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="get-hapity">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-3"></div>
-          <div class="col-md-6">
-            <div class="about-hapity">
-              <div class="about-hapity-video">
-                <div class="embed-responsive embed-responsive-16by9">
-                  <video controls="" poster="{{ url('assets/images/home-new/hapity.png')}}" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="200" height="140"></video>
-                </div>
-              </div>
-              <h2>Your Content. Your Rules.</h2>
-              <p>When you live-stream directly from Facebook, Twitter or Snapchat, you
-                don't own the content you've generated.
-              </p>
-              <p>Hapity enables you to stream directly from your own website while sharing across
-                social media, so you keep ownership of everything you create. Hapity will
-                even generate your own backups on your mobile for you.</p>
-              <div class="hapity-button">
-                <a href="<?php // echo base_url('help'); ?>">GET HAPITY NOW!</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-3"></div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="hapity-logos">
-        <div class="row">
-          <div class="col-md-12 col-xs-12 col-sm-12">
-            <div class="logos-heading">
-              <h2>Get Hapity for iOS, Android, or on
-                <br>
-                WordPress.org.</h2>
-            </div>
-            <div class="logos">
-              <ul>
-                <li>
-                  <a href="https://itunes.apple.com/mt/app/hapity/id1068976447?mt=8" target="_blank"><img src="{{ url('assets/images/home-new/apple.png')}}"  class="img-responsive">
-                  </a>
-                </li>
-                <li>
-                  <a href="https://play.google.com/store/apps/developer?id=hapity.com" target="_blank">
-                    <img src="{{ url('assets/images/home-new/android.png')}}" class="img-responsive" >
-                  </a>  
-                </li>
-                <li>
-                  <a href="https://wordpress.org/plugins/wp-hapity/" target="_blank"><img src="{{ url('assets/images/home-new/wordpress.png')}}"  class="img-responsive"></a>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="hapity-testimonial">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="carousel-mg text-center">
-              <h3 class="text-center light-gray">What do customers think of Hapity?</h3>
-              <h4>Testimonials & Social Proof</h3>
-                <div class="owl-carousel owl-theme">
-                  <div class="item text-center">
 
-                    <p>“
-As a blogger who frequently has spontaneous ideas, I find video as a convenient medium for me. Note that Hapity is my client, but I would never have a client on a product I don't love. It's so convenient for me to record a video on my phone wherever I happen to be and have a blog post on my site that is live and public. Of course, I have YouTube live, but that doesn't create a post for me on my WordPress site. Once I live broadcast and click end, this post is done. Hapity is a welcomed edition for my video marketing toolset."</p>
-                    <p>Bridget Willard</p>
-                   <!--  <p>Manager at ABCD</p> -->
-                  </div>
+    <div class="profile-page">
+    
+        <?php //echo $hapity_header_view; ?>
+    <div class="clearfix"></div>
+
+        <div class="profile-section-main">
+    <div class="container">
+            <div class="flash-error col-xs-12 col-sm-12 col-md-12" style="display: none;">Flash player is not supported by your browser, you need flash installed to see Broadcast Videos</div>
+            <div class="col-xs-12 col-sm-3 col-md-3">
+                <div class="profile-section-disable">
+                    <div class="profile-picture">
+                        <figure>
+                          @if(isset($userdata->profile_picture) && !empty($userdata->profile_picture))
+                            <img src="{{asset('images/'.$userdata->profile_picture)}}">
+                          @else
+                             <img src="{{ asset('assets/images/null.png') }}">
+                          @endif
+                        </figure>
+                        <div class="text">
+                            <h2>
+                                <a href="{{url('main/settings/')}}">
+                                  @if(isset($userdata->username))
+                                    {{ $userdata->username }}
+                                  @endif
+                                </a>
+                            </h2>
+                        </div>
+                    </div>
+               
                 </div>
             </div>
+            
+            <div class="col-xs-12 col-sm-9 col-md-9">
+                <div class="center-content">
+                    <div class="start-broadcast">
+                        <a href="{{url('webcast')}}" class=""><i class="fa fa-camera"></i> Start Your Broadcast Here</a>
+                        <a href="{{url('create-content')}}" class="create-content"><i class="fa fa-plus-square "></i> Create Content</a>
+                    </div>
+                    <div class="my-bordcasts-container" data-user-id="{{ auth::user()->id}}">
+                        @php
+                        $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+                        $index = rand(0,1);
+                        $ip = '52.18.33.132';//$ipArr[$index];
+                        @endphp
+                        @foreach ($broadcasts as $boradcast)
+                          @php
+                            $image_classes = '';
+                            $b_image = $boradcast['broadcast']['broadcast_image'];
+                            $b_id = isset($boradcast['broadcast']['id']) ? $boradcast['broadcast']['id'] : '';
+                            
+                            if($boradcast['broadcast']['title']){
+                                $b_title = $boradcast['broadcast']['title'];
+                            } else {
+                                $b_title = "Untitled";
+                            }
+                            $share_url = $boradcast['broadcast']['share_url'];
+                            $b_description = $boradcast['broadcast']['description'];
+                            $stream_url = $boradcast['broadcast']['stream_url'];
+                            $status = $boradcast['broadcast']['status'];
+
+                            $video_file_name = $boradcast['filename'];
+                            if(!$b_image){
+                                $b_image = 'https://www.hapity.com/images/default001.jpg';
+                            }
+                            if($video_file_name){
+                                $image_classes = 'has_video';
+                            }
+                      @endphp
+                            <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
+                                <a href="#" class="bordcast-play image-section">
+                                    <img src="{{ $b_image }}" alt="{{ $b_title }}">
+                                    @if($video_file_name)
+                                        <div class="video-container video-conteiner-init" style="display:none;">
+                                            <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div>
+                                        </div>
+                                        <script>
+                                            jwplayer("w-broadcast-{{ $b_id }}").setup({
+                                                        sources: [{
+                                                            file: "<?php  if($status == "online")
+                                                         echo str_replace("rtsp","rtmp",$stream_url);
+                                                         else
+                                                         echo "rtmp://".$ip.":1935/vod/".$video_file_name;?>"
+                                                        },{
+                                                            file:"<?php  if($status == "online")
+                                                         echo str_replace(array("rtsp","rtmp"),"http",$stream_url."/playlist.m3u8");
+                                                         else
+                                                         echo "http://".$ip.":1935/vod/".$video_file_name."/playlist.m3u8";?>"
+                                                        }],
+                                                    playButton: 'https://www.hapity.com/images/play.png',
+                                                    height: 380,
+                                                    width: "100%",
+                                                    image: '<?php echo $b_image; ?>',
+                                                    skin: 'stormtrooper',
+                                                    });
+                                                    
+                                                   /* $(document).ready(function(){
+                                                        $(".jw-reset").click(function(){
+                                                            jwplayer("w-broadcast-{{ $b_id }}").play('play');
+                                                        });
+                                                    });*/
+                                        </script>
+                                    @endif
+                                </a> 
+                                <div class="bordcast-inner-data">
+                                    <h3 class="my-bordcast-title">
+                                        <a href="#" class="bordcast-play"><?php echo $b_title; ?></a>
+                                    </h3>
+                                    <?php if($b_description): ?>
+                                        <p class="description">
+                                            <p class="short-desc">
+                                                <?php echo substr($b_description, 0, 300); ?>
+                                                <?php if (strlen($b_description)>300){
+                                                    echo '.... <span>Load More</span>';
+                                                } ?>
+                                            </p>
+                                            <p class="full-desc" style="display: none">
+                                                {{ $b_description }}
+                                            </p>
+                                        </p>
+                                    <?php endif; ?>    
+                                    <?php if($boradcast['broadcast']['status'] == "online") : ?>
+                                        <span class="broadcast-live"></span>
+                                    <?php else : ?>
+                                        <span class="broadcast-offline"></span>
+                                    <?php endif; ?>
+                                </div>
+                                <?php 
+                                    if($status == 'offline'){
+                                        $stream_url = str_replace('/live/', '/vod/', $stream_url);
+                                    } ?>
+                                <ul class="bordcast-edit-actions">
+                                    <li class="social-share-action">
+                                        <a href="#" data-toggle="modal" data-target="#share-modal"><!-- <i class="fa fa-share-alt-square"></i> -->
+                                            <img src="{{ asset('assets/')}}images/share.png" width="28" alt="social Media">
+                                        </a>
+                                        <ul class="share-with-icons">
+                                            <?php if($stream_url): ?>
+                                                <li>
+                                                    <a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $b_id;?>" class="code-icon">
+                                                        <i class="fa fa-code"></i>
+                                                    </a>
+                                                </li>
+                                            <?php endif; ?>    
+                                            <li>
+                                                <a href="https://twitter.com/home?status=<?php echo $share_url; ?>" target="_blank" class="twitter">
+                                                    <i class="fa fa-twitter"></i>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a  href="https://www.facebook.com/sharer/sharer.php?u=<?php echo $share_url; ?>" target="_blank">
+                                                    <i class="fa fa-facebook"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li><a href="{{ url('main/edit-content').'/'.$b_id }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
+                                        <img src="{{ asset('assets/') }}images/edit.png" width="28" alt="Edit">
+                                    </a></li>
+                                    <li><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn"><!-- <i class="fa fa-trash-o"></i> -->
+                                        <img src="{{ asset('assets/') }}images/delete.png" width="28" alt="Delete">
+                                    </a></li>
+                                </ul>
+                                <?php if($stream_url): ?>
+                                    <div id="embed-code-popup-{{ $b_id }}" class="modal-box_popup">
+                                        <header> <a href="javascript:;" class="js-modal-close close">×</a>
+                                            <h3>Copy & Paste below code in your website</h3>
+                                        </header>
+                                        <div class="modal-body">
+                                            <div class="embedcode-modal-innser">
+                                                <textarea readonly=""><iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                                    src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $boradcast['broadcast']['status'];?>&broadcast_image=<?php echo $b_image;?>">
+                                                    </iframe></textarea>                        
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>    
+                                <a href="#" class="close-btn">X</a>
+                            </div>
+                        <?php endforeach; ?>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php //echo $hapity_footer_view; ?>
+    </div>
+    <div class="clear"></div>
+    <!-- Modal -->
+    <div id="delete-modal" class="modal fade" data-backdrop="static" data-keyboard="false" role="dialog">
+      <div class="modal-dialog align-middle">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-body">
+            <h3>Are you sure you want to delete this Broadcast?</h3>
+            <input type="hidden" name="delete-brodcast-id" id="brodcast-id" value="">
+            <input type="hidden" name="delete-brodcast-url" id="brodcast-url" value="">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger delete-brodcast-action">Delete</button>
+            <button type="button" class="btn btn-default delete-model-dismiss" data-dismiss="modal">Close</button>
           </div>
         </div>
+
       </div>
     </div>
-  </section>
+    <!--including footer file-->
+    
 @endsection
+
+@push('script')
+   <script type="text/javascript" src="{{ asset('assets/js/infiniteScroll.js') }}"></script>
+    <script type="text/javascript">
+        jQuery(document).ready(function($) {
+
+            /*jwplayer("w-broadcast-<?php //echo $b_id ?>").setup({
+                sources: [{
+                    file: "<?php  if($status == "online")
+                 echo str_replace("rtsp","rtmp",$stream_url);
+                 else
+                 echo "rtmp://".$ip.":1935/vod/".$video_file_name;?>"
+                },{
+                    file:"<?php  if($status == "online")
+                 echo str_replace(array("rtsp","rtmp"),"http",$stream_url."/playlist.m3u8");
+                 else
+                 echo "http://".$ip.":1935/vod/".$video_file_name."/playlist.m3u8";?>"
+                }],
+            playButton: 'https://www.hapity.com/images/play.png',
+            height: 380,
+            width: "100%",
+            image: '<?php echo $b_image; ?>',
+            skin: 'stormtrooper',
+            });
+
+            $(document).ready(function(){
+                $(".jw-reset").click(function(){
+                    jwplayer("w-broadcast-<?php echo $b_id; ?>").play('play');
+                });
+            });*/
+
+            jQuery(document).on('click', '.bordcast-active .close-btn', function(event) {
+                event.preventDefault();
+                var bordcast = jQuery(this).parents('.my-bordcast-single');
+                bordcast.removeClass('bordcast-active');
+                bordcast.find('img').show();
+                bordcast.find('.video-container').hide();
+            });
+
+            jQuery('.delete-btn').on('click', function(event) {
+                event.preventDefault();
+                jQuery('#delete-modal #brodcast-id').val(jQuery(this).data('broadcast-id'));
+                jQuery('#delete-modal #brodcast-url').val(jQuery(this).data('broadcast-url'));
+            });
+
+            jQuery('.short-desc > span').on('click', function(event) {
+                jQuery(this).parents('.short-desc').hide().next('.full-desc').show();
+            });
+
+            jQuery( ".social-share-action" ).hover(
+                function () {
+                    jQuery(this).addClass('on-hover').find('ul').stop().show();
+                }, 
+                function () {
+                    jQuery(this).removeClass('on-hover').find('ul').stop().hide();
+                }
+            );
+            
+        });
+
+        jQuery(document).on('click', '.delete-brodcast-action', function(event) {
+            event.preventDefault();
+            var delete_model = jQuery(this).parents('#delete-modal');
+            var stream_id = delete_model.find('#brodcast-id').val();
+            var stream_url = delete_model.find('#brodcast-url').val();
+            jQuery('.delete-model-dismiss').hide();
+            jQuery(this).text('Deleting...');
+            $.ajax({
+                url: 'http://www.hapity.com/main/deletebroadcast',
+                data: {
+                    token: '<?php echo $get_token; ?>',
+                    user_id: '{{ auth::user()->id }}',
+                    stream_url: stream_url,
+                    stream_id: stream_id,
+                    plugin_auth_key: '{{ $userdata['profile']['auth_key'] }}',
+                    server: '52.18.33.132'
+                },
+                dataType: 'json',
+                success: function(data) {
+                    jQuery('.delete-brodcast-action').text(data.message);
+                    setTimeout(function(){
+                        jQuery('#bordcast-single-'+stream_id).remove();
+                        jQuery('.delete-model-dismiss').trigger('click');
+                        jQuery('.delete-brodcast-action').text('Delete');
+                    }, 900);
+                },
+                type: 'POST'
+            });
+        });
+
+        jQuery(document).on('click', '.bordcast-play', function(event) {
+            event.preventDefault();
+            var bordcast = jQuery(this).parents('.my-bordcast-single');
+            bordcast_id = bordcast.attr('id');
+            playOnlyOne(bordcast_id);
+
+            jQuery('.bordcast-play img').show();
+            jQuery('.bordcast-play .video-container').hide();
+            if(bordcast.hasClass('has_video')){
+                bordcast.find('img').hide();
+                bordcast.find('.video-container').show();
+            } 
+            jQuery('.my-bordcast-single.bordcast-active').removeClass('bordcast-active');
+            bordcast.addClass('bordcast-active');
+            
+        });
+
+        function playOnlyOne(playThis) {
+            for (i=0; i<document.getElementsByClassName('jwplayer').length;i++) { 
+                if (document.getElementsByClassName('jwplayer')[i].id != playThis) {
+                    jwplayer(document.getElementsByClassName('jwplayer')[i]).play(false);   
+                } else {
+                    jwplayer(playThis).play('play');
+                }
+            }
+        }
+    </script>
+@endpush

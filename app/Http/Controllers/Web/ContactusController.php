@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-class BroadcastsController extends Controller
+use App\Http\Controllers\Controller;
+use Mail;
+class ContactusController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,6 +15,31 @@ class BroadcastsController extends Controller
     public function index()
     {
         //
+        return view('about');
+    }
+
+    public function sendmail_contactus(Request $request){
+
+             // $FinalMessage = "Name  = $name \r\n Email = $email \r\n Message = $message "; 
+          //   $from = "webmaster.hapity@gmail.com";
+          //   $this->load->library('email');
+          //   $this->email->set_header('Content-Type', 'text/plain');
+          //   $this->email->set_newline("\r\n");
+
+          //   $this->email->from($from, $name);
+          //   $this->email->to('masteruser@hapity.com');
+          //   $this->email->cc('gohapity@gmail.com');
+
+        $email = $request->email;
+            $data = array(
+                'name' => $request->name,
+                'email' => $request->email,
+                'message'=>$request->message
+            );
+            Mail::send('emails/contactus', ['data' => $data], function ($message) use ($email) {
+                $message->to('fahimalyani73@gmail.com', $email)->subject('New Job Opportunity');
+            });
+        return "Your email has been sent successfully";
     }
 
     /**

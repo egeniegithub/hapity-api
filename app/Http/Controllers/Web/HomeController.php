@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Broadcast;
 
-class BroadcastsController extends Controller
+class HomeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,6 +16,8 @@ class BroadcastsController extends Controller
     public function index()
     {
         //
+        $broadcast = Broadcast::all();
+        return view('index')->with('broadcast',$broadcast);
     }
 
     /**

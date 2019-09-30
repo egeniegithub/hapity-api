@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class BroadcastsController extends Controller
+class PrivacyController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,6 +15,7 @@ class BroadcastsController extends Controller
     public function index()
     {
         //
+        return view('privacy_policy');
     }
 
     /**
