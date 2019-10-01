@@ -221,7 +221,7 @@
       <div class="row">
         <div class="col-md-5">
           <div class="footer-content-widget">
-            <p><a href="#."><img src="{{ url('assets/images/home-new/logo.png')}}" alt="logo" width="80px"></a></p>
+            <p><a href="{{url('/')}}"><img src="{{ url('assets/images/home-new/logo.png')}}" alt="logo" width="80px"></a></p>
             <p>Create your free livestream with Hapity: straight from<br>
              your mobile or computer to your website,and social media.<br>
              Creating livestreams has never been so easy.</p>

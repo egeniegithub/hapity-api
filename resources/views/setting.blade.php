@@ -25,7 +25,9 @@
                                 <h1>Account Settings</h1>
                                 <span>Change your basic account settings</span>
                             </div>
-                            <form class="">
+                            <form class="" method="post" actipon="{{url('save_setting')}}" enctype="multipart/form-data">
+                                @csrf
+                                <input type="hidden" name="user_id" id="user_id" value="{{ auth::user()->id }}">
                             <div class="account-settigs-content">
                                 <div class="form-group text-center">
                                     <figure>
@@ -107,83 +109,7 @@
 
                 <div class="setting_holder">
                     <div class="form_holder">
-                        <!-- <form class="account_form ">
-                            <div class="fieldset">
-                                <label>Profile Picture</label>
-                                <div class="fields-wrap">
-                                    <ul>
-                                        <li>
-                                            <div class="col_field">
-                                                <figure>
-                                                    <img src='<?php // echo $userinfo->profile_picture;?>' class='profile_picture'>
-                                                </figure>
-                                                <?php // if($userinfo->login_type == 'simple'){?>
-                                                <div class="container-box">
-                                                    <div class="imageBox">
-                                                        <div class="thumbBox"></div>
-                                                        <div class="spinner" style="display: none">Loading...</div>
-                                                    </div>
-                                                    <div class="clearfix"></div> 
-                                                    <input type="button" id="btnZoomIn" value="+" style="float: left " class='controls'>
-                                                        <input type="button" id="btnZoomOut" value="-" style="float: left" class='controls'>
-                                                    <div class="clearfix"></div> 
-                                                    <div class="action">
-                                                        <?php /*<input type="file" id="file" style="float:left; width: 250px" accept="image/gif, image/jpeg, image/png "> */ ?> 
-                                                        <div style="position:relative;">
-                                                        <a class='btn btn-primary' href='javascript:;'>
-                                                            Change Profile Photo
-                                                            <input type="file" name="image" id="file" value="Image" accept="image/gif, image/jpeg, image/png" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;'/>
-                                                        </a>
-                                                        </div>
-                                                    </div>
-                                                    <input type='hidden' id='profile_picture' value="<?php // echo $userinfo->profile_picture;?>">
-                                                    <input type='hidden' id='login-type' value="<?php // echo $userinfo->login_type;?>">
-                                                </div>
-                                                <?php// }?>
-                                            </div> 
-                                        </li>
-                                        <li>
-                                        <label>Username</label>
-                                        <div class="col_field">                                        
-                                            <div class="col_field1">
-                                                <input type="text" id='username' value="<?php // echo $userinfo->username;?>">
-                                                <img style="display:none;" src="<?php // echo site_url(); ?>/assets/images/tick.png" />
-                                            </div>
-                                            <?php /* <div class="url"><a href="--><?php //echo site_url('/profile'); ?><!--/--><?php //echo $userinfo->username;?><!--">--><?php //echo site_url('/profile'); ?><!--/--><?php //echo $userinfo->username;?><!--</a></div> */ ?>
-                                        </div>
-                                        </li>
-                                        <li>
-                                        <label>Email</label>
-                                        <div class="col_field" >                                        
-                                            <div class="col_field1">
-                                                <input type="text" id='email' value='<?php // echo $userinfo->email;?>'>
-                                            </div>
-                                        </div>
-                                        </li>
-                                        <li>
-                                            <label>Your Plugin's ID</label>
-                                            <div class="col_field" >
-                                                <div class="col_field1">
-                                                    <input type="text" value='<?php // echo $userinfo->auth_key;?>' readonly>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <label>My Broadcast(s) contains sensitive media</label>
-                                            <div class="col_field" >
-                                                <div class="col_field1">
-                                                    <input type="checkbox" id='is_sensitive' value="" name="is_sensitive" <?php // if($userinfo->is_sensitive == 'yes'){ echo 'checked'; } ?>>
-                                                </div>
-                                            </div>
-                                        </li>
-
-                                        <li id='<?php // echo $user_id;?>'>
-                                            <input type="submit" class="save_form" value="Save" id='account-save'>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </form> -->
+      
                     </div>
                     <?php // if($userinfo->login_type=='simple'){?>
                     <div class="form_holder hide">
@@ -238,5 +164,139 @@
 @endsection
 
 @push('script')
+<script type="text/javascript">
+$('#account-save').click(function(){
+    
+       $.loader({className:"blue", content:"<i class='fa fa-refresh fa-spin fa-3x fa-fw margin-bottom loadingclass'></i>"});
+        
+       email = $('#email').val().trim();
+       username = $('#username').val().trim();
+       user_id = $('#user_id').val().trim();
+       // alert($(this).parent());
+       logintype= $('#login-type').val().trim();
+       var profile_picture = '';
 
+        if($('#is_sensitive').is(':checked')){
+            is_sensitive = 'yes';
+        } else {
+            is_sensitive = 'no';
+        }
+       if(picture_change=='true')
+           profile_picture = cropper.getDataURL();
+       else if(picture_change=='false')
+           profile_picture = $('#profile_picture').val();
+       
+       if(username==''){
+           $.loader('close');
+            alertify.log('Please enter username.');            
+        }
+       else if(email==''){
+           $.loader('close');
+            alertify.log('Please enter email address.');            
+        }
+       else if(!validateEmail(email)){
+           $.loader('close');
+            alertify.alert('Invalid email address, please enter correct email.');
+            error = 'true';            
+       }
+       else{
+        $.ajax({
+                type: 'GET',
+                url: baseurl+'webservice/is_user_username/',
+                data: {
+                    username:username,
+                    user_id:user_id
+                },
+                success: function(msg){
+                    if(msg=='true'){
+                        $.loader('close');
+                         alertify.alert('Username already exist, please choose different username.');
+                         
+                    }
+                    else{
+                        $.ajax({
+                            type: 'GET',
+                            url: baseurl+'webservice/is_user_email/',
+                            data: {
+                                email:email,
+                                user_id:user_id
+                            },
+                            success: function(msg){
+                                
+                                if(msg=='true'){
+                                    $.loader('close');
+                                    alertify.alert('Email already exist, please choose different email.');
+                                    
+                                }
+                                else{
+                                    if(logintype=='simple'){
+                                        // alert(email);
+                                        // alert(user_id);
+                                        // alert(username);
+                                        // alert(profile_picture);
+                                        // alert(picture_change);
+                                        // alert(is_sensitive);
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: baseurl+'main/save_settings/',
+                                            data: {
+                                                email:email,
+                                                user_id:user_id,
+                                                username:username,
+                                                profile_picture:profile_picture,
+                                                type:'account',
+                                                picture_change:picture_change,
+                                                is_sensitive:is_sensitive
+                                            },
+                                            success: function(msg){
+                                                if(msg=='success'){
+                                                    $.loader('close');
+                                                    alertify.alert('Account settings have been successfully changed..');
+                                                    var url = baseurl+"profile/"+username;
+                                                    var html = '<a href="'+url+'">'+url+'</a>'
+                                                    $('.url').html(html);
+                                                }
+                                                location.reload();
+                                            }
+                                        });
+
+                                    }
+                                    else{
+
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: baseurl+'main/save_settings/',
+                                            data: {
+                                                email:email,
+                                                user_id:user_id,
+                                                username:username,
+                                                type:'facebook'
+                                            },
+                                            success: function(msg){
+
+                                                if(msg=='success'){
+                                                    $.loader('close');
+                                                    alertify.alert('Account settings have been successfully changed.');
+                                                    var url = baseurl+"profile/"+username;
+                                                    var html = '<a href="'+url+'">'+url+'</a>'
+                                                    $('.url').html(html);
+                                                }
+
+                                                location.reload();
+
+                                            }
+                                        });
+                                    }
+                                }
+
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
+        return false;
+}) ;
+    </script>
 @endpush
