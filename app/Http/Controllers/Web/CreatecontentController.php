@@ -43,7 +43,7 @@ class CreatecontentController extends Controller
 	            $video_name = $stream_urlx.'.'.$extension;
 	            // $imageName = 'profile_picture_' . $user_id . '.' . $extension;
                 // $path = STORAGE_PATH.'/'.$user_id."/"."videos/";
-                $path = base_path('wowza_storage');
+                $path = base_path('wowza_store');
 	            $file->move($path, $video_name);
                 //Making Stream URL
 	         	$stream_url = "rtmp://";
