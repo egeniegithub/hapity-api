@@ -17,3 +17,6 @@ yarn-error.log
 /public/images/profile_pictures/*
 
 /public/broadcast/*
+
+/wowza_store
+/wowza_store/*
