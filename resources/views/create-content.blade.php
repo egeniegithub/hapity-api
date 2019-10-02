@@ -25,7 +25,8 @@
                 <img src="{{asset('assets')}}/images/upload-icon-new.png" width="150">
             </div>
             <div class="create-content-form">
-                <form data-type="create" method="post" action="{{url('create_content_submission')}}" enctype="multipart/form-data">
+                {{-- <form data-type="create" method="post" action="{{url('create_content_submission')}}" enctype="multipart/form-data"> --}}
+                    <form method="post" action="{{url('create_content_submission')}}" enctype="multipart/form-data">
                     @csrf
                     <ul class="title-desc-section">
                         <li><input type="text" name="title" placeholder="Title" id="title" required autocomplete="off"></li>
@@ -66,7 +67,7 @@
                     <br />
                     <input id="token" type="hidden" value="{{ auth::user()->profile->auth_key }}" name="token" />
                     <input id="user_id" type="hidden" value="{{ auth::user()->id }}" name="user_id" />
-                    <input id="create-content-btn" class="btn btn-primary btn-width" type="submit" value="Upload">
+                    <input {{-- id="create-content-btns" --}} class="btn btn-primary btn-width" type="submit" value="Upload">
                 </form>
             </div>
         </div>

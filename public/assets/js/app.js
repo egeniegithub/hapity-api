@@ -290,28 +290,28 @@ $('#privacy-save').click(function(){
         return false;
 }) ;
 
-$('.create-content-form > form').submit(function(event) {
-    event.preventDefault();
-    $.loader({className:"blue", content:"<i class='fa fa-refresh fa-spin fa-3x fa-fw margin-bottom loadingclass'></i>"});
-    var content_type = $(this).data('type');
-    if(content_type == 'edit'){
-        var url = baseurl+'main/edit-content/submit/';
-    } else if(content_type == 'create'){
-        var url = baseurl+'main/create-content/submit/';
-    }
-    var data = new FormData(this);
-    $.ajax({
-        url:url,
-        type:'POST',
-        data: data,
-        cache:false,
-        contentType: false,
-        processData: false,
-        success: function(msg) {   
-            window.location = baseurl+'main';
-        }     
-    });
-});
+// $('.create-content-form > form').submit(function(event) {
+//     event.preventDefault();
+//     $.loader({className:"blue", content:"<i class='fa fa-refresh fa-spin fa-3x fa-fw margin-bottom loadingclass'></i>"});
+//     var content_type = $(this).data('type');
+//     if(content_type == 'edit'){
+//         var url = baseurl+'main/edit-content/submit/';
+//     } else if(content_type == 'create'){
+//         var url = "{{url({{url('create_content_submission')}})}}";
+//     }
+//     var data = new FormData(this);
+//     $.ajax({
+//         url:url,
+//         type:'POST',
+//         data: data,
+//         cache:false,
+//         contentType: false,
+//         processData: false,
+//         success: function(msg) {   
+//             window.location = baseurl+'main';
+//         }     
+//     });
+// });
 
 $('#login-submit').click(function(){
        username = $('#username').val().trim();

@@ -10,6 +10,7 @@ class Broadcast extends Model
     use SoftDeletes;
 
     protected $table = 'broadcasts';
+    protected $guarded = [];
     
     public function user()
     {
@@ -23,7 +24,7 @@ class Broadcast extends Model
     public function comments() {
         return $this->belongsToMany('App\User', 'broadcast_comments', 'broadcast_id', 'user_id');
     }
-    
+
     public function broadcastsComments()
     {
         return $this->hasMany('App\BroadcastComment', 'broadcast_id');
