@@ -12,7 +12,7 @@ return [
     | default location for this type of information, allowing packages
     | to have a conventional place to find your various credentials.
     |
-    */
+     */
 
     'mailgun' => [
         'domain' => env('MAILGUN_DOMAIN'),
@@ -42,6 +42,18 @@ return [
             'secret' => env('STRIPE_WEBHOOK_SECRET'),
             'tolerance' => env('STRIPE_WEBHOOK_TOLERANCE', 300),
         ],
+    ],
+
+    'facebook' => [
+        'client_id' => '2852796068070536',
+        'client_secret' => '1a2a74666a133c97279940a48dc476c4',
+        'redirect' => 'https://dev.hapity.local/login/facebook/callback',
+    ],
+
+    'twitter' => [
+        'client_id' => env('APP_ENV') == 'local' ?   env('DEV_TWITTER_CLIENT_ID') : env('LIVE_TWITTER_CLIENT_ID'),
+        'client_secret' => env('APP_ENV') == 'local' ? env('DEV_TWITTER_CLIENT_SECRET') : env('LIVE_TWITTER_CLIENT_SECRET'),
+        'redirect' => '/login/twitter/callback',
     ],
 
 ];

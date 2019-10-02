@@ -19,17 +19,15 @@ Route::get('help','Web\HelpController@index');
 Route::get('about','Web\ContactusController@index');
 Route::get('privacy-policy','Web\PrivacyController@index');
 Route::post('sendmail_contactus','Web\ContactusController@sendmail_contactus');
-// facebook routes
-Route::post('fbloginUser','Web\FacebookController@facebook_login');
 
+Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('auth.social');
+Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('auth.social.callback');
 
-// Auth::routes(['register' => false]);
-// Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/broadcasts/view/{id}', 'Web\BroadcastsController@view')->name('view_broadcast');
 
 Auth::routes();
 
-Route::get('/home', 'Web\MainController@index')->name('home');
+Route::get('/home', 'Web\MainController@index')->name('user_home');
 Route::get('webcast','Web\WebcastController@start_web_cast');
 Route::get('create-content','Web\WebcastController@create_content');
 Route::get('settings','Web\SettingController@settings');
