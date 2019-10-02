@@ -21,7 +21,20 @@ class UserProfileTableSeeder extends Seeder
         $userprofile->gender = 'Male';
         $userprofile->date_of_birth = '1991-12-21';
         $userprofile->age = '27';
+        $userprofile->auth_key =  bcrypt('Admin');
         $userprofile->full_name = 'Super Admin';
+        $userprofile->save();
+
+        $userprofile = new UserProfile();
+        $userprofile->user_id = '2';
+        $userprofile->first_name = 'Hapity';
+        $userprofile->last_name = 'User';
+        $userprofile->email = 'user@example.com';
+        $userprofile->gender = 'Male';
+        $userprofile->date_of_birth = '1991-12-21';
+        $userprofile->age = '27';
+        $userprofile->auth_key =  bcrypt('Hapity');
+        $userprofile->full_name = 'Hapity User';
         $userprofile->save();
     }
 }

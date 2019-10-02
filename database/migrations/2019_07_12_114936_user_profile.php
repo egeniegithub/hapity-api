@@ -28,6 +28,7 @@ class UserProfile extends Migration
             $table->string('auth_key', 512)->nullable();
             $table->string('full_name', 512)->nullable();
             $table->string('screen_name', 512)->nullable();
+            $table->bigInteger('is_sensitive')->default('0')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

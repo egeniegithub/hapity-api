@@ -16,7 +16,7 @@ class HomeController extends Controller
     public function index()
     {
         //
-        $broadcast = Broadcast::all();
+        $broadcast = Broadcast::all()->toArray();
         return view('index')->with('broadcast',$broadcast);
     }
 

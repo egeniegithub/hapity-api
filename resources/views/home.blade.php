@@ -21,7 +21,7 @@
         <?php //echo $hapity_header_view; ?>
     <div class="clearfix"></div>
 
-        <div class="profile-section-main">
+    <div class="profile-section-main">
     <div class="container">
             <div class="flash-error col-xs-12 col-sm-12 col-md-12" style="display: none;">Flash player is not supported by your browser, you need flash installed to see Broadcast Videos</div>
             <div class="col-xs-12 col-sm-3 col-md-3">
@@ -60,23 +60,23 @@
                         $index = rand(0,1);
                         $ip = '52.18.33.132';//$ipArr[$index];
                         @endphp
-                        @foreach ($broadcasts as $boradcast)
+                        @foreach ($broadcasts as $broadcast)
                           @php
                             $image_classes = '';
-                            $b_image = $boradcast['broadcast']['broadcast_image'];
-                            $b_id = isset($boradcast['broadcast']['id']) ? $boradcast['broadcast']['id'] : '';
+                            $b_image = $broadcast->broadcast_image;
+                            $b_id = isset($broadcast->id) ? $broadcast->id : '';
                             
-                            if($boradcast['broadcast']['title']){
-                                $b_title = $boradcast['broadcast']['title'];
+                            if($broadcast->title){
+                                $b_title = $broadcast->title;
                             } else {
                                 $b_title = "Untitled";
                             }
-                            $share_url = $boradcast['broadcast']['share_url'];
-                            $b_description = $boradcast['broadcast']['description'];
-                            $stream_url = $boradcast['broadcast']['stream_url'];
-                            $status = $boradcast['broadcast']['status'];
+                            $share_url = $broadcast->share_url;
+                            $b_description = $broadcast->description;
+                            $stream_url = $broadcast->stream_url;
+                            $status = $broadcast->status;
 
-                            $video_file_name = $boradcast['filename'];
+                            $video_file_name = $broadcast->filename;
                             if(!$b_image){
                                 $b_image = 'https://www.hapity.com/images/default001.jpg';
                             }
@@ -86,7 +86,7 @@
                       @endphp
                             <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
                                 <a href="#" class="bordcast-play image-section">
-                                    <img src="{{ $b_image }}" alt="{{ $b_title }}">
+                                    <img src="{{ asset('broadcast/images'.'/'.$b_image) }}" alt="{{ $b_title }}">
                                     @if($video_file_name)
                                         <div class="video-container video-conteiner-init" style="display:none;">
                                             <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div>
@@ -104,7 +104,7 @@
                                                          else
                                                          echo "http://".$ip.":1935/vod/".$video_file_name."/playlist.m3u8";?>"
                                                         }],
-                                                    playButton: 'https://www.hapity.com/images/play.png',
+                                                    playButton: '{{asset("assets/images/play.png")}}',
                                                     height: 380,
                                                     width: "100%",
                                                     image: '<?php echo $b_image; ?>',
@@ -136,7 +136,7 @@
                                             </p>
                                         </p>
                                     <?php endif; ?>    
-                                    <?php if($boradcast['broadcast']['status'] == "online") : ?>
+                                    <?php if($broadcast->status == "online") : ?>
                                         <span class="broadcast-live"></span>
                                     <?php else : ?>
                                         <span class="broadcast-offline"></span>
@@ -149,7 +149,7 @@
                                 <ul class="bordcast-edit-actions">
                                     <li class="social-share-action">
                                         <a href="#" data-toggle="modal" data-target="#share-modal"><!-- <i class="fa fa-share-alt-square"></i> -->
-                                            <img src="{{ asset('assets/')}}images/share.png" width="28" alt="social Media">
+                                            <img src="{{ asset('assets')}}/images/share.png" width="28" alt="social Media">
                                         </a>
                                         <ul class="share-with-icons">
                                             <?php if($stream_url): ?>
@@ -172,10 +172,10 @@
                                         </ul>
                                     </li>
                                     <li><a href="{{ url('main/edit-content').'/'.$b_id }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
-                                        <img src="{{ asset('assets/') }}images/edit.png" width="28" alt="Edit">
+                                        <img src="{{ asset('assets') }}/images/edit.png" width="28" alt="Edit">
                                     </a></li>
                                     <li><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn"><!-- <i class="fa fa-trash-o"></i> -->
-                                        <img src="{{ asset('assets/') }}images/delete.png" width="28" alt="Delete">
+                                        <img src="{{ asset('assets') }}/images/delete.png" width="28" alt="Delete">
                                     </a></li>
                                 </ul>
                                 <?php if($stream_url): ?>
@@ -186,7 +186,7 @@
                                         <div class="modal-body">
                                             <div class="embedcode-modal-innser">
                                                 <textarea readonly=""><iframe height="600" width="100%" scrolling="no" frameborder="0" 
-                                                    src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $boradcast['broadcast']['status'];?>&broadcast_image=<?php echo $b_image;?>">
+                                                    src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $broadcast->status;?>&broadcast_image=<?php echo $b_image;?>">
                                                     </iframe></textarea>                        
                                             </div>
                                         </div>

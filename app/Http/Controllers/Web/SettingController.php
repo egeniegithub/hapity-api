@@ -4,8 +4,11 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 use App\User;
 use Auth;
+Use Redirect;
+use DB;
 
 class SettingController extends Controller
 {
@@ -20,50 +23,55 @@ class SettingController extends Controller
         $userinfo = User::with('profile')->where('id', Auth::id())->first()->toArray();
     	return view('setting',compact('userinfo'));     
 	}
+    public function is_user_username($username, $user_id){
+        dd($username,$user_id);
+    }
     public function save_settings(Request $request){
-        dd($request->all());
-        if ($request->hasFile('file')) {
-            $file = $request->file('file');
-            $extension = $file->getClientOriginalExtension(); // getting image extension
-            $filename = time().'.'.$extension;
-            $path = public_path('images/');
-            $file->move($path, $filename);
-            $image_name = $filename;
+        $user_id = $request->user_id;
+        $rules = array(
+            'email' => 'unique:users,email,' . $user_id,
+            'username' => 'unique:users,username,' . $user_id,
+        );
+      
+        // $validator = Validator::make($request->all(), $rules);
+        $validator = Validator::make( $request->all(), $rules);
+        if($validator->fails()) {
+            return Redirect::back()->withErrors($validator);
+        }
+   
+        $username = $request->username;
+        $email = $request->email;
+        $is_sensitive = $request->is_sensitive;
+        $profile_picture = $request->file('image');
+        //  Saving User Data
+      
+        $imageName = $this->handle_base_64_profile_picture($user_id, $profile_picture);
+        $user['username'] = $request->username;
+        $user['email']    = $request->email;
+        
+        $profile['full_name'] = $request->username;
+        $profile['email']    = $request->email;
+        $profile['is_sensitive'] = $request->is_sensitive;
+        $profile['profile_picture']   = $imageName;
+        DB::table('users')->where('id',$user_id)->update($user);
+        DB::table('user_profiles')->where('user_id',$user_id)->update($profile);
+        return back()->with("success","Setting Successfull Update");
+    }
+
+    private function handle_base_64_profile_picture($user_id, $profile_picture)
+    {
+        $imageName = '';
+        if (!empty($profile_picture)) {
+              $file = $profile_picture;
+              $extension = $file->getClientOriginalExtension(); // getting image extension
+              $filename =time().'.'.$extension;
+              $imageName = 'profile_picture_' . $user_id . '.' . $extension;
+              $path = public_path('profile_pictures');
+              $file->move($path, $imageName);
+            // File::put(public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR . $imageName), base64_decode($image));
         }
 
-            $type = addslashes($this->input->post('type'));
-            $user_id = addslashes($this->input->post('user_id'));
-            
-            if($type=='account'){
-                $username = addslashes($this->input->post('username'));
-                $email = addslashes($this->input->post('email'));
-                $picture_change = $this->input->post('picture_change');
-                $profile_picture = $this->input->post('profile_picture');
-                $is_sensitive = $this->input->post('is_sensitive');
-  
-                define('UPLOAD_URL', 'https://api.hapity.com/uploads/user_profile_pictures/');
-                if($picture_change=='true'){
-                    $picture_path = $this->saveImage($profile_picture);
-                    $picture_path = /*UPLOAD_URL.*/$picture_path;
-                }
-                else{
-                    $picture_path = $profile_picture;
-                }
-                $data = array(
-                    'username'=>$username,
-                    'email'=>$email,   
-                    'profile_picture'=>$picture_path,
-                    'is_sensitive'  => $is_sensitive
-                );
-                $this->db->update('user', $data, "sid = $user_id");
-            }
-            else if($type=='privacy'){
-                $password = md5($this->input->post('password'));
-                $data = array(
-                    'password'=>$password,
-                );
-                $this->db->update('user', $data, "sid = $user_id");
-            }
-            echo 'success';
-        }
+        return $imageName;
+    }
+
 }
