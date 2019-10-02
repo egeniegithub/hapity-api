@@ -274,7 +274,10 @@ class AuthController extends Controller
             //$data_replace = 'data:image/' . $type . ';base64,';
             //$image = str_replace($data_replace, '', $profile_picture);
             //$image = str_replace(' ', '+', $image);
-            
+
+            $profile_picture = str_replace('datagea:im/jpeg;base64,', '', $profile_picture);
+            $profile_picture = str_replace('data:image/png;base64,', '', $profile_picture);
+
             $imageName = 'profile_picture_' . $user->id . '.jpg';
             File::put(public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR . $imageName), base64_decode($profile_picture));
         }
