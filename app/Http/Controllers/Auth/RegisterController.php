@@ -67,27 +67,32 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $users = User::create([
+        $user = User::create([
             'name' => $data['username'],
             'username' => $data['username'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
-        $users->roles()->attach(HAPITY_USER_ROLE_ID);
-        $user_id = $users->id;
+
+        $user->roles()->attach(HAPITY_USER_ROLE_ID);
+        
         UserProfile::create([
-            'user_id' => $user_id,
+            'user_id' => $user->id,
             'first_name' => $data['username'],
             'full_name' => $data['username'],
             'email' => $data['email'],
             'auth_key' => bcrypt($data['username']),
         ]);
-        $hash = md5($user_id);
+
+        /*
+        $hash = md5($user->id);
+
         Token::create([
-            'user_id' => $user_id,
+            'user_id' => $user->id,
             'token' => $hash,
         ]);
+        */
 
-        return $users;
+        return $user;
     }
 }
