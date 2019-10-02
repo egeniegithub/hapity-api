@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\User;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
+use App\Token;
+use App\User;
+use App\UserProfile;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
-use App\UserProfile;
-use App\Token;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
+
 class RegisterController extends Controller
 {
     /*
@@ -21,7 +22,7 @@ class RegisterController extends Controller
     | validation and creation. By default this controller uses a trait to
     | provide this functionality without requiring any additional code.
     |
-    */
+     */
 
     use RegistersUsers;
 
@@ -66,7 +67,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        $users =  User::create([
+        $users = User::create([
             'name' => $data['username'],
             'username' => $data['username'],
             'email' => $data['email'],
@@ -75,18 +76,18 @@ class RegisterController extends Controller
         $users->roles()->attach(HAPITY_USER_ROLE_ID);
         $user_id = $users->id;
         UserProfile::create([
-            'user_id'       =>  $user_id,
-            'first_name'    =>  $data['username'],
-            'full_name'     =>  $data['username'],
-            'email'         =>  $data['email'],
-            'auth_key'      =>  bcrypt($data['username'])
+            'user_id' => $user_id,
+            'first_name' => $data['username'],
+            'full_name' => $data['username'],
+            'email' => $data['email'],
+            'auth_key' => bcrypt($data['username']),
         ]);
-        $hash = md5($user_id );
+        $hash = md5($user_id);
         Token::create([
-                'user_id' => $user_id,
-                'token'   => $hash
-            ]);
-    }
-        return $users;  
+            'user_id' => $user_id,
+            'token' => $hash,
+        ]);
+
+        return $users;
     }
 }
