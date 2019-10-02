@@ -142,7 +142,7 @@ class LoginController extends Controller
                         }
 
                         if (!empty($fb_user)) {
-                            $local_user = User::where('email', $fb_user['email'])->with(['social'])->first();
+                            $local_user = User::where('email', $fb_user['email'])->with(['profile', 'social'])->first();
 
                             if (is_null($local_user)) {
                                 $new_user = new User();
@@ -180,7 +180,7 @@ class LoginController extends Controller
 
                                 if (is_null($user_existing_social)) {
                                     $new_user_social = new UserSocial();
-                                    $new_user_social->user_id = $new_user->id;
+                                    $new_user_social->user_id = $local_user->id;
                                     $new_user_social->social_id = $fb_user['id'];
                                     $new_user_social->email = $new_user->email;
                                     $new_user_social->platform = "facebook";

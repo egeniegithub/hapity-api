@@ -8,11 +8,11 @@ use App\UserProfile;
 use App\UserSocial;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 use Validator;
 
 class FacebookController extends Controller
 {
-    //
 
     public function __construct()
     {
@@ -22,7 +22,6 @@ class FacebookController extends Controller
 
     public function facebook_login(Request $request)
     {
-
         $rules = array(
             'facebook_id' => 'required',
             'username' => 'required',
@@ -44,162 +43,102 @@ class FacebookController extends Controller
 
         $input = $request->all();
 
-        $checkUserSocialAccountExist = User::with('social')
-//        ->where('social_id', '=', $input['facebook_id'])
-            ->where('email', $input['email'])
-            ->first();
+        $local_user = User::with(['profile', 'social'])->where('email', $request->email)->get()->first();
 
-        if (empty($checkUserSocialAccountExist)) {
-            // User Not Register
-            $User = new User();
-            $User->email = $input['email'];
-            $User->username = $input['username'];
-            $User->password = bcrypt($input['username']);
-            $User->save();
+        if (is_null($local_user)) {
+            $new_user = new User();
+            $new_user->email = $request->input('email');
+            $new_user->username = $request->input('username');
+            $new_user->password = bcrypt('h@p!ty_soc!@l_signup');
+            $new_user->save();
 
-            $UserProfile = new UserProfile();
-            $UserProfile->user_id = $User->id;
-            $UserProfile->email = $input['email'];
-            $UserProfile->auth_key = bcrypt($input['username']);
-            $UserProfile->profile_picture = $input['profile_picture'];
-            $UserProfile->save();
+            $new_user->roles()->attach(HAPITY_USER_ROLE_ID);
 
-            $UserSocial = new UserSocial();
-            $UserSocial->user_id = $User->id;
-            $UserSocial->social_id = $input['facebook_id'];
-            $UserSocial->email = $input['email'];
-            $UserSocial->platform = "facebook";
-            $UserSocial->save();
-            $token = auth()->fromUser($User);
-            $response['status'] = "success";
-            $response['user_info']['user_id'] = $User->id;
-            $response['user_info']['profile_picture'] = $UserProfile->profile_picture;
-            $response['user_info']['email'] = $User->email;
-            $response['user_info']['username'] = $User->username;
-            $response['user_info']['login_type'] = $UserSocial->platform;
-            $response['user_info']['social_id'] = $UserSocial->social_id;
-            $response['user_info']['join_date'] = date('Y-m-d', strtotime($User->created_at));
-            $response['user_info']['auth_key'] = $UserProfile->auth_key;
-            $response['user_info']['token'] = $token;
+            $profile_picture_name = $this->handle_profile_picture_upload_from_url($request->profile_picture, $new_user->id);
 
-        } else if (!empty($checkUserSocialAccountExist['social']->toArray()) && $checkUserSocialAccountExist['social'][0]['platform'] == "facebook") {
-            if (!empty($input['profile_picture'])) {
-                $user = User::find($checkUserSocialAccountExist['id']);
-                $user->profile()->update(['profile_picture' => $input['profile_picture']]);
+            $new_user_profile = new UserProfile();
+            $new_user_profile->user_id = $new_user->id;
+            $new_user_profile->email = $new_user->email;
+            $new_user_profile->auth_key = bcrypt($new_user->username);
+            if(!empty($profile_picture_name)) {
+                $new_user_profile->profile_picture = $profile_picture_name;
             }
-            $userProfileData = $checkUserSocialAccountExist->profile()->get()->first();
-            $token = auth()->fromUser($checkUserSocialAccountExist);
-            $response['status'] = "success";
-            $response['user_info']['user_id'] = $checkUserSocialAccountExist['id'];
-            $response['user_info']['profile_picture'] = $userProfileData['profile_picture'];
-            $response['user_info']['email'] = $checkUserSocialAccountExist['email'];
-            $response['user_info']['username'] = $checkUserSocialAccountExist['username'];
-            $response['user_info']['login_type'] = $checkUserSocialAccountExist['social'][0]['platform'];
-            $response['user_info']['social_id'] = $checkUserSocialAccountExist['social'][0]['social_id'];
-            $response['user_info']['join_date'] = date('Y-m-d', strtotime($checkUserSocialAccountExist['created_at']));
-            $response['user_info']['auth_key'] = $userProfileData['auth_key'];
-            $response['user_info']['token'] = $token;
+            $new_user_profile->save();
+
+            $new_user_social = new UserSocial();
+            $new_user_social->user_id = $new_user->id;
+            $new_user_social->social_id = $request->input('facebook_id');
+            $new_user_social->email = $new_user->email;
+            $new_user_social->platform = "facebook";
+            $new_user_social->save();
+
+            $token = auth()->fromUser($new_user);
+
+            $response = $this->generate_response($new_user->id, 'facebook', $token);
 
         } else {
+            $user_existing_social = UserSocial::where('social_id', $request->input('facebook_id'))->where('user_id', $local_user->id)->first();
 
-            $UserSocial = new UserSocial();
-            $UserSocial->user_id = $checkUserSocialAccountExist['id'];
-            $UserSocial->social_id = $input['facebook_id'];
-            $UserSocial->email = $input['email'];
-            $UserSocial->platform = "facebook";
-            $UserSocial->save();
+            $user_existing_profile = UserProfile::where('user_id', $local_user->id)->first();
+            if(!is_null($user_existing_profile)) {
+                $profile_picture_name = $this->handle_profile_picture_upload_from_url($request->profile_picture, $local_user->id);
 
-            if (!empty($input['profile_picture'])) {
-                $user = User::find($checkUserSocialAccountExist['id']);
-                $user->profile()->update(['profile_picture' => $input['profile_picture']]);
+                if(!empty($profile_picture_name)) {
+                    $user_existing_profile->profile_picture = $profile_picture_name;
+                }
+                $user_existing_profile->save();    
             }
 
-            $userProfileData = $checkUserSocialAccountExist->profile()->get()->first();
-            $token = auth()->fromUser($checkUserSocialAccountExist);
-            $response['status'] = "success";
-            $response['user_info']['user_id'] = $checkUserSocialAccountExist['id'];
-            $response['user_info']['profile_picture'] = $userProfileData['profile_picture'];
-            $response['user_info']['email'] = $checkUserSocialAccountExist['email'];
-            $response['user_info']['username'] = $checkUserSocialAccountExist['username'];
-            $response['user_info']['login_type'] = $UserSocial->platform;
-            $response['user_info']['social_id'] = $UserSocial->social_id;
-            $response['user_info']['join_date'] = date('Y-m-d', strtotime($checkUserSocialAccountExist['created_at']));
-            $response['user_info']['auth_key'] = $userProfileData['auth_key'];
-            $response['user_info']['token'] = $token;
+            if (is_null($user_existing_social)) {
+                $new_user_social = new UserSocial();
+                $new_user_social->user_id = $local_user->id;
+                $new_user_social->social_id = $request->input('facebook_id');
+                $new_user_social->email = $new_user->email;
+                $new_user_social->platform = "facebook";
+                $new_user_social->save();
+            }
+
+            $token = auth()->fromUser($local_user);
+
+            $response = $this->generate_response($local_user->id, 'facebook', $token);
         }
 
-//        if ($checkUserSocialAccountExist && $checkUserSocialAccountExist['platform'] == "facebook") {
-        //            // user register to facebook social account
-        //            $userProfileData = $checkUserSocialAccountExist->user->profile()->get()->first();
-        //
-        //            $response['status'] = "success";
-        //            $response['user_info']['user_id'] = $checkUserSocialAccountExist->user['id'];
-        //            $response['user_info']['profile_picture'] = $userProfileData['profile_picture'];
-        //            $response['user_info']['email'] = $checkUserSocialAccountExist->user['email'];
-        //            $response['user_info']['username'] = $checkUserSocialAccountExist->user['username'];
-        //            $response['user_info']['login_type'] = $checkUserSocialAccountExist['platform'];
-        //            $response['user_info']['social_id'] = $checkUserSocialAccountExist['social_id'];
-        //            $response['user_info']['join_date'] = date('Y-m-d',strtotime($checkUserSocialAccountExist->user['created_at']));
-        //            $response['user_info']['auth_key'] = $userProfileData['auth_key'];
-        //            $response['user_info']['token'] = "";
-        //        }
-        //        else if ($checkUserSocialAccountExist && $checkUserSocialAccountExist['platform'] != "facebook") {
-        //            // user not register to facebook social account
-        //            $userProfileData = $checkUserSocialAccountExist->user->profile()->get()->first();
-        //
-        //            $UserSocial = new UserSocial();
-        //            $UserSocial->user_id = $checkUserSocialAccountExist->user['id'];
-        //            $UserSocial->social_id = $input['facebook_id'];
-        //            $UserSocial->email = $input['email'];
-        //            $UserSocial->platform = "facebook";
-        //            $UserSocial->save();
-        //
-        //            $response['status'] = "success";
-        //            $response['user_info']['user_id'] = $checkUserSocialAccountExist->user['id'];
-        //            $response['user_info']['profile_picture'] = $userProfileData['profile_picture'];
-        //            $response['user_info']['email'] = $checkUserSocialAccountExist->user['email'];
-        //            $response['user_info']['username'] = $checkUserSocialAccountExist->user['username'];
-        //            $response['user_info']['login_type'] = $UserSocial->platform;
-        //            $response['user_info']['social_id'] = $UserSocial->social_id;
-        //            $response['user_info']['join_date'] = date('Y-m-d',strtotime($checkUserSocialAccountExist->user['created_at']));
-        //            $response['user_info']['auth_key'] = $userProfileData['auth_key'];
-        //            $response['user_info']['token'] = "";
-        //        }
-        //        else {
-        //            // user not register to social account
-        //            $User = new User();
-        //            $User->email = $input['email'];
-        //            $User->username = $input['username'];
-        //            $User->password = Hash::make(rand());
-        //            $User->save();
-        //
-        //            $UserProfile = new UserProfile();
-        //            $UserProfile->user_id = $User->id;
-        //            $UserProfile->email = $input['email'];
-        //            $UserProfile->auth_key = bcrypt($input['username']);
-        //            $UserProfile->profile_picture = $input['profile_picture'];
-        //            $UserProfile->save();
-        //
-        //            $UserSocial = new UserSocial();
-        //            $UserSocial->user_id = $User->id;
-        //            $UserSocial->social_id = $input['facebook_id'];
-        //            $UserSocial->email = $input['email'];
-        //            $UserSocial->platform = "facebook";
-        //            $UserSocial->save();
-        //
-        //            $response['status'] = "success";
-        //            $response['user_info']['user_id'] = $User->id;
-        //            $response['user_info']['profile_picture'] = $UserProfile->profile_picture;
-        //            $response['user_info']['email'] = $User->email;
-        //            $response['user_info']['username'] = $User->username;
-        //            $response['user_info']['login_type'] = $UserSocial->platform;
-        //            $response['user_info']['social_id'] = $UserSocial->social_id;
-        //            $response['user_info']['join_date'] = date('Y-m-d',strtotime($User->created_at));
-        //            $response['user_info']['auth_key'] = $User->auth_key;
-        //            $response['user_info']['token'] = "";
-        //        }
+        
 
         return response()->json($response);
+    }
+
+    private function generate_response($user_id, $platform, $token)
+    {
+        $user = User::with(['profile', 'social'])->find($user_id)->toArray();
+
+        $user_social = UserSocial::where('user_id', $user_id)->where('platform', $platform)->first();
+
+        $response = [];
+        $response['status'] = "success";
+        $response['user_info']['user_id'] = $user['id'];
+        $response['user_info']['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictures/' . $user['profile']['profile_picture']) : '';
+        $response['user_info']['email'] = $user['email'];
+        $response['user_info']['username'] = $user['username'];
+        $response['user_info']['login_type'] = $platform;
+        $response['user_info']['social_id'] = $user_social->social_id;
+        $response['user_info']['join_date'] = $user['created_at'];
+        $response['user_info']['auth_key'] = $user['profile']['auth_key'];
+        $response['user_info']['token'] = $token;
+
+        return $response;
+    }
+
+    private function handle_profile_picture_upload_from_url($profile_picture_url, $user_id)
+    {
+        $image_name = '';
+        if (!empty($profile_picture_url)) {
+            $image_content = file_get_contents($profile_picture_url);
+            $image_name = 'profile_picture_' . $user_id . '.jpg';
+            File::put(public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR . $image_name), $image_content);
+        }
+
+        return $image_name;
     }
 
 }
