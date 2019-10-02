@@ -10,17 +10,17 @@
     
     @if(isset($broadcast) && !empty($broadcast))
     
-        <meta property="og:title" content="{{ $broadcast[0]['title'] }}"/>
+        {{-- <meta property="og:title" content="{{ $broadcast[0]['title'] }}"/> --}}
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="{{ $broadcast[0]['broadcast_image'] }}" />
+        {{-- <meta property="og:image" content="{{ $broadcast[0]['broadcast_image'] }}" /> --}}
         <meta property="og:url" content="<?php // echo base_url().'/main/view_broadcast/'.$broadcast['id'];?>" />
-        <meta property="og:description" content="{{ $broadcast[0]['title'] }}" />
+        {{-- <meta property="og:description" content="{{ $broadcast[0]['title'] }}" /> --}}
         <meta property="twitter:creator" content="gohapity" />
         <meta property="twitter:site" content="gohapity" />
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:description" content="{{ $broadcast[0]['title'] }}" />
-        <meta property="twitter:title" content="{{ $broadcast[0]['title'] }}" />
-        <meta property="twitter:image:src" content="{{ $broadcast[0]['broadcast_image'] }}" />
+        {{-- <meta property="twitter:description" content="{{ $broadcast[0]['title'] }}" /> --}}
+        {{-- <meta property="twitter:title" content="{{ $broadcast[0]['title'] }}" /> --}}
+        {{-- <meta property="twitter:image:src" content="{{ $broadcast[0]['broadcast_image'] }}" /> --}}
     @endif
 
     <title>{{ config('app.name', 'Laravel') }}</title>
@@ -43,6 +43,7 @@
     <link rel="stylesheet" href="{{ asset('assets/css/alertify/alertify.rtl.css')}}">
     <link rel="stylesheet" href="{{ asset('assets/css/alertify/themes/default.css')}}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     
      <!-- Scripts -->
     {{-- <script src="{{ asset('app.js') }}"></script> --}}
@@ -291,7 +292,7 @@
 
     </div>
     {{-- <script type="text/javascript" src="{{ url('assets/js/jquery.main.js')}}"></script> --}}
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> --}}
     {{-- <script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js')}}"></script> --}}
     <script src="{{ asset('assets/js/alertify.js')}}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/jquery-ias.min.js')}}"></script>

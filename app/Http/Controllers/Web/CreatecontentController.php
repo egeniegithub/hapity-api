@@ -42,7 +42,8 @@ class CreatecontentController extends Controller
             	$extension = $file->getClientOriginalExtension();
 	            $video_name = $stream_urlx.'.'.$extension;
 	            // $imageName = 'profile_picture_' . $user_id . '.' . $extension;
-	            $path = STORAGE_PATH.'/'.$user_id."/"."videos/";
+                // $path = STORAGE_PATH.'/'.$user_id."/"."videos/";
+                $path = base_path('wowza_storage');
 	            $file->move($path, $video_name);
                 //Making Stream URL
 	         	$stream_url = "rtmp://";
@@ -110,41 +111,22 @@ class CreatecontentController extends Controller
         } 
 
     public function view_broadcast($broadcast_id){
+            $filename = '';
              $user_id = \Auth::user()->id;
-             $bc_id = Broadcast::find($broadcast_id)->id;
-                if(isset($bc_id) && !empty($bc_id)){
+             $broadcast = Broadcast::with('broadcastsComments')->where('id',$broadcast_id)->first()->toArray();
+
+                if(!empty($broadcast)){
                     if($user_id == ''){
-                        $broadcast = Broadcast::with('broadcastsComments')->first()->toArray();
-                        dd($broadcast);
+
                         // $data['APP_ID'] = $this->config->item('APP_ID');
                         // $data['APP_KEY'] = $this->config->item('APP_KEY');
                         // $data['APP_SECRET'] = $this->config->item('APP_SECRET');
-                        // $data['filename'] = $this->get_name_from_link($data['broadcast']['stream_url']);
-                        
-                        // $this->load->view('header',$data);
-                        // //$this->load->view('view-broadcast-logout',$data);
-                        // $this->load->view('view-broadcast',$data);
-                        // $this->load->view('footer');
+                        $filename = $this->get_name_from_link($broadcast['stream_url']);
+                        return view('view-broadcast',compact('broadcast','data'));
                     }
                     else{
-                        $broadcast = Broadcast::with('broadcastsComments')->first()->toArray();
-                        dd($broadcast);
-                        // $query = $this->db->query("select profile_picture,username,id,comment,date from broadcast_comments, user where broadcast_id = $broadcast_id and sid = user_id ORDER BY id ASC");
-                        // $comments = array();
-                        // foreach ($query->result_array() as $row) {
-                        //    $row['comment'] = stripslashes($row['comment']);
-                        //    $comments[] = $row;
-                        // } 
-                        // $data['comments'] = $comments;
-                        // $data['broadcast_id'] = $broadcast_id;
-                        // $data['broadcast'] = $this->get_broadcast($broadcast_id);
-                        // $data['user_id'] = $this->session->userdata('user_id');
                         // $data['notifications'] = $this->get_notifications($user_id);
                         // $data['notification_count'] = $this->get_notification_count($user_id);
-                        // $data['notification_view'] = $this->load->view('notifications', $data, TRUE);
-                        // $data['hapity_header_view'] = $this->load->view('hapity_header', NULL, TRUE);
-                        // $data['hapity_footer_view'] = $this->load->view('hapity_footer', NULL, TRUE);
-                        // $data['userdata'] = $this->get_user_profile($user_id);
                         // $app_id = $this->config->item('APP_ID');
                         // $app_key = $this->config->item('APP_KEY');
                         // $app_secret = $this->config->item('APP_SECRET');
@@ -152,12 +134,12 @@ class CreatecontentController extends Controller
                         // $data['APP_ID'] = $this->config->item('APP_ID');
                         // $data['APP_KEY'] = $this->config->item('APP_KEY');
                         // $data['APP_SECRET'] = $this->config->item('APP_SECRET');
-                        // $data['user_id'] = $user_id;
-                        // $data['filename'] = $this->get_name_from_link($data['broadcast']['stream_url']);
+                        $filename = $this->get_name_from_link($broadcast['stream_url']);
                         // $this->load->view('header',$data['broadcast']);
                         // $this->load->view('view-broadcast',$data);
                         // $this->load->view('footer');
                     }
+                    return view('view-broadcast',compact('broadcast','filename'));
                 }
                 else{                   
                     return back();
@@ -296,4 +278,23 @@ class CreatecontentController extends Controller
 
         return $name;
     }
+
+    // public function get_notifications($user_id){
+    //     $query = $this->db->query("select no.user_id as user_id, no.status,username, profile_picture, broadcast_image, bc.id as broadcast_id, no.id as noti_id, type from broadcast_notification as no,user as u,broadcast as bc where no.user_id <> $user_id and no.broadcast_id = bc.id and bc.user_id = $user_id and sid = no.user_id order by no.id desc LIMIT 50");
+    //     $response = array();
+    //     foreach ($query->result_array() as $row) {  
+    //         if($row['type']=='like')
+    //             $row['message'] = 'likes your broadcast.';
+    //         else if($row['type']=='comment')
+    //             $row['message'] = 'has commented your on broadcast.';
+          
+    //         $response[] = $row;
+    //     }
+    //     return $response;
+    // }
+    // public function get_notification_count($user_id){
+    //     $query = $this->db->query("select count(no.user_id) as count from broadcast_notification as no,broadcast as bc where no.user_id <> $user_id and no.broadcast_id = bc.id and bc.user_id = $user_id and no.status='unread' ");
+    //     $row = $query->row();
+    //     return $row->count;
+    // }
 }

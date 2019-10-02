@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use App\UserProfile;
-
+use App\Token;
 class RegisterController extends Controller
 {
     /*
@@ -81,7 +81,12 @@ class RegisterController extends Controller
             'email'         =>  $data['email'],
             'auth_key'      =>  bcrypt($data['username'])
         ]);
-        
+        $hash = md5($user_id );
+        Token::create([
+                'user_id' => $user_id,
+                'token'   => $hash
+            ]);
+    }
         return $users;  
     }
 }

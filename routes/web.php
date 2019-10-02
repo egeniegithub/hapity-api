@@ -37,4 +37,6 @@ Route::post('startwebbroadcast','Web\BroadcastsController@startwebbroadcast');
 Route::post('update_timestamp_broadcast','Web\BroadcastsController@update_timestamp_broadcast');
 Route::post('create_content_submission','Web\CreatecontentController@create_content_submission');
 Route::get('view-broadcast/{id}','Web\CreatecontentController@view_broadcast');
+Route::post('offline_broadcast','Web\BroadcastsController@offline_broadcast');
+Route::get('edit-content/{broadcast_id}','Web\BroadcastsController@edit_broadcast_content');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');

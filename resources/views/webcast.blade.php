@@ -1,7 +1,3 @@
-@php 
-
-@endphp
-
 @extends('layouts.app')
 
 @push('css')
@@ -59,7 +55,7 @@
                                 
                             </div>
                         </li>
-                        <li class="broadcast-btn-style"><input id="start-streaming" class="btn btn-primary" type="button" value="Start"></li>
+                        <li class="broadcast-btn-style"><input id="start-streamings" class="btn btn-primary" type="button" value="Start"></li>
                     </ul>
                 </form>
             </div>
@@ -148,7 +144,7 @@
             jQuery('.live-streaming').css("background-image", "");
         });
 
-        $("#start-streaming").click(function(){
+        $("#start-streamings").click(function(){
             var t = $("#title").val().trim();
             if(t) {
                 $(this).parents().find('#stream-conatiner-wrp').fadeOut('fast');
@@ -171,6 +167,10 @@
                     // processData: false,
                     dataType: 'json',
                     type: 'POST',
+
+                     headers: {
+                               'access-control-allow-origin': '*',
+                            },
                     /*contentType:false,
                     processData:false,*/
                     data: {
@@ -182,7 +182,7 @@
                         stream_url: time,
                         token: token,
                         post_plugin:flag,
-                        server: '52.18.33.132',
+                        server_input: '52.18.33.132',
                         broadcast_image: bd_image,
                         image_ba: $('#bd_image').attr('files'),
                         user_id:'{{ auth::user()->id }}',
@@ -206,7 +206,7 @@
                             $.ajax({
                                 url: "{{url('update_timestamp_broadcast')}}",
                                 dataType: 'jsonp',
-                                type: 'GET',
+                                type: 'POST',
                                 data: {
                                     _token: "{{ csrf_token() }}",
                                     token: token,
@@ -232,10 +232,11 @@
         });
         $("#stop-streaming").click(function(){
             $.ajax({
-                url: baseurl+'main/offline_broadcast/',
+                url: "{{url('offline_broadcast')}}",
                 dataType: 'json',
-                type: 'GET',
+                type: 'POST',
                 data: {
+                    _token: "{{ csrf_token() }}",
                     token: token,
                     broadcast_id: bid
                 },

@@ -152,13 +152,13 @@
                                             <img src="{{ asset('assets')}}/images/share.png" width="28" alt="social Media">
                                         </a>
                                         <ul class="share-with-icons">
-                                            <?php if($stream_url): ?>
+                                                @if($stream_url)
                                                 <li>
                                                     <a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $b_id;?>" class="code-icon">
                                                         <i class="fa fa-code"></i>
                                                     </a>
                                                 </li>
-                                            <?php endif; ?>    
+                                                @endif
                                             <li>
                                                 <a href="https://twitter.com/home?status=<?php echo $share_url; ?>" target="_blank" class="twitter">
                                                     <i class="fa fa-twitter"></i>
@@ -171,7 +171,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li><a href="{{ url('main/edit-content').'/'.$b_id }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
+                                    <li><a href="{{ url('edit-content').'/'.$b_id }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
                                         <img src="{{ asset('assets') }}/images/edit.png" width="28" alt="Edit">
                                     </a></li>
                                     <li><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn"><!-- <i class="fa fa-trash-o"></i> -->
@@ -194,8 +194,7 @@
                                 <?php endif; ?>    
                                 <a href="#" class="close-btn">X</a>
                             </div>
-                        <?php endforeach; ?>
-                        
+                        @endforeach                        
                     </div>
                 </div>
             </div>
@@ -244,18 +243,18 @@
                  else
                  echo "http://".$ip.":1935/vod/".$video_file_name."/playlist.m3u8";?>"
                 }],
-            playButton: 'https://www.hapity.com/images/play.png',
-            height: 380,
-            width: "100%",
-            image: '<?php echo $b_image; ?>',
-            skin: 'stormtrooper',
-            });
-
-            $(document).ready(function(){
-                $(".jw-reset").click(function(){
-                    jwplayer("w-broadcast-<?php echo $b_id; ?>").play('play');
+                playButton: 'https://www.hapity.com/images/play.png',
+                height: 380,
+                width: "100%",
+                image: '<?php echo $b_image; ?>',
+                skin: 'stormtrooper',
                 });
-            });*/
+
+                $(document).ready(function(){
+                    $(".jw-reset").click(function(){
+                        jwplayer("w-broadcast-<?php echo $b_id; ?>").play('play');
+                    });
+                });*/
 
             jQuery(document).on('click', '.bordcast-active .close-btn', function(event) {
                 event.preventDefault();
