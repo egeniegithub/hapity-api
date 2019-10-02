@@ -20,12 +20,16 @@ Route::group([
     Route::post('login', 'AuthController@login');
     Route::post('register', 'AuthController@register');
     Route::post('logout', 'AuthController@logout');
+
+    Route::post('{platform}/login', 'SocialLoginController@social_login')->name('social.login');
+
+
+
     Route::post('refresh', 'AuthController@refresh');
     Route::post('get_profile_info', 'AuthController@getUserProfile');
     Route::post('edit_profile', 'AuthController@editUserProfile');
     Route::post('me', 'AuthController@me');
-    Route::post('facebook_login', 'FacebookController@facebook_login');
-    Route::post('twitter_login', 'TwitterController@twitter_login');
+    
     Route::post('uploadbroadcast', 'BroadcastsController@uploadBroadcast');
     Route::post('editbroadcast', 'BroadcastsController@editBroadcast');
     Route::post('deletebroadcast', 'BroadcastsController@deleteBroadcast');

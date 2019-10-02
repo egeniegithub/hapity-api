@@ -11,25 +11,25 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Validator;
 
-class FacebookController extends Controller
+class SocialLoginController extends Controller
 {
 
     public function __construct()
     {
         auth()->setDefaultDriver('api');
-        $this->middleware('auth:api', ['except' => ['facebook_login']]);
+        $this->middleware('auth:api', ['except' => ['social_login']]);
     }
 
-    public function facebook_login(Request $request)
+    public function social_login(Request $request, $platform)
     {
         $rules = array(
-            'facebook_id' => 'required',
+            'social_id' => 'required',
             'username' => 'required',
             'email' => 'required|email',
             'profile_picture' => 'required',
         );
         $messages = array(
-            'facebook_id.required' => 'Facebook id is required.',
+            'social_id.required' => 'Social id is required.',
             'username.required' => 'Username already registered.',
             'email.required' => 'Email is required.',
             'profile_picture.required' => 'Profile Picture is required.',
@@ -60,59 +60,59 @@ class FacebookController extends Controller
             $new_user_profile->user_id = $new_user->id;
             $new_user_profile->email = $new_user->email;
             $new_user_profile->auth_key = bcrypt($new_user->username);
-            if(!empty($profile_picture_name)) {
+            if (!empty($profile_picture_name)) {
                 $new_user_profile->profile_picture = $profile_picture_name;
             }
             $new_user_profile->save();
 
             $new_user_social = new UserSocial();
             $new_user_social->user_id = $new_user->id;
-            $new_user_social->social_id = $request->input('facebook_id');
+            $new_user_social->social_id = $request->input('social_id');
             $new_user_social->email = $new_user->email;
-            $new_user_social->platform = "facebook";
+            $new_user_social->platform = $platform;
             $new_user_social->save();
 
             $token = auth()->fromUser($new_user);
 
-            $response = $this->generate_response($new_user->id, 'facebook', $token);
+            $response = $this->generate_response($new_user->id, $platform, $token, $request->input('social_id'));
 
         } else {
-            $user_existing_social = UserSocial::where('social_id', $request->input('facebook_id'))->where('user_id', $local_user->id)->first();
+            $user_existing_social = UserSocial::where('social_id', $request->input('social_id'))->where('user_id', $local_user->id)->first();
 
             $user_existing_profile = UserProfile::where('user_id', $local_user->id)->first();
-            if(!is_null($user_existing_profile)) {
+            if (!is_null($user_existing_profile)) {
                 $profile_picture_name = $this->handle_profile_picture_upload_from_url($request->profile_picture, $local_user->id);
 
-                if(!empty($profile_picture_name)) {
+                if (!empty($profile_picture_name)) {
                     $user_existing_profile->profile_picture = $profile_picture_name;
                 }
-                $user_existing_profile->save();    
+                $user_existing_profile->save();
             }
 
             if (is_null($user_existing_social)) {
                 $new_user_social = new UserSocial();
                 $new_user_social->user_id = $local_user->id;
-                $new_user_social->social_id = $request->input('facebook_id');
-                $new_user_social->email = $new_user->email;
-                $new_user_social->platform = "facebook";
+                $new_user_social->social_id = $request->input('social_id');
+                $new_user_social->email = $local_user->email;
+                $new_user_social->platform = $platform;
                 $new_user_social->save();
             }
 
             $token = auth()->fromUser($local_user);
 
-            $response = $this->generate_response($local_user->id, 'facebook', $token);
+            $response = $this->generate_response($local_user->id, $platform, $token, $request->input('social_id'));
         }
-
-        
 
         return response()->json($response);
     }
 
-    private function generate_response($user_id, $platform, $token)
+    private function generate_response($user_id, $platform, $token, $social_id)
     {
         $user = User::with(['profile', 'social'])->find($user_id)->toArray();
 
         $user_social = UserSocial::where('user_id', $user_id)->where('platform', $platform)->first();
+        $user_social->social_id = $social_id;
+        $user_social->save();
 
         $response = [];
         $response['status'] = "success";
@@ -121,7 +121,7 @@ class FacebookController extends Controller
         $response['user_info']['email'] = $user['email'];
         $response['user_info']['username'] = $user['username'];
         $response['user_info']['login_type'] = $platform;
-        $response['user_info']['social_id'] = $user_social->social_id;
+        $response['user_info']['social_id'] = $social_id;
         $response['user_info']['join_date'] = $user['created_at'];
         $response['user_info']['auth_key'] = $user['profile']['auth_key'];
         $response['user_info']['token'] = $token;
