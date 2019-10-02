@@ -268,14 +268,15 @@ class AuthController extends Controller
     {
         $imageName = '';
         if (!empty($profile_picture)) {
-            $pos = strpos($profile_picture, ';');
-            $type = explode(':image/', substr($profile_picture, 0, $pos))[1];
+            //$pos = strpos($profile_picture, ';');
+            //$type = explode(':image/', substr($profile_picture, 0, $pos))[1];
 
-            $data_replace = 'data:image/' . $type . ';base64,';
-            $image = str_replace($data_replace, '', $profile_picture);
-            $image = str_replace(' ', '+', $image);
-            $imageName = 'profile_picture_' . $user->id . '.' . $type;
-            File::put(public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR . $imageName), base64_decode($image));
+            //$data_replace = 'data:image/' . $type . ';base64,';
+            //$image = str_replace($data_replace, '', $profile_picture);
+            //$image = str_replace(' ', '+', $image);
+            
+            $imageName = 'profile_picture_' . $user->id . '.jpg';
+            File::put(public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR . $imageName), base64_decode($profile_picture));
         }
 
         return $imageName;
