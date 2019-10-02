@@ -25,10 +25,11 @@
                 <img src="{{asset('assets')}}/images/upload-icon-new.png" width="150">
             </div>
             <div class="create-content-form">
-                <form data-type="create" method="post" action="/main/create-content/submit/" enctype="multipart/form-data">
+                <form data-type="create" method="post" action="{{url('create_content_submission')}}" enctype="multipart/form-data">
+                    @csrf
                     <ul class="title-desc-section">
                         <li><input type="text" name="title" placeholder="Title" id="title" required autocomplete="off"></li>
-                        <li><textarea name="description" id="description" placeholder="Description"></textarea></li>
+                        <li><textarea name="description" id="description" placeholder="Description" required></textarea></li>
                     </ul><!-- title-desc-section -->   
                     <div class="upload-actions">
                         <!-- <h3>Upload a Video or Picture</h3> -->

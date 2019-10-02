@@ -54,7 +54,7 @@ class RegisterController extends Controller
             // 'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:50', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', 'min:3', 'confirmed'],
         ]);
     }
 
@@ -72,13 +72,16 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
+        $users->roles()->attach(HAPITY_USER_ROLE_ID);
         $user_id = $users->id;
         UserProfile::create([
-            'user_id'   =>  $user_id,
-            'email'     =>  $data['email'],
-            'auth_key'  =>  bcrypt($data['username'])
+            'user_id'       =>  $user_id,
+            'first_name'    =>  $data['username'],
+            'full_name'     =>  $data['username'],
+            'email'         =>  $data['email'],
+            'auth_key'      =>  bcrypt($data['username'])
         ]);
         
-        return $users;    
+        return $users;  
     }
 }

@@ -17,7 +17,7 @@
             <div class="streamimg-logo"><img src="{{asset('assets')}}/images/broadcast-icon-new.png" width="100"></div>
             <div class="live-broadcast-form">
 
-                <form>
+                <form enctype="multipart/form-data">
                         <div class="form-group clearfix">
                             <input type="text" class="broadcast-title" name="" placeholder="ENTER BROADCAST TITLE" id="title" required autocomplete="off">
                         </div>
@@ -166,12 +166,15 @@
                     $(".status-circle").fadeTo(100, 0.1).fadeTo(200, 1.0)
                 }, 1000);
                 $.ajax({
-                    url: baseurl+'main/startwebbroadcast/',
+                    url: "{{url('startwebbroadcast')}}",
+                    // contentType: 'multipart/form-data',
+                    // processData: false,
                     dataType: 'json',
                     type: 'POST',
                     /*contentType:false,
                     processData:false,*/
                     data: {
+                        _token: "{{ csrf_token() }}",
                         title: t,
                         geo_location: '0,0',
                         allow_user_messages: 'no',
@@ -181,6 +184,7 @@
                         post_plugin:flag,
                         server: '52.18.33.132',
                         broadcast_image: bd_image,
+                        image_ba: $('#bd_image').attr('files'),
                         user_id:'{{ auth::user()->id }}',
                     },
                     success: function (data) {
@@ -200,10 +204,11 @@
                         },3000);
                         setInterval(function(){
                             $.ajax({
-                                url: baseurl+'main/update_timestamp_broadcast/',
+                                url: "{{url('update_timestamp_broadcast')}}",
                                 dataType: 'jsonp',
                                 type: 'GET',
                                 data: {
+                                    _token: "{{ csrf_token() }}",
                                     token: token,
                                     broadcast_id: bid
                                 },
