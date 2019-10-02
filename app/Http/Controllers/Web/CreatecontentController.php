@@ -87,8 +87,9 @@ class CreatecontentController extends Controller
                	$broadcast_data['video_name'] 			= $video_name;
                	$broadcast_data['broadcast_image'] 			= $filename;
                	$broadcast_data['share_url']			= '';
-     			// dd($broadcast_data);
-                DB::table('broadcasts')->insert($broadcast_data);
+                 // dd($broadcast_data);
+                 Broadcast::create($broadcast_data);
+                // DB::table('broadcasts')->insert($broadcast_data);
                 // Broadcast::UpdateOrCreate($broadcast_data);
                 $broadcast_id = DB::getPdo()->lastInsertId();
 
@@ -109,6 +110,121 @@ class CreatecontentController extends Controller
             }
             return back();
         } 
+
+        // public function edit_content_submission(){
+        //     $user_id = $this->session->userdata('user_id');
+        //     $title = $this->input->post('title');
+        //     $description = $this->input->post('description');
+        //     $stream_id = $this->input->post('bid');
+        //     $stream_urlx = $this->input->post('stream_url');
+        //     $token = $this->input->post("token");
+        //     if($this->is_broadcast($stream_id) && $user_id!=" " && $user_id!= NULL){
+
+        //         $qry = "Select * from broadcast where  id='$stream_id' ";
+        //         $response = $this->db->query($qry);
+        //         $response = $response->result_array();
+        //         $stream_urllll = $response[0]['stream_url'];
+        //         $user_id = $response[0]['user_id'];
+        //         $broadcast_imageg = $response[0]['broadcast_image'];
+
+        //         if (($_FILES['image']['error'] === UPLOAD_ERR_OK)) {
+        //             define('UPLOAD_DIR', '/var/www/vhosts/api/api/uploads/broadcast_images/');
+        //             define('UPLOAD_URL', 'https://api.hapity.com/uploads/broadcast_images/');
+
+        //             $name = time();
+        //             $pathtosave = UPLOAD_DIR . $name . ".jpg";
+        //             $urltosave = UPLOAD_URL . $name . ".jpg";
+
+        //             if (!empty($broadcast_imageg)) {
+        //                 $pathFragments = explode('/', $broadcast_imageg);
+        //                 $broadcast_imageg = end($pathFragments);
+        //             }
+        //             foreach (glob(UPLOAD_DIR . "/*") as $filename) {
+        //                 $pos = strpos($filename, $broadcast_imageg);
+        //                 if ($pos === false) {
+
+        //                     // string needle NOT found in haystack
+        //                 } else {
+        //                     $command = "rm " . $filename;
+        //                     $error = shell_exec("$command");
+        //                 }
+        //             }
+        //             $imageFile = $_FILES['image']['name'];
+        //             $imageFile_tomove = $_FILES['image']['tmp_name'];
+        //             move_uploaded_file($imageFile_tomove, $pathtosave);
+        //             $path = $this->Broadcast->update_img_broadcast($stream_id, $urltosave);
+
+        //         }
+
+        //         if (($_FILES['video']['error'] === UPLOAD_ERR_OK)) {
+        //             if ($stream_urlx == '') {
+
+        //                 if (!empty($stream_urllll)) {
+        //                     $pathFragments = explode('/', $stream_urllll);
+        //                     $stream_urlx = end($pathFragments);
+        //                 }
+        //             }
+        //             if ($stream_urlx != '') {
+        //                 $path = "/home/san/live/";
+        //                 $files = array();
+        //                 foreach (glob($path . "/*") as $filename) {
+        //                     $pos = strpos($filename, $stream_urlx);
+        //                     if ($pos === false) {
+
+        //                         // string needle NOT found in haystack
+        //                     } else {
+        //                         $command = "rm " . $filename;
+        //                         $error = shell_exec("$command");
+        //                     }
+        //                 }
+
+        //                 $videofile = $_FILES['video']['name'];
+        //                 $videofile_tomove = $_FILES['video']['tmp_name'];
+        //                 if ($extension == '') {
+        //                     $info = pathinfo($videofile);
+        //                     $ext = $info['extension']; // get the extension of the file
+        //                     $newname = $stream_urlx . "." . $ext;
+
+        //                 } else {
+        //                     $newname = $stream_urlx . "." . $extension;
+        //                 }
+
+        //                 //$temp_pathtosave = "/home/san/live/temp-" . $newname;
+        //                 $pathtosave = "/home/san/live/" . $newname;
+
+        //                 move_uploaded_file($videofile_tomove, $pathtosave);
+
+        //                 /*$shell_exec = shell_exec("ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 $temp_pathtosave");
+
+        //                 if($shell_exec == 90){
+        //                     $shell_exec = shell_exec('ffmpeg -i "'.$temp_pathtosave.'" -vf "transpose=1,transpose=2" '. $pathtosave);
+        //                     shell_exec('rm '.$temp_pathtosave);
+        //                 }*/
+        //                 $stream_url = "rtmp://";
+        //                 $server = $this->getRandIp();
+        //                 $stream_url .= $server;
+        //                 $stream_url .= ":1935/live/" . $this->input->post('stream_url');
+
+        //             }
+        //         }
+
+        //         $broadcast_data = $this->get_broadcast_by_id($stream_id);
+        //         $data = array();
+        //         if($broadcast_data['title'] != $title){
+        //             $data['title'] = $title;
+        //         }
+
+        //         if($broadcast_data['description'] != $description){
+        //             $data['description'] = $description;
+        //         }
+                
+        //         $this->updatbroadcast($stream_id, $data);
+
+        //         $this->make_plugin_call_edit($stream_id);
+        //     }
+
+        //     redirect('main/', 'refresh');
+        // } 
 
     public function view_broadcast($broadcast_id){
             $filename = '';

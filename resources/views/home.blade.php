@@ -58,7 +58,8 @@
                         @php
                         $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
                         $index = rand(0,1);
-                        $ip = '52.18.33.132';//$ipArr[$index];
+                        // $ip = '52.18.33.132';//$ipArr[$index];
+                        $ip = '192.168.20.251';
                         @endphp
                         @foreach ($broadcasts as $broadcast)
                           @php
@@ -93,30 +94,24 @@
                                         </div>
                                         <script>
                                             jwplayer("w-broadcast-{{ $b_id }}").setup({
-                                                        sources: [{
-                                                            file: "<?php  if($status == "online")
-                                                         echo str_replace("rtsp","rtmp",$stream_url);
-                                                         else
-                                                         echo "rtmp://".$ip.":1935/vod/".$video_file_name;?>"
-                                                        },{
-                                                            file:"<?php  if($status == "online")
-                                                         echo str_replace(array("rtsp","rtmp"),"http",$stream_url."/playlist.m3u8");
-                                                         else
-                                                         echo "http://".$ip.":1935/vod/".$video_file_name."/playlist.m3u8";?>"
-                                                        }],
-                                                    playButton: '{{asset("assets/images/play.png")}}',
-                                                    height: 380,
-                                                    width: "100%",
-                                                    image: '<?php echo $b_image; ?>',
-                                                    skin: 'stormtrooper',
+                                                    sources: [{
+                                                        file: "@php if($status == 'online') echo str_replace('rtsp','rtmp',$stream_url); else echo 'rtmp://'.$ip.':1935/vod/'.$video_file_name; @endphp"
+                                                    },{
+                                                        file:"@php  if($status == 'online') echo str_replace(array('rtsp','rtmp'),'http',$stream_url.'/playlist.m3u8'); else echo 'http://'.$ip.':1935/vod/'.$video_file_name.'/playlist.m3u8' @endphp"
+                                                    }],
+                                                playButton: '{{asset("assets/images/play.png")}}',
+                                                height: 380,
+                                                width: "100%",
+                                                image: '<?php echo $b_image; ?>',
+                                                skin: 'stormtrooper',
+                                                });
+                                            
+                                                /* $(document).ready(function(){
+                                                    $(".jw-reset").click(function(){
+                                                        jwplayer("w-broadcast-{{ $b_id }}").play('play');
                                                     });
-                                                    
-                                                   /* $(document).ready(function(){
-                                                        $(".jw-reset").click(function(){
-                                                            jwplayer("w-broadcast-{{ $b_id }}").play('play');
-                                                        });
-                                                    });*/
-                                        </script>
+                                                });*/
+                                            </script>
                                     @endif
                                 </a> 
                                 <div class="bordcast-inner-data">
