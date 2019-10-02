@@ -202,79 +202,90 @@ class AuthController extends Controller
      */
     public function editUserProfile(Request $request)
     {
+        //user_id, username, email, token, password, profile_picture
+
         $user_id = $request->input('user_id');
-        $rules = array(
-            'email' => 'unique:users,email,' . $user_id,
-            'username' => 'unique:users,username,' . $user_id,
-        );
-        $validator = Validator::make(Input::all(), $rules);
-        if ($validator->fails()) {
-            $messages = $validator->errors()->all();
-            $response = array(
-                'status' => 'failure',
-                'message' => $messages[0],
-            );
-            return response()->json($response);
+        if (!is_null($user_id) && !empty($user_id)) {
+
+            $username = $request->input('username');
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $profile_picture = $request->input('profile_picture');
+
+            $user = User::find($user_id)->with(['profile', 'social']);
+
+            $rules = [];
+
+            if ($user->username != $username) {
+                $rules['username'] = 'required|unique:users';
+            } else {
+                $rules['username'] = 'required';
+            }
+
+            if ($user->email != $email) {
+                $rules['email'] = 'required|unique:users|email';
+            } else {
+                $rules['email'] = 'required|email';
+            }
+
+            $rules['password'] = 'required';
+            $rules['profile_picture'] = 'required';
+            $rules['user_id'] = 'required';
+
+            $request->validate($rules);
+            
+            if (!empty($username)) {
+                $user->username = $username;
+            }
+            if (!empty($email)) {
+                $user->email = $email;
+            }
+            if (!empty($password)) {
+                $user->password = bcrypt($password);
+            }
+            $user->save();
+
+            $user->roles()->attach(HAPITY_USER_ROLE_ID);
+
+            $user_profile = UserProfile::where('user_id', $user->id)->first();
+                  
+
+            $profile_picture_name = $this->handle_base_64_profile_picture($user, $profile_picture);
+
+            if (!empty($imageName)) {
+                $user_profile->profile_picture = $profile_picture_name;
+                
+            }
+            $user_profile->email = $user->email;
+            $user_profile->save();
+
+           
+
+            $user_info = array();
+            $user_info['user_id'] = $profile['id'];
+            if(!empty($))
+            $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile['profile']['profile_picture']);
+            $user_info['email'] = $profile['email'];
+            $user_info['username'] = $profile['username'];
+            $user_info['auth_key'] = $profile['profile']['auth_key'];
+
+            $returnData['status'] = 'success';
+            $returnData['profile_info'] = $user_info;
+
+            return response()->json($returnData, 200);
+        } else {
+            $returnData = [];
+            $returnData['status'] = 'failure';
+            $returnData['message'] = 'User Id is Required';
+
         }
-        $username = $request->input('username');
-        $email = $request->input('email');
-        $password = $request->input('password');
-        $profile_picture = $request->input('profile_picture');
-
-        //  Saving User Data
-        $user = User::find(Auth::id());
-        if (!empty($username)) {
-            $user->username = $username;
-        }
-        if (!empty($email)) {
-            $user->email = $email;
-        }
-        if (!empty($password)) {
-            $user->password = bcrypt($password);
-        }
-        $user->save();
-
-        $user->roles()->attach(HAPITY_USER_ROLE_ID);
-
-        $update_array = array();
-        //  Upload Profile Picture if Exists
-
-        $imageName = $this->handle_base_64_profile_picture($user, $profile_picture);
-
-        if (!empty($imageName)) {
-            $update_array['profile_picture'] = $imageName;
-        }
-
-        if (!empty($email)) {
-            $update_array['email'] = $email;
-        }
-        $user->profile()->update($update_array);
-
-        $profile = User::with('profile')->where('id', Auth::id())->first()->toArray();
-        $user_info = array();
-        $user_info['user_id'] = $profile['id'];
-        $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile['profile']['profile_picture']);
-        $user_info['email'] = $profile['email'];
-        $user_info['username'] = $profile['username'];
-        $user_info['auth_key'] = $profile['profile']['auth_key'];
-
-        $returnData['status'] = 'success';
-        $returnData['profile_info'] = $user_info;
-
-        return response()->json($returnData, 200);
     }
 
     private function handle_base_64_profile_picture($user, $profile_picture)
     {
         $imageName = '';
         if (!empty($profile_picture)) {
-            //$pos = strpos($profile_picture, ';');
-            //$type = explode(':image/', substr($profile_picture, 0, $pos))[1];
-
-            //$data_replace = 'data:image/' . $type . ';base64,';
-            //$image = str_replace($data_replace, '', $profile_picture);
-            //$image = str_replace(' ', '+', $image);
-
+            
             $profile_picture = str_replace('datagea:im/jpeg;base64,', '', $profile_picture);
             $profile_picture = str_replace('data:image/png;base64,', '', $profile_picture);
 

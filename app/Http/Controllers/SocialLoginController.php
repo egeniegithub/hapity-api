@@ -77,6 +77,9 @@ class SocialLoginController extends Controller
             $response = $this->generate_response($new_user->id, $platform, $token, $request->input('social_id'));
 
         } else {
+
+            $local_user->roles()->attach(HAPITY_USER_ROLE_ID);
+
             $user_existing_social = UserSocial::where('social_id', $request->input('social_id'))->where('user_id', $local_user->id)->first();
 
             $user_existing_profile = UserProfile::where('user_id', $local_user->id)->first();
