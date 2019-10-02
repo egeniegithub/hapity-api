@@ -212,28 +212,30 @@ class AuthController extends Controller
             $password = $request->input('password');
             $profile_picture = $request->input('profile_picture');
 
-            $user = User::find($user_id)->with(['profile', 'social']);
+            $user = User::with(['profile', 'social'])->find($user_id);
 
             $rules = [];
 
-            if ($user->username != $username) {
+            if (!is_null($username) && $user->username != $username) {
                 $rules['username'] = 'required|unique:users';
-            } else {
-                $rules['username'] = 'required';
             }
 
-            if ($user->email != $email) {
+            if (!is_null($email) && $user->email != $email) {
                 $rules['email'] = 'required|unique:users|email';
-            } else {
-                $rules['email'] = 'required|email';
             }
 
-            $rules['password'] = 'required';
-            $rules['profile_picture'] = 'required';
+            if (!is_null($password)) {
+                $rules['password'] = 'required';
+            }
+
+            if (!is_null($profile_picture)) {
+                $rules['profile_picture'] = 'required';
+            }
+
             $rules['user_id'] = 'required';
 
             $request->validate($rules);
-            
+
             if (!empty($username)) {
                 $user->username = $username;
             }
@@ -248,26 +250,22 @@ class AuthController extends Controller
             $user->roles()->attach(HAPITY_USER_ROLE_ID);
 
             $user_profile = UserProfile::where('user_id', $user->id)->first();
-                  
 
             $profile_picture_name = $this->handle_base_64_profile_picture($user, $profile_picture);
 
             if (!empty($imageName)) {
                 $user_profile->profile_picture = $profile_picture_name;
-                
+
             }
             $user_profile->email = $user->email;
             $user_profile->save();
 
-           
-
             $user_info = array();
-            $user_info['user_id'] = $profile['id'];
-            if(!empty($))
-            $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile['profile']['profile_picture']);
-            $user_info['email'] = $profile['email'];
-            $user_info['username'] = $profile['username'];
-            $user_info['auth_key'] = $profile['profile']['auth_key'];
+            $user_info['user_id'] = $user_id;
+            $user_info['profile_picture'] = !empty($user_profile->profile_picture) ? asset("images/profile_pictures/" . $user_profile->profile_picture) : '';
+            $user_info['email'] = $user_profile->email;
+            $user_info['username'] = $user->username;
+            $user_info['auth_key'] = $user_profile->auth_key;
 
             $returnData['status'] = 'success';
             $returnData['profile_info'] = $user_info;
@@ -285,7 +283,7 @@ class AuthController extends Controller
     {
         $imageName = '';
         if (!empty($profile_picture)) {
-            
+
             $profile_picture = str_replace('datagea:im/jpeg;base64,', '', $profile_picture);
             $profile_picture = str_replace('data:image/png;base64,', '', $profile_picture);
 
