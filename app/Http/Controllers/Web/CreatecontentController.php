@@ -272,9 +272,13 @@ class CreatecontentController extends Controller
 
     private function getRandIp()
     {
-        $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
-        $index = rand(0, 1);
-        return $ip[$index];
+        if(env('APP_ENV') == 'local'){
+            return '192.168.20.251';
+        }else{
+            $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+            $index = rand(0, 1);
+            return $ip[$index];
+        }
     }
 
     private function make_plugin_call_upload($bid, $uid) {
