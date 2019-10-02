@@ -39,7 +39,7 @@
                                 <div class="form-group text-center">
                                     <figure>
                                     	@if(isset(auth::user()->profile->profile_picture ) && !empty(auth::user()->profile->profile_picture ))
-                                        	<img src='{{ asset('/profile_pictures'.'/'.auth::user()->profile->profile_picture) }}' class='profile_picture'>
+                                        	<img src='{{ asset('images/profile_pictures/'.auth::user()->profile->profile_picture) }}' class='profile_picture'>
                                         @else
                                         	<img src='{{asset('assets/images/null.png')}}' class='profile_picture'>
                                         @endif
