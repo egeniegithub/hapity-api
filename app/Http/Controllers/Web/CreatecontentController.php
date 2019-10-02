@@ -116,45 +116,47 @@ class CreatecontentController extends Controller
                     if($user_id == ''){
                         $broadcast = Broadcast::with('broadcastsComments')->first()->toArray();
                         dd($broadcast);
-                        $data['APP_ID'] = $this->config->item('APP_ID');
-                        $data['APP_KEY'] = $this->config->item('APP_KEY');
-                        $data['APP_SECRET'] = $this->config->item('APP_SECRET');
-                        $data['filename'] = $this->get_name_from_link($data['broadcast']['stream_url']);
+                        // $data['APP_ID'] = $this->config->item('APP_ID');
+                        // $data['APP_KEY'] = $this->config->item('APP_KEY');
+                        // $data['APP_SECRET'] = $this->config->item('APP_SECRET');
+                        // $data['filename'] = $this->get_name_from_link($data['broadcast']['stream_url']);
                         
-                        $this->load->view('header',$data);
-                        //$this->load->view('view-broadcast-logout',$data);
-                        $this->load->view('view-broadcast',$data);
-                        $this->load->view('footer');
+                        // $this->load->view('header',$data);
+                        // //$this->load->view('view-broadcast-logout',$data);
+                        // $this->load->view('view-broadcast',$data);
+                        // $this->load->view('footer');
                     }
                     else{
-                        $query = $this->db->query("select profile_picture,username,id,comment,date from broadcast_comments, user where broadcast_id = $broadcast_id and sid = user_id ORDER BY id ASC");
-                        $comments = array();
-                        foreach ($query->result_array() as $row) {
-                           $row['comment'] = stripslashes($row['comment']);
-                           $comments[] = $row;
-                        } 
-                        $data['comments'] = $comments;
-                        $data['broadcast_id'] = $broadcast_id;
-                        $data['broadcast'] = $this->get_broadcast($broadcast_id);
-                        $data['user_id'] = $this->session->userdata('user_id');
-                        $data['notifications'] = $this->get_notifications($user_id);
-                        $data['notification_count'] = $this->get_notification_count($user_id);
-                        $data['notification_view'] = $this->load->view('notifications', $data, TRUE);
-                        $data['hapity_header_view'] = $this->load->view('hapity_header', NULL, TRUE);
-                        $data['hapity_footer_view'] = $this->load->view('hapity_footer', NULL, TRUE);
-                        $data['userdata'] = $this->get_user_profile($user_id);
-                        $app_id = $this->config->item('APP_ID');
-                        $app_key = $this->config->item('APP_KEY');
-                        $app_secret = $this->config->item('APP_SECRET');
-                        $pusher = new Pusher( $app_key, $app_secret, $app_id, array( 'encrypted' => true ) );
-                        $data['APP_ID'] = $this->config->item('APP_ID');
-                        $data['APP_KEY'] = $this->config->item('APP_KEY');
-                        $data['APP_SECRET'] = $this->config->item('APP_SECRET');
-                        $data['user_id'] = $user_id;
-                        $data['filename'] = $this->get_name_from_link($data['broadcast']['stream_url']);
-                        $this->load->view('header',$data['broadcast']);
-                        $this->load->view('view-broadcast',$data);
-                        $this->load->view('footer');
+                        $broadcast = Broadcast::with('broadcastsComments')->first()->toArray();
+                        dd($broadcast);
+                        // $query = $this->db->query("select profile_picture,username,id,comment,date from broadcast_comments, user where broadcast_id = $broadcast_id and sid = user_id ORDER BY id ASC");
+                        // $comments = array();
+                        // foreach ($query->result_array() as $row) {
+                        //    $row['comment'] = stripslashes($row['comment']);
+                        //    $comments[] = $row;
+                        // } 
+                        // $data['comments'] = $comments;
+                        // $data['broadcast_id'] = $broadcast_id;
+                        // $data['broadcast'] = $this->get_broadcast($broadcast_id);
+                        // $data['user_id'] = $this->session->userdata('user_id');
+                        // $data['notifications'] = $this->get_notifications($user_id);
+                        // $data['notification_count'] = $this->get_notification_count($user_id);
+                        // $data['notification_view'] = $this->load->view('notifications', $data, TRUE);
+                        // $data['hapity_header_view'] = $this->load->view('hapity_header', NULL, TRUE);
+                        // $data['hapity_footer_view'] = $this->load->view('hapity_footer', NULL, TRUE);
+                        // $data['userdata'] = $this->get_user_profile($user_id);
+                        // $app_id = $this->config->item('APP_ID');
+                        // $app_key = $this->config->item('APP_KEY');
+                        // $app_secret = $this->config->item('APP_SECRET');
+                        // $pusher = new Pusher( $app_key, $app_secret, $app_id, array( 'encrypted' => true ) );
+                        // $data['APP_ID'] = $this->config->item('APP_ID');
+                        // $data['APP_KEY'] = $this->config->item('APP_KEY');
+                        // $data['APP_SECRET'] = $this->config->item('APP_SECRET');
+                        // $data['user_id'] = $user_id;
+                        // $data['filename'] = $this->get_name_from_link($data['broadcast']['stream_url']);
+                        // $this->load->view('header',$data['broadcast']);
+                        // $this->load->view('view-broadcast',$data);
+                        // $this->load->view('footer');
                     }
                 }
                 else{                   
