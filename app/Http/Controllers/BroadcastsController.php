@@ -358,8 +358,8 @@ class BroadcastsController extends Controller
             $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
             $broadcastObj['stream_url'] = $broadcast->stream_url;
             $broadcastObj['status'] = $broadcast->status;
-            $broadcastObj['broadcast_image'] = $broadcast->broadcast_image;
-            $broadcastObj['share_url'] = $broadcast->share_url;
+            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : '';
+            $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('view_broadcast', $broadcast->id);
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
             $broadcastObj['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictuers/' . $user['profile']['profile_picture']) : '';
@@ -690,13 +690,17 @@ class BroadcastsController extends Controller
             $thumbnail_image = 'broadcast_image_' . $broadcast_id . '.jpg';
             $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
 
+            if(!is_dir($path)) {
+                mkdir($path, 777, true);
+            }
+
             $base_64_data = $request->input('image');
 
             $base_64_data = str_replace('datagea:im/jpeg;base64,', '', $base_64_data);
             $base_64_data = str_replace('data:image/png;base64,', '', $base_64_data);
 
             $imageName = 'broadcast_image_' . $broadcast_id . '.jpg';
-            File::put(public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR . $imageName), base64_decode($base_64_data));
+            File::put($path . $imageName, base64_decode($base_64_data));
         }
 
         return $thumbnail_image;
