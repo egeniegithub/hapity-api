@@ -12,10 +12,10 @@
  */
 
 Route::get('/', 'Web\HomeController@index')->name('home');
-Route::get('help', 'Web\HelpController@index');
-Route::get('privacy-policy', 'Web\PrivacyController@index');
-Route::get('about', 'Web\ContactusController@index');
-Route::post('sendmail_contactus', 'Web\ContactusController@sendmail_contactus');
+Route::get('help', 'Web\HelpController@index')->name('help');
+Route::get('privacy-policy', 'Web\PrivacyController@index')->name('privacy-policy');
+Route::get('about', 'Web\ContactusController@index')->name('about');
+Route::post('sendmail_contactus', 'Web\ContactusController@sendmail_contactus')->name('contact.us.send.email');
 
 Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('auth.social');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('auth.social.callback');
@@ -26,11 +26,10 @@ Auth::routes();
 Route::group([
     'middleware' => 'user.access',
 ], function ($router) {
-    Route::get('/home', 'Web\MainController@index')->name('user.home');
+    Route::get('/dasboard', 'Web\DashboardController@index')->name('user.dashboard');
 
-    Route::get('settings', 'Web\SettingController@settings');
-    Route::get('is_user_username{username}/{user_id}', 'Web\SettingController@is_user_username');
-    Route::post('user/save_setting', 'Web\SettingController@save_settings');
+    Route::get('settings', 'Web\SettingController@settings')->name('settings');
+    Route::post('user/save_setting', 'Web\SettingController@save_settings')->name('settgins.save');
 
     Route::get('webcast', 'Web\WebcastController@start_web_cast');
     Route::get('create-content', 'Web\WebcastController@create_content');
