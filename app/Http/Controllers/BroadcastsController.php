@@ -2,26 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Broadcast;
 use App\Http\Controllers\Controller;
 use App\PluginId;
+use App\User;
 use Illuminate\Http\Request;
 use Validator;
-use App\User;
-use App\UserProfile;
-use App\UserSocial;
-use App\Broadcast;
 
 class BroadcastsController extends Controller
 {
-    //
     public function __construct()
     {
         auth()->setDefaultDriver('api');
 //        $this->middleware('auth:api', ['except' => ['uploadBroadcast', 'editBroadcast', 'deleteBroadcast']]);
     }
 
-    function uploadBroadcast (Request $request) {
-
+    public function upload(Request $request)
+    {
         $rules = array(
             'title' => 'required',
             'geo_location' => 'required',
@@ -30,8 +27,9 @@ class BroadcastsController extends Controller
             'video' => 'required',
             'is_sensitive' => 'required',
             'post_plugin' => 'required',
-            'stream_url' => 'required'
+            'stream_url' => 'required',
         );
+
         $messages = array(
             'title.required' => 'Title is required.',
             'geo_location.required' => 'Geo location is required.',
@@ -43,92 +41,77 @@ class BroadcastsController extends Controller
             'stream_url.required' => 'Stream URL is required.',
         );
 
-        $validator = Validator::make($request->all(),$rules,$messages);
-        if($validator->fails())
-        {
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
             $messages = $validator->errors()->all();
             $response = array(
                 'status' => 'failure',
-                'message' => $messages[0]
+                'message' => $messages[0],
             );
             return response()->json($response);
         }
+       
+        $user = User::find($request->input('user_id'));
 
-        $input = $request->all();
-        $stream_urlx = $input['stream_url'];
-        $stream_url = "";
-        $server = "";
-        $filename = "";
-        $thumbnail_image = "default001.jpg";
-        if($request->hasFile('video')){
 
-            $video_file = $request->file('video');
-            $info = pathinfo($video_file->getClientOriginalName());
-            $ext = $info['extension'];
-            $filename = $stream_urlx . "." . $ext;
-            $path = storage_path('app\public\broadcast');
-            $video_path = $video_file->move($path, $filename);
-            //Making Stream URL
-            $stream_url = "rtmp://";
-            $server = $this->getRandIp();
-            $stream_url .= $server;
-            $stream_url .= ":1935/live/" . $stream_urlx;
-
-//            $temp_pathtosave = "/home/san/live/temp-" . $filename;
-//            $pathtosave = "/home/san/live/" . $filename;
-
-//            $shell_exec = shell_exec("ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 $path.$filename");
-//
-//            if ($shell_exec == 90) {
-//                shell_exec('rm ' . $path.$filename);
-//                shell_exec('ffmpeg -i "' . $path.$filename . '" -vf "transpose=1,transpose=2" ' . $path.$filename);
-//            }
-        }
-        if($request->hasFile('broadcast_image')){
-
-            $file = $request->file('broadcast_image');
-            $info = pathinfo($file->getClientOriginalName());
-            $ext = $info['extension'];
-            $thumbnail_image = Str::random(6).'_'.now()->timestamp.'.'. $ext;
-            $path = storage_path('app\public');
-            $file->move($path, $thumbnail_image);
-        }
-        $user = User::find($input['user_id']);
         $broadcast = new Broadcast();
-        $broadcast->title = $input['title'];
-        $broadcast->geo_location = $input['geo_location'];
-        $broadcast->description = $input['description'];
-        $broadcast->is_sensitive = $input['is_sensitive'];
-        $broadcast->stream_url = $stream_url;
-        $broadcast->broadcast_image = $thumbnail_image;
-        $broadcast->filename = $filename;
+        $broadcast->user_id = $request->input('user_id');
+        $broadcast->title = $request->input('title');;
+        $broadcast->geo_location = $request->input('geo_location');
+        $broadcast->description = $request->input('description');
+        $broadcast->is_sensitive = $request->input('is_sensitive');  
+        $broadcast->stream_url = '';
+        $broadcast->share_url = ''; 
+        $broadcast->video_name = '';
         $broadcast->status = 'offline';
-        $broadcast->video_name = $video_file->getClientOriginalName();
-        $user->broadcasts()->save($broadcast);
-        $share_url = route('view_broadcast',$broadcast->id);
-        $inserted_broadcast = Broadcast::find($broadcast->id);
-        $inserted_broadcast->share_url = $share_url;
-        $inserted_broadcast->save();
-        $response = array('status' => 'success', 'broadcast_id' => $broadcast->id, 'share_url' => $share_url);
-        $response['stream_url'] = $stream_url;
-        $response['server'] = $server;
-        $response['response'] = "uploadbroadcast";
-        $response['video'] = $_FILES['video']['error'];
-        if ($input['post_plugin']) {
-            $this->make_plugin_call_upload($broadcast->id, $input['user_id']);
-        }
-        return response()->json(['response' => $response]);
+        $broadcast->save();
 
+        $stream_video_info = $this->handle_video_file_upload($request);
+
+        if(!empty($stream_video_info)) {
+            $broadcast->stream_url = $stream_video_info['file_stream_url'];
+            $broadcast->filename = $stream_video_info['file_name'];
+            $broadcast->video_name = $stream_video_info['file_original_name'];
+            $broadcast->save();
+        }
+
+        $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $request->input('user_id'));
+
+        if(!empty($stream_image_name)) {
+            $broadcast->broadcast_image = $stream_image_name;
+            $broadcast->save();
+        }
+
+        $broadcast->share_url = route('view_broadcast', $broadcast->id);
+        $broadcast->save();
+
+        $response = [];
+        $response['status'] = 'success';
+        $response['broadcast_id'] = $broadcast->id;
+        $response['share_url'] = $broadcast->share_url;
+        $response['stream_url'] = $broadcast->stream_url;
+        $response['video'] = $broadcast->video_name;
+        $response['server'] = $stream_video_info['file_server'];
+        $response['response'] = 'uploadbroadcast';
+       
+        if (boolval($request->input('post_plugin'))) {
+            //TODO debug this
+            $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
+        }
+        
+        return response()->json(['response' => $response]);
     }
 
-    function editBroadcast (Request $request) {
+    public function editBroadcast(Request $request)
+    {
 
         $rules = array(
             'title' => 'required',
             'description' => 'required',
             'user_id' => 'required',
             'stream_id' => 'required',
-            'stream_url' => 'required'
+            'stream_url' => 'required',
         );
         $messages = array(
             'title.required' => 'Title is required.',
@@ -138,13 +121,12 @@ class BroadcastsController extends Controller
             'stream_url.required' => 'Stream URL is required.',
         );
 
-        $validator = Validator::make($request->all(),$rules,$messages);
-        if($validator->fails())
-        {
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
             $messages = $validator->errors()->all();
             $response = array(
                 'status' => 'failure',
-                'message' => $messages[0]
+                'message' => $messages[0],
             );
             return response()->json($response);
         }
@@ -153,15 +135,15 @@ class BroadcastsController extends Controller
         $stream_urlx = $input['stream_url'];
         $update_broad = array();
         $broadcast = Broadcast::find($input['stream_id']);
-        if(isset($input['title']) && !empty($input['title'])){
+        if (isset($input['title']) && !empty($input['title'])) {
 
             $update_broad['title'] = $input['title'];
         }
-        if(isset($input['description']) && !empty($input['description'])){
+        if (isset($input['description']) && !empty($input['description'])) {
 
             $update_broad['description'] = $input['description'];
         }
-        if($request->hasFile('video')){
+        if ($request->hasFile('video')) {
 
             $video_file = $request->file('video');
             $info = pathinfo($video_file->getClientOriginalName());
@@ -176,17 +158,16 @@ class BroadcastsController extends Controller
             $stream_url .= ":1935/live/" . $stream_urlx;
             $update_broad['stream_url'] = $stream_url;
 
-
             $streamURL = Broadcast::where(['id' => $input['stream_id']])->first()->toArray();
             $filename = $streamURL['filename'];
             Storage::delete($filename);
         }
-        if($request->hasFile('broadcast_image')){
+        if ($request->hasFile('broadcast_image')) {
 
             $file = $request->file('broadcast_image');
             $info = pathinfo($file->getClientOriginalName());
             $ext = $info['extension'];
-            $thumbnail_image = Str::random(6).'_'.now()->timestamp.'.'. $ext;
+            $thumbnail_image = Str::random(6) . '_' . now()->timestamp . '.' . $ext;
             $path = storage_path('app\public');
             $file->move($path, $thumbnail_image);
             $update_broad['broadcast_image'] = $thumbnail_image;
@@ -207,13 +188,14 @@ class BroadcastsController extends Controller
     }
 
     //params - token, user_id, stream_id, stream_url
-    function deleteBroadcast (Request $request) {
+    public function deleteBroadcast(Request $request)
+    {
         $input = $request->all();
 
         $rules = array(
             'token' => 'required',
             'user_id' => 'required',
-            'stream_id' => 'required'
+            'stream_id' => 'required',
         );
         $messages = array(
             'token.required' => 'Token is required.',
@@ -221,10 +203,9 @@ class BroadcastsController extends Controller
             'stream_id.required' => 'Stream ID is required.',
         );
 
-        $validator=Validator::make($request->all(),$rules,$messages);
-        if($validator->fails())
-        {
-            $messages=$validator->messages();
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            $messages = $validator->messages();
             return response()->json($messages);
         }
         $streamURL = Broadcast::where(['id' => $input['stream_id']])->first()->toArray();
@@ -240,7 +221,8 @@ class BroadcastsController extends Controller
 
     }
 
-    function getAllBroadcastsforUser (Request $request) {
+    public function getAllBroadcastsforUser(Request $request)
+    {
         $input = $request->all();
 
         $rules = array(
@@ -252,13 +234,12 @@ class BroadcastsController extends Controller
             'user_id.required' => 'User ID is required.',
         );
 
-        $validator=Validator::make($request->all(),$rules,$messages);
-        if($validator->fails())
-        {
-            $messages=$validator->messages();
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            $messages = $validator->messages();
             return response()->json($messages);
         }
-        
+
         $allUserBroadcast = Broadcast::with('user')->where('user_id', $input['user_id'])->get();
 
         $response['status'] = "success";
@@ -280,7 +261,7 @@ class BroadcastsController extends Controller
             $broadcastObj['username'] = $broadcast['user']->username;
             $broadcastObj['user_id'] = $broadcast['user']->id;
             $broadcastObj['profile_picture'] = $profilePicToGet['profile_picture'];
-            array_push($response['broadcast'], (object)$broadcastObj);
+            array_push($response['broadcast'], (object) $broadcastObj);
         }
 
         // remove block user need to be implemented here
@@ -289,7 +270,8 @@ class BroadcastsController extends Controller
 
     }
 
-    function startBroadcast(Request $request){
+    public function startBroadcast(Request $request)
+    {
 
         $rules = array(
             'title' => 'required',
@@ -298,7 +280,7 @@ class BroadcastsController extends Controller
             'is_sensitive' => 'required',
             'post_plugin' => 'required',
             'stream_url' => 'required',
-            'thumb_nail' => 'required'
+            'thumb_nail' => 'required',
         );
         $messages = array(
             'title.required' => 'Title is required.',
@@ -309,13 +291,12 @@ class BroadcastsController extends Controller
             'stream_url.required' => 'Stream URL is required.',
             'thumb_nail.required' => 'Thumb nail is required.',
         );
-        $validator = Validator::make($request->all(),$rules,$messages);
-        if($validator->fails())
-        {
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
             $messages = $validator->errors()->all();
             $response = array(
                 'status' => 'failure',
-                'message' => $messages[0]
+                'message' => $messages[0],
             );
             return response()->json($response);
         }
@@ -325,12 +306,12 @@ class BroadcastsController extends Controller
         $stream_url .= $server;
         $stream_url .= ":1935/live/" . $this->get('stream_url');
         $thumbnail_image = "default001.jpg";
-        if($request->hasFile('thumb_nail')){
+        if ($request->hasFile('thumb_nail')) {
 
             $file = $request->file('thumb_nail');
             $info = pathinfo($file->getClientOriginalName());
             $ext = $info['extension'];
-            $thumbnail_image = Str::random(6).'_'.now()->timestamp.'.'. $ext;
+            $thumbnail_image = Str::random(6) . '_' . now()->timestamp . '.' . $ext;
             $path = storage_path('app\public');
             $file->move($path, $thumbnail_image);
         }
@@ -345,7 +326,7 @@ class BroadcastsController extends Controller
         $broadcast->broadcast_image = $thumbnail_image;
         $broadcast->status = 'online';
         $user->broadcasts()->save($broadcast);
-        $share_url = route('view_broadcast',$broadcast->id);
+        $share_url = route('view_broadcast', $broadcast->id);
         $inserted_broadcast = Broadcast::find($broadcast->id);
         $inserted_broadcast->share_url = $share_url;
         $inserted_broadcast->save();
@@ -359,21 +340,21 @@ class BroadcastsController extends Controller
 
     }
 
-    function updateTimestampBroadcast(Request $request) {
+    public function updateTimestampBroadcast(Request $request)
+    {
         $rules = array(
-            'broadcast_id' => 'required'
+            'broadcast_id' => 'required',
         );
         $messages = array(
-            'broadcast_id.required' => 'Broadcast video is required.'
+            'broadcast_id.required' => 'Broadcast video is required.',
         );
 
-        $validator = Validator::make($request->all(),$rules,$messages);
-        if($validator->fails())
-        {
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
             $messages = $validator->errors()->all();
             $response = array(
                 'status' => 'failure',
-                'message' => $messages[0]
+                'message' => $messages[0],
             );
             return response()->json($response);
         }
@@ -389,26 +370,34 @@ class BroadcastsController extends Controller
         $this->response($response, 200);
     }
 
-    private function getRandIp() {
-        $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
-        $index = rand(0, 1);
-        return $ip[$index];
+    private function getRandIp()
+    {
+        if (env('APP_ENV') == 'local') {
+            return '192.168.20.251';
+        } else {
+            $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+            $index = rand(0, 1);
+            return $ip[$index];
+        }
     }
 
-    private function make_plugin_call_upload($bid, $uid) {
+    private function make_plugin_call_upload($bid, $uid)
+    {
 
         $share_url = "";
         $broadcast_id = $bid;
         $broadcast = Broadcast::find($bid);
+
         $user = User::find($uid);
-        $plugins = PluginId::where(['user_id' => $uid]);
+
+        $plugins = PluginId::where(['user_id' => $uid])->get();
+
         if (sizeof($plugins) > 0) {
             foreach ($plugins as $data) {
                 $title = $broadcast['title'];
                 $share_url = $broadcast['share_url'];
                 $description = $broadcast['description'];
                 $stream_url = str_replace("/live/", "/vod/", $broadcast['stream_url']);
-
 
                 if ($data['type'] == 'drupal') {
                     $postdata = http_build_query(
@@ -420,7 +409,7 @@ class BroadcastsController extends Controller
                             'key' => $user['auth_key'],
                             'broadcast_image' => $broadcast['broadcast_image'],
                             'description' => $description,
-                            'action' => 'hpb_hp_new_broadcast'
+                            'action' => 'hpb_hp_new_broadcast',
                         )
                     );
                 } else if ($data['type'] == 'wordpress') {
@@ -432,7 +421,7 @@ class BroadcastsController extends Controller
                             'status' => 'offline',
                             'key' => $user['auth_key'],
                             'broadcast_image' => $broadcast['broadcast_image'],
-                            'description' => $description
+                            'description' => $description,
                         )
                     );
                 } else if ($data['type'] == 'joomla') {
@@ -444,17 +433,16 @@ class BroadcastsController extends Controller
                             'status' => 'offline',
                             'key' => $user['auth_key'],
                             'broadcast_image' => $broadcast['broadcast_image'],
-                            'description' => $description
+                            'description' => $description,
                         )
                     );
                 }
-                $opts = array('http' =>
-                    array(
+                $opts = [
+                    'http' => [
                         'method' => 'POST',
                         'header' => 'Content-type: application/x-www-form-urlencoded',
-                        'content' => $postdata
-                    )
-                );
+                        'content' => $postdata,
+                    ]];
 
                 $context = stream_context_create($opts);
 
@@ -502,7 +490,8 @@ class BroadcastsController extends Controller
         return $share_url;
     }
 
-    private function make_plugin_call_edit($bid, $uid) {
+    private function make_plugin_call_edit($bid, $uid)
+    {
         $broadcast_id = $bid;
         $broadcast = Broadcast::find($bid);
         $user = User::find($uid);
@@ -514,9 +503,8 @@ class BroadcastsController extends Controller
                 $stream_url = str_replace("/live/", "/vod/", $broadcast['stream_url']);
                 $image = $broadcast['broadcast_image'];
 
-
                 $headers = array(
-                    'Content-type: application/xwww-form-urlencoded'
+                    'Content-type: application/xwww-form-urlencoded',
                 );
 
                 if ($data['type'] == 'drupal') {
@@ -529,7 +517,7 @@ class BroadcastsController extends Controller
                             'key' => $user['auth_key'],
                             'broadcast_image' => $image,
                             'description' => $description,
-                            'post_id_drupal' => $broadcast['post_id_drupal']
+                            'post_id_drupal' => $broadcast['post_id_drupal'],
                         )
                     );
                 } else if ($data['type'] == 'wordpress') {
@@ -542,7 +530,7 @@ class BroadcastsController extends Controller
                             'key' => $user['auth_key'],
                             'broadcast_image' => $image,
                             'description' => $description,
-                            'post_id_wp' => $broadcast['post_id']
+                            'post_id_wp' => $broadcast['post_id'],
                         )
                     );
                 } else if ($data['type'] == 'joomla') {
@@ -555,18 +543,16 @@ class BroadcastsController extends Controller
                             'key' => $user['auth_key'],
                             'broadcast_image' => $image,
                             'description' => $description,
-                            'post_id_joomla' => $broadcast['post_id_joomla']
+                            'post_id_joomla' => $broadcast['post_id_joomla'],
                         )
                     );
                 }
 
-
-                $opts = array('http' =>
-                    array(
-                        'method' => 'POST',
-                        'header' => 'Content-type: application/x-www-form-urlencoded',
-                        'content' => $postdata
-                    )
+                $opts = array('http' => array(
+                    'method' => 'POST',
+                    'header' => 'Content-type: application/x-www-form-urlencoded',
+                    'content' => $postdata,
+                ),
                 );
 
                 $context = stream_context_create($opts);
@@ -581,5 +567,77 @@ class BroadcastsController extends Controller
                 $result = file_get_contents($go, false, $context);
             }
         }
+    }
+
+    private function handle_video_file_upload($request)
+    {
+        $to_return = [];
+        if ($request->hasFile('video')) {
+
+            $video_file = $request->file('video');
+            $video_original_name = $video_file->getClientOriginalName();
+
+            $info = pathinfo($video_file->getClientOriginalName());
+            $ext = $info['extension'];
+
+            $file_name = $request->input('stream_url') . "." . $ext;
+
+            $path = base_path('wowza_store');
+
+            $video_path = $video_file->move($path, $file_name);
+
+            //Making Stream URL
+            $server = $this->getRandIp();
+
+            $stream_url = "rtmp://";
+            $stream_url .= $server;
+            $stream_url .= ":1935/vod/" . $file_name;
+
+            $to_return = [
+                'file_original_name' => $video_original_name,
+                'file_name' => $file_name,
+                'file_path' => $video_path,
+                'file_stream_url' => $stream_url,
+                'file_server' => $server
+            ];
+
+            if (env('APP_ENV') != 'local') {
+                //TODO to be debuged
+                /*
+            $temp_pathtosave = "/home/san/live/temp-" . $filename;
+            $pathtosave = "/home/san/live/" . $filename;
+
+            $shell_exec = shell_exec("ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 $path.$filename");
+
+            if ($shell_exec == 90) {
+            shell_exec('rm ' . $path . $filename);
+            shell_exec('ffmpeg -i "' . $path . $filename . '" -vf "transpose=1,transpose=2" ' . $path . $filename);
+            }
+             */
+            }            
+        }
+
+        return $to_return;
+    }
+
+    private function handle_image_file_upload($request, $broadcast_id, $user_id)
+    {
+        $thumbnail_image = '';
+
+        if ($request->hasFile('image')) {
+
+            $file = $request->file('image');
+            $info = pathinfo($file->getClientOriginalName());
+            $ext = $info['extension'];
+
+            $thumbnail_image = 'broadcast_image_' . $broadcast_id . '.' . $ext;
+
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
+            $file->move($path, $thumbnail_image);
+
+            $thumbnail_image;
+        }
+
+        return $thumbnail_image;
     }
 }

@@ -30,7 +30,7 @@ Route::group([
     Route::post('edit_profile', 'AuthController@editUserProfile');
     Route::post('me', 'AuthController@me');
     
-    Route::post('uploadbroadcast', 'BroadcastsController@uploadBroadcast');
+    Route::post('broadcasts/upload', 'BroadcastsController@upload');
     Route::post('editbroadcast', 'BroadcastsController@editBroadcast');
     Route::post('deletebroadcast', 'BroadcastsController@deleteBroadcast');
     Route::post('update_timestamp_broadcast', 'BroadcastsController@updateTimestampBroadcast');

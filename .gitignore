@@ -20,3 +20,6 @@ yarn-error.log
 
 /wowza_store
 /wowza_store/*
+
+/public/images/broadcasts
+/public/images/broadcasts/*
