@@ -49,7 +49,9 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 ////  admin routes 
 Route::get('admin/broadcast','Web\Admin\AdminBroadcastController@index');
-
+Route::get('admin/dashboard','Web\Admin\AdminController@index');
+Route::get('admin/users','Web\Admin\UsersController@index');
+Route::get('admin/reported-broadcast','Web\Admin\ReportedController@reportedBroadcasts');
 
 
 Auth::routes();

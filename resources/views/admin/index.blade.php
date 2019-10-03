@@ -17,11 +17,14 @@
                     <div class="dashboard-info-wrapper">
                         <div class="info-header">REPORTED BROADCASTS</div>
                         <div class="info-body">
-                            <div class="info-icon"><img src="<?php echo base_url('/assets/admin'); ?>/images/cam.png"/></div>
-                            <div class="info-icon-text"><?php echo $bc_count; ?></div>
+                            <div class="info-icon"><img src="{{asset('/assets/admin')}}/images/cam.png"/></div>
+                            <div class="info-icon-text">
+                                
+                                {{ !empty($data->reported_broadcast_count) ? $data->reported_broadcast_count : 0 }}
+                            </div>
                         </div>
                         <div class="info-footer">
-                            <a href="<?php echo base_url('admin/reported_broadcasts'); ?>">View more</a>
+                            <a href="{{url('admin/reported_broadcasts')}}">View more</a>
                         </div>
                     </div>
                 </div>
@@ -32,11 +35,11 @@
                     <div class="dashboard-info-wrapper">
                         <div class="info-header">REPORTED USERS</div>
                         <div class="info-body">
-                            <div class="info-icon"><img src="<?php echo base_url('/assets/admin'); ?>/images/reported-user-lg-icon.png"/></div>
-                            <div class="info-icon-text"><?php echo $user_count; ?></div>
+                            <div class="info-icon"><img src="{{asset('/assets/admin')}}/images/reported-user-lg-icon.png"/></div>
+                            <div class="info-icon-text"> {{ !empty($data->reported_user_count) ? $data->reported_user_count : 0 }}</div>
                         </div>
                         <div class="info-footer">
-                            <a href="<?php echo base_url('admin/reported_users'); ?>">View more</a>
+                            <a href="{{url('admin/reported_users') }}">View more</a>
                         </div>
                     </div>
                 </div>
@@ -48,11 +51,11 @@
                     <div class="dashboard-info-wrapper">
                         <div class="info-header">LIVE BROADCASTS</div>
                         <div class="info-body">
-                            <div class="info-icon"><img src="<?php echo base_url('/assets/admin'); ?>/images/live-bc-lg-icon.png"/></div>
-                            <div class="info-icon-text"><?php echo $live_count; ?></div>
+                            <div class="info-icon"><img src="{{asset('/assets/admin')}}/images/live-bc-lg-icon.png"/></div>
+                            <div class="info-icon-text"> {{ !empty($data->live_broadcast_count) ? $data->live_broadcast_count : 0 }}</div>
                         </div>
                         <div class="info-footer">
-                            <a href="<?php echo base_url('admin/all_broadcasts'); ?>">View more</a>
+                            <a href="{{url('admin/broadcast')}}">View more</a>
                         </div>
                     </div>
                 </div>
@@ -64,18 +67,12 @@
                         <p class="world-wide-text"> Live Broadcasts World Wide</p>
                     </div>
                     <div class="map-section">
-                        <img src="<?php echo base_url('/assets/admin'); ?>/images/map.png"/>
+                        <img src="{{asset('/assets/admin')}}/images/map.png"/>
                     </div>
                 </div>
                 <!--Worldwide Section End-->
 
-                <!--Footer Section Start-->
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <footer>
-                        <div class="copyright-text">Copyright &copy; 20015-2016 Hapity. All rights reserved.</div>
-                    </footer>
-                </div>
-                <!--Footer Section End-->
+                
             </div>
         </div>
         <!--Right Content Area End-->

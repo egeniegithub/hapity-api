@@ -29,4 +29,7 @@ class Broadcast extends Model
     {
         return $this->hasMany('App\BroadcastComment', 'broadcast_id');
     }
+    public function reportedBradcast(){
+        return $this->hasMany('App\ReportBroadcast','broadcast_id')->select('broadcast_id');
+    } 
 }
