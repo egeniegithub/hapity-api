@@ -26,7 +26,7 @@ Auth::routes();
 Route::group([
     'middleware' => 'user.access',
 ], function ($router) {
-    Route::get('/dasboard', 'Web\DashboardController@index')->name('user.dashboard');
+    Route::get('/dashboard', 'Web\DashboardController@index')->name('user.dashboard');
 
     Route::get('settings', 'Web\SettingController@settings')->name('settings');
     Route::post('user/save_setting', 'Web\SettingController@save_settings')->name('settgins.save');
