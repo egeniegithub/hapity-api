@@ -239,8 +239,8 @@ class BroadcastsController extends Controller
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
             if (file_exists($file_path)) {
                 unlink($file_path);
-    
-                if(is_file($file_path)) {
+
+                if (is_file($file_path)) {
                     exec('rm -f ' . $file_path);
                 }
             }
@@ -311,12 +311,10 @@ class BroadcastsController extends Controller
         if (file_exists($file_path)) {
             unlink($file_path);
 
-            if(is_file($file_path)) {
+            if (is_file($file_path)) {
                 exec('rm -f ' . $file_path);
             }
         }
-
-        
 
         $response['status'] = "success";
         $response['response'] = "deletebroadcast";
@@ -375,7 +373,7 @@ class BroadcastsController extends Controller
 
     }
 
-    public function updateTimestampBroadcast(Request $request)
+    public function update_timestamp(Request $request)
     {
         $rules = array(
             'broadcast_id' => 'required',
@@ -400,9 +398,11 @@ class BroadcastsController extends Controller
 
         $broadcast = Broadcast::find($broadcast_id);
         $broadcast->timestamp = $date;
+        $broadcast->save();
+        
         $response = array();
-        $response['status'] = 'timestamp';
-        $this->response($response, 200);
+        $response['status'] = $date;
+        return response($response, 200);
     }
 
     private function getRandIp()
@@ -686,5 +686,12 @@ class BroadcastsController extends Controller
         }
 
         return $thumbnail_image;
+    }
+
+    private function delete_file_from_wowza_store($file_path)
+    {
+        if (file_exists($file_path)) {
+            unlink($file_path);
+        }
     }
 }
