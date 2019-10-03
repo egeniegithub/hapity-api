@@ -31,8 +31,8 @@ Route::group([
     Route::get('settings', 'Web\SettingController@settings')->name('settings');
     Route::post('user/save_setting', 'Web\SettingController@save_settings')->name('settgins.save');
 
-    Route::get('webcast', 'Web\WebcastController@start_web_cast');
-    Route::get('create-content', 'Web\WebcastController@create_content');
+    Route::get('webcast', 'Web\BroadcastsController@start_web_cast');
+    Route::get('create-content', 'Web\BroadcastsController@create_content');
 
     Route::post('create_content_submission', 'Web\CreatecontentController@create_content_submission');
     Route::post('edit_content_submission', 'Web\CreatecontentController@edit_content_submission');
