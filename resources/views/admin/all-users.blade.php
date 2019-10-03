@@ -34,7 +34,7 @@
                         </div>
 
                         <div class="report-bc-action-div">
-                            <a href="javascript:" onclick="del_a_user({{ $user['id'] }});" class="delete-block-bc del-all-bc-single">Delete</a>
+                        <a href="{{url('admin/deleteuser'.'/'.$user['id'])}}" class="delete-block-bc del-all-bc-single">Delete</a>
                         </div>
                     </div>
                 </div>
