@@ -135,7 +135,7 @@ class BroadcastsController extends Controller
             );
             return response()->json($response);
         }
-        
+
         $server = $this->getRandIp();
         $stream_url = $this->make_streaming_server_url($server, $request->input('stream_url'), true);
 
@@ -183,22 +183,14 @@ class BroadcastsController extends Controller
         return response()->json(['response' => $response]);
     }
 
-    public function editBroadcast(Request $request)
+    public function edit(Request $request)
     {
-
         $rules = array(
-            'title' => 'required',
-            'description' => 'required',
-            'user_id' => 'required',
-            'stream_id' => 'required',
-            'stream_url' => 'required',
+            'broadcast_id' => 'required',
         );
+
         $messages = array(
-            'title.required' => 'Title is required.',
-            'description.required' => 'Description is required.',
-            'user_id.required' => 'User ID is required.',
-            'stream_id.required' => 'Broadcast ID is required.',
-            'stream_url.required' => 'Stream URL is required.',
+            'broadcast_id.required' => 'Broadcast ID is required.',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -211,76 +203,99 @@ class BroadcastsController extends Controller
             return response()->json($response);
         }
 
-        $input = $request->all();
-        $stream_urlx = $input['stream_url'];
-        $update_broad = array();
-        $broadcast = Broadcast::find($input['stream_id']);
-        if (isset($input['title']) && !empty($input['title'])) {
+        $user = User::find($request->input('user_id'));
 
-            $update_broad['title'] = $input['title'];
+        $broadcast = Broadcast::find($request->input('broadcast_id'));
+
+        if ($request->has('title') && !is_null($request->input('title'))) {
+            $broadcast->title = $request->input('title');
+            $broadcast->save();
         }
-        if (isset($input['description']) && !empty($input['description'])) {
 
-            $update_broad['description'] = $input['description'];
+        if ($request->has('geo_location') && !is_null($request->input('geo_location'))) {
+            $broadcast->geo_location = $request->input('geo_location');
+            $broadcast->save();
         }
-        if ($request->hasFile('video')) {
 
-            $video_file = $request->file('video');
-            $info = pathinfo($video_file->getClientOriginalName());
-            $ext = $info['extension'];
-            $filename = $stream_urlx . "." . $ext;
-            $path = storage_path('app\public\broadcast');
-            $video_path = $video_file->move($path, $filename);
-            //Making Stream URL
-            $stream_url = "rtmp://";
-            $server = $this->getRandIp();
-            $stream_url .= $server;
-            $stream_url .= ":1935/live/" . $stream_urlx;
-            $update_broad['stream_url'] = $stream_url;
-
-            $streamURL = Broadcast::where(['id' => $input['stream_id']])->first()->toArray();
-            $filename = $streamURL['filename'];
-            Storage::delete($filename);
+        if ($request->has('description') && !is_null($request->input('description'))) {
+            $broadcast->description = $request->input('description');
+            $broadcast->save();
         }
-        if ($request->hasFile('broadcast_image')) {
 
-            $file = $request->file('broadcast_image');
-            $info = pathinfo($file->getClientOriginalName());
-            $ext = $info['extension'];
-            $thumbnail_image = Str::random(6) . '_' . now()->timestamp . '.' . $ext;
-            $path = storage_path('app\public');
-            $file->move($path, $thumbnail_image);
-            $update_broad['broadcast_image'] = $thumbnail_image;
-
-            $streamURL = Broadcast::where(['id' => $input['stream_id']])->first()->toArray();
-            $filename = $streamURL['broadcast_image'];
-            Storage::delete($filename);
+        if ($request->has('is_sensitive') && !is_null($request->input('is_sensitive'))) {
+            $broadcast->is_sensitive = $request->input('is_sensitive');
+            $broadcast->save();
         }
-        $broadcast->save($update_broad);
 
+        if ($request->has('status') && !is_null($request->input('status'))) {
+            $broadcast->status = $request->input('status');
+            $broadcast->save();
+        }
+
+        $broadcast->save();
+
+        $stream_video_info = $this->handle_video_file_upload($request);
+        if (!empty($stream_video_info)) {
+            $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
+            if (file_exists($file_path)) {
+                unlink($file_path);
+    
+                if(is_file($file_path)) {
+                    exec('rm -f ' . $file_path);
+                }
+            }
+
+            $broadcast->stream_url = $stream_video_info['file_stream_url'];
+            $broadcast->filename = $stream_video_info['file_name'];
+            $broadcast->video_name = $stream_video_info['file_original_name'];
+            $broadcast->save();
+        }
+
+        $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $request->input('user_id'));
+
+        if (!empty($stream_image_name)) {
+            $broadcast->broadcast_image = $stream_image_name;
+            $broadcast->save();
+        }
+
+        $broadcast->share_url = route('view_broadcast', $broadcast->id);
+        $broadcast->save();
+
+        $response = [];
         $response['status'] = 'success';
+        $response['broadcast_id'] = $broadcast->id;
+        $response['share_url'] = $broadcast->share_url;
+        $response['stream_url'] = $broadcast->stream_url;
+        $response['video'] = $broadcast->video_name;
+        if ($broadcast->broadcast_image) {
+            $response['image'] = asset('images/broadcasts/' . $request->input('user_id') . '/' . $broadcast->broadcast_image);
+        }
+
+        if (!empty($stream_video_info)) {
+            $response['server'] = $stream_video_info['file_server'];
+        }
         $response['response'] = 'editbroadcast';
 
-        if (isset($input['plugin_auth_key']) && !empty($input['plugin_auth_key'])) {
-            $this->make_plugin_call_edit($input['stream_id'], $input['user_id']);
+        if (boolval($request->input('post_plugin'))) {
+            //TODO debug this
+            $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
         }
-        return response()->json($response);
+
+        return response()->json(['response' => $response]);
     }
 
     //params - token, user_id, stream_id, stream_url
-    public function deleteBroadcast(Request $request)
+    public function delete(Request $request)
     {
         $input = $request->all();
 
         $rules = array(
-            'token' => 'required',
             'user_id' => 'required',
-            'stream_id' => 'required',
+            'broadcast_id' => 'required',
         );
         $messages = array(
-            'token.required' => 'Token is required.',
             'user_id.required' => 'User ID is required.',
-            'stream_id.required' => 'Stream ID is required.',
+            'broadcast_id.required' => 'Stream ID is required.',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -288,11 +303,21 @@ class BroadcastsController extends Controller
             $messages = $validator->messages();
             return response()->json($messages);
         }
-        $streamURL = Broadcast::where(['id' => $input['stream_id']])->first()->toArray();
-        $filename = $streamURL['filename'];
-        Broadcast::where('user_id', $input['user_id'])->where(['id' => $input['stream_id']])->delete();
+        $streamURL = Broadcast::where(['id' => $input['broadcast_id']])->first()->toArray();
+        $file_name = $streamURL['filename'];
+        Broadcast::where('user_id', $input['user_id'])->where(['id' => $input['broadcast_id']])->delete();
 
-        Storage::delete($filename);
+        $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
+        if (file_exists($file_path)) {
+            unlink($file_path);
+
+            if(is_file($file_path)) {
+                exec('rm -f ' . $file_path);
+            }
+        }
+
+        
+
         $response['status'] = "success";
         $response['response'] = "deletebroadcast";
         $response['message'] = "deleted successfully";
