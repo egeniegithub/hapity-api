@@ -56,8 +56,8 @@
                             <div class="alert alert-success">{{ Session::get('flash_message') }}</div>
                         @endif
                         @if(Session::has('flash_message_delete'))
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                            <div class="alert alert-success">{{ Session::get('flash_message_delete') }}</div>
+                            {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+                            <div class="alert alert-danger">{{ Session::get('flash_message_delete') }}</div>
                         @endif
                         
                     </div>

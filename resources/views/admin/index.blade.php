@@ -24,7 +24,7 @@
                             </div>
                         </div>
                         <div class="info-footer">
-                            <a href="{{url('admin/reported_broadcasts')}}">View more</a>
+                            <a href="{{url('admin/reported-broadcast')}}">View more</a>
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                             <div class="info-icon-text"> {{ !empty($data->reported_user_count) ? $data->reported_user_count : 0 }}</div>
                         </div>
                         <div class="info-footer">
-                            <a href="{{url('admin/reported_users') }}">View more</a>
+                            <a href="{{url('admin/reported-users') }}">View more</a>
                         </div>
                     </div>
                 </div>

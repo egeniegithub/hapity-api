@@ -8,16 +8,7 @@
 
 @endpush
 @section('content')
-    <!--Main start-->
-
-<div class="main">
-    <div class="container-fluid">
-        <div class="row">
-            <!--Left Sidebar start-->
-            <div id="left_area" class="col-lg-2 col-md-2 col-sm-4 col-xs-12">
-                <?php echo $side;?>
-            </div>
-            <!--Left Sidebar End-->
+ 
             <!--Right Content Area start-->
             <div class="col-lg-10 col-md-10 col-sm-10 col-xs-12">
                 <div class="row">
@@ -28,12 +19,12 @@
                     </div>
                     <!--Reported Broadcost listing start-->
                     <?php foreach ($reported_broadcasts as $broadcast) { ?>
-
+                        
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="listing-reported-broadcost">
-                            <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast['title']); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast['id']); ?>">
+                            <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast['broadcast']['title']); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast['id']); ?>">
                                 <div class="reporting-bc-image">
-                                    <img src="<?php echo $broadcast['broadcast_image']; ?>"/>
+                                    <img src="<?php echo $broadcast['broadcast']['broadcast_image']; ?>"/>
                                                 <span class="play-report-icon">
                                                     <i class="fa fa-play"></i>
                                                 </span>
@@ -42,14 +33,14 @@
                             </a>
 
                             <div class="reported-bc-detail">
-                                <p> <span class="title"><?php echo ucwords($broadcast['title']) ;?></span></p>
-                                <p> <span class="postby">Posted By : </span> <span class="report-result-display"> <?php echo $broadcast['username'] ;?></span></p>
-                                <p>  <span class="reportby">Reports :</span> <span class="report-result-display"> <?php echo sizeof($broadcast['list_of_reporters']) ;?></span></p>
-                                <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo $broadcast['timestamp'] ;?></span></p>
+                                <p> <span class="title"><?php echo ucwords($broadcast['broadcast']['title']) ;?></span></p>
+                                <p> <span class="postby">Posted By : </span> <span class="report-result-display"> <?php echo $broadcast['broadcast']['user']['username'] ;?></span></p>
+                                <p>  <span class="reportby">Reports :</span> <span class="report-result-display"> {{ !empty($broadcast['broadcast']['userWithReportedUser']['reportedUser']) ? count($broadcast['broadcast']['userWithReportedUser']['reportedUser']) : 0 }}</span></p>
+                                <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo $broadcast['broadcast']['created_at'] ;?></span></p>
                             </div>
 
                             <div class="report-bc-action-div">
-                                <a href="<?php echo base_url('admin/approved_broadcast/'.$broadcast['bid']);?>" class="approve-block-bc">Approve</a>
+                                <a href="{{ url('admin/approved_broadcast/'.$broadcast['broadcast']['id']) }}" class="approve-block-bc">Approve</a>
                                 <a href="javascript:" onclick="del_broadcast_report(<?php echo $broadcast['id'] ?>);" class="delete-block-bc">Delete</a>
                             </div>
                         </div>
@@ -59,26 +50,26 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <button type="button" class="close" id="model-cross" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel"><?php echo ucwords($broadcast['title']); ?></h4>
+                                        <h4 class="modal-title" id="myModalLabel"><?php echo ucwords($broadcast['broadcast']['title']); ?></h4>
                                     </div>
                                     <div class="modal-body">
                                         <div id="broadcast-<?php echo $broadcast['id'];?>" class="player"></div>
                                         <script type="text/javascript">
                                             jwplayer("broadcast-<?php echo $broadcast['id'];?>").setup({
                                                 sources: [{
-                                                    file: "<?php  if($broadcast['status'] == "online")
-                                                 echo str_replace("rtsp","rtmp",$broadcast['stream_url']);
+                                                    file: "<?php  if($broadcast['broadcast']['status'] == "online")
+                                                 echo str_replace("rtsp","rtmp",$broadcast['broadcast']['stream_url']);
                                                  else
-                                                 echo "rtmp://".$ip.":1935/vod/".$broadcast['filename'];?>"
+                                                 echo "rtmp://".$ip.":1935/vod/".$broadcast['broadcast']['filename'];?>"
                                                 },{
                                                     file:"<?php  if($broadcast['status'] == "online")
-                                                 echo str_replace("rtsp","http",$broadcast['stream_url']."/playlist.m3u8");
+                                                 echo str_replace("rtsp","http",$broadcast['broadcast']['stream_url']."/playlist.m3u8");
                                                  else
-                                                 echo "http://".$ip.":1935/vod/".$broadcast['filename']."/playlist.m3u8";?>"
+                                                 echo "http://".$ip.":1935/vod/".$broadcast['broadcast']['filename']."/playlist.m3u8";?>"
                                                 }],
                                                 height: 380,
                                                 width: "100%",
-                                                image: '<?php echo $broadcast['broadcast_image'];?>',
+                                                image: '<?php echo $broadcast['broadcast']['broadcast_image'];?>',
                                             });
                                         </script>
                                     </div>
@@ -98,7 +89,7 @@
 
                         <div class="report-bc-pagination">
                             <nav>
-                                <?php echo $pages ?>
+                               {{ $reported_broadcasts->links() }}
                             </nav>
                         </div>
                     </div>
