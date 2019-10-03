@@ -15,7 +15,7 @@
     
                         <!--Reported Broadcast listing start-->
                         <?php foreach ($reported_users as $user) { ?>
-    
+                        @php @endphp
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="listing-reported-broadcost">
                                     <div class="reporting-bc-image reported_user-image">
@@ -28,8 +28,8 @@
                                 </div>
     
                                 <div class="report-bc-action-div">
-                                    <a href="{{ url('admin/approved_user/'.$user['id']) }}" class="approve-block-bc">Approve</a>
-                                    <a href="javascript:" onclick="del_user_report(<?php echo $user['sid'] ?>);" class="delete-block-bc">Delete</a>
+                                    <a href="{{ url('admin/approveduser/'.$user['id']) }}" class="approve-block-bc">Approve</a>
+                                    <a href="{{url('admin/deleteuser'.'/'.$user['id'])}}"  class="delete-block-bc">Delete</a>
                                 </div>
                             </div>
                         </div>

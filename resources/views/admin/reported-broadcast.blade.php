@@ -40,8 +40,8 @@
                             </div>
 
                             <div class="report-bc-action-div">
-                                <a href="{{ url('admin/approved_broadcast/'.$broadcast['broadcast']['id']) }}" class="approve-block-bc">Approve</a>
-                                <a href="javascript:" onclick="del_broadcast_report(<?php echo $broadcast['id'] ?>);" class="delete-block-bc">Delete</a>
+                                <a href="{{ url('approvedbroadcast'.'/'.$broadcast['id']) }}" class="approve-block-bc">Approve</a>
+                            <a href="{{url('deletebroadcast'.'/'.$broadcast['id'])}}"  class="delete-block-bc">Delete</a>
                             </div>
                         </div>
                         <!-- Modal start -->
