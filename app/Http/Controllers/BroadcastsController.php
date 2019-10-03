@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\PluginId;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Validator;
 
 class BroadcastsController extends Controller
@@ -278,7 +279,7 @@ class BroadcastsController extends Controller
 
         if (boolval($request->input('post_plugin'))) {
             //TODO debug this
-            $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
+            $share_url = $this->make_plugin_call_edit($broadcast->id, $request->input('user_id'));
         }
 
         return response()->json(['response' => $response]);
@@ -685,6 +686,17 @@ class BroadcastsController extends Controller
             $file->move($path, $thumbnail_image);
 
             $thumbnail_image;
+        } else if ($request->has('image') && !empty($request->input('image')) && !is_null($request->input('image'))) {
+            $thumbnail_image = 'broadcast_image_' . $broadcast_id . '.jpg';
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
+
+            $base_64_data = $request->input('image');
+
+            $base_64_data = str_replace('datagea:im/jpeg;base64,', '', $base_64_data);
+            $base_64_data = str_replace('data:image/png;base64,', '', $base_64_data);
+
+            $imageName = 'broadcast_image_' . $broadcast_id . '.jpg';
+            File::put(public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR . $imageName), base64_decode($base_64_data));
         }
 
         return $thumbnail_image;
