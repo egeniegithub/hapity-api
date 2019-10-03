@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\UserProfile;
 use App\UserSocial;
 use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Socialite;
@@ -44,12 +44,12 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');        
+        $this->middleware('guest')->except('logout');
 
         $this->username = $this->findUsername();
     }
 
-     /**
+    /**
      * Handle a login request to the application.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -92,7 +92,7 @@ class LoginController extends Controller
      */
     protected function authenticated(Request $request, $user)
     {
-        if($request->user()->hasRole(SUPER_ADMIN_ROLE_ID)) {
+        if ($request->user()->hasRole(SUPER_ADMIN_ROLE_ID)) {
             return redirect()->route('admin.dashboard');
         } else if ($request->user()->hasRole(HAPITY_USER_ROLE_ID)) {
             return redirect()->route('user.home');
@@ -183,7 +183,7 @@ class LoginController extends Controller
                                 $new_user_social->user_id = $new_user->id;
                                 $new_user_social->social_id = $fb_user['id'];
                                 $new_user_social->email = $new_user->email;
-                                $new_user_social->platform = "facebook";
+                                $new_user_social->platform = $provider;
                                 $new_user_social->save();
 
                                 Auth::login($new_user);
@@ -198,7 +198,7 @@ class LoginController extends Controller
                                     $new_user_social->user_id = $local_user->id;
                                     $new_user_social->social_id = $fb_user['id'];
                                     $new_user_social->email = $new_user->email;
-                                    $new_user_social->platform = "facebook";
+                                    $new_user_social->platform = $provider;
                                     $new_user_social->save();
                                 }
 
@@ -211,7 +211,7 @@ class LoginController extends Controller
                         }
                     }
                 } catch (Exception $e) {
-                    Log::debug($platform . ' login failed: ' . $e->getMessage());
+                    Log::debug($provider . ' login failed: ' . $e->getMessage());
                 }
                 break;
             case 'twitter':
