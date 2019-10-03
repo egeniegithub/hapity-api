@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Broadcast;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -16,7 +17,7 @@ class HomeController extends Controller
     public function index()
     {
         //
-        $broadcast = Broadcast::all()->toArray();
+        $broadcast = Broadcast::find(Auth::user()->id)->orderBy('id','DESC')->get()->toArray();
         return view('index')->with('broadcast',$broadcast);
     }
 
