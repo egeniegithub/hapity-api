@@ -182,7 +182,7 @@
                         stream_url: time,
                         token: token,
                         post_plugin:flag,
-                        server_input: '52.18.33.132',
+                        server_input: '{{$server}}',
                         broadcast_image: bd_image,
                         image_ba: $('#bd_image').attr('files'),
                         user_id:'{{ auth::user()->id }}',

@@ -13,7 +13,28 @@ use URL;
 
 class BroadcastsController extends Controller
 {
-    
+
+    private $server;
+
+    public function __construct()
+    {
+        $this->server = $this->getRandIp();
+    }
+
+    public function start_web_cast()
+    {
+        $data = User::with('profile')->where('id', Auth::id())->first()->toArray();
+
+        $server = $this->server;
+
+        return view('webcast', compact('data', 'server'));
+    }
+
+    public function create_content()
+    {
+        $data = User::with('profile')->where('id', Auth::id())->first()->toArray();
+        return view('create-content', compact('data'));
+    }
 
     public function startwebbroadcast(Request $request)
     {
@@ -37,7 +58,7 @@ class BroadcastsController extends Controller
             $stream_url .= $server;
             $stream_url .= ":1935/live/" . $request->stream_url . '_360p';
         } else {
-            $server = $this->getRandIp();
+            $server = $this->$server;
             $stream_url .= $server;
             $stream_url .= ":1935/live/" . $request->stream_url;
         }
@@ -354,5 +375,16 @@ class BroadcastsController extends Controller
             return back();
         }
 
+    }
+
+    private function getRandIp()
+    {
+        if (env('APP_ENV') == 'local') {
+            return '192.168.20.251';
+        } else {
+            $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+            $index = rand(0, 1);
+            return $ip[$index];
+        }
     }
 }
