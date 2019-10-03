@@ -44,7 +44,7 @@ class LoginController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest')->except('logout');        
 
         $this->username = $this->findUsername();
     }
@@ -83,6 +83,21 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if($request->user()->hasRole(SUPER_ADMIN_ROLE_ID)) {
+            return redirect()->route('admin.dashboard');
+        } else if ($request->user()->hasRole(HAPITY_USER_ROLE_ID)) {
+            return redirect()->route('user.home');
+        }
+    }
 
     public function findUsername()
     {

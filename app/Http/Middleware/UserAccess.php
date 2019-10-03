@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 class UserAccess
 {
@@ -16,12 +15,16 @@ class UserAccess
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::user();
+        if (!is_null($request->user())) {
+            $user = $request->user();
 
-        if($user->hasRole(HAPITY_USER_ROLE_ID)) {
-            return $next($request);
+            if ($user->hasRole(HAPITY_USER_ROLE_ID)) {
+                return $next($request);
+            } else {
+                return redirect()->route('login');
+            }
         } else {
             return redirect()->route('login');
-        }        
+        }
     }
 }

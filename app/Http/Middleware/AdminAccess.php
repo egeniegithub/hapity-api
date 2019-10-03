@@ -3,7 +3,6 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 class AdminAccess
 {
@@ -16,12 +15,15 @@ class AdminAccess
      */
     public function handle($request, Closure $next)
     {
-        $user = Auth::user();
-
-        if ($user->hasRole(SUPER_ADMIN_ROLE_ID)) {
-            return $next($request);
+        if (!is_null($request->user())) {
+            $user = $request->user();
+            if ($user->hasRole(SUPER_ADMIN_ROLE_ID)) {
+                return $next($request);
+            } else {
+                return redirect()->route('home');
+            }
         } else {
-            return redirect()->route('home');
+            return redirect()->route('login');
         }
     }
 }
