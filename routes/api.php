@@ -31,9 +31,12 @@ Route::group([
     Route::post('me', 'AuthController@me');
     
     Route::post('broadcasts/upload', 'BroadcastsController@upload');
-    Route::post('editbroadcast', 'BroadcastsController@editBroadcast');
-    Route::post('deletebroadcast', 'BroadcastsController@deleteBroadcast');
-    Route::post('update_timestamp_broadcast', 'BroadcastsController@updateTimestampBroadcast');
+    Route::post('broadcasts/start', 'BroadcastsController@start');
+    
+    Route::post('broadcasts/edit', 'BroadcastsController@edit');
+    Route::post('broadcasts/delete', 'BroadcastsController@delete');
+    Route::post('broadcasts/update/timestamp', 'BroadcastsController@update_timestamp');
+
     Route::post('getallbroadcastsforuser', 'BroadcastsController@getAllBroadcastsforUser');
-    Route::post('startbroadcast', 'BroadcastsController@startBroadcastz');
+    
 });

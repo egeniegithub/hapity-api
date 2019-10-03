@@ -51,7 +51,7 @@ class Handler extends ExceptionHandler
 
             $response['status'] = "Error";
             $response['errorCode'] = $exception->getCode();
-            $response['errorMessage'] = $exception->getMessage() . ' Line: ' . $exception->getLine();
+            $response['errorMessage'] = $exception->getMessage() . ' (Line: ' . $exception->getLine() . ') (File: ' . $exception->getFile() . ')';
 
             return response()->json($response);
         } else {
