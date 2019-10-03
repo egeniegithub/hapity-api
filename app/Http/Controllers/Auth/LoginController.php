@@ -95,7 +95,7 @@ class LoginController extends Controller
         if ($request->user()->hasRole(SUPER_ADMIN_ROLE_ID)) {
             return redirect()->route('admin.dashboard');
         } else if ($request->user()->hasRole(HAPITY_USER_ROLE_ID)) {
-            return redirect()->route('user.home');
+            return redirect()->route('user.dashboard');
         }
     }
 
