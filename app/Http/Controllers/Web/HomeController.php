@@ -17,7 +17,7 @@ class HomeController extends Controller
     public function index()
     {
         //
-        $broadcast = Broadcast::find(Auth::user()->id)->orderBy('id','DESC')->get()->toArray();
+        $broadcast = Broadcast::orderBy('id','DESC')->get()->toArray();
         return view('index')->with('broadcast',$broadcast);
     }
 

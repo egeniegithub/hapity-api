@@ -1,0 +1,270 @@
+* {
+    margin: 0;
+    padding: 0;
+    outline: none !important;
+}
+
+/*==================== Home Page ==================== */
+.form-section {
+    background-color: #499229;
+    border-radius: 14px;
+    /*    box-shadow: -1px 66px 13px -5px #a3c893;*/
+    left: 26.6%;
+    margin-top: 12%;
+    padding: 15px 50px 81px;
+    position: relative;
+    width: 530px;
+}
+.form-logo-section {
+    padding-bottom: 40px;
+    text-align: center;
+    width: 100%;
+}
+.login-submit {
+    background-color: #363636 !important;
+    border: 2px solid !important;
+    border-radius: 6px !important;
+    color: #ffffff !important;
+    float: right;
+    font-family: arial;
+    font-size: 19px !important;
+    padding: 2px 13px !important;
+}
+.form-section input {
+    border-radius: 5px;
+    font-size: 15px;
+    height: 40px;
+}
+.form-logo-section img {
+    width: 32%;
+}
+.form-logo-section img {
+    width: 32%;
+}
+/*==================== Dashboard ==================== */
+.header-section {
+    background-color: #cfcfcf;
+    padding: 10px;
+}
+.heade-logo {
+    float: left;
+}
+.logout-button {
+    float: right;
+}
+.logout-button .logout {
+    background-color: #000000;
+    border: 2px solid;
+    color: #ffffff;
+    display: block;
+    font-size: 16px;
+    margin: 1px 0;
+    padding: 2px 8px;
+}
+.left-side-bar {
+    background-color: #373737;
+    color: #ffffff;
+    font-family: arial;
+    font-size: 17px;
+    /*margin-bottom: -644px;*/
+    margin-left: -15px;
+    height: 100%;
+    /*padding-bottom: 644px;*/
+}
+#left_area{
+    height: 100%;
+    min-height: 1335px;
+}
+.left-admin-side-bar a {
+    border-bottom: 1px solid #404040;
+    color: #ffffff;
+    display: block;
+    padding: 9px 1px 9px 3px;
+}
+.list-icon {
+    display: inline-block;
+    padding: 0 2px;
+}
+.section-heading p {
+    font-family: Century Gothic;
+    font-size: 28px;
+    float: left;
+}
+.info-header {
+    background-color: #2b720d;
+    color: #ffffff;
+    float: left;
+    font-size: 17px;
+    height: 32px;
+    padding: 4px 10px;
+    width: 100%;
+}
+.info-body {
+    background-color: #509e2e;
+    float: left;
+    height: 112px;
+    padding: 16px 12px;
+    width: 100%;
+}
+.info-icon {
+    float: left;
+}
+.info-icon-text {
+    color: #ffffff;
+    float: right;
+    font-size: 72px;
+    font-weight: bold;
+    line-height: 70px;
+    padding-right: 10px;
+}
+.info-footer {
+    background-color: #4a942a;
+    float: left;
+    width: 100%;
+}
+.info-footer > a {
+    color: #ffffff;
+    float: right;
+    font-size: 15px;
+    padding: 2px 12px;
+}
+.world-wide-text {
+    padding: 12px 0;
+}
+.copyright-text {
+    font-size: 15px;
+    margin-top: 20px;
+    padding: 13px 0;
+    text-align: center;
+}
+.left-admin-side-bar a:hover {
+    background-color: #2b720d;
+    color: #ffffff;
+    text-decoration: none;
+}
+/*==================== Reported Broadcost ==================== */
+.reporting-bc-image {
+    float: left;
+    height: 75px;
+    margin: 5px;
+    position: relative;
+    width: 75px;
+    overflow:hidden;
+}
+.reporting-bc-image > img {
+    float: left;
+    opacity: 0.6;
+    position: relative;
+    width: 100%;
+}
+.reported-bc-detail {
+    float: left;
+    padding-left: 8px;
+}
+.reported-bc-detail > p {
+    margin: 0;
+}
+.title {
+    font-family: Century Gothic;
+    font-size: 18px;
+    color: #538550;
+}
+.report-result-display {
+    color: #0065b3;
+    font-size: 14px;
+}
+.listing-reported-broadcost {
+    background-color: #eaeaea;
+    border: 1px solid #bfbfbf;
+    float: left;
+    width: 100%;
+    padding: 5px 0;
+    margin-bottom: 12px;
+}
+.play-report-icon .fa.fa-play {
+    color: #ffffff;
+    display: block;
+    font-size: 40px;
+    left: 80%;
+    opacity: 0.6;
+    position: relative;
+    top: 45%;
+}
+.play-report-icon {
+    display: block;
+    position: absolute;
+    top: 18px;
+}
+.report-bc-action-div {
+    float: right;
+    padding: 8px 15px;
+}
+.approve-block-bc {
+    background-color: #499229;
+    color: #ffffff;
+    display: block;
+    font-family: Century Gothic;
+    font-size: 15px;
+    padding: 5px 9px;
+    text-align: center;
+}
+.delete-block-bc {
+    background-color: #a30101;
+    color: #ffffff;
+    display: block;
+    font-family: Century Gothic;
+    font-size: 15px;
+    padding: 5px 9px;
+    margin-top: 6px;
+    text-align: center;
+}
+.report-bc-pagination {
+    float: left;
+    text-align: center;
+    width: 100%;
+    margin-top: 40px;
+}
+.active-page {
+    background-color: #499229 !important;
+    color: #ffffff !important;
+}
+.overlay {
+    background-color: rgba(0, 0, 0, 0.57);
+    height: 75px;
+    width: 75px;
+}
+.postby, .reportby, .reportdate {
+    display: inline-block;
+    min-width: 76px;
+}
+
+/*==================== All Broadcost ==================== */
+.all-bc-search {
+    float: right;
+    padding: 10px 5px;
+}
+.all-bc-search input {
+    border: 1px solid #cccccc;
+    border-radius: 7px;
+    font-size: 15px;
+    height: 30px;
+    padding: 0 10px;
+    width: 300px;
+}
+.all-bc-search .fa.fa-search {
+    color: #117a00;
+    display: inline-block;
+    font-size: 20px;
+}
+.all-bc-search button {
+    background: #ffffff none repeat scroll 0 0;
+    border: medium none;
+}
+.del-all-bc-single {
+    margin-top: 35px;
+}
+
+/*==================== Reported Users ==================== */
+.reported_user-image img {
+    opacity: 1;
+}

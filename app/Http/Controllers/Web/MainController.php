@@ -23,7 +23,7 @@ class MainController extends Controller
     public function index()
     {
     	$userdata = User::with('profile')->where('id', Auth::id())->first()->toArray();
-    	$broadcasts = Broadcast::orderBy('id','DESC')->get();
+    	$broadcasts = Broadcast::where('user_id',Auth::user()->id)->orderBy('id','DESC')->get();
     	return view('home',compact('userdata','broadcasts'));
     }
     
