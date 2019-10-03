@@ -12,8 +12,6 @@ class AdminBroadcastController extends Controller
     //
     public function index(Request $request){
         $data = Broadcast::with('user');
-        // $broadcasts = Broadcast::paginate('20');
-        // $data = DB::table('broadcasts bc')->join('users as u','u.id','bc.user_id');
         if( isset($request['search']) || isset($request['datetimes']) ) {
             if(isset($request['search']) && $request['search'] != '') {
                 $data = $data->where('title', 'like', "%".$request['search']."%");
