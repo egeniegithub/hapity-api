@@ -60,7 +60,7 @@ Route::group([
     Route::get('admin/deleteuser/{id}', 'Web\Admin\UsersController@deleteuser');
     Route::get('admin/approveduser/{id}', 'Web\Admin\UsersController@approveduser');
 
-    Route::get('admin/dashboard', 'Web\Admin\AdminController@index');
+    Route::get('admin/dashboard', 'Web\Admin\AdminController@index')->name('admin.dashboard');
     Route::get('admin/settings', 'Web\Admin\AdminController@adminSetting');
     Route::post('admin/changepassword', 'Web\Admin\AdminController@changePassword');
 
