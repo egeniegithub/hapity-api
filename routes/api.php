@@ -17,26 +17,24 @@ Route::group([
 
 ], function ($router) {
 
-    Route::post('login', 'AuthController@login');
-    Route::post('register', 'AuthController@register');
-    Route::post('logout', 'AuthController@logout');
+    Route::post('login', 'AuthController@login')->name('api.login');
+    Route::post('register', 'AuthController@register')->name('api.register');
+    Route::post('logout', 'AuthController@logout')->name('api.logout');
 
     Route::post('{platform}/login', 'SocialLoginController@social_login')->name('social.login');
 
-
-
-    Route::post('refresh', 'AuthController@refresh');
-    Route::post('get_profile_info', 'AuthController@getUserProfile');
-    Route::post('edit_profile', 'AuthController@editUserProfile');
-    Route::post('me', 'AuthController@me');
+    Route::post('refresh', 'AuthController@refresh')->name('api.jwt.refresh');
+    Route::post('get_profile_info', 'AuthController@getUserProfile')->name('api.getuserprofile');
+    Route::post('edit_profile', 'AuthController@editUserProfile')->name('api.edituserprofile');
+    Route::post('me', 'AuthController@me')->name('api.me');
     
-    Route::post('broadcasts/upload', 'BroadcastsController@upload');
-    Route::post('broadcasts/start', 'BroadcastsController@start');    
-    Route::post('broadcasts/edit', 'BroadcastsController@edit');
+    Route::post('broadcasts/upload', 'BroadcastsController@upload')->name('api.broadcast.upload');
+    Route::post('broadcasts/start', 'BroadcastsController@start')->name('api.broadcast.start');    
+    Route::post('broadcasts/edit', 'BroadcastsController@edit')->name('api.broadcast.edit');
     
-    Route::post('broadcasts/delete', 'BroadcastsController@delete');
-    Route::post('broadcasts/update/timestamp', 'BroadcastsController@update_timestamp');
+    Route::post('broadcasts/delete', 'BroadcastsController@delete')->name('api.broadcast.delete');
+    Route::post('broadcasts/update/timestamp', 'BroadcastsController@update_timestamp')->name('api.broadcast.timestamp');
 
-    Route::post('getallbroadcastsforuser', 'BroadcastsController@getAllBroadcastsforUser');
+    Route::post('broadcasts/all', 'BroadcastsController@all_user_broadcasts')->name('api.broadcast.all');
     
 });

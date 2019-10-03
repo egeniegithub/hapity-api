@@ -324,16 +324,13 @@ class BroadcastsController extends Controller
 
     }
 
-    public function getAllBroadcastsforUser(Request $request)
+    public function all_user_broadcasts(Request $request)
     {
-        $input = $request->all();
-
         $rules = array(
-//            'token' => 'required',
             'user_id' => 'required',
         );
+
         $messages = array(
-//            'token.required' => 'Token is required.',
             'user_id.required' => 'User ID is required.',
         );
 
@@ -343,31 +340,36 @@ class BroadcastsController extends Controller
             return response()->json($messages);
         }
 
-        $allUserBroadcast = Broadcast::with('user')->where('user_id', $input['user_id'])->get();
+        $allUserBroadcast = Broadcast::where('user_id', $request->input('user_id'))->get();
 
-        $response['status'] = "success";
-        $response['broadcast'] = [];
+        $user = User::with('profile')->find($request->input('user_id'))->toArray();
+
+        $broadcasts = [];
 
         foreach ($allUserBroadcast as $key => $broadcast) {
-            $profilePicToGet = $broadcast['user']->profile()->first();
 
-            $broadcastObj['id'] = $broadcast['id'];
-            $broadcastObj['geo_location'] = $broadcast['geo_location'];
-            $broadcastObj['filename'] = $broadcast['filename'];
-            $broadcastObj['title'] = $broadcast['title'];
-            $broadcastObj['description'] = $broadcast['description'];
-            $broadcastObj['is_sensitive'] = $broadcast['is_sensitive'];
-            $broadcastObj['stream_url'] = $broadcast['stream_url'];
-            $broadcastObj['status'] = $broadcast['status'];
-            $broadcastObj['broadcast_image'] = $broadcast['broadcast_image'];
-            $broadcastObj['share_url'] = $broadcast['share_url'];
-            $broadcastObj['username'] = $broadcast['user']->username;
-            $broadcastObj['user_id'] = $broadcast['user']->id;
-            $broadcastObj['profile_picture'] = $profilePicToGet['profile_picture'];
-            array_push($response['broadcast'], (object) $broadcastObj);
+            $broadcastObj = [];
+            $broadcastObj['id'] = $broadcast->id;
+            $broadcastObj['geo_location'] = $broadcast->geo_location;
+            $broadcastObj['filename'] = $broadcast->filename;
+            $broadcastObj['title'] = $broadcast->title;
+            $broadcastObj['description'] = $broadcast->description;
+            $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
+            $broadcastObj['stream_url'] = $broadcast->stream_url;
+            $broadcastObj['status'] = $broadcast->status;
+            $broadcastObj['broadcast_image'] = $broadcast->broadcast_image;
+            $broadcastObj['share_url'] = $broadcast->share_url;
+            $broadcastObj['username'] = $user['username'];
+            $broadcastObj['user_id'] = $user['id'];
+            $broadcastObj['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictuers/' . $user['profile']['profile_picture']) : '';
+
+            $broadcasts[] = $broadcastObj;
         }
 
-        // remove block user need to be implemented here
+        $response = [];
+        $response['status'] = 'success';
+        $response['user_id'] = $request->input('user_id');
+        $response['broadcasts'] = $broadcasts;
 
         return response()->json($response);
 
@@ -399,7 +401,7 @@ class BroadcastsController extends Controller
         $broadcast = Broadcast::find($broadcast_id);
         $broadcast->timestamp = $date;
         $broadcast->save();
-        
+
         $response = array();
         $response['status'] = $date;
         return response($response, 200);
