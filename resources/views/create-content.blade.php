@@ -39,7 +39,7 @@
                                 <!-- <span><i class="fa fa-video-camera"></i> Video</span> -->
                                 <a class='btn-purple' href='javascript:;'>
                                 Upload video
-                                <input type="file" name="video" value="Video" accept="video/mp4,video/x-m4v,video/*" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" id="video-upload-btn" onchange=''/>
+                                <input type="file" name="video" value="Video" required accept="video/mp4,video/x-m4v,video/*" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" id="video-upload-btn" onchange=''/>
                                 </a>
                                 <div class="uploaded-container left-uploaded-conteiner">
                                     <video id="upload-video" style="display:none;" autoplay muted>
@@ -55,7 +55,7 @@
                             <a class='btn-purple' href='javascript:;'>
                                 Upload image
                                 <!-- <span><i class="fa fa-image"></i> Image</span> -->
-                                <input type="file" name="image" value="Image" accept="image/x-png,image/gif,image/jpeg" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40"  onchange='document.getElementById("upload-image").src = window.URL.createObjectURL(this.files[0])' />
+                                <input type="file" name="image" required value="Image" accept="image/x-png,image/gif,image/jpeg" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40"  onchange='document.getElementById("upload-image").src = window.URL.createObjectURL(this.files[0])' />
                                
                                 </a>
                                   <div class="uploaded-container">

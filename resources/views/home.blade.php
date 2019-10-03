@@ -49,6 +49,19 @@
             </div>
             
             <div class="col-xs-12 col-sm-9 col-md-9">
+                <div class="row">
+                    <div class="col-sm-12">
+                        @if (Session::has('flash_message'))
+                            {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+                            <div class="alert alert-success">{{ Session::get('flash_message') }}</div>
+                        @endif
+                        @if(Session::has('flash_message_delete'))
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                            <div class="alert alert-success">{{ Session::get('flash_message_delete') }}</div>
+                        @endif
+                        
+                    </div>
+                </div>
                 <div class="center-content">
                     <div class="start-broadcast">
                         <a href="{{url('webcast')}}" class=""><i class="fa fa-camera"></i> Start Your Broadcast Here</a>
@@ -288,8 +301,9 @@
             jQuery('.delete-model-dismiss').hide();
             jQuery(this).text('Deleting...');
             $.ajax({
-                url: 'http://www.hapity.com/main/deletebroadcast',
+                url: "{{url('deleteBroadcast')}}",
                 data: {
+                    _token: "{{ csrf_token() }}",
                     token: '<?php echo $get_token; ?>',
                     user_id: '{{ auth::user()->id }}',
                     stream_url: stream_url,
@@ -299,6 +313,7 @@
                 },
                 dataType: 'json',
                 success: function(data) {
+                    console.log(data)
                     jQuery('.delete-brodcast-action').text(data.message);
                     setTimeout(function(){
                         jQuery('#bordcast-single-'+stream_id).remove();
