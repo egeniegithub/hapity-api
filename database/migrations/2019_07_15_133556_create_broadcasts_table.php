@@ -31,6 +31,7 @@ class CreateBroadcastsTable extends Migration
             $table->bigInteger('post_id')->nullable();
             $table->bigInteger('post_id_joomla')->nullable();
             $table->bigInteger('post_id_drupal')->nullable();
+            $table->dateTime('timestamp')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
