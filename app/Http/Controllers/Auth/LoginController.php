@@ -196,7 +196,7 @@ class LoginController extends Controller
                         }
                     }
                 } catch (Exception $e) {
-                    Log::debug('facebook login failed: ' . $e->getMessage());
+                    Log::debug($platform . ' login failed: ' . $e->getMessage());
                 }
                 break;
             case 'twitter':
