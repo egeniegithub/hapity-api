@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Redirect;
 use DB;
 use URL;
 use App\User;
@@ -11,6 +14,7 @@ use App\UserProfile;
 use App\PluginId;
 use Auth;
 use App\Broadcast;
+use File;
 
 class CreatecontentController extends Controller
 {
@@ -21,210 +25,178 @@ class CreatecontentController extends Controller
     }
 
     public function create_content_submission(Request $request){
-    		$video_name = '';
-            $title = $request->title;
-            $description = $request->description;
-            $geo_location = "0,0";
-            $allow_user_messages = false;
-            $user_id = $request->user_id;
-            $is_sensitive = 'no';
-            $post_plugin = true;
-            $token = $request->token;
-            $stream_urlx = md5(microtime().rand()).".stream";
-            // $extension = $request->extension;
+        $rules = array(
+            'title' => 'required',
+            'geo_location' => 'required',
+            'description' => 'required',
+            'user_id' => 'required',
+            'video' => 'required',
+            'is_sensitive' => 'required',
+            'post_plugin' => 'required',
+            'stream_url' => 'required'
+        );
+        $messages = array(
+            'title.required' => 'Title is required.',
+            'geo_location.required' => 'Geo location is required.',
+            'description.required' => 'Description is required.',
+            'user_id.required' => 'User ID is required.',
+            'video.required' => 'Broadcast video is required.',
+            'is_sensitive.required' => 'Sensitivity flag is required.',
+            'post_plugin.required' => 'Plugin flag is required.',
+            'stream_url.required' => 'Stream URL is required.',
+        );
+        $geo_location = "0,0";
+        $allow_user_messages = false;
+        $user_id = $request->user_id;
+        $is_sensitive = 'no';
+        $post_plugin = true;
+        $token = $request->token;
+        $stream_urlx = md5(microtime().rand()).".stream";
+        $stream_url = "";
+        $server = "";
+        $filename = "";
+        $thumbnail_image = "default001.jpg";
+        // upload video
+        if($request->hasFile('video')){
+            $video_file = $request->file('video');
+            $info = pathinfo($video_file->getClientOriginalName());
+            $ext = $info['extension'];
+            $filename = $stream_urlx . "." . $ext;
+            // $path = storage_path('app\public\broadcast');
+            $path = base_path('wowza_store');
+            $video_path = $video_file->move($path, $filename);
+            //Making Stream URL
+            $stream_url = "rtmp://";
+            $server = $this->getRandIp();
+            $stream_url .= $server;
+            $stream_url .= ":1935/live/" . $stream_urlx;
+        }
+        // upload image
+        
+        if (!$post_plugin)
+            $post_plugin = 'false';
 
-            $stream_url = "";
-            $server = "";
-            $filename = "";
-            // upload video
-            if($request->hasFile('video')){
-            	$file = $request->file('video');
-            	$extension = $file->getClientOriginalExtension();
-	            $video_name = $stream_urlx.'.'.$extension;
-	            // $imageName = 'profile_picture_' . $user_id . '.' . $extension;
-                // $path = STORAGE_PATH.'/'.$user_id."/"."videos/";
-                $path = base_path('wowza_store');
-	            $file->move($path, $video_name);
-                //Making Stream URL
-	         	$stream_url = "rtmp://";
-                $server = $this->getRandIp();
-                $stream_url .= $server;
-                $stream_url .= ":1935/live/" . $stream_urlx;
-            }
-            // image 
+        $date = date('Y-m-d h:i:s', time());
+        if (auth::user()->id) {
+            $user_data = UserProfile::find($user_id);
+            // $user_data = $this->get_user_profile($user_id);
+            $is_sensitive = $user_data->is_sensitive;
+
+            if ($allow_user_messages == '')
+                $allow_user_messages = 'yes';
+
+            $user = User::find($user_id);
+            $broadcast = new Broadcast();
+            $broadcast->title = $request->title;
+            $broadcast->geo_location = $request->geo_location;
+            $broadcast->description = $request->description;
+            $broadcast->is_sensitive = $request->is_sensitive;
+            $broadcast->stream_url = $stream_url;
+            $broadcast->broadcast_image = $thumbnail_image;
+            $broadcast->filename = $filename;
+            $broadcast->status = 'offline';
+            $broadcast->video_name = $video_file->getClientOriginalName();
+            $broadcast->share_url = '';
+            $user->broadcasts()->save($broadcast);
             if($request->hasFile('image')){
-            	$file = $request->file('image');
-            	$extension = $file->getClientOriginalExtension();
-	            $filename = time().'.'.$extension;
-	            // $imageName = 'profile_picture_' . $user_id . '.' . $extension;
-	            $path = STORAGE_PATH.'/'.$user_id."/"."images/";
-	            $file->move($path, $filename);
+                $file = $request->file('image');
+                $info = pathinfo($file->getClientOriginalName());
+                $ext = $info['extension'];
+                $thumbnail_image = Str::random(6).'_'.now()->timestamp.'.'. $ext;
+                $path = public_path('images/broadcasts/'.Auth::user()->id.DIRECTORY_SEPARATOR.$broadcast->id);
+                $file->move($path, $thumbnail_image);
+            }
+            $share_url = URL::to('/view-broadcast').'/'.$broadcast->id;
+            $inserted_broadcast = Broadcast::find($broadcast->id);
+            $inserted_broadcast->share_url = $share_url;
+            $inserted_broadcast->save();
+            $response = array('status' => 'success', 'broadcast_id' => $broadcast->id, 'share_url' => $share_url);
+            $response['stream_url'] = $stream_url;
+            $response['server'] = $server;
+            $response['response'] = "uploadbroadcast";
+            $response['video'] = $_FILES['video']['error'];
+            if ($post_plugin) {
+                $this->make_plugin_call_upload($broadcast->id, $user_id);
             }
 
+        }
+            return redirect::to('home')->with('flash_message','Broadcast Uploaded Successfull');
+    } 
 
-            if (!$post_plugin)
-                $post_plugin = 'false';
+    public function edit_content_submission(Request $request){
+     
+        $rules = array(
+            'title' => 'required',
+            'description' => 'required',
+            'user_id' => 'required',
+            'stream_id' => 'required',
+            'stream_url' => 'required'
+        );
+        $messages = array(
+            'title.required' => 'Title is required.',
+            'description.required' => 'Description is required.',
+            'user_id.required' => 'User ID is required.',
+            'stream_id.required' => 'Broadcast ID is required.',
+            'stream_url.required' => 'Stream URL is required.',
+        );
+        $update_broad = array();
+        $stream_urlx = md5(microtime().rand()).".stream";
+        $input = $request->all();
+        $broadcast_id = $request->bid;
+        $update_broad = array();
+        $broadcast = Broadcast::find($broadcast_id);
+        if(isset($request->title) && !empty($request->title)){
+            $update_broad['title'] = $request->title;
+        }
+        if(isset($request->description) && !empty($request->description)){
+            $update_broad['description'] = $request->description;
+        }
+        if($request->hasFile('video')){
+            $video_file = $request->file('video');
+            $info = pathinfo($video_file->getClientOriginalName());
+            $ext = $info['extension'];
+            $filename = $stream_urlx . "." . $ext;
+            // $path = storage_path('app\public\broadcast');
+            $path = base_path('wowza_store');
+            $video_path = $video_file->move($path, $filename);
+            //Making Stream URL
+            $stream_url = "rtmp://";
+            $server = $this->getRandIp();
+            $stream_url .= $server;
+            $stream_url .= ":1935/live/" . $stream_urlx;
+            $update_broad['stream_url'] = $stream_url;
+            
+            $streamURL = Broadcast::where(['id' => $broadcast_id])->first()->toArray();
+            $filename = $streamURL['filename'];
+            $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $filename);
+            if(is_file($file_path)) unlink($file_path);
+         
+        }
+        if($request->hasFile('image')){
 
-            $date = date('Y-m-d h:i:s', time());
-            if (auth::user()->id) {
-            	$user_data = UserProfile::find($user_id);
-                // $user_data = $this->get_user_profile($user_id);
-                $is_sensitive = $user_data->is_sensitive;
-
-                if ($allow_user_messages == '')
-                    $allow_user_messages = 'yes';
-
-               	$broadcast_data['title'] 				= $title;
-               	$broadcast_data['description'] 			= $description;
-               	$broadcast_data['geo_location'] 		= $geo_location;
-               	$broadcast_data['allow_user_messages'] 	= $allow_user_messages;
-               	$broadcast_data['user_id'] 				= $user_id;
-               	$broadcast_data['stream_url'] 			= $stream_url;
-               	$broadcast_data['created_at'] 			= $date;
-               	$broadcast_data['is_sensitive'] 		= $is_sensitive;
-               	$broadcast_data['status'] 				= 'offline';
-               	$broadcast_data['filename'] 			= $video_name;
-               	$broadcast_data['video_name'] 			= $video_name;
-               	$broadcast_data['broadcast_image'] 			= $filename;
-               	$broadcast_data['share_url']			= '';
-                 // dd($broadcast_data);
-                 Broadcast::create($broadcast_data);
-                // DB::table('broadcasts')->insert($broadcast_data);
-                // Broadcast::UpdateOrCreate($broadcast_data);
-                $broadcast_id = DB::getPdo()->lastInsertId();
-
-		        $share_url = URL::to('/view-broadcast').'/'.$broadcast_id;
-		        
-		        $data['share_url'] = $share_url;
-		        // DB::table('broadcasts')->where('id',$broadcast_id)->update($data);
-                Broadcast::where('id',$broadcast_id)->update($data);
-		        $response = array('status' => 'success', 'broadcast_id' => $broadcast_id, 'share_url' => $share_url);
-		        // return $response;
-                $response['stream_url'] = $stream_url;
-                $response['status'] = 'success';
-                $response['video'] = $_FILES['video']['error'];
-                $bid = $response['broadcast_id'];
-                $path = '';
-                
-                $result = $this->make_plugin_call_upload($bid,$user_id);
-            }
-            return back();
-        } 
-
-        // public function edit_content_submission(){
-        //     $user_id = $this->session->userdata('user_id');
-        //     $title = $this->input->post('title');
-        //     $description = $this->input->post('description');
-        //     $stream_id = $this->input->post('bid');
-        //     $stream_urlx = $this->input->post('stream_url');
-        //     $token = $this->input->post("token");
-        //     if($this->is_broadcast($stream_id) && $user_id!=" " && $user_id!= NULL){
-
-        //         $qry = "Select * from broadcast where  id='$stream_id' ";
-        //         $response = $this->db->query($qry);
-        //         $response = $response->result_array();
-        //         $stream_urllll = $response[0]['stream_url'];
-        //         $user_id = $response[0]['user_id'];
-        //         $broadcast_imageg = $response[0]['broadcast_image'];
-
-        //         if (($_FILES['image']['error'] === UPLOAD_ERR_OK)) {
-        //             define('UPLOAD_DIR', '/var/www/vhosts/api/api/uploads/broadcast_images/');
-        //             define('UPLOAD_URL', 'https://api.hapity.com/uploads/broadcast_images/');
-
-        //             $name = time();
-        //             $pathtosave = UPLOAD_DIR . $name . ".jpg";
-        //             $urltosave = UPLOAD_URL . $name . ".jpg";
-
-        //             if (!empty($broadcast_imageg)) {
-        //                 $pathFragments = explode('/', $broadcast_imageg);
-        //                 $broadcast_imageg = end($pathFragments);
-        //             }
-        //             foreach (glob(UPLOAD_DIR . "/*") as $filename) {
-        //                 $pos = strpos($filename, $broadcast_imageg);
-        //                 if ($pos === false) {
-
-        //                     // string needle NOT found in haystack
-        //                 } else {
-        //                     $command = "rm " . $filename;
-        //                     $error = shell_exec("$command");
-        //                 }
-        //             }
-        //             $imageFile = $_FILES['image']['name'];
-        //             $imageFile_tomove = $_FILES['image']['tmp_name'];
-        //             move_uploaded_file($imageFile_tomove, $pathtosave);
-        //             $path = $this->Broadcast->update_img_broadcast($stream_id, $urltosave);
-
-        //         }
-
-        //         if (($_FILES['video']['error'] === UPLOAD_ERR_OK)) {
-        //             if ($stream_urlx == '') {
-
-        //                 if (!empty($stream_urllll)) {
-        //                     $pathFragments = explode('/', $stream_urllll);
-        //                     $stream_urlx = end($pathFragments);
-        //                 }
-        //             }
-        //             if ($stream_urlx != '') {
-        //                 $path = "/home/san/live/";
-        //                 $files = array();
-        //                 foreach (glob($path . "/*") as $filename) {
-        //                     $pos = strpos($filename, $stream_urlx);
-        //                     if ($pos === false) {
-
-        //                         // string needle NOT found in haystack
-        //                     } else {
-        //                         $command = "rm " . $filename;
-        //                         $error = shell_exec("$command");
-        //                     }
-        //                 }
-
-        //                 $videofile = $_FILES['video']['name'];
-        //                 $videofile_tomove = $_FILES['video']['tmp_name'];
-        //                 if ($extension == '') {
-        //                     $info = pathinfo($videofile);
-        //                     $ext = $info['extension']; // get the extension of the file
-        //                     $newname = $stream_urlx . "." . $ext;
-
-        //                 } else {
-        //                     $newname = $stream_urlx . "." . $extension;
-        //                 }
-
-        //                 //$temp_pathtosave = "/home/san/live/temp-" . $newname;
-        //                 $pathtosave = "/home/san/live/" . $newname;
-
-        //                 move_uploaded_file($videofile_tomove, $pathtosave);
-
-        //                 /*$shell_exec = shell_exec("ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 $temp_pathtosave");
-
-        //                 if($shell_exec == 90){
-        //                     $shell_exec = shell_exec('ffmpeg -i "'.$temp_pathtosave.'" -vf "transpose=1,transpose=2" '. $pathtosave);
-        //                     shell_exec('rm '.$temp_pathtosave);
-        //                 }*/
-        //                 $stream_url = "rtmp://";
-        //                 $server = $this->getRandIp();
-        //                 $stream_url .= $server;
-        //                 $stream_url .= ":1935/live/" . $this->input->post('stream_url');
-
-        //             }
-        //         }
-
-        //         $broadcast_data = $this->get_broadcast_by_id($stream_id);
-        //         $data = array();
-        //         if($broadcast_data['title'] != $title){
-        //             $data['title'] = $title;
-        //         }
-
-        //         if($broadcast_data['description'] != $description){
-        //             $data['description'] = $description;
-        //         }
-                
-        //         $this->updatbroadcast($stream_id, $data);
-
-        //         $this->make_plugin_call_edit($stream_id);
-        //     }
-
-        //     redirect('main/', 'refresh');
-        // } 
+            $file = $request->file('image');
+            $info = pathinfo($file->getClientOriginalName());
+            $ext = $info['extension'];
+            $thumbnail_image = Str::random(6).'_'.now()->timestamp.'.'. $ext;
+            $path = public_path('images/broadcasts/'.Auth::user()->id.DIRECTORY_SEPARATOR.$broadcast_id);
+            // $path = storage_path('app\public');
+            $file->move($path, $thumbnail_image);
+            $update_broad['broadcast_image'] = $thumbnail_image;
+            $streamURL = Broadcast::where(['id' => $broadcast_id])->first()->toArray();
+            $filename = $streamURL['broadcast_image'];
+            
+            $file_path = public_path('images/broadcasts'.DIRECTORY_SEPARATOR.Auth::user()->id.DIRECTORY_SEPARATOR.$broadcast_id.DIRECTORY_SEPARATOR.$filename);
+            // dd($file_path);
+            if(is_file($file_path)) unlink($file_path);
+        }
+        // dd($request->all());
+        Broadcast::find($broadcast_id)->update($update_broad);
+        // $broadcast->update($update_broad);
+        if (isset($input['token']) && !empty($input['token'])) {
+            $this->make_plugin_call_edit($broadcast_id, Auth::user()->id);
+        }
+        return redirect::to('home')->with('flash_message','Broadcast Updated Successfull');
+    } 
 
     public function view_broadcast($broadcast_id){
             $filename = '';
@@ -417,4 +389,126 @@ class CreatecontentController extends Controller
     //     $row = $query->row();
     //     return $row->count;
     // }
+
+    private function make_plugin_call_edit($bid, $uid) {
+        $broadcast_id = $bid;
+        $broadcast = Broadcast::find($bid);
+        $user = User::find($uid);
+        $plugins = PluginId::where(['user_id' => $uid]);
+        if (isset($plugins) && !empty($plugins)) {
+            foreach ($plugins as $data) {
+                $title = $broadcast['title'];
+                $description = $broadcast['description'];
+                $stream_url = str_replace("/live/", "/vod/", $broadcast['stream_url']);
+                $image = $broadcast['broadcast_image'];
+
+
+                $headers = array(
+                    'Content-type: application/xwww-form-urlencoded'
+                );
+
+                if ($data['type'] == 'drupal') {
+                    $postdata = http_build_query(
+                        array(
+                            'title' => $title,
+                            'stream_url' => $stream_url,
+                            'bid' => $broadcast_id,
+                            'status' => 'offline',
+                            'key' => $user['auth_key'],
+                            'broadcast_image' => $image,
+                            'description' => $description,
+                            'post_id_drupal' => $broadcast['post_id_drupal']
+                        )
+                    );
+                } else if ($data['type'] == 'wordpress') {
+                    $postdata = http_build_query(
+                        array(
+                            'title' => $title,
+                            'stream_url' => $stream_url,
+                            'bid' => $broadcast_id,
+                            'status' => 'offline',
+                            'key' => $user['auth_key'],
+                            'broadcast_image' => $image,
+                            'description' => $description,
+                            'post_id_wp' => $broadcast['post_id']
+                        )
+                    );
+                } else if ($data['type'] == 'joomla') {
+                    $postdata = http_build_query(
+                        array(
+                            'title' => $title,
+                            'stream_url' => $stream_url,
+                            'bid' => $broadcast_id,
+                            'status' => 'offline',
+                            'key' => $user['auth_key'],
+                            'broadcast_image' => $image,
+                            'description' => $description,
+                            'post_id_joomla' => $broadcast['post_id_joomla']
+                        )
+                    );
+                }
+
+
+                $opts = array('http' =>
+                    array(
+                        'method' => 'POST',
+                        'header' => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $postdata
+                    )
+                );
+
+                $context = stream_context_create($opts);
+
+                if ($data['type'] == 'wordpress') {
+                    $go = $data['url'] . '?action=hpb_hp_edit_broadcast';
+                } else if ($data['type'] == 'drupal') {
+                    $go = $data['url'] . '?action=hpb_hp_edit_broadcast';
+                } else if ($data['type'] == 'joomla') {
+                    $go = $data['url'] . 'index.php?option=com_hapity&task=savebroadcast.editBroadcastData';
+                }
+                $result = file_get_contents($go, false, $context);
+            }
+        }
+    }
+
+    //params - token, user_id, stream_id, stream_url
+    public function deleteBroadcast (Request $request) {
+        $user_id = $request->user_id;
+        $stream_id = $request->stream_id;
+        $rules = array(
+            'token' => 'required',
+            'user_id' => 'required',
+            'stream_id' => 'required'
+        );
+        $messages = array(
+            'token.required' => 'Token is required.',
+            'user_id.required' => 'User ID is required.',
+            'stream_id.required' => 'Stream ID is required.',
+        );
+
+        // $validator=Validator::make($request->all(),$rules,$messages);
+        // if($validator->fails())
+        // {
+        //     $messages=$validator->messages();
+        //     return response()->json($messages);
+        // }
+        $streamURL = Broadcast::where(['id' => $stream_id])->first()->toArray();
+        $filename = $streamURL['filename'];
+        $broadcast_image = $streamURL['broadcast_image'];
+        Broadcast::where('user_id', $user_id)->where(['id' => $stream_id])->delete();
+        $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $filename);
+        if(is_file($file_path)) unlink($file_path);
+        
+        $file_image_path = public_path('images/broadcasts'.DIRECTORY_SEPARATOR.Auth::user()->id.DIRECTORY_SEPARATOR.$stream_id.DIRECTORY_SEPARATOR.$broadcast_image);
+        if(is_file($file_image_path)) unlink($file_image_path);
+        
+        // return back()->with('message','Record Delete Successfull ');
+        $response['status'] = "success";
+        $response['response'] = "deletebroadcast";
+        $response['message'] = "deleted successfully";
+
+        return response()->json($response);
+
+    }
+
 }
