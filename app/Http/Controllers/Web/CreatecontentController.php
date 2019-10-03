@@ -168,7 +168,7 @@ class CreatecontentController extends Controller
             $stream_url .= $server;
             $stream_url .= ":1935/live/" . $stream_urlx;
             $update_broad['stream_url'] = $stream_url;
-
+            $update_broad['filename'] = $filename;
             $streamURL = Broadcast::where(['id' => $broadcast_id])->first()->toArray();
             $filename = $streamURL['filename'];
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $filename);
