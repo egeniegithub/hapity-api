@@ -33,6 +33,30 @@ class AdminBroadcastController extends Controller
         return view('admin.all-broadcast',compact('broadcasts'));
     } 
     function deleteBroadcast($broadcast_id){
+        // $admin_id=$this->session->userdata('admin_id');
+
+        // if($admin_id!=''){
+        //     $ans=$this->admin_model->delete_broadcast($id);
+        //     if($ans>0){
+        //         redirect('admin/reported_broadcasts?delete=true','refresh');
+        //     }
+        // }
+        // else{
+        //     redirect('admin/','refresh');
+        // }
+        // $qry1="delete from broadcast where id=".$id;
+        // $qry2="delete from report_broadcast where broadcast_id=".$id;
+        // $this->db->query($qry1);
+        // $this->db->query($qry2);
+        // $num = $this->db->affected_rows();
+        // if($num>0)
+        // {
+        //     return $num;
+        // }
+        // else{
+        //     return 0;
+        // }
+
         Broadcast::find($broadcast_id)->delete();
     }
 

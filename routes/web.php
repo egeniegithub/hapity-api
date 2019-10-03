@@ -49,9 +49,16 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 ////  admin routes 
 Route::get('admin/broadcast','Web\Admin\AdminBroadcastController@index');
+Route::get('deletebroadcast/{id}','Web\Admin\AdminBroadcastController@deleteBroadcast');
+
 Route::get('admin/dashboard','Web\Admin\AdminController@index');
+Route::get('admin/settings','Web\Admin\AdminController@adminSetting');
+Route::post('admin/changepassword','Web\Admin\AdminController@changePassword');
+
 Route::get('admin/users','Web\Admin\UsersController@index');
+
 Route::get('admin/reported-broadcast','Web\Admin\ReportedController@reportedBroadcasts');
+Route::get('admin/reported-users','Web\Admin\ReportedController@reportedUsers');
 
 
 Auth::routes();

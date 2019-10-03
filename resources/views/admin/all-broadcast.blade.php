@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="report-bc-action-div">
-                            <a href="javascript:" onclick="del_a_report(<?php echo $broadcast->id ?>);" class="delete-block-bc del-all-bc-single">Delete</a>
+                        <a href="{{url('deletebroadcast'.'/'.$broadcast->id)}}" class="delete-block-bc del-all-bc-single">Delete</a>
                         </div>
                     </div>
                     <div class="modal fade" id="broadcastModel-<?php echo ($broadcast->id); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
