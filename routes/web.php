@@ -45,4 +45,11 @@ Route::get('/broadcasts/view/{id}', 'Web\BroadcastsController@view')->name('view
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
+
+
+////  admin routes 
+Route::get('admin/broadcast','Web\Admin\AdminBroadcastController@index');
+
+
+
 Auth::routes();
