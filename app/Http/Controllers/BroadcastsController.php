@@ -20,6 +20,11 @@ class BroadcastsController extends Controller
 
     public function upload(Request $request)
     {
+
+        $content = $request->getContent();
+        print_r($content);
+        exit;
+
         $rules = array(
             'user_id' => 'required',
         );
