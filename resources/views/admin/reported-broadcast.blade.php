@@ -63,9 +63,9 @@
                                                  echo "rtmp://".$ip.":1935/vod/".$broadcast['broadcast']['filename'];?>"
                                                 },{
                                                     file:"<?php  if($broadcast['status'] == "online")
-                                                 echo str_replace("rtsp","http",$broadcast['broadcast']['stream_url']."/playlist.m3u8");
+                                                 echo str_replace("rtsp","http",$broadcast['broadcast']['stream_url']);
                                                  else
-                                                 echo "http://".$ip.":1935/vod/".$broadcast['broadcast']['filename']."/playlist.m3u8";?>"
+                                                 echo "http://".$ip.":1935/vod/".$broadcast['broadcast']['filename'];?>"
                                                 }],
                                                 height: 380,
                                                 width: "100%",

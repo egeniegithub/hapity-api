@@ -110,7 +110,7 @@
                                                     sources: [{
                                                         file: "@php if($status == 'online') echo str_replace('rtsp','rtmp',$stream_url); else echo 'rtmp://'.$ip.':1935/vod/'.$video_file_name; @endphp"
                                                     },{
-                                                        file:"@php  if($status == 'online') echo str_replace(array('rtsp','rtmp'),'http',$stream_url.'/playlist.m3u8'); else echo 'http://'.$ip.':1935/vod/'.$video_file_name.'/playlist.m3u8' @endphp"
+                                                        file:"@php  if($status == 'online') echo str_replace(array('rtsp','rtmp'),'http',$stream_url); else echo 'http://'.$ip.':1935/vod/'.$video_file_name @endphp"
                                                     }],
                                                 playButton: '{{asset("assets/images/play.png")}}',
                                                 height: 380,
