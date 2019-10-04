@@ -13,7 +13,6 @@ use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Str;
-use URL;
 
 class CreatecontentController extends Controller
 {
@@ -26,108 +25,67 @@ class CreatecontentController extends Controller
     public function create_content_submission(Request $request)
     {
         $rules = array(
-            'title' => 'required',
-            'geo_location' => 'required',
-            'description' => 'required',
-            'user_id' => 'required',
+            'title' => 'required',            
+            'description' => 'required',            
             'video' => 'required',
-            'is_sensitive' => 'required',
-            'post_plugin' => 'required',
-            'stream_url' => 'required',
+            'image' => 'required'
+            
         );
-        $messages = array(
-            'title.required' => 'Title is required.',
-            'geo_location.required' => 'Geo location is required.',
-            'description.required' => 'Description is required.',
-            'user_id.required' => 'User ID is required.',
-            'video.required' => 'Broadcast video is required.',
-            'is_sensitive.required' => 'Sensitivity flag is required.',
-            'post_plugin.required' => 'Plugin flag is required.',
-            'stream_url.required' => 'Stream URL is required.',
-        );
-        $geo_location = "0,0";
-        $allow_user_messages = false;
-        $user_id = $request->user_id;
-        $is_sensitive = 'no';
-        $post_plugin = true;
-        $token = $request->token;
-        $stream_urlx = md5(microtime() . rand()) . ".stream";
-        $stream_url = "";
-        $server = "";
-        $filename = "";
-        $thumbnail_image = "default001.jpg";
-        // upload video
+
+        $request->validate($rules);
+    
+        //Handle file upload;
+        $video_name_with_ext = '';
         if ($request->hasFile('video')) {
             $video_file = $request->file('video');
-            $info = pathinfo($video_file->getClientOriginalName());
-            $ext = $info['extension'];
-            $filename = $stream_urlx . "." . $ext;
-            // $path = storage_path('app\public\broadcast');
+
+            //Generate File name
+            $file_name = md5(time()) . '.stream';
+            $extension = $video_file->getClientOriginalExtension();
+            $video_name_with_ext = $file_name . '.' . $extension;
             $path = base_path('wowza_store');
-            $video_path = $video_file->move($path, $filename);
-            //Making Stream URL
-            $stream_url = "rtmp://";
-            $server = $this->getRandIp();
-            $stream_url .= $server;
-            $stream_url .= ":1935/live/" . $stream_urlx;
-        }
-        // upload image
-
-        if (!$post_plugin) {
-            $post_plugin = 'false';
+            $video_file->move($path, $video_name_with_ext);
         }
 
-        $date = date('Y-m-d h:i:s', time());
-        if (auth::user()->id) {
-            $user_data = UserProfile::find($user_id);
-            // $user_data = $this->get_user_profile($user_id);
-            $is_sensitive = $user_data->is_sensitive;
+        //server ip
+        $server_ip = $this->getRandIp();
 
-            if ($allow_user_messages == '') {
-                $allow_user_messages = 'yes';
-            }
+        //stream url
+        $stream_url = 'rtmp://' . $server_ip . ':1935/vod/' . $video_name_with_ext;
 
-            $user = User::find($user_id);
-            $broadcast = new Broadcast();
-            $broadcast->title = $request->title;
-            $broadcast->geo_location = $request->geo_location;
-            $broadcast->description = $request->description;
-            $broadcast->is_sensitive = $request->is_sensitive;
-            $broadcast->stream_url = $stream_url;
-            $broadcast->broadcast_image = $thumbnail_image;
-            $broadcast->filename = $filename;
-            $broadcast->status = 'offline';
-            $broadcast->video_name = $video_file->getClientOriginalName();
-            $broadcast->share_url = '';
-            $user->broadcasts()->save($broadcast);
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
-                $info = pathinfo($file->getClientOriginalName());
-                $ext = $info['extension'];
-                $thumbnail_image = Str::random(6) . '_' . now()->timestamp . '.' . $ext;
-                $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $broadcast->id . DIRECTORY_SEPARATOR);
+        $image_file_name_with_ext = '';
+        //handle image upload
+        if ($request->hasFile('image')) {
+            $image_file = $request->file('image');
+            $extension = $image_file->getClientOriginalExtension();
 
-                if(!is_dir($path)) {
-                    //mkdir($path);
-                    exec('mkdir -R ' . $path);    
-                }
+            //Generate File name
+            $image_file_name_with_ext = md5(time()) . '.' . $extension;
+            $path = public_path('images/broadcasts/' . Auth::id() . '/');
 
-                $file->move($path, $thumbnail_image);
-            }
-            $share_url = URL::to('/view-broadcast') . '/' . $broadcast->id;
-            $inserted_broadcast = Broadcast::find($broadcast->id);
-            $inserted_broadcast->share_url = $share_url;
-            $inserted_broadcast->save();
-            $response = array('status' => 'success', 'broadcast_id' => $broadcast->id, 'share_url' => $share_url);
-            $response['stream_url'] = $stream_url;
-            $response['server'] = $server;
-            $response['response'] = "uploadbroadcast";
-            $response['video'] = $_FILES['video']['error'];
-            if ($post_plugin) {
-                $this->make_plugin_call_upload($broadcast->id, $user_id);
-            }
-
+            $image_file->move($path, $image_file_name_with_ext);
         }
+
+        $user = Auth::user();
+        $user_profile = $user->profile()->get();
+        
+        $broadcast = new Broadcast();
+        $broadcast->user_id = Auth::id();
+        $broadcast->title = $request->title;
+        $broadcast->geo_location = $request->geo_location;
+        $broadcast->description = $request->description;
+        $broadcast->is_sensitive = $request->is_sensitive;
+        $broadcast->stream_url = $stream_url;
+        $broadcast->broadcast_image = $image_file_name_with_ext;
+        $broadcast->filename = $video_name_with_ext;
+        $broadcast->status = 'offline';
+        $broadcast->share_url = '';
+        $broadcast->video_name = $video_name_with_ext;
+        $broadcast->save();
+
+        $broadcast->share_url = route('broadcast.view', $broadcast->id);
+        $broadcast->save();
+
         return redirect::to('dashboard')->with('flash_message', 'Broadcast Uploaded Successfull');
     }
 
