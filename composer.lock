@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "488c070a3714eb83ed6abd544949f201",
+    "content-hash": "464654d3ece0f5a5d4d4583a6f091aa1",
     "packages": [
         {
             "name": "biscolab/laravel-recaptcha",
@@ -3765,6 +3765,30 @@
                 "environment"
             ],
             "time": "2019-09-10T21:37:39+00:00"
+        },
+        {
+            "name": "wowza/wse-rest-library-php",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WowzaMediaSystems/wse-rest-library-php.git",
+                "reference": "31dfe5eb43b8c98c9f025dc454fb70239999cfbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WowzaMediaSystems/wse-rest-library-php/zipball/31dfe5eb43b8c98c9f025dc454fb70239999cfbf",
+                "reference": "31dfe5eb43b8c98c9f025dc454fb70239999cfbf",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Com\\Wowza\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "homepage": "https://www.wowza.com",
+            "time": "2019-02-20T23:27:14+00:00"
         }
     ],
     "packages-dev": [
@@ -5531,7 +5555,9 @@
     ],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "wowza/wse-rest-library-php": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

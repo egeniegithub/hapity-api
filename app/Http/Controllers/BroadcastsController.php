@@ -116,7 +116,7 @@ class BroadcastsController extends Controller
             'is_sensitive' => 'required',
             'post_plugin' => 'required',
             'stream_url' => 'required',
-            'image' => 'required',
+            //'image' => 'required',
         );
         $messages = array(
             'title.required' => 'Title is required.',
