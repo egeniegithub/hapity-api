@@ -38,7 +38,11 @@ class SocialLoginController extends Controller
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
             $messages = $validator->messages();
-            return response()->json($messages);
+            $to_return = [];
+            $to_return['status'] = 'error';
+            $to_return['message'] = $messages[0];
+
+            return response()->json($to_return);
         }
 
         $input = $request->all();
