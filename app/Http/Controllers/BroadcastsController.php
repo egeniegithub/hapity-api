@@ -71,7 +71,7 @@ class BroadcastsController extends Controller
             $broadcast->save();
         }
 
-        $broadcast->share_url = route('view_broadcast', $broadcast->id);
+        $broadcast->share_url = route('broadcast.view', $broadcast->id);
         $broadcast->save();
 
         $response = [];
@@ -238,7 +238,7 @@ class BroadcastsController extends Controller
             $broadcast->save();
         }
 
-        $broadcast->share_url = route('view_broadcast', $broadcast->id);
+        $broadcast->share_url = route('broadcast.view', $broadcast->id);
         $broadcast->save();
 
         $response = [];
@@ -346,7 +346,7 @@ class BroadcastsController extends Controller
             $broadcastObj['stream_url'] = $broadcast->stream_url;
             $broadcastObj['status'] = $broadcast->status;
             $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/images/default001.jpg');
-            $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('view_broadcast', $broadcast->id);
+            $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
             $broadcastObj['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictuers/' . $user['profile']['profile_picture']) : '';

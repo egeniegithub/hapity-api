@@ -69,50 +69,62 @@
                     </div>
                     <div class="my-bordcasts-container" data-user-id="{{ auth::user()->id}}">
                         @php
-                        $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
-                        $index = rand(0,1);
-                        // $ip = '52.18.33.132';//$ipArr[$index];
-                        $ip = '192.168.20.251';
-                        @endphp
-                        @foreach ($broadcasts as $broadcast)
-                          @php
-                            $image_classes = '';
-                            $b_image = '';
-                            // $broadcast->broadcast_image;
-                            $b_id = isset($broadcast->id) ? $broadcast->id : '';
-                            
-                            if($broadcast->title){
-                                $b_title = $broadcast->title;
-                            } else {
-                                $b_title = "Untitled";
-                            }
-                            $share_url = $broadcast->share_url;
-                            $b_description = $broadcast->description;
-                            $stream_url = $broadcast->stream_url;
-                            $status = $broadcast->status;
+                            $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+                            $index = rand(0,1);                            
+                            $ip =  env('APP_ENV') == 'local' ? '192.168.20.251' : $ipArr[$index];
 
-                            $video_file_name = $broadcast->filename;
-                            if(!$b_image){
-                                $b_image = 'default001.jpg';
-                            }
-                            if($video_file_name){
-                                $image_classes = 'has_video';
-                            }
-                      @endphp
+                            echo $ip;
+                        @endphp
+
+                        @foreach ($broadcasts as $broadcast)
+                            @php
+                                $image_classes = '';
+                                $b_image = '';
+                                // $broadcast->broadcast_image;
+                                $b_id = isset($broadcast->id) ? $broadcast->id : '';
+                                
+                                if($broadcast->title){
+                                    $b_title = $broadcast->title;
+                                } else {
+                                    $b_title = "Untitled";
+                                }
+
+                                $share_url = $broadcast->share_url;
+                                $b_description = $broadcast->description;
+                                $stream_url = $broadcast->stream_url;
+                                $status = $broadcast->status;
+
+                                $video_file_name = $broadcast->filename;
+                                
+                                if(!$b_image){
+                                    $b_image = 'default001.jpg';
+                                }
+
+                                if($video_file_name){
+                                    $image_classes = 'has_video';
+                                }
+
+                            @endphp
                             <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
                                 <a href="#" class="bordcast-play image-section">
-                                    <img src="{{ asset('images'.'/'.$b_image) }}" alt="{{ $b_title }}">
+                                    @if(!empty($broadcast->broadcast_image)) 
+                                        <img src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$broadcast->broadcast_image) }}" alt="{{ $b_title }}" />
+                                    @else 
+                                        <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
+                                    @endif
                                     @if($video_file_name)
                                         <div class="video-container video-conteiner-init" style="display:none;">
                                             <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div>
                                         </div>
                                         <script>
                                             jwplayer("w-broadcast-{{ $b_id }}").setup({
-                                                    sources: [{
+                                                sources: [
+                                                    {
                                                         file: "@php if($status == 'online') echo str_replace('rtsp','rtmp',$stream_url); else echo 'rtmp://'.$ip.':1935/vod/'.$video_file_name; @endphp"
                                                     },{
                                                         file:"@php  if($status == 'online') echo str_replace(array('rtsp','rtmp'),'http',$stream_url); else echo 'http://'.$ip.':1935/vod/'.$video_file_name @endphp"
-                                                    }],
+                                                    }
+                                                ],
                                                 playButton: '{{asset("assets/images/play.png")}}',
                                                 height: 380,
                                                 width: "100%",
@@ -125,7 +137,7 @@
                                                         jwplayer("w-broadcast-{{ $b_id }}").play('play');
                                                     });
                                                 });*/
-                                            </script>
+                                        </script>
                                     @endif
                                 </a> 
                                 <div class="bordcast-inner-data">
