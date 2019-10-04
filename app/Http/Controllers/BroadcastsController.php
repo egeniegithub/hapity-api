@@ -313,11 +313,7 @@ class BroadcastsController extends Controller
 
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
             if (file_exists($file_path)) {
-                unlink($file_path);
-
-                if (is_file($file_path)) {
-                    exec('rm -f ' . $file_path);
-                }
+                exec('rm -f ' . $file_path);
             }
 
             $response['status'] = "success";
@@ -678,6 +674,11 @@ class BroadcastsController extends Controller
         }
 
         return $to_return;
+    }
+
+    public function download(Request $request, $broadcast_id, $file_name)
+    {
+
     }
 
     private function handle_image_file_upload($request, $broadcast_id, $user_id)
