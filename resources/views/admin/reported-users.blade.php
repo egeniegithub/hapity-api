@@ -12,19 +12,36 @@
                                 <p> Reported Users</p>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                @if (Session::has('flash_message'))
+                                    {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+                                    <div class="alert alert-success">{{ Session::get('flash_message') }}</div>
+                                @endif
+                                @if(Session::has('flash_message_delete'))
+                                    {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+                                    <div class="alert alert-danger">{{ Session::get('flash_message_delete') }}</div>
+                                @endif
+                                
+                            </div>
+                        </div>
     
                         <!--Reported Broadcast listing start-->
-                        <?php foreach ($reported_users as $user) { ?>
+                        <?php foreach ($reported_users as $key => $user) { if($user->hasRole(SUPER_ADMIN_ROLE_ID)) continue;  ?>
                         @php @endphp
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="listing-reported-broadcost">
                                     <div class="reporting-bc-image reported_user-image">
+                                        @if(!empty($user['profile']['profile_picture']))
                                         <img src="<?php echo $user['profile']['profile_picture']; ?>"/>
+                                        @else
+                                    <img src="{{asset('assets/images/null.png')}}" >
+                                        @endif
                                     </div>
                                 <div class="reported-bc-detail">
                                     <p> <span class="title"><?php echo ucwords($user['username']) ;?></span></p>
-                                    <p>  <span class="reportby">Reports :</span> <span class="report-result-display"> {{ !empty($user['reported_user']) ? count($user['reported_user']) : 0 }}</span></p>
-                                    <p>  <span class="reportdate">Registered :</span> <span class="report-result-display"> <?php echo $user['join_date']; ?></span></p>
+                                    <p>  <span class="reportby">Reports :</span> <span class="report-result-display"> {{ !empty($user['reportedUser']) ? count($user['reportedUser']) : 0 }}</span></p>
+                                    <p>  <span class="reportdate">Registered :</span> <span class="report-result-display"> <?php echo $user['created_at']; ?></span></p>
                                 </div>
     
                                 <div class="report-bc-action-div">
@@ -42,27 +59,15 @@
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                             <div class="report-bc-pagination">
                                 <nav>
-                                    {{ $reported_users->links() }}
+                                    {{ !empty($reported_users) ? $reported_users->links() : '' }}
                                 </nav>
                             </div>
                         </div>
-                        <!--Pagination End-->                        <!--Footer Section Start-->
-                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                            <footer>
-                                <div class="copyright-text">Copyright &copy; 20015-2016 Hapity. All rights reserved.</div>
-                            </footer>
-                        </div>
-                        <!--Footer Section End-->
+                      
                     </div>
                 </div>
                 <!--Right Content Area End-->
-            </div>
-        </div>
-    </div>
-    <!--Main End-->
-    </div>
-    <!--Wrapper End-->
-    </body>
+       
     <?php
     if(isset($_GET['approved'])) {?>
         <script>

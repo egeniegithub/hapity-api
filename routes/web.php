@@ -53,8 +53,8 @@ Route::group([
 ], function ($router) {
 
     Route::get('admin/broadcast', 'Web\Admin\AdminBroadcastController@index');
-    Route::get('deletebroadcast/{id}', 'Web\Admin\AdminBroadcastController@deleteBroadcast');
-    Route::get('approvedbroadcast/{id}', 'Web\Admin\AdminBroadcastController@approvedbroadcast');
+    Route::get('admin/deletebroadcast/{id}', 'Web\Admin\AdminBroadcastController@deleteBroadcast');
+    // Route::get('approvedbroadcast/{id}', 'Web\Admin\AdminBroadcastController@approvedbroadcast');
 
     Route::get('admin/users', 'Web\Admin\UsersController@index');
     Route::get('admin/deleteuser/{id}', 'Web\Admin\UsersController@deleteuser');
@@ -68,4 +68,7 @@ Route::group([
 
     Route::get('admin/reported-broadcast', 'Web\Admin\ReportedController@reportedBroadcasts');
     Route::get('admin/reported-users', 'Web\Admin\ReportedController@reportedUsers');
+    Route::get('admin/reportBroadcastDelete/{id}', 'Web\Admin\ReportedController@reportBroadcastDelete');
+    Route::get('admin/reportBroadcastApproved/{id}', 'Web\Admin\ReportedController@reportBroadcastApproved');
+
 });

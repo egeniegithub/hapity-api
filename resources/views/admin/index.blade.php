@@ -20,7 +20,7 @@
                             <div class="info-icon"><img src="{{asset('/assets/admin')}}/images/cam.png"/></div>
                             <div class="info-icon-text">
                                 
-                                {{ !empty($data->reported_broadcast_count) ? $data->reported_broadcast_count : 0 }}
+                                {{ !empty($data[0]['reported_broadcast_count']) ? $data[0]['reported_broadcast_count'] : 0 }}
                             </div>
                         </div>
                         <div class="info-footer">
@@ -36,7 +36,7 @@
                         <div class="info-header">REPORTED USERS</div>
                         <div class="info-body">
                             <div class="info-icon"><img src="{{asset('/assets/admin')}}/images/reported-user-lg-icon.png"/></div>
-                            <div class="info-icon-text"> {{ !empty($data->reported_user_count) ? $data->reported_user_count : 0 }}</div>
+                            <div class="info-icon-text"> {{ !empty($data[0]['reported_user_count']) ? $data[0]['reported_user_count'] : 0 }}</div>
                         </div>
                         <div class="info-footer">
                             <a href="{{url('admin/reported-users') }}">View more</a>
@@ -52,7 +52,7 @@
                         <div class="info-header">LIVE BROADCASTS</div>
                         <div class="info-body">
                             <div class="info-icon"><img src="{{asset('/assets/admin')}}/images/live-bc-lg-icon.png"/></div>
-                            <div class="info-icon-text"> {{ !empty($data->live_broadcast_count) ? $data->live_broadcast_count : 0 }}</div>
+                            <div class="info-icon-text"> {{ !empty($data[0]['live_broadcast_count']) ? $data[0]['live_broadcast_count'] : 0 }}</div>
                         </div>
                         <div class="info-footer">
                             <a href="{{url('admin/broadcast')}}">View more</a>

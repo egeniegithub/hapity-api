@@ -14,7 +14,7 @@ class ReportUser extends Model
         return $this->blongsTo('App\User');
     }
     public function userWithProfile(){
-        return $this->belongsTo('App\User');
+        return $this->belongsTo('App\User','user_id')->with('profile');
     }
 
 }

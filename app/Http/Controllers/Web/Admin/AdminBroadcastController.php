@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Broadcast;
 use App\ReportBroadcast;
+use App\User;
 use DB; 
 use Auth;
 
@@ -17,7 +18,9 @@ class AdminBroadcastController extends Controller
         $this->middleware('auth');
     }
     public function index(Request $request){
-        $data = Broadcast::with('user');
+        $data = User::rightJoin('broadcasts','broadcasts.user_id','=','users.id')->select('broadcasts.*','users.username');
+
+        // $data = Broadcast::with('user');
         if( isset($request['search']) || isset($request['datetimes']) ) {
             if(isset($request['search']) && $request['search'] != '') {
                 $data = $data->where('title', 'like', "%".$request['search']."%");
@@ -41,23 +44,27 @@ class AdminBroadcastController extends Controller
     public function deleteBroadcast($broadcast_id){
         $user_id = Auth::user()->id;
         $broadcast = Broadcast::find($broadcast_id);
-        $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
-        if (file_exists($file_path)) {
-            // unlink($file_path);
+        if(isset($broadcast) && !empty($broadcast->filename)){
+            $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
+            if (file_exists($file_path)) {
+                // unlink($file_path);
 
-            if (is_file($file_path)) {
-                exec('rm -f ' . $file_path);
+                if (is_file($file_path)) {
+                    exec('rm -f ' . $file_path);
+                }
             }
         }
-        ReportBroadcast::where('broadcast_id',$broadcast_id)->delete();
-        Broadcast::find($broadcast_id)->delete();
+        // $broadcast = Broadcast::find($broadcast_id);
+        // if(isset($broadcast) && !empty($broadcast)) $broadcast->delete();
+        DB::table('broadcasts')->where('id',$broadcast_id)->delete();
+        // $reportBroadcast = ReportBroadcast::where('broadcast_id',$broadcast_id);
+        // if(isset($reportBroadcast) && !empty($reportBroadcast)) $reportBroadcast->delete();
+        DB::table('report_broadcasts')->where('broadcast_id',$broadcast_id)->delete();
+        // $result = Broadcast::where('id',$broadcast_id)->delete();
+        // dd($broadcast_id);
         return back()->with('flash_message','Broadcast Deleted Successfully ');
     }
 
-    public function approvedbroadcast($broadcast_id){
-        ReportBroadcast::where('broadcast_id',$broadcast_id)->delete();
-        return back()->with('flash_message','ReportedBroadcast Approved Successfully ');
-    }
 
     
 }
