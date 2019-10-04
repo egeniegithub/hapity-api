@@ -380,7 +380,7 @@ class BroadcastsController extends Controller
     private function getRandIp()
     {
         if (env('APP_ENV') == 'local') {
-            return '192.168.20.251';
+            return '72.255.38.246';
         } else {
             $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
             $index = rand(0, 1);
