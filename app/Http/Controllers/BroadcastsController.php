@@ -304,24 +304,34 @@ class BroadcastsController extends Controller
             $messages = $validator->messages();
             return response()->json($messages);
         }
-        $streamURL = Broadcast::where(['id' => $input['broadcast_id']])->first()->toArray();
-        $file_name = $streamURL['filename'];
-        Broadcast::where('user_id', $input['user_id'])->where(['id' => $input['broadcast_id']])->delete();
+        $streamURL = Broadcast::where(['id' => $input['broadcast_id']])->first();
 
-        $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
-        if (file_exists($file_path)) {
-            unlink($file_path);
+        if (!is_null($streamURL)) {
+            $streamURL = $streamURL->toArray();
+            $file_name = $streamURL['filename'];
+            Broadcast::where('user_id', $input['user_id'])->where(['id' => $input['broadcast_id']])->delete();
 
-            if (is_file($file_path)) {
-                exec('rm -f ' . $file_path);
+            $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
+            if (file_exists($file_path)) {
+                unlink($file_path);
+
+                if (is_file($file_path)) {
+                    exec('rm -f ' . $file_path);
+                }
             }
+
+            $response['status'] = "success";
+            $response['response'] = "deletebroadcast";
+            $response['message'] = "deleted successfully";
+
+            return response()->json($response);
+        } else {
+            $response['status'] = "error";
+            $response['response'] = "deletebroadcast";
+            $response['message'] = "Broadcast not Found!";
+
+            return response()->json($response);
         }
-
-        $response['status'] = "success";
-        $response['response'] = "deletebroadcast";
-        $response['message'] = "deleted successfully";
-
-        return response()->json($response);
 
     }
 
@@ -690,7 +700,7 @@ class BroadcastsController extends Controller
             $thumbnail_image = 'broadcast_image_' . $broadcast_id . '.jpg';
             $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
 
-            if(!is_dir($path)) {
+            if (!is_dir($path)) {
                 mkdir($path, 777, true);
             }
 

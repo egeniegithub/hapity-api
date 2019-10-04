@@ -26,13 +26,13 @@ class SocialLoginController extends Controller
             'social_id' => 'required',
             'username' => 'required',
             'email' => 'required|email',
-            'profile_picture' => 'required',
+            //'profile_picture' => 'required',
         );
         $messages = array(
             'social_id.required' => 'Social id is required.',
             'username.required' => 'Username already registered.',
             'email.required' => 'Email is required.',
-            'profile_picture.required' => 'Profile Picture is required.',
+            //'profile_picture.required' => 'Profile Picture is required.',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
