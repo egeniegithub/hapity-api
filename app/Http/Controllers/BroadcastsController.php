@@ -330,7 +330,7 @@ class BroadcastsController extends Controller
 
         $allUserBroadcast = Broadcast::where('user_id', $request->input('user_id'))->get();
 
-        $user = User::with('profile')->find($request->input('user_id'))->toArray();
+        $user = User::orderBy('id', 'desc')->with('profile')->find($request->input('user_id'))->toArray();
 
         $broadcasts = [];
 
