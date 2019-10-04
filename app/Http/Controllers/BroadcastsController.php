@@ -20,13 +20,9 @@ class BroadcastsController extends Controller
 
     public function upload(Request $request)
     {
-        $rules = array(
-            'user_id' => 'required',
-        );
+        $request_params = $request->all();
 
-        $messages = array(
-            'user_id.required' => 'User ID is required.',
-        );
+        dd($request);
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
@@ -81,6 +77,8 @@ class BroadcastsController extends Controller
         $response['video'] = $broadcast->video_name;
         if ($broadcast->broadcast_image) {
             $response['image'] = asset('images/broadcasts/' . $request->input('user_id') . '/' . $broadcast->broadcast_image);
+        } else {
+            $response['image'] = asset('images/images/default001.jpg');
         }
         $response['server'] = $stream_video_info['file_server'];
         $response['response'] = 'uploadbroadcast';
@@ -146,6 +144,8 @@ class BroadcastsController extends Controller
         $response['video'] = $broadcast->video_name;
         if ($broadcast->broadcast_image) {
             $response['image'] = asset('images/broadcasts/' . $request->input('user_id') . '/' . $broadcast->broadcast_image);
+        } else {
+            $response['image'] = asset('images/images/default001.jpg');
         }
         $response['server'] = $server;
         $response['response'] = 'startbroadcast';
@@ -244,6 +244,8 @@ class BroadcastsController extends Controller
         $response['video'] = $broadcast->video_name;
         if ($broadcast->broadcast_image) {
             $response['image'] = asset('images/broadcasts/' . $request->input('user_id') . '/' . $broadcast->broadcast_image);
+        } else {
+            $response['image'] = asset('images/images/default001.jpg');
         }
 
         if (!empty($stream_video_info)) {
@@ -338,7 +340,7 @@ class BroadcastsController extends Controller
             $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
             $broadcastObj['stream_url'] = $broadcast->stream_url;
             $broadcastObj['status'] = $broadcast->status;
-            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : '';
+            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/images/default001.jpg');;
             $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('view_broadcast', $broadcast->id);
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
@@ -703,6 +705,13 @@ class BroadcastsController extends Controller
 
     public function download(Request $request, $broadcast_id, $file_name)
     {
+        $broadcast = Broadcast::find($broadcast_id);
+
+        if(!is_null($broadcast)) {
+
+            $file_name = $broadcast;
+
+        }
 
     }
 
