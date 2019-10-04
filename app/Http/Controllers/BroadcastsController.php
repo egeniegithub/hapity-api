@@ -21,25 +21,11 @@ class BroadcastsController extends Controller
     public function upload(Request $request)
     {
         $rules = array(
-            'title' => 'required',
-            'geo_location' => 'required',
-            'description' => 'required',
             'user_id' => 'required',
-            'video' => 'required',
-            'is_sensitive' => 'required',
-            'post_plugin' => 'required',
-            'stream_url' => 'required',
         );
 
         $messages = array(
-            'title.required' => 'Title is required.',
-            'geo_location.required' => 'Geo location is required.',
-            'description.required' => 'Description is required.',
             'user_id.required' => 'User ID is required.',
-            'video.required' => 'Broadcast video is required.',
-            'is_sensitive.required' => 'Sensitivity flag is required.',
-            'post_plugin.required' => 'Plugin flag is required.',
-            'stream_url.required' => 'Stream URL is required.',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -56,11 +42,12 @@ class BroadcastsController extends Controller
         $user = User::find($request->input('user_id'));
 
         $broadcast = new Broadcast();
+
         $broadcast->user_id = $request->input('user_id');
-        $broadcast->title = $request->input('title');
-        $broadcast->geo_location = $request->input('geo_location');
-        $broadcast->description = $request->input('description');
-        $broadcast->is_sensitive = $request->input('is_sensitive');
+        $broadcast->title = !is_null($request->input('title')) ? $request->input('title') : '';
+        $broadcast->geo_location = !is_null($request->input('geo_location')) ? $request->input('geo_location') : '';
+        $broadcast->description = !is_null($request->input('description')) ? $request->input('description') : '';
+        $broadcast->is_sensitive = !is_null($request->input('is_sensitive')) ? $request->input('is_sensitive') : '';
         $broadcast->stream_url = '';
         $broadcast->share_url = '';
         $broadcast->video_name = '';
@@ -108,24 +95,11 @@ class BroadcastsController extends Controller
 
     public function start(Request $request)
     {
-
         $rules = array(
-            'title' => 'required',
-            'geo_location' => 'required',
             'user_id' => 'required',
-            'is_sensitive' => 'required',
-            'post_plugin' => 'required',
-            'stream_url' => 'required',
-            //'image' => 'required',
         );
         $messages = array(
-            'title.required' => 'Title is required.',
-            'geo_location.required' => 'Geo location is required.',
             'user_id.required' => 'User ID is required.',
-            'is_sensitive.required' => 'Sensitivity flag is required.',
-            'post_plugin.required' => 'Plugin flag is required.',
-            'stream_url.required' => 'Stream URL is required.',
-            'image.required' => 'Thumb nail is required.',
         );
         $validator = Validator::make($request->all(), $rules, $messages);
         if ($validator->fails()) {
@@ -144,10 +118,10 @@ class BroadcastsController extends Controller
 
         $broadcast = new Broadcast();
         $broadcast->user_id = $request->input('user_id');
-        $broadcast->title = $request->input('title');
-        $broadcast->geo_location = $request->input('geo_location');
-        $broadcast->description = $request->input('description');
-        $broadcast->is_sensitive = $request->input('is_sensitive');
+        $broadcast->title = !is_null($request->input('title')) ? $request->input('title') : '';
+        $broadcast->geo_location = !is_null($request->input('geo_location')) ? $request->input('geo_location') : '';
+        $broadcast->description = !is_null($request->input('description')) ? $request->input('description') : '';
+        $broadcast->is_sensitive = !is_null($request->input('is_sensitive')) ? $request->input('is_sensitive') : '';
         $broadcast->stream_url = $stream_url;
         $broadcast->share_url = '';
         $broadcast->video_name = '';
@@ -410,7 +384,47 @@ class BroadcastsController extends Controller
         $broadcast->save();
 
         $response = array();
-        $response['status'] = $date;
+        $response = array();
+        $response['status'] = 'success';
+        $response['timestamp'] = $date;
+        $response['message'] = 'Broadcast Timestamp Successfully Updated';
+
+        return response($response, 200);
+    }
+
+    public function stop_broadcast(Request $request)
+    {
+        $rules = array(
+            'broadcast_id' => 'required',
+        );
+        $messages = array(
+            'broadcast_id.required' => 'Broadcast video is required.',
+        );
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+        if ($validator->fails()) {
+            $messages = $validator->errors()->all();
+            $response = array(
+                'status' => 'failure',
+                'message' => $messages[0],
+            );
+            return response()->json($response);
+        }
+
+        $input = $request->all();
+        $broadcast_id = $input['broadcast_id'];
+        $date = date('Y-m-d h:i:s', time());
+
+        $broadcast = Broadcast::find($broadcast_id);
+        $broadcast->timestamp = $date;
+        $broadcast->status = 'offline';
+        $broadcast->save();
+
+        $response = array();
+        $response['status'] = 'success';
+        $response['timestamp'] = $date;
+        $response['message'] = 'Broadcast Successfully Stopped';
+
         return response($response, 200);
     }
 
