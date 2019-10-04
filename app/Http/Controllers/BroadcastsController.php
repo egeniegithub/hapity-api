@@ -60,7 +60,7 @@ class BroadcastsController extends Controller
         if (!empty($stream_video_info)) {
             $broadcast->stream_url = $stream_video_info['file_stream_url'];
             $broadcast->filename = $stream_video_info['file_name'];
-            $broadcast->video_name = $stream_video_info['file_original_name'];
+            $broadcast->video_name = $stream_video_info['file_name'];
             $broadcast->save();
         }
 
@@ -666,13 +666,10 @@ class BroadcastsController extends Controller
         if ($request->hasFile('video')) {
 
             $video_file = $request->file('video');
-            $video_original_name = $video_file->getClientOriginalName();
+            $video_original_name = $video_file->getClientOriginalName();            
+            $ext = $video_file->getClientOriginalExtension();
 
-            $info = pathinfo($video_file->getClientOriginalName());
-            $ext = $info['extension'];
-
-            $file_name = $request->input('stream_url') . "." . $ext;
-
+            $file_name = md5(time()) . ".stream." . $ext;
             $path = base_path('wowza_store');
 
             $video_path = $video_file->move($path, $file_name);
@@ -730,25 +727,27 @@ class BroadcastsController extends Controller
     private function handle_image_file_upload($request, $broadcast_id, $user_id)
     {
         $thumbnail_image = '';
-
         if ($request->hasFile('image')) {
-
-            $file = $request->file('image');
-            $info = pathinfo($file->getClientOriginalName());
-            $ext = $info['extension'];
-
-            $thumbnail_image = 'broadcast_image_' . $broadcast_id . '.' . $ext;
-
+            $file = $request->file('image');            
+            $ext = $file->getClientOriginalExtension();
+            $thumbnail_image =  md5(time()) . '.' . $ext;
             $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
-            $file->move($path, $thumbnail_image);
+            
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
 
-            $thumbnail_image;
-        } else if ($request->has('image') && !empty($request->input('image')) && !is_null($request->input('image'))) {
-            $thumbnail_image = 'broadcast_image_' . $broadcast_id . '.jpg';
+            $file->move($path, $thumbnail_image);     
+            
+            return $thumbnail_image;
+        } 
+        
+        if ($request->has('image') && !empty($request->input('image')) && !is_null($request->input('image'))) {
+            $thumbnail_image = md5(time()) . '.jpg';
             $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
 
             if (!is_dir($path)) {
-                mkdir($path, 777, true);
+                mkdir($path);
             }
 
             $base_64_data = $request->input('image');
@@ -756,10 +755,11 @@ class BroadcastsController extends Controller
             $base_64_data = str_replace('datagea:im/jpeg;base64,', '', $base_64_data);
             $base_64_data = str_replace('data:image/png;base64,', '', $base_64_data);
 
-            $imageName = 'broadcast_image_' . $broadcast_id . '.jpg';
-            File::put($path . $imageName, base64_decode($base_64_data));
-        }
+            File::put($path . $thumbnail_image, base64_decode($base_64_data));
 
+            return $thumbnail_image;
+        }    
+        
         return $thumbnail_image;
     }
 
