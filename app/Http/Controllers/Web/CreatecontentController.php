@@ -108,7 +108,8 @@ class CreatecontentController extends Controller
                 $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $broadcast->id . DIRECTORY_SEPARATOR);
 
                 if(!is_dir($path)) {
-                    mkdir($path);
+                    //mkdir($path);
+                    exec('mkdir -R ' . $path);    
                 }
 
                 $file->move($path, $thumbnail_image);
