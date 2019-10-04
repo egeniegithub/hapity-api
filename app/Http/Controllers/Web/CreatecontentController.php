@@ -105,7 +105,12 @@ class CreatecontentController extends Controller
                 $info = pathinfo($file->getClientOriginalName());
                 $ext = $info['extension'];
                 $thumbnail_image = Str::random(6) . '_' . now()->timestamp . '.' . $ext;
-                $path = public_path('images/broadcasts/' . Auth::user()->id . DIRECTORY_SEPARATOR . $broadcast->id);
+                $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $broadcast->id . DIRECTORY_SEPARATOR);
+
+                if(!is_dir($path)) {
+                    mkdir($path);
+                }
+
                 $file->move($path, $thumbnail_image);
             }
             $share_url = URL::to('/view-broadcast') . '/' . $broadcast->id;
