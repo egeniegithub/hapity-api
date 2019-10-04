@@ -381,6 +381,7 @@ class BroadcastsController extends Controller
 
         $broadcast = Broadcast::find($broadcast_id);
         $broadcast->timestamp = $date;
+        $broadcast->status = 'online';
         $broadcast->save();
 
         $response = array();
