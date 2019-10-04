@@ -20,14 +20,13 @@ class BroadcastsController extends Controller
 
     public function upload(Request $request)
     {
-        $request_params = $request->all();
+        $rules = array(
+            'user_id' => 'required',
+        );
 
-        print_r($_POST);
-
-        print_r($_FILES);
-
-        print_r($_GET);
-        exit;
+        $messages = array(
+            'user_id.required' => 'User ID is required.',
+        );
 
         $validator = Validator::make($request->all(), $rules, $messages);
 
