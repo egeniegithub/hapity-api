@@ -34,35 +34,35 @@
                 @if(isset($broadcasts) && !empty($broadcasts))
                 @foreach ($broadcasts as $broadcast) 
                     @php 
-
+                    // if(isset($broadcast['id']) && empty($broadcast['id'])) continue;
                     $image_classes = '';
                     $b_image = !empty($broadcast->broadcast_image) ? $broadcast->broadcast_image : 'https://www.hapity.com/images/default001.jpg';
                     // echo "<pre>";
                     // print_r($broadcast);
                     // echo "</pre>"; exit;
-                    $b_id = $broadcast->id;
+                    $b_id = $broadcast['id'];
                     
-                    if($broadcast->title){
-                        $b_title = $broadcast->title;
+                    if($broadcast['title']){
+                        $b_title = $broadcast['title'];
                     } else {
                         $b_title = "Untitled";
                     }
-                    $stream_url = $broadcast->stream_url;
+                    $stream_url = $broadcast['stream_url'];
 
-                    $video_file_name = $broadcast->filename;
+                    $video_file_name = $broadcast['filename'];
                     if(!$b_image){
                         $b_image = 'https://www.hapity.com/images/default001.jpg';
                     }
                     if($video_file_name){
                         $image_classes = 'has_video';
                     }
-                    $status = $broadcast->status;
+                    $status = $broadcast['status'];
                     @endphp
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="listing-reported-broadcost">
-                        <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast->title); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast->id); ?>">
+                        <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast['title']); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast['id']); ?>">
                             <div class="reporting-bc-image">
-                                <img src="<?php echo $broadcast->broadcast_image; ?>"/>
+                                <img src="<?php echo $broadcast['broadcast_image']; ?>"/>
                                             <span class="play-report-icon">
                                                 <i class="fa fa-play"></i>
                                             </span>
@@ -71,35 +71,35 @@
                         </a>
 
                         <div class="reported-bc-detail">
-                            <p> <span class="title btitle">{{ ucwords($broadcast->title) }}</span></p>
-                            <p> <span class="postby">Posted By : </span> <span class="report-result-display"> {{ $broadcast['user']['username'] }} </span></p>
-                            <p>  <span class="reportby">Status :</span> <span class="report-result-display"> {{ $broadcast->status }} </span></p>
-                            <p>  <span class="reportdate">Source :</span> <span class="report-result-display"> <a href="{{ $broadcast->share_url }}">{{ $broadcast['share_url'] }}</a> </span></p>
+                            <p> <span class="title btitle">{{ ucwords($broadcast['title']) }}</span></p>
+                            <p> <span class="postby">Posted By : </span> <span class="report-result-display"> {{ $broadcast['username'] }} </span></p>
+                            <p>  <span class="reportby">Status :</span> <span class="report-result-display"> {{ $broadcast['status'] }} </span></p>
+                            <p>  <span class="reportdate">Source :</span> <span class="report-result-display"> <a href="{{ $broadcast['share_url'] }}">{{ $broadcast['share_url'] }}</a> </span></p>
 
                             @if(isset($_GET['dev']))
-                                <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="<?php echo $broadcast->stream_url;?>">{{ $broadcast['stream_url'] }}</a> </span></p>
+                                <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="<?php echo $broadcast['stream_url'];?>">{{ $broadcast['stream_url'] }}</a> </span></p>
                             @endif
-                            <?php $stream_count = "https://api.hapity.com/webservice/stream_count?id=".$broadcast->id; ?>
+                            <?php $stream_count = "https://api.hapity.com/webservice/stream_count?id=".$broadcast['id']; ?>
                             <p>  <span class="reportdate">Views :</span> <span class="report-result-display"> <?php  echo file_get_contents($stream_count); ?> </span></p>
                             
-                            <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast->created_at));?> </span></p>
+                            <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast['created_at']));?> </span></p>
                         </div>
 
                         <div class="report-bc-action-div">
-                        <a href="{{url('deletebroadcast'.'/'.$broadcast->id)}}" class="delete-block-bc del-all-bc-single">Delete</a>
+                        <a href="{{url('admin/deletebroadcast'.'/'.$broadcast['id'])}}" class="delete-block-bc del-all-bc-single">Delete</a>
                         </div>
                     </div>
-                    <div class="modal fade" id="broadcastModel-<?php echo ($broadcast->id); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+                    <div class="modal fade" id="broadcastModel-<?php echo ($broadcast['id']); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close close-video" id="model-cross" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel"><?php echo ucwords($broadcast->title); ?></h4>
+                                    <h4 class="modal-title" id="myModalLabel"><?php echo ucwords($broadcast['title']); ?></h4>
                                 </div>
                                 <div class="modal-body">
-                                    <div id="broadcast-<?php echo $broadcast->id;?>" class="player"></div>
+                                    <div id="broadcast-<?php echo $broadcast['id'];?>" class="player"></div>
                                     <script type="text/javascript">
-                                        jwplayer("broadcast-<?php echo $broadcast->id;?>").setup({
+                                        jwplayer("broadcast-<?php echo $broadcast['id'];?>").setup({
                                             sources: [{
                                                 file: "<?php  if($status == "online")
                                              echo str_replace("rtsp","rtmp",$stream_url);
@@ -118,7 +118,7 @@
                                             skin: 'stormtrooper',
                                         });
                                         <?php /**/ ?>
-                                        // jwplayer("broadcast-<?php echo $broadcast->id;?>").setup({
+                                        // jwplayer("broadcast-<?php echo $broadcast['id'];?>").setup({
                                         //     sources: [{
                                         //         file: "rtmp://52.18.33.132:1935/vod/1012135211551959177802.stream"
                                         //     },{

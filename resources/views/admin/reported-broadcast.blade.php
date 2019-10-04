@@ -17,6 +17,19 @@
                             <p> Reported Broadcasts</p>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @if (Session::has('flash_message'))
+                                {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+                                <div class="alert alert-success">{{ Session::get('flash_message') }}</div>
+                            @endif
+                            @if(Session::has('flash_message_delete'))
+                                {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+                                <div class="alert alert-danger">{{ Session::get('flash_message_delete') }}</div>
+                            @endif
+                            
+                        </div>
+                    </div>
                     <!--Reported Broadcost listing start-->
                     <?php foreach ($reported_broadcasts as $broadcast) { ?>
                         
@@ -40,8 +53,8 @@
                             </div>
 
                             <div class="report-bc-action-div">
-                                <a href="{{ url('approvedbroadcast'.'/'.$broadcast['id']) }}" class="approve-block-bc">Approve</a>
-                            <a href="{{url('deletebroadcast'.'/'.$broadcast['id'])}}"  class="delete-block-bc">Delete</a>
+                                <a href="{{ url('admin/reportBroadcastApproved'.'/'.$broadcast['id']) }}" class="approve-block-bc">Approve</a>
+                            <a href="{{url('admin/reportBroadcastDelete'.'/'.$broadcast['id'])}}"  class="delete-block-bc">Delete</a>
                             </div>
                         </div>
                         <!-- Modal start -->

@@ -44,16 +44,6 @@ class AdminController extends Controller
         }else{
             return back()->with('flash_message_delete','Password Not Match Please Enter Correct Password !');
         }
-        dd($user);
-        $result=$this->db->query($qry);
-        if($result->num_rows()>0){
-            return $result->row()->id;
-        }else{
-            return 'not-match';
-        }
-
-        $qry="update admin set password = '".$new."' where username = '".$this->session->userdata('admin_username')."'";
-
         
     }
 }

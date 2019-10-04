@@ -77,7 +77,8 @@
                         @foreach ($broadcasts as $broadcast)
                           @php
                             $image_classes = '';
-                            $b_image = $broadcast->broadcast_image;
+                            $b_image = '';
+                            // $broadcast->broadcast_image;
                             $b_id = isset($broadcast->id) ? $broadcast->id : '';
                             
                             if($broadcast->title){
@@ -92,7 +93,7 @@
 
                             $video_file_name = $broadcast->filename;
                             if(!$b_image){
-                                $b_image = 'https://www.hapity.com/images/default001.jpg';
+                                $b_image = 'default001.jpg';
                             }
                             if($video_file_name){
                                 $image_classes = 'has_video';
@@ -100,7 +101,7 @@
                       @endphp
                             <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
                                 <a href="#" class="bordcast-play image-section">
-                                    <img src="{{ asset('broadcast/images'.'/'.$b_image) }}" alt="{{ $b_title }}">
+                                    <img src="{{ asset('images'.'/'.$b_image) }}" alt="{{ $b_title }}">
                                     @if($video_file_name)
                                         <div class="video-container video-conteiner-init" style="display:none;">
                                             <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div>

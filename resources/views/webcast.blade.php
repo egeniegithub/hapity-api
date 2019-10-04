@@ -241,8 +241,8 @@
                     broadcast_id: bid
                 },
                 success: function () {
-                    window.location.href = '{{url('home/')}}';
-                    //document['externalInterface'].stopRec();
+                    window.location.href = '{{url('dashboard/')}}';
+                    // document['externalInterface'].stopRec();
                 }
             });
         });

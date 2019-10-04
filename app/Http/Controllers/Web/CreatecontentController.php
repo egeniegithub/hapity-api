@@ -209,7 +209,7 @@ class CreatecontentController extends Controller
         if (isset($input['token']) && !empty($input['token'])) {
             $this->make_plugin_call_edit($broadcast_id, Auth::user()->id);
         }
-        return redirect::to('home')->with('flash_message', 'Broadcast Updated Successfull');
+        return redirect::to('dashboard')->with('flash_message', 'Broadcast Updated Successfull');
     }
 
     public function view_broadcast($broadcast_id)

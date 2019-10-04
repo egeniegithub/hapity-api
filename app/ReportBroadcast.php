@@ -11,7 +11,7 @@ class ReportBroadcast extends Model
     protected $guarded = [];
     
     public function broadcast(){
-        return $this->belongsTo('App\Broadcast','id')->with('userWithReportedUser');
+        return $this->belongsTo('App\Broadcast','broadcast_id')->with('userWithReportedUser');
     }
     
 }
