@@ -22,9 +22,9 @@ class BroadcastsController extends Controller
     public function upload(Request $request)
     {
 
-        $content = Input::all();
+        $content = $request->all();
 
-        print_r($content);
+        return response()->json($content);
         exit;
 
         $rules = array(
