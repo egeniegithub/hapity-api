@@ -650,7 +650,7 @@ class BroadcastsController extends Controller
         if (strpos($file_name, 'rtmp://') === false) {
             //Making Stream URL
             $application = $live ? 'live' : 'vod';
-            $stream_url = "rtmp://" . $server . ":1935/" . $application . "/" . $file_name . '/manifest.mpd';
+            $stream_url = "rtmp://" . $server . ":1935/" . $application . "/" . $file_name;
             return $stream_url;
         } else {
             $file_name = str_replace('/vod/', $application, $file_name);
