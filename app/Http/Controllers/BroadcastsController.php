@@ -21,12 +21,6 @@ class BroadcastsController extends Controller
 
     public function upload(Request $request)
     {
-
-        $content = $request->all();
-
-        return response()->json($content);
-        exit;
-
         $rules = array(
             'user_id' => 'required',
         );
