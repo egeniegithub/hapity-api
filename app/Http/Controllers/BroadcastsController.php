@@ -22,7 +22,11 @@ class BroadcastsController extends Controller
     {
         $request_params = $request->all();
 
-        print_r($request->all());
+        print_r($_POST);
+
+        print_r($_FILES);
+
+        print_r($_GET);
         exit;
 
         $validator = Validator::make($request->all(), $rules, $messages);
