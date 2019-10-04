@@ -417,16 +417,26 @@ class BroadcastsController extends Controller
         $date = date('Y-m-d h:i:s', time());
 
         $broadcast = Broadcast::find($broadcast_id);
-        $broadcast->timestamp = $date;
-        $broadcast->status = 'offline';
-        $broadcast->save();
 
-        $response = array();
-        $response['status'] = 'success';
-        $response['timestamp'] = $date;
-        $response['message'] = 'Broadcast Successfully Stopped';
+        if (!is_null($broadcast)) {
+            $broadcast->timestamp = $date;
+            $broadcast->status = 'offline';
+            $broadcast->save();
 
-        return response($response, 200);
+            $response = array();
+            $response['status'] = 'success';
+            $response['timestamp'] = $date;
+            $response['message'] = 'Broadcast Successfully Stopped';
+
+            return response($response, 200);
+        } else {
+            $response = array();
+            $response['status'] = 'error';
+            $response['timestamp'] = $date;
+            $response['message'] = 'Broadcast Not Found';
+
+        }
+
     }
 
     private function getRandIp()
