@@ -34,6 +34,7 @@ Route::group([
     
     Route::post('broadcasts/delete', 'BroadcastsController@delete')->name('api.broadcast.delete');
     Route::post('broadcasts/update/timestamp', 'BroadcastsController@update_timestamp')->name('api.broadcast.timestamp');
+    Route::post('broadcasts/stop', 'BroadcastsController@stop_broadcast')->name('api.broadcast.stop');
 
     Route::post('broadcasts/all', 'BroadcastsController@all_user_broadcasts')->name('api.broadcast.all');
     
