@@ -128,7 +128,7 @@ class CreatecontentController extends Controller
             }
 
         }
-        return redirect::to('home')->with('flash_message', 'Broadcast Uploaded Successfull');
+        return redirect::to('dashboard')->with('flash_message', 'Broadcast Uploaded Successfull');
     }
 
     public function edit_content_submission(Request $request)
