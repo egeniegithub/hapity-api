@@ -345,7 +345,7 @@ class BroadcastsController extends Controller
             $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
             $broadcastObj['stream_url'] = $broadcast->stream_url;
             $broadcastObj['status'] = $broadcast->status;
-            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/images/default001.jpg');;
+            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/images/default001.jpg');
             $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('view_broadcast', $broadcast->id);
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
@@ -708,16 +708,23 @@ class BroadcastsController extends Controller
         return $to_return;
     }
 
-    public function download(Request $request, $broadcast_id, $file_name)
+    public function download(Request $request)
     {
+        $broadcast_id = $request->get('broadcast_id');
+
+        $file_name = $request->get('file_name');
+
         $broadcast = Broadcast::find($broadcast_id);
 
-        if(!is_null($broadcast)) {
-
-            $file_name = $broadcast;
-
+        if (!is_null($broadcast)) {
+            $file_name = $broadcast->filename;
         }
 
+        $path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
+
+        if (is_file($path) && file_exists($path)) {
+            return response()->download($path, $file_name . '.mp4');
+        }
     }
 
     private function handle_image_file_upload($request, $broadcast_id, $user_id)

@@ -38,4 +38,5 @@ Route::group([
 
     Route::post('broadcasts/all', 'BroadcastsController@all_user_broadcasts')->name('api.broadcast.all');
     
+    Route::get('broadcasts/download', 'BroadcastsController@download')->name('api.broadcast.download');
 });
