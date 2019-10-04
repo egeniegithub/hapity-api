@@ -24,9 +24,6 @@ class BroadcastsController extends Controller
 
         $content = Input::all();
 
-        $headers = $request->headers->all();
-
-        print_r($headers);
         print_r($content);
         exit;
 
