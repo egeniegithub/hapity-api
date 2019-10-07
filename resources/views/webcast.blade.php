@@ -125,8 +125,7 @@
             reader.onloadend = function() {
                 console.log('RESULT', reader.result);
                 bd_image = reader.result;
-                
-                $('.live-streaming').css("background-image", "asset('" + bd_image + "')");
+                $('.live-streaming').css("background-image", "url('" + bd_image + "')");
 
                 if($('.upload-custom-image').hasClass('active-this-btn')){
                     $('.upload-custom-image').hide().removeClass('.active-this-btn');
