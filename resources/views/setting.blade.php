@@ -33,7 +33,7 @@
                                 <h1>Account Settings</h1>
                                 <span>Change your basic account settings</span>
                             </div>
-                            <form class="" method="post" action="{{url('user/save_setting')}}" enctype="multipart/form-data">
+                            <form class="" method="post" action="{{route('settgins.save')}}" enctype="multipart/form-data">
                                 @csrf
                             <div class="account-settigs-content">
                                 <div class="form-group text-center">

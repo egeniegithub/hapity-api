@@ -9,7 +9,7 @@
                 <div class="section-heading">
                     <p> All Users</p>
                     <div class="all-bc-search">
-                        <form action="{{url('admin/users')}}">
+                        <form action="{{route('admin.users')}}">
                             <input required name="search" type="text" placeholder="Search user..."/>
                             <button type="submit"><i class="fa fa-search"></i></button>
                         </form>
@@ -38,7 +38,7 @@
                         </div>
 
                         <div class="report-bc-action-div">
-                        <a href="{{url('admin/deleteuser'.'/'.$user['id'])}}" class="delete-block-bc del-all-bc-single">Delete</a>
+                        <a href="{{route('admin.deleteuser',$user['id'])}}" class="delete-block-bc del-all-bc-single">Delete</a>
                         </div>
                     </div>
                 </div>

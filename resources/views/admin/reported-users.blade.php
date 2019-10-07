@@ -45,8 +45,8 @@
                                 </div>
     
                                 <div class="report-bc-action-div">
-                                    <a href="{{ url('admin/approveduser/'.$user['id']) }}" class="approve-block-bc">Approve</a>
-                                    <a href="{{url('admin/deleteuser'.'/'.$user['id'])}}"  class="delete-block-bc">Delete</a>
+                                    <a href="{{ route('admin.approveduser',$user['id']) }}" class="approve-block-bc">Approve</a>
+                                    <a href="{{route('admin.deleteuser',$user['id'])}}"  class="delete-block-bc">Delete</a>
                                 </div>
                             </div>
                         </div>

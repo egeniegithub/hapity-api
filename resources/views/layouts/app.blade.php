@@ -145,38 +145,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="{{url('/')}}">
-                <img src="{{ url('assets/images/home-new/logo.png')}}" width="90px">
+              <a class="navbar-brand" href="{{route('home')}}">
+                <img src="{{ asset('assets/images/home-new/logo.png')}}" width="90px">
               </a>
             </div>
 
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav navbar-right nav-color">
-
-                <li><a href="{{route('home')}}">Home</a></li>
-                @if(Auth::check())
-                  @if(Auth::user()->hasRole(SUPER_ADMIN_ROLE_ID))
-                    <li><a href="{{route('admin.dashboard')}}" class="sign_in">Admin</a></li>
-                  @else 
-                    <li><a href="{{route('user.dashboard')}}" class="sign_in">dashboard</a></li>
-                    <li><a href="{{route('settings')}}" class="sign_in">settings</a></li>
-                  @endif
-                @else
-                <li><a href="{{route('login')}}">Login</a></li>
-                <li><a href="{{route('register')}}">Register</a></li>
-                @endif
-                <!-- <li><a href="url('about'); ?>">Who we are</a></li> -->
-                <li><a href="http://blog.hapity.com/">Blog</a></li>
-                <li><a href="{{route('help')}}">Help</a></li>
-                <li><a href="{{route('about')}}">Contact</a></li>
-
-                @if(Auth::check())
-                <li><a href="{{url('logout')}}" class="sign_in">Logout</a></li>
-                @endif
-
-              </ul>
-            </div><!-- /.navbar-collapse -->
+            @include('layouts.top-menubar')
           </div><!-- /.container-fluid -->
         </nav>
 <?php // } else { ?>
@@ -192,7 +166,7 @@
                 <span class="icon-bar"></span>
               </button>
               <a class="navbar-brand" href="<?php // echo base_url('home'); ?>">
-                <img src="{{ url('assets/images/home-new/logo.png')}}" width="90px">
+                <img src="{{ asset('assets/images/home-new/logo.png')}}" width="90px">
               </a>
             </div>
 
@@ -226,13 +200,13 @@
       <div class="row">
         <div class="col-md-5">
           <div class="footer-content-widget">
-            <p><a href="{{url('/')}}"><img src="{{ url('assets/images/home-new/logo.png')}}" alt="logo" width="80px"></a></p>
+            <p><a href="{{route('home')}}"><img src="{{ asset('assets/images/home-new/logo.png')}}" alt="logo" width="80px"></a></p>
             <p>Create your free livestream with Hapity: straight from<br>
              your mobile or computer to your website,and social media.<br>
              Creating livestreams has never been so easy.</p>
             <p style="margin-top: 20px;">
-              <a href="https://itunes.apple.com/mt/app/hapity/id1068976447?mt=8" target="_blank"><img src="{{ url('assets/images/home-new/app-store.png')}}"></a>
-              <a href="https://play.google.com/store/apps/developer?id=hapity.com" target="_blank"><img src="{{ url('assets/images/home-new/gplay-btn.png')}}"></a>
+              <a href="https://itunes.apple.com/mt/app/hapity/id1068976447?mt=8" target="_blank"><img src="{{ asset('assets/images/home-new/app-store.png')}}"></a>
+              <a href="https://play.google.com/store/apps/developer?id=hapity.com" target="_blank"><img src="{{ asset('assets/images/home-new/gplay-btn.png')}}"></a>
             </p>
           </div>
         </div>
@@ -241,28 +215,8 @@
             <div class="col-md-4">
               <div class="main-column-4-styling">
                 <h5 class="text-uppercase">Quick links</h5>
-                <ul>
-                    <li><a href="{{route('home')}}">Home</a></li>
-                @if(Auth::check())
-                  @if(Auth::user()->hasRole(SUPER_ADMIN_ROLE_ID))
-                    <li><a href="{{route('admin.dashboard')}}" class="sign_in">Admin</a></li>
-                  @else 
-                    <li><a href="{{route('user.dashboard')}}" class="sign_in">dashboard</a></li>
-                    <li><a href="{{route('settings')}}" class="sign_in">settings</a></li>
-                  @endif                  
-                @else
-                <li><a href="{{url('/login')}}">Login</a></li>
-                <li><a href="{{url('register')}}">Register</a></li>
-                @endif
-                <!-- <li><a href="url('about'); ?>">Who we are</a></li> -->
-                <li><a href="https://blog.hapity.com/">Blog</a></li>
-                <li><a href="{{route('help')}}">Help</a></li>
-                <li><a href="{{route('about')}}">Contact</a></li>
-
-                @if(Auth::check())
-                <li><a href="{{route('logout')}}" class="sign_in">Logout</a></li>
-                @endif
-                </ul>
+                @include('layouts.footer-menubar')
+               
               </div>
             </div>
             <div class="col-md-4">
@@ -270,8 +224,8 @@
                 <h5 class="text-uppercase">links</h5>
                 <ul>
                   <!-- <li><a href="">Terms & Conditions</a></li> -->
-                  <li><a href="{{url('privacy-policy')}}">Privacy Policy</a></li>
-                  <li><a href="{{url('help')}}">How it Works</a></li>
+                  <li><a href="{{route('privacy-policy')}}">Privacy Policy</a></li>
+                  <li><a href="{{route('help')}}">How it Works</a></li>
                 </ul>
               </div>
             </div>
@@ -296,7 +250,7 @@
       <div class="row">
         <div class="col-md-5">
           <div class="copyrights-content">
-            <p>Hapity® is a registered trademark. <a href="{{url('privacy-policy')}}">Privacy and Terms</a><br> &copy;2019 All Rights Reserved. </p>
+            <p>Hapity® is a registered trademark. <a href="{{route('privacy-policy')}}">Privacy and Terms</a><br> &copy;2019 All Rights Reserved. </p>
           </div>
         </div>
       </div>
@@ -313,11 +267,11 @@
     <script src="{{ asset('assets/js/jquery.tooltipster.js')}}"></script>
     <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
     <!-- <script type="text/javascript" src="assets/js/jquery-1.11.1.min.js')}}"></script> -->
-    <script src="{{ url('assets/js/bootstrap.min.js')}}"></script>
+    <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
     
-    <script src="{{ url('assets/js/cropbox.js')}}"></script>
+    <script src="{{ asset('assets/js/cropbox.js')}}"></script>
     <script src="https://js.pusher.com/2.2/pusher.min.js"></script>
-    <script src="{{ url('assets/js/jquery.loader.js')}}"></script>
+    <script src="{{ asset('assets/js/jquery.loader.js')}}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/app.js')}}"></script>
 
     {{-- <script src="https://www.google.com/recaptcha/api.js?render=6Lf9xLoUAAAAANkPex8syVDugeSH73EJeeTeqByn"></script> --}}

@@ -38,7 +38,7 @@
   </div>
   <div class="signup-area">
     <p>Don’t have an account yet?</p>
-    <a href="{{url('register')}}">Register yourself now</a>
+    <a href="{{route('register')}}">Register yourself now</a>
     </div>
     <div class="social-media-login"> 
       <a class="facebook fb-cursor" href="{{ route('auth.social', 'facebook') }}">login with facebook</a> 

@@ -34,7 +34,7 @@
         <?php // endif; ?>
       <div class="about-ContactForm-wrapepr-new">
         <h2>SEND US A MESSAGE</h2>
-        <form  method="post" action="{{url('sendmail_contactus')}}">
+        <form  method="post" action="{{route('contact.us.send.email')}}">
         	@csrf
           <div class="form-group row">
             <div class="col-xs-6">

@@ -53,8 +53,8 @@
                             </div>
 
                             <div class="report-bc-action-div">
-                                <a href="{{ url('admin/reportBroadcastApproved'.'/'.$broadcast['id']) }}" class="approve-block-bc">Approve</a>
-                            <a href="{{url('admin/reportBroadcastDelete'.'/'.$broadcast['id'])}}"  class="delete-block-bc">Delete</a>
+                                <a href="{{ route('admin.reportBroadcastApproved',$broadcast['id']) }}" class="approve-block-bc">Approve</a>
+                            <a href="{{route('admin.reportBroadcastDelete',$broadcast['id'])}}"  class="delete-block-bc">Delete</a>
                             </div>
                         </div>
                         <!-- Modal start -->
