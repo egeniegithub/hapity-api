@@ -115,11 +115,33 @@
                             @endphp
                             <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
                                 <a href="#" class="bordcast-play image-section">
-                                    @if(!empty($broadcast->broadcast_image)) 
-                                        <img src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$broadcast->broadcast_image) }}" alt="{{ $b_title }}" />
-                                    @else 
+                                    @php 
+                                        $thumbnail_image = $broadcast->broadcast_image;
+                                        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+
+                                    // check if the data is empty 
+                                    @endphp
+                                    @if(!empty($thumbnail_image) && $thumbnail_image != null)
+                                    @php
+                                        // check base64 format
+                                        $explode = explode(',', $thumbnail_image);
+                                        // check if type is allowed
+                                        $format = str_replace(
+                                            ['data:image/', ';', 'base64'], 
+                                            ['', '', '',], 
+                                            $explode[0]
+                                        );  
+                                    @endphp
+                                        @if(in_array($format, $allowedExtensions))
+                                            <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
+                                        @else
+                                            <img src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$thumbnail_image) }}" alt="{{ $b_title }}" />
+                                        @endif
+                                        
+                                    @else
                                         <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
                                     @endif
+
                                     @if($video_file_name)
                                         <div class="video-container video-conteiner-init" style="display:none;">
                                             {{-- <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div> --}}

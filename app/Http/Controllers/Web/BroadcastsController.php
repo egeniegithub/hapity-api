@@ -42,6 +42,7 @@ class BroadcastsController extends Controller
 
     public function startwebbroadcast(Request $request)
     {
+
         $title = $request->title;
         $description = "";
         $geo_location = $request->geo_location;
@@ -52,6 +53,7 @@ class BroadcastsController extends Controller
 
         $post_plugin = $request->post_plugin;
         $broadcast_image = $request->broadcast_image;
+        $filename = $request->stream_url;
         if (!$post_plugin) {
             $post_plugin = 'false';
         }
@@ -93,7 +95,7 @@ class BroadcastsController extends Controller
                 $broadcast_data['created_at'] = $date;
                 $broadcast_data['is_sensitive'] = $is_sensitive;
                 $broadcast_data['status'] = 'offline';
-                $broadcast_data['filename'] = '';
+                $broadcast_data['filename'] = $filename;
                 $broadcast_data['video_name'] = '';
                 $broadcast_data['broadcast_image'] = $broadcast_image;
                 $broadcast_data['share_url'] = '';
