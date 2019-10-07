@@ -191,27 +191,27 @@ class BroadcastsController extends Controller
 
         $broadcast = Broadcast::find($request->input('broadcast_id'));
 
-        if ($request->has('title') && !is_null($request->input('title'))) {
+        if ($request->has('title') && !is_null($request->input('title')) && !empty($request->input('title'))) {
             $broadcast->title = $request->input('title');
             $broadcast->save();
         }
 
-        if ($request->has('geo_location') && !is_null($request->input('geo_location'))) {
+        if ($request->has('geo_location') && !is_null($request->input('geo_location'))  && !empty($request->input('geo_location'))) {
             $broadcast->geo_location = $request->input('geo_location');
             $broadcast->save();
         }
 
-        if ($request->has('description') && !is_null($request->input('description'))) {
+        if ($request->has('description') && !is_null($request->input('description'))  && !empty($request->input('description'))) {
             $broadcast->description = $request->input('description');
             $broadcast->save();
         }
 
-        if ($request->has('is_sensitive') && !is_null($request->input('is_sensitive'))) {
+        if ($request->has('is_sensitive') && !is_null($request->input('is_sensitive')) && !empty($request->input('is_sensitive'))) {
             $broadcast->is_sensitive = $request->input('is_sensitive');
             $broadcast->save();
         }
 
-        if ($request->has('status') && !is_null($request->input('status'))) {
+        if ($request->has('status') && !is_null($request->input('status')) && !empty($request->input('status'))) {
             $broadcast->status = $request->input('status');
             $broadcast->save();
         }
@@ -233,7 +233,7 @@ class BroadcastsController extends Controller
 
         $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $request->input('user_id'));
 
-        if (!empty($stream_image_name)) {
+        if (!empty($stream_image_name) ) {
             $broadcast->broadcast_image = $stream_image_name;
             $broadcast->save();
         }
@@ -328,13 +328,18 @@ class BroadcastsController extends Controller
             return response()->json($messages);
         }
 
-        $allUserBroadcast = Broadcast::where('user_id', $request->input('user_id'))->get();
+        $allUserBroadcast = Broadcast::orderBy('id', 'desc')->where('user_id', $request->input('user_id'))->get();
 
         $user = User::orderBy('id', 'desc')->with('profile')->find($request->input('user_id'))->toArray();
 
         $broadcasts = [];
 
         foreach ($allUserBroadcast as $key => $broadcast) {
+
+            $file_info = !empty($broadcast->filename) ? pathinfo($broadcast->filename) : [];
+
+            $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
+
 
             $broadcastObj = [];
             $broadcastObj['id'] = $broadcast->id;
@@ -343,9 +348,9 @@ class BroadcastsController extends Controller
             $broadcastObj['title'] = $broadcast->title;
             $broadcastObj['description'] = $broadcast->description;
             $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
-            $broadcastObj['stream_url'] = $broadcast->stream_url;
+            $broadcastObj['stream_url'] =  !empty($broadcast->filename) ? 'http://' . $this->getRandIp() . ':1935/vod/' .  $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
             $broadcastObj['status'] = $broadcast->status;
-            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/images/default001.jpg');
+            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg');
             $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
