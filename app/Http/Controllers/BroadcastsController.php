@@ -131,7 +131,8 @@ class BroadcastsController extends Controller
         $broadcast->is_sensitive = !is_null($request->input('is_sensitive')) ? $request->input('is_sensitive') : '';
         $broadcast->stream_url = $stream_url;
         $broadcast->share_url = '';
-        $broadcast->video_name = '';
+        $broadcast->video_name = $request->input('stream_url');
+        $broadcast->filename = $request->input('stream_url');
         $broadcast->status = 'online';
         $broadcast->save();
 
@@ -652,19 +653,22 @@ class BroadcastsController extends Controller
 
     private function make_streaming_server_url($server, $file_name, $live = false)
     {
-        if (strpos($file_name, 'rtmp://') === false) {
+       
             //Making Stream URL
             $application = $live ? 'live' : 'vod';
             $protocol = $live ? 'rmtp:' : 'http:';
 
-            $stream_url =  $protocol . "//" . $server . ":1935/" . $application . "/" . $file_name. '/playlist.m3u8';
-            return $stream_url;
-        } else {
-            $file_name = str_replace('/vod/', $application, $file_name);
-            $file_name = str_replace('/live/', $application, $file_name);
+            $file_info = pathinfo($file_name);
+            $ext = !empty($file_info) ?  $file_info['extension'] : 'mp4';
 
-            return $file_name;
-        }
+            if($live == true) {
+                $stream_url =  $protocol . "//" . $server . ":8088/" . $application . "/" . $file_name. '/playlist.m3u8';
+            } else {
+                $stream_url =  $protocol . "//" . $server . ":1935/" . $application . "/" . $ext . ':' . $file_name. '/playlist.m3u8';
+            }
+            
+            return $stream_url;
+        
     }
 
     private function handle_video_file_upload($request)
