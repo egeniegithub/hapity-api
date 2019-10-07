@@ -126,8 +126,8 @@
                                             WowzaPlayer.create('w-broadcast-{{ $b_id }}',
                                             {
                                                 "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
-                                                "title":"Title",
-                                                "description":"Description",
+                                                "title":"{{ $b_title }}",
+                                                "description":"{{ $b_description }}",
                                                 //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
                                                 "sourceURL":"{{ $stream_url }}",
                                                 "autoPlay":false,
@@ -140,26 +140,6 @@
                                                 }
                                             );
 
-                                            /*
-                                            jwplayer("w-broadcast-{{ $b_id }}").setup({
-                                                sources: [
-                                                    {
-                                                        //file: "@php if($status == 'online') echo str_replace('rtsp','rtmp',$stream_url); else echo 'rtmp://'.$ip.':1935/vod/'.$video_file_name; @endphp"
-                                                        file: "{{ $stream_url }}"
-                                                    }
-                                                ],
-                                                playButton: '{{asset("assets/images/play.png")}}',
-                                                height: 380,
-                                                width: "100%",
-                                                image: '<?php echo $b_image; ?>',
-                                                skin: 'stormtrooper',
-                                                });
-                                            
-                                                /* $(document).ready(function(){
-                                                    $(".jw-reset").click(function(){
-                                                        jwplayer("w-broadcast-{{ $b_id }}").play('play');
-                                                    });
-                                                });*/
                                         </script>
                                     @endif
                                 </a> 
@@ -273,32 +253,7 @@
 @push('script')
    <script type="text/javascript" src="{{ asset('assets/js/infiniteScroll.js') }}"></script>
     <script type="text/javascript">
-        jQuery(document).ready(function($) {
-
-            /*jwplayer("w-broadcast-<?php //echo $b_id ?>").setup({
-                sources: [{
-                    file: "<?php  if($status == "online")
-                 echo str_replace("rtsp","rtmp",$stream_url);
-                 else
-                 echo "rtmp://".$ip.":1935/vod/".$video_file_name;?>"
-                },{
-                    file:"<?php  if($status == "online")
-                 echo str_replace(array("rtsp","rtmp"),"http",$stream_url."/playlist.m3u8");
-                 else
-                 echo "http://".$ip.":1935/vod/".$video_file_name."/playlist.m3u8";?>"
-                }],
-                playButton: 'https://www.hapity.com/images/play.png',
-                height: 380,
-                width: "100%",
-                image: '<?php echo $b_image; ?>',
-                skin: 'stormtrooper',
-                });
-
-                $(document).ready(function(){
-                    $(".jw-reset").click(function(){
-                        jwplayer("w-broadcast-<?php echo $b_id; ?>").play('play');
-                    });
-                });*/
+        jQuery(document).ready(function($) {           
 
             jQuery(document).on('click', '.bordcast-active .close-btn', function(event) {
                 event.preventDefault();
