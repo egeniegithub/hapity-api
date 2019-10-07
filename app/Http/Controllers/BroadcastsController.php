@@ -223,10 +223,6 @@ class BroadcastsController extends Controller
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
             if (file_exists($file_path)) {
                 unlink($file_path);
-
-                if (is_file($file_path)) {
-                    exec('rm -f ' . $file_path);
-                }
             }
 
             $broadcast->stream_url = $stream_video_info['file_stream_url'];
@@ -654,7 +650,9 @@ class BroadcastsController extends Controller
         if (strpos($file_name, 'rtmp://') === false) {
             //Making Stream URL
             $application = $live ? 'live' : 'vod';
-            $stream_url = "rtmp://" . $server . ":1935/" . $application . "/" . $file_name;
+            $protocol = $live ? 'rmtp:' : 'http:';
+
+            $stream_url =  $protocol . "//" . $server . ":1935/" . $application . "/" . $file_name. '/playlist.m3u8';
             return $stream_url;
         } else {
             $file_name = str_replace('/vod/', $application, $file_name);
