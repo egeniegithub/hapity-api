@@ -132,39 +132,6 @@
                                         </div>
                                         <script>
 
-                                            jwplayer("w-broadcast-{{ $b_id }}").setup(
-                                                {
-                                                    "playlist": [
-                                                        {
-                                                        "sources": [
-                                                            {
-                                                            "default": false,
-                                                            "file": "{{ $stream_url }}",
-                                                            "label": "0",
-                                                            "type": "hls",
-                                                            "preload": "metadata"
-                                                            }
-                                                        ]
-                                                        }
-                                                    ],
-                                                    "primary": "html5",
-                                                    "hlshtml": true
-                                                    }
-                                                /*
-                                                {
-                                                sources: [
-                                                    {
-                                                        file: "{{ $stream_url }}"
-                                                    }
-                                                ],
-                                                playButton: '{{asset("assets/images/play.png")}}',
-                                                height: 380,
-                                                width: "100%",
-                                                image: '<?php echo $b_image; ?>',
-                                                skin: 'stormtrooper',
-                                                });*/
-
-                                            /*
                                             WowzaPlayer.create('w-broadcast-{{ $b_id }}',
                                             {
                                                 "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
@@ -181,7 +148,7 @@
                                                 "uiQuickRewindSeconds":"30"
                                                 }
                                             );
-                                            */
+                                            
 
                                         </script>
                                     @endif
