@@ -23,6 +23,7 @@ class DashboardController extends Controller
     {
         $userdata = User::with('profile')->where('id', Auth::id())->first()->toArray();
         $broadcasts = Broadcast::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
+
         return view('home', compact('userdata', 'broadcasts'));
     }
 

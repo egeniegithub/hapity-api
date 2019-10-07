@@ -15,6 +15,7 @@
   </style>
 @endpush
 @section('content')
+<script type="text/javascript" src="//player.wowza.com/player/latest/wowzaplayer.min.js"></script>
 
     <div class="profile-page">
     
@@ -73,7 +74,6 @@
                             $index = rand(0,1);                            
                             $ip =  env('APP_ENV') == 'local' ? '192.168.20.251' : $ipArr[$index];
 
-                            echo $ip;
                         @endphp
 
                         @foreach ($broadcasts as $broadcast)
@@ -91,7 +91,11 @@
 
                                 $share_url = $broadcast->share_url;
                                 $b_description = $broadcast->description;
-                                $stream_url = $broadcast->stream_url;
+                                $stream_url = urlencode('http://' . $ip .  ':1935/vod/mp4:' .  $broadcast->filename . '/playlist.m3u8') ;
+                                //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
+
+                                echo $stream_url; 
+
                                 $status = $broadcast->status;
 
                                 $video_file_name = $broadcast->filename;
@@ -114,15 +118,34 @@
                                     @endif
                                     @if($video_file_name)
                                         <div class="video-container video-conteiner-init" style="display:none;">
-                                            <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div>
+                                            {{-- <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div> --}}
+
+                                            <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
                                         </div>
                                         <script>
+                                            WowzaPlayer.create('w-broadcast-{{ $b_id }}',
+                                            {
+                                                "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
+                                                "title":"Title",
+                                                "description":"Description",
+                                                //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
+                                                "sourceURL":"{{ $stream_url }}",
+                                                "autoPlay":false,
+                                                "volume":"75",
+                                                "mute":false,
+                                                "loop":false,
+                                                "audioOnly":false,
+                                                "uiShowQuickRewind":true,
+                                                "uiQuickRewindSeconds":"30"
+                                                }
+                                            );
+
+                                            /*
                                             jwplayer("w-broadcast-{{ $b_id }}").setup({
                                                 sources: [
                                                     {
-                                                        file: "@php if($status == 'online') echo str_replace('rtsp','rtmp',$stream_url); else echo 'rtmp://'.$ip.':1935/vod/'.$video_file_name; @endphp"
-                                                    },{
-                                                        file:"@php  if($status == 'online') echo str_replace(array('rtsp','rtmp'),'http',$stream_url); else echo 'http://'.$ip.':1935/vod/'.$video_file_name @endphp"
+                                                        //file: "@php if($status == 'online') echo str_replace('rtsp','rtmp',$stream_url); else echo 'rtmp://'.$ip.':1935/vod/'.$video_file_name; @endphp"
+                                                        file: "{{ $stream_url }}"
                                                     }
                                                 ],
                                                 playButton: '{{asset("assets/images/play.png")}}',
