@@ -125,7 +125,7 @@
             reader.onloadend = function() {
                 console.log('RESULT', reader.result);
                 bd_image = reader.result;
-                jQuery('.live-streaming').css("background-image", "url('" + bd_image + "')");
+                jQuery('.live-streaming').css("background-image", "asset('" + bd_image + "')");
 
                 if(jQuery('.upload-custom-image').hasClass('active-this-btn')){
                     jQuery('.upload-custom-image').hide().removeClass('.active-this-btn');
@@ -162,7 +162,7 @@
                     $(".status-circle").fadeTo(100, 0.1).fadeTo(200, 1.0)
                 }, 1000);
                 $.ajax({
-                    url: "{{url('startwebbroadcast')}}",
+                    url: "{{route('startwebbroadcast')}}",
                     // contentType: 'multipart/form-data',
                     // processData: false,
                     dataType: 'json',
@@ -204,7 +204,7 @@
                         },3000);
                         setInterval(function(){
                             $.ajax({
-                                url: "{{url('update_timestamp_broadcast')}}",
+                                url: "{{route('update_timestamp_broadcast')}}",
                                 dataType: 'jsonp',
                                 type: 'POST',
                                 data: {
@@ -232,7 +232,7 @@
         });
         $("#stop-streaming").click(function(){
             $.ajax({
-                url: "{{url('offline_broadcast')}}",
+                url: "{{route('offline_broadcast')}}",
                 dataType: 'json',
                 type: 'POST',
                 data: {
@@ -241,7 +241,7 @@
                     broadcast_id: bid
                 },
                 success: function () {
-                    window.location.href = '{{url('dashboard/')}}';
+                    window.location.href = '{{route('user.dashboard')}}';
                     // document['externalInterface'].stopRec();
                 }
             });

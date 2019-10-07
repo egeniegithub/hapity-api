@@ -26,7 +26,7 @@
             </div>
             <div class="create-content-form">
                 {{-- <form data-type="create" method="post" action="{{url('create_content_submission')}}" enctype="multipart/form-data"> --}}
-                    <form method="post" action="{{url('create_content_submission')}}" enctype="multipart/form-data">
+                    <form method="post" action="{{route('create_content_submission')}}" enctype="multipart/form-data">
                     @csrf
                     <ul class="title-desc-section">
                         <li><input type="text" name="title" placeholder="Title" id="title" required autocomplete="off"></li>

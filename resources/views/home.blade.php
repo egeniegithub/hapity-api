@@ -37,7 +37,7 @@
                         </figure>
                         <div class="text">
                             <h2>
-                                <a href="{{url('main/settings/')}}">
+                                <a href="{{route('settings')}}">
                                   @if(isset($userdata->username))
                                     {{ $userdata->username }}
                                   @endif
@@ -65,8 +65,8 @@
                 </div>
                 <div class="center-content">
                     <div class="start-broadcast">
-                        <a href="{{url('webcast')}}" class=""><i class="fa fa-camera"></i> Start Your Broadcast Here</a>
-                        <a href="{{url('create-content')}}" class="create-content"><i class="fa fa-plus-square "></i> Create Content</a>
+                        <a href="{{route('webcast')}}" class=""><i class="fa fa-camera"></i> Start Your Broadcast Here</a>
+                        <a href="{{route('create-content')}}" class="create-content"><i class="fa fa-plus-square "></i> Create Content</a>
                     </div>
                     <div class="my-bordcasts-container" data-user-id="{{ auth::user()->id}}">
                         @php
@@ -199,7 +199,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li><a href="{{ url('edit-content').'/'.$b_id }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
+                                    <li><a href="{{ route('edit_broadcast_content',$b_id) }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
                                         <img src="{{ asset('assets') }}/images/edit.png" width="28" alt="Edit">
                                     </a></li>
                                     <li><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn"><!-- <i class="fa fa-trash-o"></i> -->
@@ -296,7 +296,7 @@
             jQuery('.delete-model-dismiss').hide();
             jQuery(this).text('Deleting...');
             $.ajax({
-                url: "{{url('deleteBroadcast')}}",
+                url: "{{route('deleteBroadcast')}}",
                 data: {
                     _token: "{{ csrf_token() }}",
                     token: '<?php echo $get_token; ?>',

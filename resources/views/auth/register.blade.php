@@ -6,7 +6,7 @@
 <div class="wrapper login-new-wrapper"> 
   
   <div class="form-area">
-    <form method="POST" action="{{ url('register') }}">
+    <form method="POST" action="{{ route('register') }}">
         @csrf
       <input id="username" type="text" placeholder="USERNAME" class="form-fields @error('username') is-invalid @enderror" name="username" value="{{ old('username') }}" required autocomplete="username" autofocus>
         @error('username')
