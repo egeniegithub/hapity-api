@@ -125,7 +125,7 @@
             reader.onloadend = function() {
                 console.log('RESULT', reader.result);
                 bd_image = reader.result;
-                jQuery('.live-streaming').css("background-image", "asset('" + bd_image + "')");
+                jQuery('.live-streaming').css("background-image", "url('" + bd_image + "')");
 
                 if(jQuery('.upload-custom-image').hasClass('active-this-btn')){
                     jQuery('.upload-custom-image').hide().removeClass('.active-this-btn');
@@ -184,7 +184,7 @@
                         post_plugin:flag,
                         server_input: '{{$server}}',
                         broadcast_image: bd_image,
-                        image_ba: $('#bd_image').attr('files'),
+                        // image_ba: $('#bd_image').attr('files'),
                         user_id:'{{ auth::user()->id }}',
                     },
                     success: function (data) {
