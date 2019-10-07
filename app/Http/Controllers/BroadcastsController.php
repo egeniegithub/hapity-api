@@ -85,7 +85,11 @@ class BroadcastsController extends Controller
         } else {
             $response['image'] = asset('images/images/default001.jpg');
         }
-        $response['server'] = $stream_video_info['file_server'];
+
+        if (!empty($stream_video_info) && isset($stream_video_info['file_server'])) {
+            $response['server'] = $stream_video_info['file_server'];
+        }
+        
         $response['response'] = 'uploadbroadcast';
 
         if (boolval($request->input('post_plugin'))) {
@@ -666,7 +670,7 @@ class BroadcastsController extends Controller
         if ($request->hasFile('video')) {
 
             $video_file = $request->file('video');
-            $video_original_name = $video_file->getClientOriginalName();            
+            $video_original_name = $video_file->getClientOriginalName();
             $ext = $video_file->getClientOriginalExtension();
 
             $file_name = md5(time()) . ".stream." . $ext;
@@ -728,20 +732,20 @@ class BroadcastsController extends Controller
     {
         $thumbnail_image = '';
         if ($request->hasFile('image')) {
-            $file = $request->file('image');            
+            $file = $request->file('image');
             $ext = $file->getClientOriginalExtension();
-            $thumbnail_image =  md5(time()) . '.' . $ext;
+            $thumbnail_image = md5(time()) . '.' . $ext;
             $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
-            
+
             if (!is_dir($path)) {
                 mkdir($path);
             }
 
-            $file->move($path, $thumbnail_image);     
-            
+            $file->move($path, $thumbnail_image);
+
             return $thumbnail_image;
-        } 
-        
+        }
+
         if ($request->has('image') && !empty($request->input('image')) && !is_null($request->input('image'))) {
             $thumbnail_image = md5(time()) . '.jpg';
             $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
@@ -758,8 +762,8 @@ class BroadcastsController extends Controller
             File::put($path . $thumbnail_image, base64_decode($base_64_data));
 
             return $thumbnail_image;
-        }    
-        
+        }
+
         return $thumbnail_image;
     }
 
