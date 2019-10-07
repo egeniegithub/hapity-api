@@ -132,7 +132,7 @@ class BroadcastsController extends Controller
         $broadcast->stream_url = $stream_url;
         $broadcast->share_url = '';
         $broadcast->video_name = $request->input('stream_url');
-        $broadcast->filename = $request->input('stream_url');
+        $broadcast->filename = $request->input('stream_url'). '.mp4';
         $broadcast->status = 'online';
         $broadcast->save();
 
@@ -331,7 +331,7 @@ class BroadcastsController extends Controller
 
         $allUserBroadcast = Broadcast::orderBy('id', 'desc')->where('user_id', $request->input('user_id'))->get();
 
-        $user = User::orderBy('id', 'desc')->with('profile')->find($request->input('user_id'))->toArray();
+        $user = User::with('profile')->find($request->input('user_id'))->toArray();
 
         $broadcasts = [];
 
@@ -340,7 +340,6 @@ class BroadcastsController extends Controller
             $file_info = !empty($broadcast->filename) ? pathinfo($broadcast->filename) : [];
 
             $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
-
 
             $broadcastObj = [];
             $broadcastObj['id'] = $broadcast->id;
@@ -656,10 +655,12 @@ class BroadcastsController extends Controller
        
             //Making Stream URL
             $application = $live ? 'live' : 'vod';
-            $protocol = $live ? 'rmtp:' : 'http:';
+            $protocol = $live ? 'rtmp:' : 'http:';
 
             $file_info = pathinfo($file_name);
             $ext = !empty($file_info) ?  $file_info['extension'] : 'mp4';
+
+            $ext = $ext == 'stream' ? 'mp4' : $ext;
 
             if($live == true) {
                 $stream_url =  $protocol . "//" . $server . ":8088/" . $application . "/" . $file_name. '/playlist.m3u8';
