@@ -96,12 +96,18 @@
                                 $share_url = $broadcast->share_url;
                                 $b_description = $broadcast->description;
 
+                            
+
 
                                 $stream_url = urlencode('http://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
                                 if($broadcast->status == 'online') {
-                                    $stream_url = urlencode('rtmp://' . $ip .  ':1935/live/' .  $broadcast->filename . '/playlist.m3u8') ;
+                                    $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );
+                                    
+                                    $stream_url = urlencode('rtmp://' . $ip .  ':1935/live/' .  $file . '/playlist.m3u8') ;
                                 }
                                 //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
+                                //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8 
+                                //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream%2Fplaylist.m3u8
 
                                 echo $stream_url; 
 
