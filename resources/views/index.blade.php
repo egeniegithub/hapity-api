@@ -21,7 +21,7 @@
                 </div>
               </div>
               <div class="home-transcript">
-                <p><a href="<?php //echo base_url('assets/');?>/docs/Hapity Homepage Video Script.pdf" target="_blank">Transcript</a></p>
+                <p><a href="{{ asset('assets/') }}/docs/Hapity Homepage Video Script.pdf" target="_blank">Transcript</a></p>
               </div>
             </div>
             <div class="col-md-3"></div>
@@ -52,7 +52,7 @@
                 </div>
                 <div class="col-md-4">
                   <div class="discover-button">
-                    <a href="<?php// echo base_url('help'); ?>" class="btn-green">Discover More</a>
+                    <a href="{{ route('help') }}" class="btn-green">Discover More</a>
                   </div>
                 </div>
                 <div class="col-md-4">
@@ -139,7 +139,7 @@
                 social media, so you keep ownership of everything you create. Hapity will
                 even generate your own backups on your mobile for you.</p>
               <div class="hapity-button">
-                <a href="<?php // echo base_url('help'); ?>">GET HAPITY NOW!</a>
+                <a href="{{ route('help') }}">GET HAPITY NOW!</a>
               </div>
             </div>
           </div>

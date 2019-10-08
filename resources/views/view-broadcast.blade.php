@@ -87,6 +87,7 @@
                         if($status == 'offline'){
                             $stream_url = str_replace('/live/', '/vod/', $stream_url);
                         } 
+                        // echo $stream_url;
                     @endphp
                     <iframe height="600" width="100%" scrolling="no" frameborder="0" 
                     src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $broadcast->status;?>&broadcast_image=<?php echo $b_image;?>">
@@ -151,9 +152,9 @@
                     <div class="modal-body">
                         <div class="embedcode-modal-innser">
                             <textarea readonly="">
-                                {{-- <iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                <iframe height="600" width="100%" scrolling="no" frameborder="0" 
                                 src="https://api.hapity.com/widget.php?stream={{ $broadcast['stream_url'] }}&title={{ urlencode($broadcast['title']) }}&status={{ $broadcast['status'] }}&broadcast_image={{ $broadcast['broadcast_image'] }}">
-                                </iframe> --}}
+                                </iframe>
                             </textarea>                        
                         </div>
                     </div>
