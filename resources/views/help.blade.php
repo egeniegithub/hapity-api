@@ -1,428 +1,6 @@
 @extends('layouts.app')
-
-@section('content')
-	<section class="help-new">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="main-heading text-center">
-            <h1 class="page_title text-center pur-col font-bold">How to integrate into your website</h1>
-          </div>
-        </div>
-      </div>
-
-      <div class="row">
-        <!-- Integrate with Wordpress - Starts Here  -->
-        <div class="col-md-6 video-lg">
-          <div class="video-heading text-center">
-            <h4>Integrate with Wordpress</h4>
-          </div>
-           <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}home/images/play-video.png" alt="Video Frame"> --> 
-                <video id="video1" controls poster="{{asset('/')}}images/integrate-with-wordpress.jpg"
-             src="{{asset('/')}}videos/How-To-WordPress_Edit03-Vimeo_720p.mov"></video>
-                </div>
-          <div class="download-buttons-stuff">
-            <div class="row no-margin">
-              <div class="col-md-6 no-padding">
-                <div class="download-guide text-center">
-                  <a href="{{asset('/')}}docs/help-docs/Hapity for WordPress.docx" target="_blank">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-guide.png" alt="logo"></li>
-                      <li><h4>Download Guide</h4></li>
-                    </ul>                  
-                  </a>
-                </div>
-              </div>
-
-              <div class="col-md-6 no-padding">
-                <div class="download-plugin text-center">
-                  <a href="https://wordpress.org/plugins/wp-hapity/">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
-                      <li><h4>Download Plugin</h4></li>
-                    </ul>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="transcript-bottom text-center">
-            <a href="{{asset('/')}}docs/Hapity Installtion Guide-Wordpress Script.pdf" target="_blank">
-              <p><h4><span>Transcript</span></h4></p>
-            </a>
-          </div>
-        </div>
-        <!-- Integrate with Wordpress - Ends Here  -->
-
-
-
-        <!-- Integrate with Drupal - Starts Here  -->
-        <div class="col-md-6 video-lg">
-          <div class="video-heading text-center">
-            <h4>Integrate with Drupal</h4>
-          </div>
-         <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
-                    <video id="video2" controls poster="{{asset('/')}}images/integrate-with-drupal.jpg" src="{{asset('/')}}videos/How_To_Drupal_Edit03-Vimeo_720p.mov"></video>
-                </div>
-          <div class="download-buttons-stuff">
-            <div class="row no-margin">
-              <div class="col-md-6 no-padding">
-                <div class="download-guide text-center">
-                  <a href="{{asset('/')}}docs/help-docs/Hapity for Drupal.docx" target="_blank">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-guide.png" alt="logo"></li>
-                      <li><h4>Download Guide</h4></li>
-                    </ul>                  
-                  </a>
-                </div>
-              </div>
-
-              <div class="col-md-6 no-padding">
-                <div class="download-plugin text-center">
-                  <a href="{{asset('/')}}plugin/hapity-drupal.zip">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
-                      <li><h4>Download Plugin</h4></li>
-                    </ul>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="transcript-bottom text-center">
-            <a href="{{asset('/')}}docs/Hapity Installtion Guide-Drupal Script.pdf" target="_blank">
-              <p><h4><span>Transcript</span></h4></p>
-            </a>
-          </div>
-        </div>
-        <!-- Integrate with Drupal - Ends Here  -->
-
-
-
-        <!-- Integrate with Joomla - Starts Here  -->
-        <div class="col-md-6 video-lg">
-          <div class="video-heading text-center">
-            <h4>Integrate with Joomla</h4>
-          </div>
-          <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}('assets/'); ?>/home/images/play-video.png" alt="Video Frame"> --> 
-                    <video id="video3" controls poster="{{asset('/')}}images/integrate-with-joomla.jpg" src="{{asset('/')}}videos/How-To_Joomla_Edit03_Vimeo_720p.mov"></video>
-                </div>
-          <div class="download-buttons-stuff">
-            <div class="row no-margin">
-              <div class="col-md-6 no-padding">
-                <div class="download-guide text-center">
-                   <a href="{{asset('/')}}docs/help-docs/Hapity for Joomla.docx" target="_blank">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-guide.png" alt="logo"></li>
-                      <li><h4>Download Guide</h4></li>
-                    </ul>                  
-                  </a>
-                </div>
-              </div>
-
-              <div class="col-md-6 no-padding">
-                <div class="download-plugin text-center">
-                  <a href="https://extensions.joomla.org/extensions/extension/communication/video-conference/hapity/">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
-                      <li><h4>Download Plugin</h4></li>
-                    </ul>
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="transcript-bottom text-center">
-            <a href="{{asset('/')}}docs/Hapity Installtion Guide-Joomla Script.pdf" target="_blank">
-              <p><h4><span>Transcript</span></h4></p>
-            </a>
-          </div>
-        </div>
-        <!-- Integrate with Joomla - Ends Here  -->
-
-
-
-        <!-- Guide for Other Websites - Starts Here  -->
-        <div class="col-md-6 video-lg">
-          <div class="video-heading text-center">
-            <h4>Guide for other websites</h4>
-          </div>
-             <img src="{{asset('/')}}images/guide-for-other-websites.jpg" class="img-w-100">
-          <!-- <div class="hapity-video-new">
-            <video controls="" poster="https://www.hapity.com/assets/home-new/img/hapity.png" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="555" height="370"></video>
-          </div> -->
-          <div class="download-buttons-stuff">
-            <div class="row no-margin">
-              <div class="col-md-12 no-padding">
-                <div class="download-guide text-center">
-                   <a href="https://www.hapity.com/guide/new-docs/hapity-for-custom-website.pdf">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-guide.png" alt="logo"></li>
-                      <li><h4>Download Guide</h4></li>
-                    </ul>                  
-                  </a>
-                </div>
-              </div>
-<!--                <div class="col-md-6 no-padding">
-                <div class="download-plugin text-center">
-                  <a href="#">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
-                      <li><h4>Download Plugin</h4></li>
-                    </ul>
-                  </a>
-                </div>
-              </div> -->
-            </div>
-          </div>
-
-         <div class="transcript-bottom text-center">
-            <a href="#">
-              <p><h4><span>Transcript</span></h4></p>
-            </a>
-          </div>
-        </div>
-        <!-- Guide for Other Websites - Ends Here  -->
-      </div>
-    </div>
-    <!-- Section - How to use Hapity  -->
-    <div class="container">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="main-heading text-center">
-            <h1 class="page_title text-center pur-col font-bold">How to use hapity</h1>
-          </div>
-        </div>
-      </div>
-      
-      <div class="row">
-        <!-- Guide for Mobiles - Starts Here  -->
-        <div class="col-md-4 video-lg">
-          <div class="video-heading text-center">
-            <h4>Guide for Mobiles</h4>
-          </div>
-            <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets')}}home/images/play-video.png" alt="Video Frame"> --> 
-                    <video id="video4" controls poster="{{asset('/')}}images/guide-for-mobiles.jpg" src="{{asset('/')}}videos/Hapity_Mobile_Guide_Edit02-Vimeo_720p.mov"></video>
-                </div>
-          <div class="download-buttons-stuff">
-            <div class="row no-margin">
-             <div class="col-md-12 no-padding">
-                <div class="download-guide text-center">
-                  <a href="">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-guide.png" alt="logo"></li>
-                      <li><h4>Download Guide</h4></li>
-                    </ul>                  
-                  </a>
-                </div>
-              </div> 
-<!--                <div class="col-md-6 no-padding">
-                <div class="download-plugin text-center">
-                  <a href="#">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
-                      <li><h4>Download Plugin</h4></li>
-                    </ul>
-                  </a>
-                </div>
-              </div>  -->
-            </div>
-          </div>
-
-          <div class="transcript-bottom text-center">
-            <a href="https://www.hapity.com/assets/docs/Hapity Mobile Broadcast Guide Script.pdf">
-              <p><h4><span>Transcript</span></h4></p>
-            </a>
-          </div>
-        </div>
-        <!-- Guide for Mobiles - Ends Here  -->
-
-
-
-        <!-- Broadcasting from your PC - Starts Here  -->
-        <div class="col-md-4 video-lg">
-          <div class="video-heading text-center">
-            <h4>Broadcasting from your PC</h4>
-          </div>
-            <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
-                <video id="video5" controls poster="{{asset('/')}}images/broadcasting-from-your-pc.jpg" src="{{asset('/')}}videos/Hapity_PC_Guide_Edit02-Vimeo_720p.mov"></video>
-            </div>
-          <div class="download-buttons-stuff">
-           <div class="row no-margin">
-              <div class="col-md-12 no-padding">
-                <div class="download-guide text-center">
-                  <a href="#">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-guide.png" alt="logo"></li>
-                      <li><h4>Download Guide</h4></li>
-                    </ul>                  
-                  </a>
-                </div>
-              </div>
-<!--               <div class="col-md-6 no-padding">
-                <div class="download-plugin text-center">
-                  <a href="#">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
-                      <li><h4>Download Plugin</h4></li>
-                    </ul>
-                  </a>
-                </div>
-              </div> -->
-            </div>
-          </div>
-
-          <div class="transcript-bottom text-center">
-            <a href="https://www.hapity.com/assets/docs/Haptity PC Broadcast Guide Script.pdf">
-              <p><h4><span>Transcript</span></h4></p>
-            </a>
-          </div>
-        </div>
-        <!-- Broadcasting from your PC - Ends Here  -->
-
-
-
-        <!-- Guide for enabling flash - Starts Here  -->
-        <div class="col-md-4 video-lg">
-          <div class="video-heading text-center">
-            <h4>Guide for enabling flash</h4>
-          </div>
-           <img src="{{asset('/')}}images/guide-for-enabling-flash.jpg" class="img-w-100">
-          <!-- <div class="hapity-video-new-small">
-            <video controls="" poster="https://www.hapity.com/assets/home-new/img/hapity.png" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="360" height="210"></video>
-          </div> -->
-          <div class="download-buttons-stuff">
-            <div class="row no-margin">
-              <div class="col-md-12 no-padding">
-                <div class="download-guide text-center">
-                  <a href="https://www.hapity.com/assets/docs/help-docs/Hapity – Enabling Flash player in Chrome.docx">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-guide.png" alt="logo"></li>
-                      <li><h4>Download Guide</h4></li>
-                    </ul>                  
-                  </a>
-                </div>
-              </div>
-<!--             <div class="col-md-6 no-padding">
-                <div class="download-plugin text-center">
-                  <a href="#">
-                    <ul>
-                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
-                      <li><h4>Download Plugin</h4></li>
-                    </ul>
-                  </a>
-                </div>
-              </div>  -->
-            </div>
-          </div>
-
-        <div class="transcript-bottom text-center">
-            <a href="#">
-              <p><h4><span>Transcript</span></h4></p>
-            </a>
-          </div>
-        </div>
-        <!-- Guide for enabling flash - Starts Here  -->
-      </div>
-    </div>
-</section><!-- help new ends here -->
-
-
-<!-- modal -video -->
-<div class="modal fade modal-dismiss" id="wp-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-close-cstm" role="document">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="modal-content">
-            <div class="modal-body video-body">
-              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
-                    <video id="video1" controls poster="{{asset('/')}}videos/default-video.jpg" src="{{asset('/')}}videos/How-To-WordPress_Edit03-Vimeo_720p.mov"></video>
-                </div>
-      <!-- <script src="//content.jwplatform.com/players/5mMyXrlJ-cZlbtNEg.js"></script> -->
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade modal-dismiss" id="drupal-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-close-cstm" role="document">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="modal-content">
-            <div class="modal-body video-body">
-              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
-                    <video id="video2" controls poster="{{asset('/')}}videos/default-video.jpg" src="{{asset('/')}}videos/How_To_Drupal_Edit03-Vimeo_720p.mov"></video>
-                </div>
-      <!-- <script src="//content.jwplatform.com/players/fTJiZjlW-cZlbtNEg.js"></script> -->
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade modal-dismiss" id="joomla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-close-cstm" role="document">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="modal-content">
-            <div class="modal-body video-body">
-              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
-                    <video id="video3" controls poster="{{asset('/')}}videos/default-video.jpg" src="{{asset('/')}}videos/How-To_Joomla_Edit03_Vimeo_720p.mov"></video>
-                </div>
-      <!-- <script src="//content.jwplatform.com/players/vv0lNkAY-cZlbtNEg.js"></script> -->
-            </div>
-        </div>
-    </div>
-</div>
-<div class="modal fade modal-dismiss" id="mob-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-close-cstm" role="document">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="modal-content">
-            <div class="modal-body video-body">
-              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
-                    <video id="video4" controls poster="{{asset('/')}}videos/default-video.jpg" src="{{asset('/')}}videos/Hapity_Mobile_Guide_Edit02-Vimeo_720p.mov"></video>
-                </div>
-     <!-- <script src="//content.jwplatform.com/players/HiJyonlF-cZlbtNEg.js"></script> -->
-            </div>
-        </div>
-    </div>
-</div>
-<!-- <div class="modal fade" id="web-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-close-cstm" role="document">
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-    <div class="modal-content">
-      <div class="modal-body video-body">
-        <script src="//content.jwplatform.com/players/HiJyonlF-cZlbtNEg.js"></script>
-      </div>
-    </div>
-  </div>
-</div> -->
-<div class="modal fade modal-dismiss" id="broadcast-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-close-cstm" role="document">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-        <div class="modal-content">
-            <div class="modal-body video-body">
-              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
-                    <video id="video5" controls poster="{{asset('/')}}videos/default-video.jpg" src="{{asset('/')}}videos/Hapity_PC_Guide_Edit02-Vimeo_720p.mov"></video>
-                </div>
-      <!-- <script src="//content.jwplatform.com/players/84he002q-cZlbtNEg.js"></script> -->
-            </div>
-        </div>
-    </div>
-</div>
-<div class="clearfix"></div>
-@endsection
-
-<!-- ------------Recommend Videos------------- --> 
+  @push('css')
+    <!-- ------------Recommend Videos------------- --> 
 <style>
 /** New help page **/
 .video-heading.text-center {
@@ -532,6 +110,430 @@
         .purple-txt-help {font-size: 20px;}
     }
 </style>
+  @endpush
+@section('content')
+	<section class="help-new">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="main-heading text-center">
+            <h1 class="page_title text-center pur-col font-bold">How to integrate into your website</h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Integrate with Wordpress - Starts Here  -->
+        <div class="col-md-6 video-lg">
+          <div class="video-heading text-center">
+            <h4>Integrate with Wordpress</h4>
+          </div>
+           <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}home/images/play-video.png" alt="Video Frame"> --> 
+                <video id="video1" controls poster="{{asset('assets')}}/images/integrate-with-wordpress.jpg"
+             src="{{asset('assets')}}/videos/How-To-WordPress_Edit03-Vimeo_720p.mov"></video>
+                </div>
+          <div class="download-buttons-stuff">
+            <div class="row no-margin">
+              <div class="col-md-6 no-padding">
+                <div class="download-guide text-center">
+                  <a href="{{asset('assets')}}/docs/help-docs/Hapity for WordPress.docx" target="_blank">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
+                      <li><h4>Download Guide</h4></li>
+                    </ul>                  
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6 no-padding">
+                <div class="download-plugin text-center">
+                  <a href="https://wordpress.org/plugins/wp-hapity/">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-plugin.png" alt="logo"></li>
+                      <li><h4>Download Plugin</h4></li>
+                    </ul>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="transcript-bottom text-center">
+            <a href="{{asset('assets')}}/docs/Hapity Installtion Guide-Wordpress Script.pdf" target="_blank">
+              <p><h4><span>Transcript</span></h4></p>
+            </a>
+          </div>
+        </div>
+        <!-- Integrate with Wordpress - Ends Here  -->
+
+
+
+        <!-- Integrate with Drupal - Starts Here  -->
+        <div class="col-md-6 video-lg">
+          <div class="video-heading text-center">
+            <h4>Integrate with Drupal</h4>
+          </div>
+         <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
+                    <video id="video2" controls poster="{{asset('assets')}}/images/integrate-with-drupal.jpg" src="{{asset('assets')}}/videos/How_To_Drupal_Edit03-Vimeo_720p.mov"></video>
+                </div>
+          <div class="download-buttons-stuff">
+            <div class="row no-margin">
+              <div class="col-md-6 no-padding">
+                <div class="download-guide text-center">
+                  <a href="{{asset('assets')}}/docs/help-docs/Hapity for Drupal.docx" target="_blank">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
+                      <li><h4>Download Guide</h4></li>
+                    </ul>                  
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6 no-padding">
+                <div class="download-plugin text-center">
+                  <a href="{{asset('assets')}}/plugin/hapity-drupal.zip">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-plugin.png" alt="logo"></li>
+                      <li><h4>Download Plugin</h4></li>
+                    </ul>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="transcript-bottom text-center">
+            <a href="{{asset('assets')}}/docs/Hapity Installtion Guide-Drupal Script.pdf" target="_blank">
+              <p><h4><span>Transcript</span></h4></p>
+            </a>
+          </div>
+        </div>
+        <!-- Integrate with Drupal - Ends Here  -->
+
+
+
+        <!-- Integrate with Joomla - Starts Here  -->
+        <div class="col-md-6 video-lg">
+          <div class="video-heading text-center">
+            <h4>Integrate with Joomla</h4>
+          </div>
+          <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}('assets/'); ?>/home/images/play-video.png" alt="Video Frame"> --> 
+                    <video id="video3" controls poster="{{asset('assets')}}/images/integrate-with-joomla.jpg" src="{{asset('assets')}}/videos/How-To_Joomla_Edit03_Vimeo_720p.mov"></video>
+                </div>
+          <div class="download-buttons-stuff">
+            <div class="row no-margin">
+              <div class="col-md-6 no-padding">
+                <div class="download-guide text-center">
+                   <a href="{{asset('assets')}}/docs/help-docs/Hapity for Joomla.docx" target="_blank">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
+                      <li><h4>Download Guide</h4></li>
+                    </ul>                  
+                  </a>
+                </div>
+              </div>
+
+              <div class="col-md-6 no-padding">
+                <div class="download-plugin text-center">
+                  <a href="https://extensions.joomla.org/extensions/extension/communication/video-conference/hapity/">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-plugin.png" alt="logo"></li>
+                      <li><h4>Download Plugin</h4></li>
+                    </ul>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="transcript-bottom text-center">
+            <a href="{{asset('assets')}}/docs/Hapity Installtion Guide-Joomla Script.pdf" target="_blank">
+              <p><h4><span>Transcript</span></h4></p>
+            </a>
+          </div>
+        </div>
+        <!-- Integrate with Joomla - Ends Here  -->
+
+
+
+        <!-- Guide for Other Websites - Starts Here  -->
+        <div class="col-md-6 video-lg">
+          <div class="video-heading text-center">
+            <h4>Guide for other websites</h4>
+          </div>
+             {{-- <img src="{{asset('/')}}images/guide-for-other-websites.jpg" class="img-w-100"> --}}
+          <!-- <div class="hapity-video-new">
+            <video controls="" poster="https://www.hapity.com/assets/home-new/img/hapity.png" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="555" height="370"></video>
+          </div> -->
+          <div class="download-buttons-stuff">
+            <div class="row no-margin">
+              <div class="col-md-12 no-padding">
+                <div class="download-guide text-center">
+                   <a href="https://www.hapity.com/guide/new-docs/hapity-for-custom-website.pdf">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
+                      <li><h4>Download Guide</h4></li>
+                    </ul>                  
+                  </a>
+                </div>
+              </div>
+<!--                <div class="col-md-6 no-padding">
+                <div class="download-plugin text-center">
+                  <a href="#">
+                    <ul>
+                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
+                      <li><h4>Download Plugin</h4></li>
+                    </ul>
+                  </a>
+                </div>
+              </div> -->
+            </div>
+          </div>
+
+         <div class="transcript-bottom text-center">
+            <a href="#">
+              <p><h4><span>Transcript</span></h4></p>
+            </a>
+          </div>
+        </div>
+        <!-- Guide for Other Websites - Ends Here  -->
+      </div>
+    </div>
+    <!-- Section - How to use Hapity  -->
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="main-heading text-center">
+            <h1 class="page_title text-center pur-col font-bold">How to use hapity</h1>
+          </div>
+        </div>
+      </div>
+      
+      <div class="row">
+        <!-- Guide for Mobiles - Starts Here  -->
+        <div class="col-md-4 video-lg">
+          <div class="video-heading text-center">
+            <h4>Guide for Mobiles</h4>
+          </div>
+            <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets')}}home/images/play-video.png" alt="Video Frame"> --> 
+                    <video id="video4" controls poster="{{asset('assets')}}/images/guide-for-mobiles.jpg" src="{{asset('assets')}}/videos/Hapity_Mobile_Guide_Edit02-Vimeo_720p.mov"></video>
+                </div>
+          <div class="download-buttons-stuff">
+            <div class="row no-margin">
+             <div class="col-md-12 no-padding">
+                <div class="download-guide text-center">
+                  <a href="">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
+                      <li><h4>Download Guide</h4></li>
+                    </ul>                  
+                  </a>
+                </div>
+              </div> 
+<!--                <div class="col-md-6 no-padding">
+                <div class="download-plugin text-center">
+                  <a href="#">
+                    <ul>
+                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
+                      <li><h4>Download Plugin</h4></li>
+                    </ul>
+                  </a>
+                </div>
+              </div>  -->
+            </div>
+          </div>
+
+          <div class="transcript-bottom text-center">
+            <a href="{{ asset('assets/docs/Hapity Mobile Broadcast Guide Script.pdf') }}">
+              <p><h4><span>Transcript</span></h4></p>
+            </a>
+          </div>
+        </div>
+        <!-- Guide for Mobiles - Ends Here  -->
+
+
+
+        <!-- Broadcasting from your PC - Starts Here  -->
+        <div class="col-md-4 video-lg">
+          <div class="video-heading text-center">
+            <h4>Broadcasting from your PC</h4>
+          </div>
+            <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
+                <video id="video5" controls poster="{{asset('assets')}}/images/broadcasting-from-your-pc.jpg" src="{{asset('assets')}}/videos/Hapity_PC_Guide_Edit02-Vimeo_720p.mov"></video>
+            </div>
+          <div class="download-buttons-stuff">
+           <div class="row no-margin">
+              <div class="col-md-12 no-padding">
+                <div class="download-guide text-center">
+                  <a href="#">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
+                      <li><h4>Download Guide</h4></li>
+                    </ul>                  
+                  </a>
+                </div>
+              </div>
+<!--               <div class="col-md-6 no-padding">
+                <div class="download-plugin text-center">
+                  <a href="#">
+                    <ul>
+                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
+                      <li><h4>Download Plugin</h4></li>
+                    </ul>
+                  </a>
+                </div>
+              </div> -->
+            </div>
+          </div>
+
+          <div class="transcript-bottom text-center">
+            <a href="{{ asset('assets/docs/Haptity PC Broadcast Guide Script.pdf') }}">
+              <p><h4><span>Transcript</span></h4></p>
+            </a>
+          </div>
+        </div>
+        <!-- Broadcasting from your PC - Ends Here  -->
+
+
+
+        <!-- Guide for enabling flash - Starts Here  -->
+        <div class="col-md-4 video-lg">
+          <div class="video-heading text-center">
+            <h4>Guide for enabling flash</h4>
+          </div>
+           <img src="{{asset('assets')}}/images/guide-for-enabling-flash.jpg" class="img-w-100">
+          <!-- <div class="hapity-video-new-small">
+            <video controls="" poster="https://www.hapity.com/assets/home-new/img/hapity.png" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="360" height="210"></video>
+          </div> -->
+          <div class="download-buttons-stuff">
+            <div class="row no-margin">
+              <div class="col-md-12 no-padding">
+                <div class="download-guide text-center">
+                  <a href="{{ asset('assets/docs/help-docs/Hapity – Enabling Flash player in Chrome.docx') }}">
+                    <ul>
+                      <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
+                      <li><h4>Download Guide</h4></li>
+                    </ul>                  
+                  </a>
+                </div>
+              </div>
+<!--             <div class="col-md-6 no-padding">
+                <div class="download-plugin text-center">
+                  <a href="#">
+                    <ul>
+                      <li><img src="{{asset('/')}}images/download-plugin.png" alt="logo"></li>
+                      <li><h4>Download Plugin</h4></li>
+                    </ul>
+                  </a>
+                </div>
+              </div>  -->
+            </div>
+          </div>
+
+        <div class="transcript-bottom text-center">
+            <a href="#">
+              <p><h4><span>Transcript</span></h4></p>
+            </a>
+          </div>
+        </div>
+        <!-- Guide for enabling flash - Starts Here  -->
+      </div>
+    </div>
+</section><!-- help new ends here -->
+
+
+<!-- modal -video -->
+<div class="modal fade modal-dismiss" id="wp-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-close-cstm" role="document">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-content">
+            <div class="modal-body video-body">
+              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
+                    <video id="video1" controls poster="{{asset('assets')}}/videos/default-video.jpg" src="{{asset('assets')}}/videos/How-To-WordPress_Edit03-Vimeo_720p.mov"></video>
+                </div>
+      <!-- <script src="//content.jwplatform.com/players/5mMyXrlJ-cZlbtNEg.js"></script> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-dismiss" id="drupal-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-close-cstm" role="document">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-content">
+            <div class="modal-body video-body">
+              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
+                    <video id="video2" controls poster="{{asset('assets')}}/videos/default-video.jpg" src="{{asset('assets')}}/videos/How_To_Drupal_Edit03-Vimeo_720p.mov"></video>
+                </div>
+      <!-- <script src="//content.jwplatform.com/players/fTJiZjlW-cZlbtNEg.js"></script> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-dismiss" id="joomla-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-close-cstm" role="document">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-content">
+            <div class="modal-body video-body">
+              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
+                    <video id="video3" controls poster="{{asset('assets')}}/videos/default-video.jpg" src="{{asset('assets')}}/videos/How-To_Joomla_Edit03_Vimeo_720p.mov"></video>
+                </div>
+      <!-- <script src="//content.jwplatform.com/players/vv0lNkAY-cZlbtNEg.js"></script> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade modal-dismiss" id="mob-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-close-cstm" role="document">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-content">
+            <div class="modal-body video-body">
+              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
+                    <video id="video4" controls poster="{{asset('assets')}}/videos/default-video.jpg" src="{{asset('assets')}}/videos/Hapity_Mobile_Guide_Edit02-Vimeo_720p.mov"></video>
+                </div>
+     <!-- <script src="//content.jwplatform.com/players/HiJyonlF-cZlbtNEg.js"></script> -->
+            </div>
+        </div>
+    </div>
+</div>
+<!-- <div class="modal fade" id="web-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-close-cstm" role="document">
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+    <div class="modal-content">
+      <div class="modal-body video-body">
+        <script src="//content.jwplatform.com/players/HiJyonlF-cZlbtNEg.js"></script>
+      </div>
+    </div>
+  </div>
+</div> -->
+<div class="modal fade modal-dismiss" id="broadcast-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-close-cstm" role="document">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        <div class="modal-content">
+            <div class="modal-body video-body">
+              <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
+                    <video id="video5" controls poster="{{asset('assets')}}/videos/default-video.jpg" src="{{asset('assets')}}/videos/Hapity_PC_Guide_Edit02-Vimeo_720p.mov"></video>
+                </div>
+      <!-- <script src="//content.jwplatform.com/players/84he002q-cZlbtNEg.js"></script> -->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+@endsection
+
+@push('script')
 <script>
 
     $('.modal-dismiss').on('hidden.bs.modal', function () {
@@ -573,3 +575,5 @@
         // });
     }
 </script>
+
+@endpush
