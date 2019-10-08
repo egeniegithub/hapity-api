@@ -257,7 +257,7 @@ class BroadcastsController extends Controller
         $response['share_url'] = $broadcast->share_url;
         $response['stream_url'] = $broadcast->stream_url;
         $response['video'] = $broadcast->video_name;
-        if ($broadcast->broadcast_image) {
+        if (!empty($broadcast->broadcast_image)) {
             $response['image'] = asset('images/broadcasts/' . $request->input('user_id') . '/' . $broadcast->broadcast_image);
         } else {
             $response['image'] = asset('images/images/default001.jpg');
