@@ -69,8 +69,8 @@
                     <div class="video-frame">
 
                     <div id="flashContent">        
-                        <object type="application/x-shockwave-flash" width="100%" height="330" id="externalInterface" data="{{asset('assets/js')}}/web-back.swf" name="externalInterface">
-                            <param name="movie" value="{{asset('assets/js')}}/web-back.swf" />
+                        <object type="application/x-shockwave-flash" width="100%" height="330" id="externalInterface" data-movie="{{asset('assets/js/web-back.swf')}}" name="externalInterface">
+                            <param name="movie" value="{{asset('assets/js/web-back.swf')}}" />
                             <param name="quality" value="high" />
                             <param name="bgcolor" value="#ffffff" />
                             <param name="play" value="true" />
@@ -119,29 +119,29 @@
         var server;
         var token = '3ef815416f775098fe977004015c6193';
 
-        jQuery("#bd_image").on('change', function() {
-            var file = jQuery("#bd_image").get(0).files[0];
+        $("#bd_image").on('change', function() {
+            var file = $("#bd_image").get(0).files[0];
             var reader = new FileReader();
             reader.onloadend = function() {
                 console.log('RESULT', reader.result);
                 bd_image = reader.result;
-                jQuery('.live-streaming').css("background-image", "url('" + bd_image + "')");
+                $('.live-streaming').css("background-image", "url('" + bd_image + "')");
 
-                if(jQuery('.upload-custom-image').hasClass('active-this-btn')){
-                    jQuery('.upload-custom-image').hide().removeClass('.active-this-btn');
-                    jQuery('.reset-image-btn').show().addClass('active-this-btn');
+                if($('.upload-custom-image').hasClass('active-this-btn')){
+                    $('.upload-custom-image').hide().removeClass('.active-this-btn');
+                    $('.reset-image-btn').show().addClass('active-this-btn');
                 }
             }
             reader.readAsDataURL(file);
         });
 
-        jQuery('.reset-image-btn').on('click', function(event) {
+        $('.reset-image-btn').on('click', function(event) {
             event.preventDefault();
-            if(jQuery(this).hasClass('active-this-btn')){
-                jQuery(this).hide().removeClass('.active-this-btn');
-                jQuery('.upload-custom-image').show().addClass('active-this-btn');
+            if($(this).hasClass('active-this-btn')){
+                $(this).hide().removeClass('.active-this-btn');
+                $('.upload-custom-image').show().addClass('active-this-btn');
             }
-            jQuery('.live-streaming').css("background-image", "");
+            $('.live-streaming').css("background-image", "");
         });
 
         $("#start-streamings").click(function(){
@@ -248,9 +248,9 @@
         });
 
         function show_share_icons(share_url){
-            jQuery('.share-with-icons-live').show();
-            jQuery('.twitter-icon a').attr('href', 'https://twitter.com/home?status='+share_url);
-            jQuery('.facebook-icon a').attr('href', 'https://www.facebook.com/sharer/sharer.php?u='+share_url);
+            $('.share-with-icons-live').show();
+            $('.twitter-icon a').attr('href', 'https://twitter.com/home?status='+share_url);
+            $('.facebook-icon a').attr('href', 'https://www.facebook.com/sharer/sharer.php?u='+share_url);
         }
     });
 </script>
