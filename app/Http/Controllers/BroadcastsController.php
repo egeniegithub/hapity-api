@@ -339,7 +339,12 @@ class BroadcastsController extends Controller
 
             $file_info = !empty($broadcast->filename) ? pathinfo($broadcast->filename) : [];
 
-            $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
+            $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';            
+
+            $stream_url = !empty($broadcast->filename) ? 'http://' . $this->getRandIp() . ':1935/vod/' .  $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
+            if($broadcast->status == 'online') {
+                $stream_url = !empty($broadcast->filename) ? 'rtmp://' . $this->getRandIp() . ':1935/live/' . $broadcast->filename . '/playlist.m3u8' : '';
+            }
 
             $broadcastObj = [];
             $broadcastObj['id'] = $broadcast->id;
@@ -348,7 +353,7 @@ class BroadcastsController extends Controller
             $broadcastObj['title'] = $broadcast->title;
             $broadcastObj['description'] = $broadcast->description;
             $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
-            $broadcastObj['stream_url'] =  !empty($broadcast->filename) ? 'http://' . $this->getRandIp() . ':1935/vod/' .  $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
+            $broadcastObj['stream_url'] =  $stream_url;
             $broadcastObj['status'] = $broadcast->status;
             $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg');
             $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
