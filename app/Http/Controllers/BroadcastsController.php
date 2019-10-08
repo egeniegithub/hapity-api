@@ -56,6 +56,10 @@ class BroadcastsController extends Controller
         $broadcast->status = 'offline';
         $broadcast->save();
 
+
+        $broadcast->share_url = route('broadcast.view', $broadcast->id);
+        $broadcast->save();
+
         $stream_video_info = $this->handle_video_file_upload($request);
 
         if (!empty($stream_video_info)) {
