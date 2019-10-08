@@ -241,9 +241,9 @@ class BroadcastsController extends Controller
             }
         }
 
-        $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $request->input('user_id'));
+        $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $broadcast->user_id);
 
-        if (!empty($stream_image_name) && $request->has('image')) {
+        if (!empty($stream_image_name)) {            
             $broadcast->broadcast_image = $stream_image_name;
             $broadcast->save();
         }
@@ -258,9 +258,9 @@ class BroadcastsController extends Controller
         $response['stream_url'] = $broadcast->stream_url;
         $response['video'] = $broadcast->video_name;
         if (!empty($broadcast->broadcast_image)) {
-            $response['image'] = asset('images/broadcasts/' . $request->input('user_id') . '/' . $broadcast->broadcast_image);
+            $response['image'] = asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image);
         } else {
-            $response['image'] = asset('images/images/default001.jpg');
+            $response['image'] = asset('images/default001.jpg');
         }
 
         if (!empty($stream_video_info)) {
@@ -270,7 +270,7 @@ class BroadcastsController extends Controller
 
         if (boolval($request->input('post_plugin'))) {
             //TODO debug this
-            $share_url = $this->make_plugin_call_edit($broadcast->id, $request->input('user_id'));
+            $share_url = $this->make_plugin_call_edit($broadcast->id, $broadcast->user_id);
         }
 
         return response()->json(['response' => $response]);
@@ -752,6 +752,8 @@ class BroadcastsController extends Controller
 
     private function handle_image_file_upload($request, $broadcast_id, $user_id)
     {
+        $image = $request->input('image');
+
         $thumbnail_image = '';
         if ($request->hasFile('image')) {
             $file = $request->file('image');
@@ -768,14 +770,15 @@ class BroadcastsController extends Controller
             return $thumbnail_image;
         }
 
-        if ($request->has('image') && !empty($request->input('image')) && !is_null($request->input('image'))) {
+        if (!empty($image) && !is_null($image)) {
             $thumbnail_image = md5(time()) . '.jpg';
+            
             $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
 
             if (!is_dir($path)) {
                 mkdir($path);
             }
-
+            
             $base_64_data = $request->input('image');
 
             $base_64_data = str_replace('datagea:im/jpeg;base64,', '', $base_64_data);
@@ -785,6 +788,8 @@ class BroadcastsController extends Controller
 
             return $thumbnail_image;
         }
+
+        
 
         return $thumbnail_image;
     }
