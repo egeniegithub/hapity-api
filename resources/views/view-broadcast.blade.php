@@ -5,10 +5,16 @@
 @endpush
 @section('content')
 
-@php
+{{-- @php
     $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
     $index = rand(0,1);
     $ip = $ipArr[$index];
+@endphp --}}
+
+@php
+    $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+    $index = rand(0,1);                            
+    $ip =  env('APP_ENV') == 'local' ? '192.168.20.251' : $ipArr[$index];
 @endphp
 
 <style type="text/css" media="screen">
@@ -25,7 +31,68 @@
         <div class="col-xs-12 col-sm-3 col-md-3"></div>
         <div class="col-xs-12 col-sm-6 col-md-6">
             <div class="my-bordcast-single bordcast-active">
-                <iframe src="https://api.hapity.com/widget.php?stream=rtmp://52.17.132.36:1935/vod/<?php echo $filename; ?>&title=<?php echo $broadcast['title'];?>&status=offline&bid=1308&broadcast_image=<?php echo $broadcast['broadcast_image'];?>"></iframe>
+                   @php 
+                    $image_classes = '';
+                    $b_image = '';
+                    $b_id = isset($broadcast->id) ? $broadcast->id : '';
+                    if($broadcast->title){
+                        $b_title = $broadcast->title;
+                    } else {
+                        $b_title = "Untitled";
+                    }
+                    $file_info = pathinfo($broadcast->filename);
+                    $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
+                    $share_url = $broadcast->share_url;
+                    $b_description = $broadcast->description;
+                    $stream_url = urlencode('http://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                    //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
+
+                    // echo $stream_url; 
+
+                    $status = $broadcast->status;
+
+                    $video_file_name = $broadcast->filename;
+                    
+                    if(!$b_image){
+                        $b_image = 'default001.jpg';
+                    }
+
+                    if($video_file_name){
+                        $image_classes = 'has_video';
+                    }
+                    @endphp
+                    @if($video_file_name)
+                        <script>
+                            WowzaPlayer.create('w-broadcast-{{ $b_id }}',
+                            {
+                                "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
+                                "title":"{{ $b_title }}",
+                                "description":"{{ $b_description }}",
+                                //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
+                                "sourceURL":"{{ $stream_url }}",
+                                "autoPlay":false,
+                                "volume":"75",
+                                "mute":false,
+                                "loop":false,
+                                "audioOnly":false,
+                                "uiShowQuickRewind":true,
+                                "uiQuickRewindSeconds":"30"
+                                }
+                            );
+
+                        </script>
+                    @endif
+                    
+                    @php
+                        if($status == 'offline'){
+                            $stream_url = str_replace('/live/', '/vod/', $stream_url);
+                        } 
+                    @endphp
+                    <iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                    src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $broadcast->status;?>&broadcast_image=<?php echo $b_image;?>">
+                    </iframe>
+
+                {{-- <iframe src="https://api.hapity.com/widget.php?stream=rtmp://52.17.132.36:1935/vod/{{ $filename }}&title={{ $broadcast['title'] }}&status=offline&bid=1308&broadcast_image={{ $broadcast['broadcast_image'] }}"></iframe> --}}
 
                 <?php /*div href="#" class="bordcast-play image-section">
                     <div class="broadcast-streaming" id="broadcast-<?php echo $broadcast['id'];?>">Loading Broadcast</div>
@@ -84,9 +151,9 @@
                     <div class="modal-body">
                         <div class="embedcode-modal-innser">
                             <textarea readonly="">
-                                <iframe height="600" width="100%" scrolling="no" frameborder="0" 
-                                src="https://api.hapity.com/widget.php?stream=<?php echo $broadcast['stream_url'];?>&title=<?php echo urlencode($broadcast['title']);?>&status=<?php echo $broadcast['status'];?>&broadcast_image=<?php echo $broadcast['broadcast_image'];?>">
-                                </iframe>
+                                {{-- <iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                src="https://api.hapity.com/widget.php?stream={{ $broadcast['stream_url'] }}&title={{ urlencode($broadcast['title']) }}&status={{ $broadcast['status'] }}&broadcast_image={{ $broadcast['broadcast_image'] }}">
+                                </iframe> --}}
                             </textarea>                        
                         </div>
                     </div>

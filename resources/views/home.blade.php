@@ -204,10 +204,11 @@
                                         <span class="broadcast-offline"></span>
                                     <?php endif; ?>
                                 </div>
-                                <?php 
+                                @php
                                     if($status == 'offline'){
                                         $stream_url = str_replace('/live/', '/vod/', $stream_url);
-                                    } ?>
+                                    } 
+                                @endphp
                                 <ul class="bordcast-edit-actions">
                                     <li class="social-share-action">
                                         <a href="#" data-toggle="modal" data-target="#share-modal"><!-- <i class="fa fa-share-alt-square"></i> -->
