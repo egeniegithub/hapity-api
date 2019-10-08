@@ -17,8 +17,6 @@
 @section('content')
 <script type="text/javascript" src="//player.wowza.com/player/latest/wowzaplayer.min.js"></script>
 
-<script type="text/javascript" src=https://cdn.jwplayer.com/libraries/2U1I0GPZ.js"></script>
-
     <div class="profile-page">
     
         <?php //echo $hapity_header_view; ?>
@@ -41,8 +39,8 @@
                         <div class="text">
                             <h2>
                                 <a href="{{route('settings')}}">
-                                  @if(Auth::user()->username)
-                                    {{ Auth::user()->username }}
+                                  @if(isset($userdata->username))
+                                    {{ $userdata->username }}
                                   @endif
                                 </a>
                             </h2>
@@ -112,16 +110,14 @@
                                 //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8 
                                 //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream%2Fplaylist.m3u8
 
-                                // echo $stream_url; 
+                                //echo $stream_url; 
 
                                 $status = $broadcast->status;
 
                                 $video_file_name = $broadcast->filename;
                                 
-                                if(!empty($broadcast->broadcast_image)){
-                                    $b_image = asset('/images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image);
-                                } else {
-                                    $b_image = asset('/images/default001.jpg');
+                                if(!$b_image){
+                                    $b_image = 'default001.jpg';
                                 }
 
                                 if($video_file_name){
@@ -165,40 +161,6 @@
                                             <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
                                         </div>
                                         <script>
-
-                                            jwplayer("w-broadcast-{{ $b_id }}").setup(
-                                                {
-                                                    "playlist": [
-                                                        {
-                                                        "sources": [
-                                                            {
-                                                            "default": false,
-                                                            "file": "{{ $stream_url }}",
-                                                            "label": "0",
-                                                            "type": "hls",
-                                                            "preload": "metadata"
-                                                            }
-                                                        ]
-                                                        }
-                                                    ],
-                                                    "primary": "html5",
-                                                    "hlshtml": true
-                                                    }
-                                                /*
-                                                {
-                                                sources: [
-                                                    {
-                                                        file: "{{ $stream_url }}"
-                                                    }
-                                                ],
-                                                playButton: '{{asset("assets/images/play.png")}}',
-                                                height: 380,
-                                                width: "100%",
-                                                image: '<?php echo $b_image; ?>',
-                                                skin: 'stormtrooper',
-                                                });*/
-
-                                            /*
                                             WowzaPlayer.create('w-broadcast-{{ $b_id }}',
                                             {
                                                 "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
@@ -215,7 +177,6 @@
                                                 "uiQuickRewindSeconds":"30"
                                                 }
                                             );
-                                            */
 
                                         </script>
                                     @endif
