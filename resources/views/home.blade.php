@@ -95,7 +95,12 @@
 
                                 $share_url = $broadcast->share_url;
                                 $b_description = $broadcast->description;
+
+
                                 $stream_url = urlencode('http://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                                if($broadcast->status == 'online') {
+                                    $stream_url = urlencode('rtmp://' . $ip .  ':1935/live/' .  $broadcast->filename . '/playlist.m3u8') ;
+                                }
                                 //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
 
                                 echo $stream_url; 
