@@ -216,6 +216,8 @@ class AuthController extends Controller
 
             $rules = [];
 
+            $user = User::find($user_id);
+
             if (!is_null($username) && $user->username != $username) {
                 $rules['username'] = 'required|unique:users';
             }
@@ -253,10 +255,11 @@ class AuthController extends Controller
 
             $profile_picture_name = $this->handle_image_file_upload($request);
 
-            if (!empty($imageName)) {
+            if (!empty($profile_picture_name)) {
                 $user_profile->profile_picture = $profile_picture_name;
-
+                $user_profile->save();
             }
+
             $user_profile->email = $user->email;
             $user_profile->save();
 
