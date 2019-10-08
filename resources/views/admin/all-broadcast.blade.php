@@ -86,7 +86,6 @@
                                     @else
                                         <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
                                     @endif
-                                {{-- <img src="{{ $broadcast['broadcast_image'] }}"/> --}}
                                             <span class="play-report-icon">
                                                 <i class="fa fa-play"></i>
                                             </span>
@@ -141,19 +140,7 @@
                                             image: '<?php echo $b_image; ?>',
                                             skin: 'stormtrooper',
                                         });
-                                        <?php /**/ ?>
-                                        // jwplayer("broadcast-<?php echo $broadcast['id'];?>").setup({
-                                        //     sources: [{
-                                        //         file: "rtmp://52.18.33.132:1935/vod/1012135211551959177802.stream"
-                                        //     },{
-                                        //         file:"http://52.18.33.132:1935/vod/1012135211551959177802.stream/playlist.m3u8"
-                                        //     }],
-                                        //     playButton: 'https://www.hapity.com/images/play.png',
-                                        //     height: 380,
-                                        //     width: "100%",
-                                        //     image: 'https://api.hapity.com/uploads/broadcast_images/1551959322.jpg',
-                                        //     skin: 'stormtrooper',
-                                        // });
+                                       
                                     </script>
                                 </div>
                                 <div class="modal-footer">

@@ -18,8 +18,7 @@
 <script type="text/javascript" src="//player.wowza.com/player/latest/wowzaplayer.min.js"></script>
 
     <div class="profile-page">
-    
-        <?php //echo $hapity_header_view; ?>
+
     <div class="clearfix"></div>
 
     <div class="profile-section-main">

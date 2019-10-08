@@ -14,7 +14,7 @@
       <li><a href="{{route('login')}}">Login</a></li>
       <li><a href="{{route('register')}}">Register</a></li>
       @endif
-      <!-- <li><a href="url('about'); ?>">Who we are</a></li> -->
+
       <li><a href="http://blog.hapity.com/">Blog</a></li>
       <li><a href="{{route('help')}}">Help</a></li>
       <li><a href="{{route('about')}}">Contact</a></li>

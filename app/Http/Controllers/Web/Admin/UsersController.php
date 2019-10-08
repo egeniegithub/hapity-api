@@ -24,15 +24,11 @@ class UsersController extends Controller
             $reported_user_ids[] = $reported_user->reported_user_id;
         }
 
-        
-
         if($request['search']!='')
         {
             $data = $data->where('username','like','%'.$request['search'].'%');
-            // $qry="select username,profile_picture,join_date,sid,email from user where username like '%".$request['search']."%'";
         }
         $users = $data->paginate(20);
-        // dd($users);
         return view('admin.all-users',compact('users', 'reported_user_ids'));
     }
     public function deleteuser($user_id){

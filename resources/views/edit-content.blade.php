@@ -38,7 +38,7 @@
                         <h3>Upload a Video or Picture</h3>
                         <div class="row">
                             <div class="upload-containe col-xs-4 col-md-4 video-upload-btn" style="position:relative;">
-                                <!-- <span><i class="fa fa-video-camera"></i> Video</span> -->
+                             
                                 <a class='btn btn-primary' href='javascript:;'>
                                 Update video
                                 <input type="file" name="video" value="Video" accept="video/mp4,video/x-m4v,video/*" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" id="video-upload-btn" onchange=''/>
@@ -56,7 +56,7 @@
                             <div class="upload-containe col-xs-4 col-md-4 image-upload-btn" style="position:relative;">
                             <a class='btn btn-primary' href='javascript:;'>
                                 Update image
-                                <!-- <span><i class="fa fa-image"></i> Image</span> -->
+                              
                                 <input type="file" name="image" value="Image" accept="image/x-png,image/gif,image/jpeg" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40"  onchange='document.getElementById("upload-image").src = window.URL.createObjectURL(this.files[0])' />
                                
                                 </a>

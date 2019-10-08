@@ -33,7 +33,6 @@
     <!-- Styles -->
     <link href="{{asset('/')}}assets/css/bootstrap.min.css" rel="stylesheet">
     <link href="{{asset('/')}}assets/css/style.css" rel="stylesheet">
-    {{-- <link href="{{ asset('assets/css/app.css') }}" rel="stylesheet"> --}}
 
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css')}}" >
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/tooltipster.css')}}" >
@@ -48,9 +47,7 @@
     <script type="text/javascript" src="http://www.hapity.com/assets/js/fb.js"></script>
         <script src="{{ asset('assets/js/jwplayer.js') }}"></script>
             <script type='text/javascript'>jwplayer.key='fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=';</script>    </head>
-     <!-- Scripts -->
-    {{-- <script src="{{ asset('app.js') }}"></script> --}}
-
+ 
     <script type="text/javascript">
     // Load the SDK asynchronously
     window.fbAsyncInit = function() {
@@ -62,22 +59,6 @@
             xfbml      : true,  // parse social plugins on this page
             version    : 'v2.2' // use version 2.2
         });
-
-        // Now that we've initialized the JavaScript SDK, we call
-        // FB.getLoginStatus().  This function gets the state of the
-        // person visiting this page and can return one of three states to
-        // the callback you provide.  They can be:
-        //
-        // 1. Logged into your app ('connected')
-        // 2. Logged into Facebook, but not your app ('not_authorized')
-        // 3. Not logged into Facebook and can't tell if they are logged into
-        //    your app or not.
-        //
-        // These three cases are handled in the callback function.
-
-//  FB.getLoginStatus(function(response) {
-//    statusChangeCallback(response);
-//  });
 
     };
     $(document).ready(function(){
@@ -153,38 +134,7 @@
             @include('layouts.top-menubar')
           </div><!-- /.container-fluid -->
         </nav>
-<?php // } else { ?>
-  
-<!-- <nav class="navbar navbar-default bg-color">
-          <div class="container-fluid">
-             {{-- Brand and toggle get grouped for better mobile display  --}}
-            <div class="navbar-header">
-              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="<?php // echo base_url('home'); ?>">
-                <img src="{{ asset('assets/images/home-new/logo.png')}}" width="90px">
-              </a>
-            </div>
 
-             {{-- Collect the nav links, forms, and other content for toggling  --}}
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-              <ul class="nav navbar-nav navbar-right nav-color">
-                <li><a href="<?php // echo base_url('/main/'); ?>" class="sign_in">Home</a></li>
-                <li><a href="<?php // echo base_url('main/settings'); ?>" class="sign_in">settings</a></li>
-                <li><a href="http://blog.hapity.com/">Blog</a></li>
-                <li><a href="<?php // echo base_url('help');?>" class="sign_in">Help</a></li>
-                <li><a href="<?php // echo base_url('about'); ?>#ContactFormSubmit">Contact</a></li>
-                <li><a href="<?php // echo base_url('home/log_out'); ?>" class="sign_in">Logout</a></li>
-              </ul>
-            </div>
-          </div>
-</nav> -->
-
-<?php //} ?>
     </div>
   </div>
 </header><!-- header -->      
@@ -223,7 +173,6 @@
               <div class="main-column-4-styling">
                 <h5 class="text-uppercase">links</h5>
                 <ul>
-                  <!-- <li><a href="">Terms & Conditions</a></li> -->
                   <li><a href="{{route('privacy-policy')}}">Privacy Policy</a></li>
                   <li><a href="{{route('help')}}">How it Works</a></li>
                 </ul>
@@ -258,15 +207,12 @@
   </footer><!-- footer ends here -->
 
     </div>
-    {{-- <script type="text/javascript" src="{{ url('assets/js/jquery.main.js')}}"></script> --}}
-     {{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script> --}}
-    {{-- <script type="text/javascript" src="{{ asset('assets/js/bootstrap.min.js')}}"></script> --}}
+
     <script src="{{ asset('assets/js/alertify.js')}}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/jquery-ias.min.js')}}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/functions.js')}}"></script>
     <script src="{{ asset('assets/js/jquery.tooltipster.js')}}"></script>
-    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
-    <!-- <script type="text/javascript" src="assets/js/jquery-1.11.1.min.js')}}"></script> -->
+
     <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
     
     <script src="{{ asset('assets/js/cropbox.js')}}"></script>
@@ -274,14 +220,6 @@
     <script src="{{ asset('assets/js/jquery.loader.js')}}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/app.js')}}"></script>
 
-    {{-- <script src="https://www.google.com/recaptcha/api.js?render=6Lf9xLoUAAAAANkPex8syVDugeSH73EJeeTeqByn"></script> --}}
-   {{--  <script>
-    grecaptcha.ready(function() {
-        grecaptcha.execute('6Lf9xLoUAAAAANkPex8syVDugeSH73EJeeTeqByn', {action: "{{url('about')}}"}).then(function(token) {
-        });
-    });
-    </script> --}}
-    
     @stack('script')
 </body>
 </html>

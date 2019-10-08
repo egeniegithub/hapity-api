@@ -42,7 +42,6 @@ Route::group([
     Route::post('offline_broadcast', 'Web\BroadcastsController@offline_broadcast')->name('offline_broadcast');
     Route::get('edit-content/{broadcast_id}', 'Web\BroadcastsController@edit_broadcast_content')->name('edit_broadcast_content');
 
-    //Route::get('/broadcasts/view/{id}', 'Web\BroadcastsController@view')->name('view_broadcast');
 });
 
 ////  admin routes
@@ -52,7 +51,6 @@ Route::group([
 
     Route::get('admin/broadcast', 'Web\Admin\AdminBroadcastController@index')->name('admin.broadcast');
     Route::get('admin/deletebroadcast/{id}', 'Web\Admin\AdminBroadcastController@deleteBroadcast')->name('admin.deletebroadcast');
-    // Route::get('approvedbroadcast/{id}', 'Web\Admin\AdminBroadcastController@approvedbroadcast');
 
     Route::get('admin/deleteuser/{id}', 'Web\Admin\UsersController@deleteuser')->name('admin.deleteuser');
     Route::get('admin/approveduser/{id}', 'Web\Admin\UsersController@approveduser')->name('admin.approveduser');

@@ -9,11 +9,11 @@
       <div class="row">
         <div class="col-sm-12">
           @if (Session::has('flash_message'))
-              {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+         
               <div class="alert alert-success">{{ Session::get('flash_message') }}</div>
           @endif
           @if(Session::has('flash_message_delete'))
-              {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+
               <div class="alert alert-danger">{{ Session::get('flash_message_delete') }}</div>
           @endif
         </div>
@@ -38,13 +38,12 @@
             <div class="col-xs-12 col-sm-6 col-md-6">
               <label for="g-recaptcha">Captcha</label>
               <div class="g-recaptcha" data-sitekey="6Lf9xLoUAAAAANkPex8syVDugeSH73EJeeTeqByn"></div>
-              <?php // echo $recaptchaScriptTag; ?>
-              <?php // echo $recaptcha; ?>
+              
               <p>&nbsp;</p>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
             	<input type="submit" value="SubmitContactQuery" id="SubmitContactQuery">
-              {{-- <input type="submit" value="SUBMIT" id="SubmitContactQuery" name="SubmitContactQuery"/> --}}
+
             </div>
           </div>
         </form>

@@ -5,11 +5,7 @@
 @endpush
 @section('content')
 
-{{-- @php
-    $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
-    $index = rand(0,1);
-    $ip = $ipArr[$index];
-@endphp --}}
+
 
 @php
     $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
@@ -45,9 +41,7 @@
                     $share_url = $broadcast->share_url;
                     $b_description = $broadcast->description;
                     $stream_url = urlencode('http://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
-                    //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
-
-                    // echo $stream_url; 
+                    
 
                     $status = $broadcast->status;
 
@@ -93,37 +87,7 @@
                     src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $broadcast->status;?>&broadcast_image=<?php echo $b_image;?>">
                     </iframe>
 
-                {{-- <iframe src="https://api.hapity.com/widget.php?stream=rtmp://52.17.132.36:1935/vod/{{ $filename }}&title={{ $broadcast['title'] }}&status=offline&bid=1308&broadcast_image={{ $broadcast['broadcast_image'] }}"></iframe> --}}
-
-                <?php /*div href="#" class="bordcast-play image-section">
-                    <div class="broadcast-streaming" id="broadcast-<?php echo $broadcast['id'];?>">Loading Broadcast</div>
-                </div>
-                <script type="text/javascript">
-                    jwplayer("broadcast-<?php echo $broadcast['id'];?>").setup({
-                        sources: [{
-                            file: "<?php  if($broadcast['status'] == "online")
-                         echo str_replace("rtsp","rtmp",$broadcast['stream_url']);
-                         else
-                         echo "rtmp://".$ip.":1935/vod/".$filename;?>"
-                        },{
-                            file:"<?php  if($broadcast['status'] == "online")
-                         echo str_replace(array("rtsp", "rtmp"),"http",$broadcast['stream_url']."/playlist.m3u8");
-                         else
-                         echo "http://".$ip.":1935/vod/".$filename."/playlist.m3u8";?>"
-                        }],
-                    playButton: 'https://www.hapity.com/images/play.png',
-                    height: 380,
-                    width: "100%",
-                    image: '<?php echo $broadcast['broadcast_image'];?>',
-                    skin: 'stormtrooper',
-                    primary: 'flash'
-                    });
-                    $(document).ready(function(){
-                        $(".jw-reset").click(function(){
-                            jwplayer("broadcast-<?php echo $broadcast["id"];?>").play('play');
-                        });
-                    });
-                </script> */ ?>
+               
                 <?php if($broadcast['status'] == "online") : ?>
                     <span class="broadcast-live"></span>
                 <?php else : ?>
@@ -160,40 +124,7 @@
                     </div>
                 </div>
                 <div class="social-like-btn">
-                    <!-- <a href="javascript:void(0)" class="like-button-<?php echo $broadcast['id'];?>">
-                        <?php //if($broadcast['liked']!=true){ ?>
-                            <img src="<?php //echo base_url('assets/'); ?>/images/icon-like1.png" onClick="like_broadcast('<?php // echo $user_id;?>','<?php echo $broadcast['id'];?>')"> 
-                        <?php //}else{
-                                ?>
-                             <img src="<?php //echo base_url('assets/'); ?>/images/icon-unlike.png" onClick="unlike_broadcast('<?php // echo $user_id;?>','<?php echo $broadcast['id'];?>')">
-                        <?php
-                       //}                                            
-                        ?>
-                    </a> -->
                     
-                </div>
-                <!-- <div class="comment-respond">
-                    <ul>
-                        <ul class="comment-<?php // echo $broadcast['id'];?>">
-                            <li>
-                                <figure><img src="<?php //echo $userdata->profile_picture; ?>" alt="#"></figure>
-                                <div class="text" id='<?php // echo $user_id;?>'>
-                                    <input type="text" class='new-comment' id='<?php echo $broadcast['id'];?>' placeholder="Post your comment..."/>
-                                </div>
-                            </li>
-                            <?php // foreach($comments as $comment){?>
-                            <li>
-                                <figure><a href="javascript:void(0)"><img src="<?php // echo $comment['profile_picture'] ;?>" alt="#"></a></figure>
-                                <div class="text">
-                                    <h2><a href="javascript:void(0)"><?php // echo $comment['username'] ;?></a><time><?php // echo $comment['date'] ;?> </time></h2>
-                                    <p><?php // echo $comment['comment'] ;?></p>
-                                </div>
-                            </li>
-                            <?php // } ?>
-                
-                        </ul>
-                    </ul>
-                </div> -->
 
             </div>
         </div>
