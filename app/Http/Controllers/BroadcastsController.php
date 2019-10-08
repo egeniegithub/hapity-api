@@ -141,6 +141,9 @@ class BroadcastsController extends Controller
         $broadcast->status = 'online';
         $broadcast->save();
 
+        $broadcast->share_url = route('broadcast.view', $broadcast->id);
+        $broadcast->save();
+
         $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $request->input('user_id'));
 
         if (!empty($stream_image_name)) {
