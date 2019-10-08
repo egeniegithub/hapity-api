@@ -27,7 +27,7 @@ class BroadcastsController extends Controller
 
         $messages = array(
             'user_id.required' => 'User ID is required.',
-            'video' => 'size:1048576'
+            'video' => 'size:1048576',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
@@ -55,7 +55,6 @@ class BroadcastsController extends Controller
         $broadcast->video_name = '';
         $broadcast->status = 'offline';
         $broadcast->save();
-
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
         $broadcast->save();
@@ -94,7 +93,7 @@ class BroadcastsController extends Controller
         if (!empty($stream_video_info) && isset($stream_video_info['file_server'])) {
             $response['server'] = $stream_video_info['file_server'];
         }
-        
+
         $response['response'] = 'uploadbroadcast';
 
         if (boolval($request->input('post_plugin'))) {
@@ -137,7 +136,7 @@ class BroadcastsController extends Controller
         $broadcast->stream_url = $stream_url;
         $broadcast->share_url = '';
         $broadcast->video_name = $request->input('stream_url');
-        $broadcast->filename = $request->input('stream_url'). '.mp4';
+        $broadcast->filename = $request->input('stream_url') . '.mp4';
         $broadcast->status = 'online';
         $broadcast->save();
 
@@ -205,12 +204,12 @@ class BroadcastsController extends Controller
             $broadcast->save();
         }
 
-        if ($request->has('geo_location') && !is_null($request->input('geo_location'))  && !empty($request->input('geo_location'))) {
+        if ($request->has('geo_location') && !is_null($request->input('geo_location')) && !empty($request->input('geo_location'))) {
             $broadcast->geo_location = $request->input('geo_location');
             $broadcast->save();
         }
 
-        if ($request->has('description') && !is_null($request->input('description'))  && !empty($request->input('description'))) {
+        if ($request->has('description') && !is_null($request->input('description')) && !empty($request->input('description'))) {
             $broadcast->description = $request->input('description');
             $broadcast->save();
         }
@@ -234,15 +233,17 @@ class BroadcastsController extends Controller
                 unlink($file_path);
             }
 
-            $broadcast->stream_url = $stream_video_info['file_stream_url'];
-            $broadcast->filename = $stream_video_info['file_name'];
-            $broadcast->video_name = $stream_video_info['file_original_name'];
-            $broadcast->save();
+            if ($request->has('video')) {
+                $broadcast->stream_url = $stream_video_info['file_stream_url'];
+                $broadcast->filename = $stream_video_info['file_name'];
+                $broadcast->video_name = $stream_video_info['file_original_name'];
+                $broadcast->save();
+            }
         }
 
         $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $request->input('user_id'));
 
-        if (!empty($stream_image_name) ) {
+        if (!empty($stream_image_name) && $request->has('image')) {
             $broadcast->broadcast_image = $stream_image_name;
             $broadcast->save();
         }
@@ -347,10 +348,10 @@ class BroadcastsController extends Controller
 
             $file_info = !empty($broadcast->filename) ? pathinfo($broadcast->filename) : [];
 
-            $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';            
+            $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
 
-            $stream_url = !empty($broadcast->filename) ? 'http://' . $this->getRandIp() . ':1935/vod/' .  $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
-            if($broadcast->status == 'online') {
+            $stream_url = !empty($broadcast->filename) ? 'http://' . $this->getRandIp() . ':1935/vod/' . $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
+            if ($broadcast->status == 'online') {
                 $stream_url = !empty($broadcast->filename) ? 'rtmp://' . $this->getRandIp() . ':1935/live/' . $broadcast->filename . '/playlist.m3u8' : '';
             }
 
@@ -361,7 +362,7 @@ class BroadcastsController extends Controller
             $broadcastObj['title'] = $broadcast->title;
             $broadcastObj['description'] = $broadcast->description;
             $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
-            $broadcastObj['stream_url'] =  $stream_url;
+            $broadcastObj['stream_url'] = $stream_url;
             $broadcastObj['status'] = $broadcast->status;
             $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg');
             $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
@@ -665,24 +666,24 @@ class BroadcastsController extends Controller
 
     private function make_streaming_server_url($server, $file_name, $live = false)
     {
-       
-            //Making Stream URL
-            $application = $live ? 'live' : 'vod';
-            $protocol = $live ? 'rtmp:' : 'http:';
 
-            $file_info = pathinfo($file_name);
-            $ext = !empty($file_info) ?  $file_info['extension'] : 'mp4';
+        //Making Stream URL
+        $application = $live ? 'live' : 'vod';
+        $protocol = $live ? 'rtmp:' : 'http:';
 
-            $ext = $ext == 'stream' ? 'mp4' : $ext;
+        $file_info = pathinfo($file_name);
+        $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
 
-            if($live == true) {
-                $stream_url =  $protocol . "//" . $server . ":8088/" . $application . "/" . $file_name. '/playlist.m3u8';
-            } else {
-                $stream_url =  $protocol . "//" . $server . ":1935/" . $application . "/" . $ext . ':' . $file_name. '/playlist.m3u8';
-            }
-            
-            return $stream_url;
-        
+        $ext = $ext == 'stream' ? 'mp4' : $ext;
+
+        if ($live == true) {
+            $stream_url = $protocol . "//" . $server . ":8088/" . $application . "/" . $file_name . '/playlist.m3u8';
+        } else {
+            $stream_url = $protocol . "//" . $server . ":1935/" . $application . "/" . $ext . ':' . $file_name . '/playlist.m3u8';
+        }
+
+        return $stream_url;
+
     }
 
     private function handle_video_file_upload($request)
