@@ -23,3 +23,5 @@ yarn-error.log
 
 /public/images/broadcasts
 /public/images/broadcasts/*
+/public/assets/videos
+/public/assets/videos/*

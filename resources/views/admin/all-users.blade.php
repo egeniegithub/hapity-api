@@ -16,15 +16,15 @@
                     </div>
                 </div>
             </div>
-
+            {{-- @php dd($users); @endphp --}}
             <!--Reported Broadcast listing start-->
             @foreach ($users as $user)
                 @if(!in_array($user->id, $reported_user_ids) && !$user->hasRole(SUPER_ADMIN_ROLE_ID))
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="listing-reported-broadcost">
                             <div class="reporting-bc-image reported_user-image">
-                                @if(!empty($user['profile_picture']))
-                                <img src="<?php echo $user['profile_picture']; ?>"/>
+                                @if(!empty($user['profile']['profile_picture']))
+                                <img src="{{ asset('images/profile_pictures'.'/'.$user['profile']['profile_picture'] )}}"/>
                                 @else
                             <img src="{{asset('assets/images/null.png')}}" >
                                 @endif
