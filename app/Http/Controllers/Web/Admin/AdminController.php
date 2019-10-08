@@ -33,17 +33,16 @@ class AdminController extends Controller
         return view('admin.admin-settings');
     }
     public function changePassword(Request $request){
-        $old = $request->oldpass;
-        $new = $request->newpass;
-        $oldpass = md5($old);
-        $newpass = md5($new);
-        $user = User::find(Auth::user()->id)->where('password',$oldpass)->count();
-        if($user > 0){
-            User::find(Auth::user()->id)->where('id',Auth::user()->id)->where('password',$oldpass)->update(['password',$newpass]);
+
+        $newpass = bcrypt($request->newpass);
+        $user = User::find(Auth::user()->id);
+
+        if (\Hash::check($request->oldpass,$user->password)) {
+            $data = array('password' => $newpass);
+            $result = User::where('id',$user->id)->update($data);
             return back()->with('flash_message','Password Update Successfully');
         }else{
-            return back()->with('flash_message_delete','Password Not Match Please Enter Correct Password !');
-        }
-        
+            return back()->with('flash_message_delete','Old Password Is Not Correct Please Enter Correct Password !');
+        }   
     }
 }
