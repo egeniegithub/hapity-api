@@ -128,41 +128,9 @@
                             <h1>Privacy Settings</h1>
                             <span>Change your password or apply privacy on your broadcasts</span>
                         </div>
-                        {{-- <form class="account_form">
-                            <div class="fieldset">
-                                <div class="fields-wrap">
-                                   <ul>
-                                        <li>
-                                            <label>Current Password</label>
-                                            <div class="col_field">
-                                                <div class="col_field1">
-                                                    <input type="password" class="" id='current-password'>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <label>New Password</label>
-                                            <div class="col_field">
-                                                <div class="col_field1">
-                                                    <input type="password" class="" id='new-password'>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <label>Confirm Password</label>
-                                            <div class="col_field" id='{{ auth::user()->id }}'>
-                                                <div class="col_field1">
-                                                    <input type="password" class="" id='confirm-password'>
-                                                </div>
-                                                <input type="submit" class="save_form" value="Save" id='privacy-save' >
-                                            </div>
-                                        </li>
-                                    </ul> 
-                                </div>
-                            </div>
-                        </form> --}}
+
                     </div>
-                    <?php // } ?>
+            
                 </div>
             </div>
         </div>
@@ -189,134 +157,7 @@ $('#account-save').click(function(){
     
        $.loader({className:"blue", content:"<i class='fa fa-refresh fa-spin fa-3x fa-fw margin-bottom loadingclass'></i>"});
         
-       // email = $('#email').val().trim();
-       // username = $('#username').val().trim();
-       // user_id = $('#user_id').val().trim();
-       // // alert($(this).parent());
-       // logintype= $('#login-type').val().trim();
-       // var profile_picture = '';
-
-       //  if($('#is_sensitive').is(':checked')){
-       //      is_sensitive = 'yes';
-       //  } else {
-       //      is_sensitive = 'no';
-       //  }
-       // if(picture_change=='true')
-       //     profile_picture = cropper.getDataURL();
-       // else if(picture_change=='false')
-       //     profile_picture = $('#profile_picture').val();
-       
-       // if(username==''){
-       //     $.loader('close');
-       //      alertify.log('Please enter username.');            
-       //  }
-       // else if(email==''){
-       //     $.loader('close');
-       //      alertify.log('Please enter email address.');            
-       //  }
-       // else if(!validateEmail(email)){
-       //     $.loader('close');
-       //      alertify.alert('Invalid email address, please enter correct email.');
-       //      error = 'true';            
-       // }
-       // else{
-       //  $.ajax({
-       //          type: 'GET',
-       //          url: "{{ url('is_user_username') }}/"+username+"/"+user_id,
-       //          data: {
-       //              username:username,
-       //              user_id:user_id
-       //          },
-       //          success: function(msg){
-       //              if(msg=='true'){
-       //                  $.loader('close');
-       //                   alertify.alert('Username already exist, please choose different username.');
-                         
-       //              }
-       //              else{
-       //                  $.ajax({
-       //                      type: 'GET',
-       //                      url: baseurl+'webservice/is_user_email/',
-       //                      data: {
-       //                          email:email,
-       //                          user_id:user_id
-       //                      },
-       //                      success: function(msg){
-                                
-       //                          if(msg=='true'){
-       //                              $.loader('close');
-       //                              alertify.alert('Email already exist, please choose different email.');
-                                    
-       //                          }
-       //                          else{
-       //                              if(logintype=='simple'){
-       //                                  // alert(email);
-       //                                  // alert(user_id);
-       //                                  // alert(username);
-       //                                  // alert(profile_picture);
-       //                                  // alert(picture_change);
-       //                                  // alert(is_sensitive);
-       //                                  $.ajax({
-       //                                      type: 'POST',
-       //                                      url: baseurl+'main/save_settings/',
-       //                                      data: {
-       //                                          email:email,
-       //                                          user_id:user_id,
-       //                                          username:username,
-       //                                          profile_picture:profile_picture,
-       //                                          type:'account',
-       //                                          picture_change:picture_change,
-       //                                          is_sensitive:is_sensitive
-       //                                      },
-       //                                      success: function(msg){
-       //                                          if(msg=='success'){
-       //                                              $.loader('close');
-       //                                              alertify.alert('Account settings have been successfully changed..');
-       //                                              var url = baseurl+"profile/"+username;
-       //                                              var html = '<a href="'+url+'">'+url+'</a>'
-       //                                              $('.url').html(html);
-       //                                          }
-       //                                          location.reload();
-       //                                      }
-       //                                  });
-
-       //                              }
-       //                              else{
-
-       //                                  $.ajax({
-       //                                      type: 'POST',
-       //                                      url: baseurl+'main/save_settings/',
-       //                                      data: {
-       //                                          email:email,
-       //                                          user_id:user_id,
-       //                                          username:username,
-       //                                          type:'facebook'
-       //                                      },
-       //                                      success: function(msg){
-
-       //                                          if(msg=='success'){
-       //                                              $.loader('close');
-       //                                              alertify.alert('Account settings have been successfully changed.');
-       //                                              var url = baseurl+"profile/"+username;
-       //                                              var html = '<a href="'+url+'">'+url+'</a>'
-       //                                              $('.url').html(html);
-       //                                          }
-
-       //                                          location.reload();
-
-       //                                      }
-       //                                  });
-       //                              }
-       //                          }
-
-       //                      }
-       //                  });
-
-       //              }
-       //          }
-       //      });
-       //  }
-       //  return false;
+   
 }) ;
     </script>
 @endpush

@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            {{-- @php dd($users); @endphp --}}
+
             <!--Reported Broadcast listing start-->
             @foreach ($users as $user)
                 @if(!in_array($user->id, $reported_user_ids) && !$user->hasRole(SUPER_ADMIN_ROLE_ID))

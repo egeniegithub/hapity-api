@@ -25,7 +25,7 @@
                 <img src="{{asset('assets')}}/images/upload-icon-new.png" width="150">
             </div>
             <div class="create-content-form">
-                {{-- <form data-type="create" method="post" action="{{url('create_content_submission')}}" enctype="multipart/form-data"> --}}
+                
                     <form method="post" action="{{route('create_content_submission')}}" enctype="multipart/form-data">
                     @csrf
                     <ul class="title-desc-section">
@@ -33,10 +33,10 @@
                         <li><textarea name="description" id="description" placeholder="Description" required></textarea></li>
                     </ul><!-- title-desc-section -->   
                     <div class="upload-actions">
-                        <!-- <h3>Upload a Video or Picture</h3> -->
+                       
                         <div class="row">
                             <div class="upload-containe col-xs-6 col-sm-6 col-md-4 video-upload-btn" style="position:relative;">
-                                <!-- <span><i class="fa fa-video-camera"></i> Video</span> -->
+                                
                                 <a class='btn-purple' href='javascript:;'>
                                 Upload video
                                 <input type="file" name="video" value="Video" required accept="video/mp4,video/x-m4v,video/*" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" id="video-upload-btn" onchange=''/>
@@ -67,7 +67,7 @@
                     <br />
                     <input id="token" type="hidden" value="{{ auth::user()->profile->auth_key }}" name="token" />
                     <input id="user_id" type="hidden" value="{{ auth::user()->id }}" name="user_id" />
-                    <input {{-- id="create-content-btns" --}} class="btn btn-primary btn-width" type="submit" value="Upload">
+                    <input  class="btn btn-primary btn-width" type="submit" value="Upload">
                 </form>
             </div>
         </div>

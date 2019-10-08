@@ -20,9 +20,7 @@
                         <div class="row">
                             <div class="col-md-7">
                                 <div class="form-group label-cstm">
-                                   <!--  <input type="checkbox" name="" id="senstive-info">
-                                    <label for="senstive-info">&nbsp;&nbsp;Broadcast contains sensitive information</label>
- -->
+                                  
                                     <div class="styled-input-single">
                                         <input type="checkbox" name="fieldset-1" id="senstive-info" />
                                         <label for="senstive-info">Broadcast contains sensitive information</label>
@@ -31,9 +29,7 @@
                             </div>
                             <div class="col-md-5">
                                 <div class="form-group label-cstm">
-                                   <!--  <input type="checkbox" name="" id="embed">
-                                    <label for="embed">&nbsp;&nbsp;Embed into website</label> -->
-
+                                  
                                     <div class="styled-input-single">
                                         <input type="checkbox" name="fieldset-2" id="embed" />
                                         <label for="embed">Embed into website</label>
@@ -184,21 +180,13 @@
                         post_plugin:flag,
                         server_input: '{{$server}}',
                         broadcast_image: bd_image,
-                        // image_ba: $('#bd_image').attr('files'),
                         user_id:'{{ auth::user()->id }}',
                     },
                     success: function (data) {
                         bid = data.broadcast_id;
                         
-                        /*setTimeout(function(){
-                            show_share_icons(data.share_url);
-                        }, 3000);*/
-                        //server = 'rtmp://'+data.server+':1935/live?wozpubuser:Pu8Eg3n3_';
-                        //document['externalInterface'].changeServer(server);
-                        //setTimeout(function(){
                             document['externalInterface'].title(time);
-                        //},2000);
-                        //console.log(server);
+                    
                         setTimeout(function(){
                             document['externalInterface'].record();
                         },3000);

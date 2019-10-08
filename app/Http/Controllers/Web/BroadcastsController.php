@@ -27,7 +27,7 @@ class BroadcastsController extends Controller
     
     public function start_web_cast()
     {
-        $data = User::with('profile')->where('id', Auth::id())->first()->toArray();
+        $data = User::with('profile')->where('id', Auth::id())->first();
 
         $server = $this->server;
 
@@ -36,7 +36,7 @@ class BroadcastsController extends Controller
 
     public function create_content()
     {
-        $data = User::with('profile')->where('id', Auth::id())->first()->toArray();
+        $data = User::with('profile')->where('id', Auth::id())->first();
         return view('create-content', compact('data'));
     }
 
@@ -99,13 +99,12 @@ class BroadcastsController extends Controller
                 $broadcast_data['video_name'] = '';
                 $broadcast_data['broadcast_image'] = $broadcast_image;
                 $broadcast_data['share_url'] = '';
-                // dd($broadcast_data);
+
                 DB::table('broadcasts')->insert($broadcast_data);
                 $broadcast_id = DB::getPdo()->lastInsertId();
 
                 $share_url = URL::to('/view-broadcast') . '/' . $broadcast_id;
                 $data['share_url'] = $share_url;
-                // DB::table('broadcasts')->where('id',$broadcast_id)->update($data);
                 Broadcast::where('id', $broadcast_id)->update($data);
                 $response = array('status' => 'success', 'broadcast_id' => $broadcast_id, 'share_url' => $share_url);
 
@@ -155,20 +154,6 @@ class BroadcastsController extends Controller
                 BroadcastViewer::find($broadcast_id)->delete();
             }
 
-            // $this->config->load('pusher_config');
-            // $this->load->library('Pusher');
-            // $pusher = new Pusher('ed469f4dd7ae71e71eb8', 'df53e45b5e538cf561e4', '129559');
-            // $channel_name = 'Broadcast-' . $broadcast_id;
-            // $event_name = 'Broadcast';
-            // $pusher_data = array('comment' => '',
-            //     'viewer_list' => '',
-            //     'user_name' => '',
-            //     'broadcast_id' => '',
-            //     'user_id' => '',
-            //     'status' => 'close',
-            //     'profile_picture' => '',
-            // );
-            // $pusher->trigger($channel_name, $event_name, $pusher_data);
             $this->make_plugin_call_edit($broadcast_id);
             $result = json_encode($response, true);
             echo $result;
@@ -187,8 +172,7 @@ class BroadcastsController extends Controller
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
             ->rightJoin('plugin_ids as pl', 'pl.user_id', '=', 'u.id')
             ->where('broadcasts.id', $broadcast_id)
-            ->get()
-            ->toArray();
+            ->get();
 
         if (count($broadcast) > 0) {
             foreach ($broadcast as $data) {
@@ -277,7 +261,6 @@ class BroadcastsController extends Controller
                     }
                     if (!empty($data)) {
                         Broadcast::find($broadcast_id)->update($data);
-                        // $this->db->update('broadcast', $data, "id = $broadcast_id");
                     }
                 }
             }
@@ -290,8 +273,7 @@ class BroadcastsController extends Controller
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
             ->rightJoin('plugin_ids as pl', 'pl.user_id', '=', 'u.id')
             ->where('broadcasts.id', $broadcast_id)
-            ->get()
-            ->toArray();
+            ->get();
         if (count($broadcast) > 0) {
             foreach ($broadcast as $data) {
                 $title = $data['title'];
@@ -369,7 +351,7 @@ class BroadcastsController extends Controller
     public function edit_broadcast_content($broadcast_id)
     {
         if (User::find(Auth::user()->id)->exists() && Auth::user()->id != " " && Auth::user()->id != null) {
-            $broadcast_data = Broadcast::find($broadcast_id)->toArray();
+            $broadcast_data = Broadcast::find($broadcast_id);
             return view('edit-content', compact('broadcast_data'));
         } else {
             return back();
@@ -486,7 +468,7 @@ class BroadcastsController extends Controller
             $info = pathinfo($video_file->getClientOriginalName());
             $ext = $info['extension'];
             $filename = $stream_urlx . "." . $ext;
-            // $path = storage_path('app\public\broadcast');
+
             $path = base_path('wowza_store');
             $video_path = $video_file->move($path, $filename);
             //Making Stream URL
@@ -496,7 +478,7 @@ class BroadcastsController extends Controller
             $stream_url .= ":1935/live/" . $stream_urlx;
             $update_broad['stream_url'] = $stream_url;
             $update_broad['filename'] = $filename;
-            $streamURL = Broadcast::where(['id' => $broadcast_id])->first()->toArray();
+            $streamURL = Broadcast::where(['id' => $broadcast_id])->first();
             $filename = $streamURL['filename'];
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $filename);
             if (is_file($file_path)) {
@@ -511,22 +493,22 @@ class BroadcastsController extends Controller
             $ext = $info['extension'];
             $thumbnail_image = Str::random(6) . '_' . now()->timestamp . '.' . $ext;
             $path = public_path('images/broadcasts/' . Auth::user()->id . DIRECTORY_SEPARATOR);
-            // $path = storage_path('app\public');
+
             $file->move($path, $thumbnail_image);
             $update_broad['broadcast_image'] = $thumbnail_image;
-            $streamURL = Broadcast::where(['id' => $broadcast_id])->first()->toArray();
+            $streamURL = Broadcast::where(['id' => $broadcast_id])->first();
             $filename = $streamURL['broadcast_image'];
 
             $file_path = public_path('images/broadcasts' . DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $broadcast_id . DIRECTORY_SEPARATOR . $filename);
-            // dd($file_path);
+
             if (is_file($file_path)) {
                 unlink($file_path);
             }
 
         }
-        // dd($request->all());
+
         Broadcast::find($broadcast_id)->update($update_broad);
-        // $broadcast->update($update_broad);
+
         if (isset($input['token']) && !empty($input['token'])) {
             $this->make_plugin_call_edit($broadcast_id, Auth::user()->id);
         }
@@ -541,25 +523,11 @@ class BroadcastsController extends Controller
         if (!empty($broadcast)) {
             if ($user_id == '') {
 
-                // $data['APP_ID'] = $this->config->item('APP_ID');
-                // $data['APP_KEY'] = $this->config->item('APP_KEY');
-                // $data['APP_SECRET'] = $this->config->item('APP_SECRET');
                 $filename = $this->get_name_from_link($broadcast['stream_url']);
                 return view('view-broadcast', compact('broadcast', 'data'));
             } else {
-                // $data['notifications'] = $this->get_notifications($user_id);
-                // $data['notification_count'] = $this->get_notification_count($user_id);
-                // $app_id = $this->config->item('APP_ID');
-                // $app_key = $this->config->item('APP_KEY');
-                // $app_secret = $this->config->item('APP_SECRET');
-                // $pusher = new Pusher( $app_key, $app_secret, $app_id, array( 'encrypted' => true ) );
-                // $data['APP_ID'] = $this->config->item('APP_ID');
-                // $data['APP_KEY'] = $this->config->item('APP_KEY');
-                // $data['APP_SECRET'] = $this->config->item('APP_SECRET');
+      
                 $filename = $this->get_name_from_link($broadcast['stream_url']);
-                // $this->load->view('header',$data['broadcast']);
-                // $this->load->view('view-broadcast',$data);
-                // $this->load->view('footer');
             }
             return view('view-broadcast', compact('broadcast', 'filename'));
         } else {
@@ -696,7 +664,7 @@ class BroadcastsController extends Controller
         $user_id = $request->user_id;
         $stream_id = $request->stream_id;
      
-        $streamURL = Broadcast::where(['id' => $stream_id])->first()->toArray();
+        $streamURL = Broadcast::where(['id' => $stream_id])->first();
         $filename = $streamURL['filename'];
         $broadcast_image = $streamURL['broadcast_image'];
         Broadcast::where('user_id', $user_id)->where(['id' => $stream_id])->delete();

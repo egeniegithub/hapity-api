@@ -8,12 +8,7 @@
     <link rel="stylesheet" href="{{asset('assets/admin')}}/css/alertify/themes/default.css">
     <link rel="stylesheet" href="{{asset('assets/admin')}}/css/alertify/alertify.rtl.css">
     
-    <?php
-    /* ?>
-    <script src="{{asset('/assets/admin')}}/js/jwplayer.js"></script> */ ?>
-    
-<!--    <script type="text/javascript">jwplayer.key="fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=";</script>-->
-    <!-- <script type="text/javascript">jwplayer.key="GP79dCbSwylDzSWRktMgkdmgH5moDV+P4R6k3w==";</script> -->
+
     <script src="{{asset('/assets/admin')}}/js/jquery.js"></script>
     <script src="{{asset('/assets/admin')}}/js/functions.js"></script>
     <script src="{{asset('/assets/admin')}}/js/bootstrap.min.js"></script>

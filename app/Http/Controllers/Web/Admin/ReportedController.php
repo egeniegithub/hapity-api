@@ -18,12 +18,10 @@ class ReportedController extends Controller
     }
     public function reportedBroadcasts(){
         $reported_broadcasts = ReportBroadcast::with('broadcast')->paginate('20');
-        // dd($reported_broadcasts);
         return view('admin.reported-broadcast',compact('reported_broadcasts'));
     }
     public function reportedUsers(){
         $reported_users = User::with('profile','reportedUser')->paginate('20');
-        // dd(count($reported_users[0]['reportedUser']));
         if(isset($reported_users[0]['reportedUser']) && count($reported_users[0]['reportedUser']) > 0){
 
         }else{
