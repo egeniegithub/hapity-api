@@ -23,14 +23,15 @@
     <div class="clearfix"></div>
 
     <div class="profile-section-main">
+        
     <div class="container">
             <div class="flash-error col-xs-12 col-sm-12 col-md-12" style="display: none;">Flash player is not supported by your browser, you need flash installed to see Broadcast Videos</div>
             <div class="col-xs-12 col-sm-3 col-md-3">
                 <div class="profile-section-disable">
                     <div class="profile-picture">
                         <figure>
-                          @if(isset($userdata->profile_picture) && !empty($userdata->profile_picture))
-                            <img src="{{asset('images/'.$userdata->profile_picture)}}">
+                          @if(isset(Auth::user()->profile->profile_picture) && !empty(Auth::user()->profile->profile_picture))
+                            <img src="{{asset('images/profile_pictures/'.Auth::user()->profile->profile_picture)}}">
                           @else
                              <img src="{{ asset('assets/images/null.png') }}">
                           @endif
@@ -38,8 +39,8 @@
                         <div class="text">
                             <h2>
                                 <a href="{{route('settings')}}">
-                                  @if(isset($userdata->username))
-                                    {{ $userdata->username }}
+                                  @if(Auth::user()->username)
+                                    {{ Auth::user()->username }}
                                   @endif
                                 </a>
                             </h2>
@@ -109,7 +110,7 @@
                                 //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8 
                                 //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream%2Fplaylist.m3u8
 
-                                echo $stream_url; 
+                                // echo $stream_url; 
 
                                 $status = $broadcast->status;
 
@@ -246,9 +247,11 @@
                                         </header>
                                         <div class="modal-body">
                                             <div class="embedcode-modal-innser">
-                                                <textarea readonly=""><iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                                <textarea readonly="">
+                                                    <iframe height="600" width="100%" scrolling="no" frameborder="0" 
                                                     src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $broadcast->status;?>&broadcast_image=<?php echo $b_image;?>">
-                                                    </iframe></textarea>                        
+                                                    </iframe>
+                                                </textarea>                        
                                             </div>
                                         </div>
                                     </div>

@@ -66,7 +66,11 @@
 
                 <ul class="post-options clearfix share-with-icons-live">
                     <li class="username">
-                        <img src="{{ auth::user()->profile->profile_picture }}">
+                            @if(isset(auth::user()->profile->profile_picture) && !empty(auth::user()->profile->profile_picture))
+                            <img src="{{asset('images/profile_pictures/'.auth::user()->profile->profile_picture)}}">
+                          @else
+                             <img src="{{ asset('assets/images/null.png') }}">
+                          @endif
                         &nbsp; <span>{{ auth::user()->username }}</span>
                     </li>
                     <li><a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $broadcast['id'];?>" class="code-icon"><i class="fa fa-code"></i></a></li>
@@ -79,9 +83,11 @@
                     </header>
                     <div class="modal-body">
                         <div class="embedcode-modal-innser">
-                            <textarea readonly=""><iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                            <textarea readonly="">
+                                <iframe height="600" width="100%" scrolling="no" frameborder="0" 
                                 src="https://api.hapity.com/widget.php?stream=<?php echo $broadcast['stream_url'];?>&title=<?php echo urlencode($broadcast['title']);?>&status=<?php echo $broadcast['status'];?>&broadcast_image=<?php echo $broadcast['broadcast_image'];?>">
-                                </iframe></textarea>                        
+                                </iframe>
+                            </textarea>                        
                         </div>
                     </div>
                 </div>

@@ -54,7 +54,6 @@ Route::group([
     Route::get('admin/deletebroadcast/{id}', 'Web\Admin\AdminBroadcastController@deleteBroadcast')->name('admin.deletebroadcast');
     // Route::get('approvedbroadcast/{id}', 'Web\Admin\AdminBroadcastController@approvedbroadcast');
 
-    Route::get('admin/users', 'Web\Admin\UsersController@index')->name('admin.users');
     Route::get('admin/deleteuser/{id}', 'Web\Admin\UsersController@deleteuser')->name('admin.deleteuser');
     Route::get('admin/approveduser/{id}', 'Web\Admin\UsersController@approveduser')->name('admin.approveduser');
 
@@ -62,7 +61,7 @@ Route::group([
     Route::get('admin/settings', 'Web\Admin\AdminController@adminSetting')->name('admin.settings');
     Route::post('admin/changepassword', 'Web\Admin\AdminController@changePassword')->name('admin.changepassword');
 
-    Route::get('admin/users', 'Web\Admin\UsersController@index');
+    Route::get('admin/users', 'Web\Admin\UsersController@index')->name('admin.users');
 
     Route::get('admin/reported-broadcast', 'Web\Admin\ReportedController@reportedBroadcasts')->name('admin.reportedBroadcasts');
     Route::get('admin/reported-users', 'Web\Admin\ReportedController@reportedUsers')->name('admin.reportedUsers');
