@@ -123,7 +123,7 @@ class AuthController extends Controller
             $user->roles()->attach(HAPITY_USER_ROLE_ID);
 
             //  Upload Profile Picture if Exists
-            $imageName = $this->handle_base_64_profile_picture($user, $profile_picture);
+            $imageName = $this->handle_image_file_upload($request);
 
             //  Saving User Profile
             $profile = new UserProfile();
@@ -251,7 +251,7 @@ class AuthController extends Controller
 
             $user_profile = UserProfile::where('user_id', $user->id)->first();
 
-            $profile_picture_name = $this->handle_base_64_profile_picture($user, $profile_picture);
+            $profile_picture_name = $this->handle_image_file_upload($request);
 
             if (!empty($imageName)) {
                 $user_profile->profile_picture = $profile_picture_name;
@@ -292,6 +292,47 @@ class AuthController extends Controller
         }
 
         return $imageName;
+    }
+
+    private function handle_image_file_upload($request)
+    {
+        $field_name = 'profile_picture';
+
+        $thumbnail_image = '';
+        if ($request->hasFile($field_name)) {
+            $file = $request->file($field_name);
+            $ext = $file->getClientOriginalExtension();
+            $thumbnail_image = md5(time()) . '.' . $ext;
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR );
+
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+
+            $file->move($path, $thumbnail_image);
+
+            return $thumbnail_image;
+        }
+
+        if ($request->has($field_name) && !empty($request->input($field_name)) && !is_null($request->input($field_name))) {
+            $thumbnail_image = md5(time()) . '.jpg';
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR );
+
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+
+            $base_64_data = $request->input($field_name);
+
+            $base_64_data = str_replace('datagea:im/jpeg;base64,', '', $base_64_data);
+            $base_64_data = str_replace('data:image/png;base64,', '', $base_64_data);
+
+            File::put($path . $thumbnail_image, base64_decode($base_64_data));
+
+            return $thumbnail_image;
+        }
+
+        return $thumbnail_image;
     }
 
     /**
