@@ -39,8 +39,8 @@
                         <div class="text">
                             <h2>
                                 <a href="{{route('settings')}}">
-                                  @if(isset($userdata->username))
-                                    {{ $userdata->username }}
+                                  @if(Auth::user())
+                                    {{ Auth::user()->username }}
                                   @endif
                                 </a>
                             </h2>
