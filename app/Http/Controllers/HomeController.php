@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Libraries\Wowza_lib;
 
 class HomeController extends Controller
 {
@@ -23,7 +24,12 @@ class HomeController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
-    {
+    {   
+
+        $wowza = new Wowza_lib();
+        $wowza->get_server_stats();
+        
+        
         return view('home');
     }
 }

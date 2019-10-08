@@ -95,7 +95,7 @@ class BroadcastsController extends Controller
                 $broadcast_data['created_at'] = $date;
                 $broadcast_data['is_sensitive'] = $is_sensitive;
                 $broadcast_data['status'] = 'offline';
-                $broadcast_data['filename'] = $filename;
+                $broadcast_data['filename'] = $filename.".mp4";
                 $broadcast_data['video_name'] = '';
                 $broadcast_data['broadcast_image'] = $broadcast_image;
                 $broadcast_data['share_url'] = '';
@@ -536,7 +536,7 @@ class BroadcastsController extends Controller
     public function view_broadcast($broadcast_id){
         $filename = '';
         $user_id = \Auth::user()->id;
-        $broadcast = Broadcast::with('broadcastsComments')->where('id', $broadcast_id)->first()->toArray();
+        $broadcast = Broadcast::with('broadcastsComments')->where('id', $broadcast_id)->first();
 
         if (!empty($broadcast)) {
             if ($user_id == '') {
