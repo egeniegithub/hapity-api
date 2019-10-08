@@ -31,18 +31,16 @@ Route::group([
     Route::get('settings', 'Web\SettingController@settings')->name('settings');
     Route::post('user/save_setting', 'Web\SettingController@save_settings')->name('settgins.save');
 
-    Route::get('webcast', 'Web\BroadcastsController@start_web_cast');
-    Route::get('create-content', 'Web\BroadcastsController@create_content');
-
-    Route::post('create_content_submission', 'Web\CreatecontentController@create_content_submission');
-    Route::post('edit_content_submission', 'Web\CreatecontentController@edit_content_submission');
-    Route::post('deleteBroadcast', 'Web\CreatecontentController@deleteBroadcast');
-    Route::get('view-broadcast/{id}', 'Web\CreatecontentController@view_broadcast')->name('broadcast.view');
-
-    Route::post('startwebbroadcast', 'Web\BroadcastsController@startwebbroadcast');
-    Route::post('update_timestamp_broadcast', 'Web\BroadcastsController@update_timestamp_broadcast');
-    Route::post('offline_broadcast', 'Web\BroadcastsController@offline_broadcast');
-    Route::get('edit-content/{broadcast_id}', 'Web\BroadcastsController@edit_broadcast_content');
+    Route::get('webcast', 'Web\BroadcastsController@start_web_cast')->name('webcast');
+    Route::get('create-content', 'Web\BroadcastsController@create_content')->name('create-content');
+    Route::post('create_content_submission', 'Web\BroadcastsController@create_content_submission')->name('create_content_submission');
+    Route::post('edit_content_submission', 'Web\BroadcastsController@edit_content_submission')->name('edit_content_submission');
+    Route::post('deleteBroadcast', 'Web\BroadcastsController@deleteBroadcast')->name('deleteBroadcast');
+    Route::get('view-broadcast/{id}', 'Web\BroadcastsController@view_broadcast')->name('broadcast.view');
+    Route::post('startwebbroadcast', 'Web\BroadcastsController@startwebbroadcast')->name('startwebbroadcast');
+    Route::post('update_timestamp_broadcast', 'Web\BroadcastsController@update_timestamp_broadcast')->name('update_timestamp_broadcast');
+    Route::post('offline_broadcast', 'Web\BroadcastsController@offline_broadcast')->name('offline_broadcast');
+    Route::get('edit-content/{broadcast_id}', 'Web\BroadcastsController@edit_broadcast_content')->name('edit_broadcast_content');
 
     //Route::get('/broadcasts/view/{id}', 'Web\BroadcastsController@view')->name('view_broadcast');
 });
@@ -52,23 +50,22 @@ Route::group([
     'middleware' => 'admin.access',
 ], function ($router) {
 
-    Route::get('admin/broadcast', 'Web\Admin\AdminBroadcastController@index');
-    Route::get('admin/deletebroadcast/{id}', 'Web\Admin\AdminBroadcastController@deleteBroadcast');
+    Route::get('admin/broadcast', 'Web\Admin\AdminBroadcastController@index')->name('admin.broadcast');
+    Route::get('admin/deletebroadcast/{id}', 'Web\Admin\AdminBroadcastController@deleteBroadcast')->name('admin.deletebroadcast');
     // Route::get('approvedbroadcast/{id}', 'Web\Admin\AdminBroadcastController@approvedbroadcast');
 
-    Route::get('admin/users', 'Web\Admin\UsersController@index');
-    Route::get('admin/deleteuser/{id}', 'Web\Admin\UsersController@deleteuser');
-    Route::get('admin/approveduser/{id}', 'Web\Admin\UsersController@approveduser');
+    Route::get('admin/deleteuser/{id}', 'Web\Admin\UsersController@deleteuser')->name('admin.deleteuser');
+    Route::get('admin/approveduser/{id}', 'Web\Admin\UsersController@approveduser')->name('admin.approveduser');
 
     Route::get('admin/dashboard', 'Web\Admin\AdminController@index')->name('admin.dashboard');
-    Route::get('admin/settings', 'Web\Admin\AdminController@adminSetting');
-    Route::post('admin/changepassword', 'Web\Admin\AdminController@changePassword');
+    Route::get('admin/settings', 'Web\Admin\AdminController@adminSetting')->name('admin.settings');
+    Route::post('admin/changepassword', 'Web\Admin\AdminController@changePassword')->name('admin.changepassword');
 
-    Route::get('admin/users', 'Web\Admin\UsersController@index');
+    Route::get('admin/users', 'Web\Admin\UsersController@index')->name('admin.users');
 
-    Route::get('admin/reported-broadcast', 'Web\Admin\ReportedController@reportedBroadcasts');
-    Route::get('admin/reported-users', 'Web\Admin\ReportedController@reportedUsers');
-    Route::get('admin/reportBroadcastDelete/{id}', 'Web\Admin\ReportedController@reportBroadcastDelete');
-    Route::get('admin/reportBroadcastApproved/{id}', 'Web\Admin\ReportedController@reportBroadcastApproved');
+    Route::get('admin/reported-broadcast', 'Web\Admin\ReportedController@reportedBroadcasts')->name('admin.reportedBroadcasts');
+    Route::get('admin/reported-users', 'Web\Admin\ReportedController@reportedUsers')->name('admin.reportedUsers');
+    Route::get('admin/reportBroadcastDelete/{id}', 'Web\Admin\ReportedController@reportBroadcastDelete')->name('admin.reportBroadcastDelete');
+    Route::get('admin/reportBroadcastApproved/{id}', 'Web\Admin\ReportedController@reportBroadcastApproved')->name('admin.reportBroadcastApproved');
 
 });

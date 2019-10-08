@@ -6,35 +6,21 @@
 <div class="profile-page new_design">
   <div class="section-main">
     <div class="container">
-      <?php /* if($successSubmit){
-            echo $successSubmit;
-        } 
-        if(isset($_REQUEST['dev'])){
-      if(function_exists('mail')){
-        echo 'yes exit';
-        $i = mail('test@gmail.com', 'test email', 'test');
-
-        echo '<br />';
-        if($i){
-          echo 'email sent';
-        } else {
-          echo 'email not send';
-        }
-      } else {
-        echo 'no exist';
-      }
-    }
-       */ ?>
-        <?php // if($this->session->flashdata('msg')): ?>
-          <?php // if ($this->session->flashdata('msg') == 'sent') { ?>
-            {{-- <div class="alert alert-success text-center">Your mail has been sent successfully!</div> --}}
-          <?php // } elseif ($this->session->flashdata('msg') == 'no-send') { ?>
-            {{-- <div class="alert alert-danger text-center">There is error in sending mail! Please try again later</div> --}}
-          <?php // } ?>  
-        <?php // endif; ?>
+      <div class="row">
+        <div class="col-sm-12">
+          @if (Session::has('flash_message'))
+              {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+              <div class="alert alert-success">{{ Session::get('flash_message') }}</div>
+          @endif
+          @if(Session::has('flash_message_delete'))
+              {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
+              <div class="alert alert-danger">{{ Session::get('flash_message_delete') }}</div>
+          @endif
+        </div>
+      </div>
       <div class="about-ContactForm-wrapepr-new">
         <h2>SEND US A MESSAGE</h2>
-        <form  method="post" action="{{url('sendmail_contactus')}}">
+        <form  method="post" action="{{route('contact.us.send.email')}}">
         	@csrf
           <div class="form-group row">
             <div class="col-xs-6">

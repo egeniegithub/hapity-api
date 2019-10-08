@@ -28,7 +28,7 @@
     <div class="create-content-wrap">
         <div class="create-content-conatiner" id="create-content-conatiner-wrp">
             <div class="create-content-form">
-            <form method="post" data-type="edit" action="{{url('edit_content_submission')}}" enctype="multipart/form-data">
+            <form method="post" data-type="edit" action="{{route('edit_content_submission')}}" enctype="multipart/form-data">
                 @csrf
                     <ul>
                         <li><input type="text" name="title" placeholder="Title" value="<?php echo $broadcast_data['title']; ?>" id="title" required autocomplete="off"></li>

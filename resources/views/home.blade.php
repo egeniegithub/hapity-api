@@ -25,23 +25,24 @@
     <div class="clearfix"></div>
 
     <div class="profile-section-main">
+        
     <div class="container">
             <div class="flash-error col-xs-12 col-sm-12 col-md-12" style="display: none;">Flash player is not supported by your browser, you need flash installed to see Broadcast Videos</div>
             <div class="col-xs-12 col-sm-3 col-md-3">
                 <div class="profile-section-disable">
                     <div class="profile-picture">
                         <figure>
-                          @if(isset($userdata->profile_picture) && !empty($userdata->profile_picture))
-                            <img src="{{asset('images/'.$userdata->profile_picture)}}">
+                          @if(isset(Auth::user()->profile->profile_picture) && !empty(Auth::user()->profile->profile_picture))
+                            <img src="{{asset('images/profile_pictures/'.Auth::user()->profile->profile_picture)}}">
                           @else
                              <img src="{{ asset('assets/images/null.png') }}">
                           @endif
                         </figure>
                         <div class="text">
                             <h2>
-                                <a href="{{url('main/settings/')}}">
-                                  @if(isset($userdata->username))
-                                    {{ $userdata->username }}
+                                <a href="{{route('settings')}}">
+                                  @if(Auth::user()->username)
+                                    {{ Auth::user()->username }}
                                   @endif
                                 </a>
                             </h2>
@@ -67,8 +68,8 @@
                 </div>
                 <div class="center-content">
                     <div class="start-broadcast">
-                        <a href="{{url('webcast')}}" class=""><i class="fa fa-camera"></i> Start Your Broadcast Here</a>
-                        <a href="{{url('create-content')}}" class="create-content"><i class="fa fa-plus-square "></i> Create Content</a>
+                        <a href="{{route('webcast')}}" class=""><i class="fa fa-camera"></i> Start Your Broadcast Here</a>
+                        <a href="{{route('create-content')}}" class="create-content"><i class="fa fa-plus-square "></i> Create Content</a>
                     </div>
                     <div class="my-bordcasts-container" data-user-id="{{ auth::user()->id}}">
                         @php
@@ -97,10 +98,21 @@
 
                                 $share_url = $broadcast->share_url;
                                 $b_description = $broadcast->description;
-                                $stream_url = urlencode('http://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
-                                //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
 
-                                echo $stream_url; 
+                            
+
+
+                                $stream_url = urlencode('http://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                                if($broadcast->status == 'online') {
+                                    $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );
+                                    
+                                    $stream_url = urlencode('rtmp://' . $ip .  ':1935/live/' .  $file . '/playlist.m3u8') ;
+                                }
+                                //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
+                                //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8 
+                                //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream%2Fplaylist.m3u8
+
+                                // echo $stream_url; 
 
                                 $status = $broadcast->status;
 
@@ -119,11 +131,33 @@
                             @endphp
                             <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
                                 <a href="#" class="bordcast-play image-section">
-                                    @if(!empty($broadcast->broadcast_image)) 
-                                        <img src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$broadcast->broadcast_image) }}" alt="{{ $b_title }}" />
-                                    @else 
+                                    @php 
+                                        $thumbnail_image = $broadcast->broadcast_image;
+                                        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+
+                                    // check if the data is empty 
+                                    @endphp
+                                    @if(!empty($thumbnail_image) && $thumbnail_image != null)
+                                    @php
+                                        // check base64 format
+                                        $explode = explode(',', $thumbnail_image);
+                                        // check if type is allowed
+                                        $format = str_replace(
+                                            ['data:image/', ';', 'base64'], 
+                                            ['', '', '',], 
+                                            $explode[0]
+                                        );  
+                                    @endphp
+                                        @if(in_array($format, $allowedExtensions))
+                                            <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
+                                        @else
+                                            <img src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$thumbnail_image) }}" alt="{{ $b_title }}" />
+                                        @endif
+                                        
+                                    @else
                                         <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
                                     @endif
+
                                     @if($video_file_name)
                                         <div class="video-container video-conteiner-init" style="display:none;">
                                             {{-- <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div> --}}
@@ -209,10 +243,11 @@
                                         <span class="broadcast-offline"></span>
                                     <?php endif; ?>
                                 </div>
-                                <?php 
+                                @php
                                     if($status == 'offline'){
                                         $stream_url = str_replace('/live/', '/vod/', $stream_url);
-                                    } ?>
+                                    } 
+                                @endphp
                                 <ul class="bordcast-edit-actions">
                                     <li class="social-share-action">
                                         <a href="#" data-toggle="modal" data-target="#share-modal"><!-- <i class="fa fa-share-alt-square"></i> -->
@@ -238,7 +273,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li><a href="{{ url('edit-content').'/'.$b_id }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
+                                    <li><a href="{{ route('edit_broadcast_content',$b_id) }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
                                         <img src="{{ asset('assets') }}/images/edit.png" width="28" alt="Edit">
                                     </a></li>
                                     <li><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn"><!-- <i class="fa fa-trash-o"></i> -->
@@ -252,9 +287,11 @@
                                         </header>
                                         <div class="modal-body">
                                             <div class="embedcode-modal-innser">
-                                                <textarea readonly=""><iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                                <textarea readonly="">
+                                                    <iframe height="600" width="100%" scrolling="no" frameborder="0" 
                                                     src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $broadcast->status;?>&broadcast_image=<?php echo $b_image;?>">
-                                                    </iframe></textarea>                        
+                                                    </iframe>
+                                                </textarea>                        
                                             </div>
                                         </div>
                                     </div>
@@ -335,7 +372,7 @@
             jQuery('.delete-model-dismiss').hide();
             jQuery(this).text('Deleting...');
             $.ajax({
-                url: "{{url('deleteBroadcast')}}",
+                url: "{{route('deleteBroadcast')}}",
                 data: {
                     _token: "{{ csrf_token() }}",
                     token: '<?php echo $get_token; ?>',

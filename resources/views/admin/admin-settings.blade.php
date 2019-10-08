@@ -27,7 +27,7 @@
                             </div>
                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
     
-                        <form role="form" method="post" action="{{url('admin/changepassword')}}">
+                        <form role="form" method="post" action="{{route('admin.changepassword')}}">
                             @csrf
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">User Name</label>

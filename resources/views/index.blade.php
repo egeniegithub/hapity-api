@@ -17,7 +17,7 @@
             <div class="col-md-6">
               <div class="hapity-video">
                 <div class="embed-responsive embed-responsive-16by9">
-                  <video controls="" poster="{{ url('assets/images/home-new/hapity.png')}}" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="200" height="140"></video>
+                  <video controls="" poster="{{ asset('assets/images/home-new/hapity.png')}}" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="200" height="140"></video>
                 </div>
               </div>
               <div class="home-transcript">
@@ -43,7 +43,7 @@
                 <div class="col-md-4">
                   <div class="discover-content">
                     <figure>
-                      <img src="{{ url('assets/images/home-new/free-livestream.png')}}">
+                      <img src="{{ asset('assets/images/home-new/free-livestream.png')}}">
                     </figure>
                     <strong>Free livestream plugins</strong>
                     <p>On WordPress, Drupal, Joomla and</p>
@@ -58,8 +58,8 @@
                 <div class="col-md-4">
                   <div class="discover-content">
                     <figure>
-                      <a href="https://itunes.apple.com/mt/app/hapity/id1068976447?mt=8" target="_blank"><img src="{{ url('assets/images/home-new/apple-new.png')}}"></a>
-                      <a href="https://play.google.com/store/apps/developer?id=hapity.com" target="_blank"><img src="{{ url('assets/images/home-new/play-store.png')}}"></a>
+                      <a href="https://itunes.apple.com/mt/app/hapity/id1068976447?mt=8" target="_blank"><img src="{{ asset('assets/images/home-new/apple-new.png')}}"></a>
+                      <a href="https://play.google.com/store/apps/developer?id=hapity.com" target="_blank"><img src="{{ asset('assets/images/home-new/play-store.png')}}"></a>
                     </figure>
                     <strong>Mobile apps</strong>
                     <p>Available from the App Store and</p>
@@ -78,7 +78,7 @@
           <div class="col-md-6">
             <div class="broadcasting-content">
               <h2>One-click broadcasting</h2>
-              <img src="{{ url('assets/images/home-new/green-bar.png')}}">
+              <img src="{{ asset('assets/images/home-new/green-bar.png')}}">
               <p>Get instantly video streaming from your site with just one-click.
                 Getting set up should be the least of your worries, which is why
                 you can install, enable and start sharing your message with the
@@ -89,7 +89,7 @@
           <div class="col-md-6">
             <div class="mobile-section">
               <figure>
-                <img src="{{ url('assets/images/home-new/mobiles.png')}}" class="img-responsive">
+                <img src="{{ asset('assets/images/home-new/mobiles.png')}}" class="img-responsive">
               </figure>
             </div>
           </div>
@@ -102,14 +102,14 @@
           <div class="col-md-6">
             <div class="audience-img">
               <figure>
-                <img src="{{ url('assets/images/home-new/mans.png')}}" class="img-responsive">
+                <img src="{{ asset('assets/images/home-new/mans.png')}}" class="img-responsive">
               </figure>
             </div>
           </div>
           <div class="col-md-6">
             <div class="broadcasting-content">
               <h2>Reach every audience</h2>
-              <img src="{{ url('assets/images/home-new/green-bar.png')}}">
+              <img src="{{ asset('assets/images/home-new/green-bar.png')}}">
               <p>No more scheduling headaches! One-click enables you to post
                 your livestreams on Twitter and Facebook at the same time, with
                 links back to your website. More traffic to your site, more leads
@@ -128,7 +128,7 @@
             <div class="about-hapity">
               <div class="about-hapity-video">
                 <div class="embed-responsive embed-responsive-16by9">
-                  <video controls="" poster="{{ url('assets/images/home-new/hapity.png')}}" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="200" height="140"></video>
+                  <video controls="" poster="{{ asset('assets/images/home-new/hapity.png')}}" src="https://www.hapity.com/assets/videos/Hapity-Final-MP4.mp4" width="200" height="140"></video>
                 </div>
               </div>
               <h2>Your Content. Your Rules.</h2>
@@ -159,16 +159,16 @@
             <div class="logos">
               <ul>
                 <li>
-                  <a href="https://itunes.apple.com/mt/app/hapity/id1068976447?mt=8" target="_blank"><img src="{{ url('assets/images/home-new/apple.png')}}"  class="img-responsive">
+                  <a href="https://itunes.apple.com/mt/app/hapity/id1068976447?mt=8" target="_blank"><img src="{{ asset('assets/images/home-new/apple.png')}}"  class="img-responsive">
                   </a>
                 </li>
                 <li>
                   <a href="https://play.google.com/store/apps/developer?id=hapity.com" target="_blank">
-                    <img src="{{ url('assets/images/home-new/android.png')}}" class="img-responsive" >
+                    <img src="{{ asset('assets/images/home-new/android.png')}}" class="img-responsive" >
                   </a>  
                 </li>
                 <li>
-                  <a href="https://wordpress.org/plugins/wp-hapity/" target="_blank"><img src="{{ url('assets/images/home-new/wordpress.png')}}"  class="img-responsive"></a>
+                  <a href="https://wordpress.org/plugins/wp-hapity/" target="_blank"><img src="{{ asset('assets/images/home-new/wordpress.png')}}"  class="img-responsive"></a>
                 </li>
               </ul>
             </div>

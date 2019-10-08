@@ -15,7 +15,7 @@
                     <div class="section-heading">
                         <p>All Broadcasts</p>
                         <div class="all-bc-search">
-                        <form action="{{url('admin/broadcast')}}">
+                        <form action="{{route('admin.broadcast')}}">
                                 <input name="search" type="text" placeholder="Search broadcast..."/>
                                 <input type="text" name="datetimes" />
                                 <button type="submit"><i class="fa fa-search"></i></button>
@@ -86,7 +86,7 @@
                         </div>
 
                         <div class="report-bc-action-div">
-                        <a href="{{url('admin/deletebroadcast'.'/'.$broadcast['id'])}}" class="delete-block-bc del-all-bc-single">Delete</a>
+                        <a href="{{route('admin.deletebroadcast',$broadcast['id'])}}" class="delete-block-bc del-all-bc-single">Delete</a>
                         </div>
                     </div>
                     <div class="modal fade" id="broadcastModel-<?php echo ($broadcast['id']); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">

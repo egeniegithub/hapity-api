@@ -39,7 +39,7 @@
                                     <img src="{{asset('/assets/admin')}}/images/dashboard-logo.png"/>
                                 </div>
                                 <div class="logout-button">
-                                    <a href="{{url('logout')}}" class="logout">Log out</a>
+                                    <a href="{{route('logout')}}" class="logout">Log out</a>
                                 </div>
     
                             </div>
