@@ -15,10 +15,11 @@
     <script src="{{asset('/assets/admin')}}/js/app.js"></script>
     <script src="{{asset('assets/admin')}}/js/alertify.js"></script>
 
-    <?php
-        echo "<script src='".('../../assets/') ."/js/jwplayer.js'></script>
-                <script type='text/javascript'>jwplayer.key='fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=';</script>";
-    ?>
+    <script src="{{asset('assets/admin')}}/js/jwplayer.js"></script>
+    <script type='text/javascript'>
+        jwplayer.key='fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=';
+    </script>
+   
     @stack('admin-css')
 </head>
 <body id="close-modal">
