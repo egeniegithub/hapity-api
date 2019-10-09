@@ -17,13 +17,14 @@
 
 
 
-@php
+
+{{-- @php
     if($broadcast_data['broadcast_image']){
         $image = $broadcast_data['broadcast_image'];
     } else {
         $image = 'https://www.hapity.com/assets/images/picture.png';
     }
-@endphp
+@endphp --}}
 <div class="profile-page new_design">
     <div class="create-content-wrap">
         <div class="create-content-conatiner" id="create-content-conatiner-wrp">
@@ -61,7 +62,32 @@
                                
                                 </a>
                                   <div class="uploaded-container">
-                                	<img id="upload-image" src="{{ $image }}" />
+                                        @php 
+                                        $thumbnail_image = $broadcast_data['broadcast_image'];
+                                        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+                                    
+                                    // check if the data is empty 
+                                    @endphp
+                                    @if(!empty($thumbnail_image) && $thumbnail_image != null)
+                                        @php
+                                            // check base64 format
+                                            $explode = explode(',', $thumbnail_image);
+                                            // check if type is allowed
+                                            $format = str_replace(
+                                                ['data:image/', ';', 'base64'], 
+                                                ['', '', '',], 
+                                                $explode[0]
+                                            );  
+                                        @endphp
+                                        @if(in_array($format, $allowedExtensions))
+                                            <img id="upload-image" src="{{ $thumbnail_image }}"  />
+                                        @else
+                                            <img id="upload-image" src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$thumbnail_image) }}" />
+                                        @endif
+                                    @else
+                                        <img id="upload-image" src="{{ asset('images/default001.jpg') }}" />
+                                    @endif
+
                                   </div>
                             </div>
                         </div>    
@@ -77,9 +103,6 @@
     </div>
 </div>
 <div class="clearfix"></div>
-
-
-
 
 @endsection
 

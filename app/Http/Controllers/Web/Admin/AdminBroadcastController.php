@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Broadcast;
-use App\ReportBroadcast;
+// use App\ReportBroadcast;
 use App\User;
 use DB; 
 use Auth;
@@ -30,11 +30,11 @@ class AdminBroadcastController extends Controller
                 $from = $datetimes[0];
                 $datetimes[1] = str_replace('/', '-', $datetimes[1]);
                 $to = $datetimes[1];
-                $data = $data->whereBetween('created_at', [$from, $to]);
+                $data = $data->whereBetween('broadcasts.created_at', [$from, $to]);
             }
         }
 
-        $broadcasts = $data->paginate('20');
+        $broadcasts = $data->orderBy('broadcasts.id','DESC')->paginate('20');
         return view('admin.all-broadcast',compact('broadcasts'));
     } 
     public function deleteBroadcast($broadcast_id){
