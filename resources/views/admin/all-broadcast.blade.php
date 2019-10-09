@@ -36,7 +36,7 @@
                     @php 
                     
                     $image_classes = '';
-                    $b_image = !empty($broadcast->broadcast_image) ? $broadcast->broadcast_image : 'https://www.hapity.com/images/default001.jpg';
+                    $b_image = !empty($broadcast->broadcast_image) ? $broadcast->broadcast_image : public_path('images/default001.jpg');
                    
                     $b_id = $broadcast['id'];
                     
@@ -49,12 +49,13 @@
 
                     $video_file_name = $broadcast['filename'];
                     if(!$b_image){
-                        $b_image = 'https://www.hapity.com/images/default001.jpg';
+                        $b_image = public_path('images/default001.jpg');
                     }
                     if($video_file_name){
                         $image_classes = 'has_video';
                     }
                     $status = $broadcast['status'];
+                    // dd($b_image);
                     @endphp
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="listing-reported-broadcost">
@@ -80,7 +81,7 @@
                                         @if(in_array($format, $allowedExtensions))
                                             <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
                                         @else
-                                            <img src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$thumbnail_image) }}" alt="{{ $b_title }}" />
+                                            <img src="{{ asset('images/broadcasts/' . $broadcast['user_id'] . '/'  .$thumbnail_image) }}" alt="{{ $b_title }}" />
                                         @endif
                                         
                                     @else

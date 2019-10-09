@@ -28,7 +28,7 @@ class UsersController extends Controller
         {
             $data = $data->where('username','like','%'.$request['search'].'%');
         }
-        $users = $data->paginate(20);
+        $users = $data->orderBy('users.id','DESC')->paginate(20);
         return view('admin.all-users',compact('users', 'reported_user_ids'));
     }
     public function deleteuser($user_id){
