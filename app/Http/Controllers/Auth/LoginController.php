@@ -188,7 +188,7 @@ class LoginController extends Controller
 
                                 Auth::login($new_user);
 
-                                return redirect()->route('user_home');
+                                return redirect()->route('user.dashboard');
 
                             } else {
                                 $user_existing_social = UserSocial::where('social_id', $fb_user['id'])->where('user_id', $local_user->id)->first();
@@ -204,7 +204,7 @@ class LoginController extends Controller
 
                                 Auth::login($local_user);
 
-                                return redirect()->route('user_home');
+                                return redirect()->route('user.dashboard');
 
                             }
 
