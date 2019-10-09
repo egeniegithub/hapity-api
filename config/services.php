@@ -45,13 +45,13 @@ return [
     ],
 
     'facebook' => [
-        'client_id' => '2852796068070536',
-        'client_secret' => '1a2a74666a133c97279940a48dc476c4',
-        'redirect' => 'https://dev.hapity.local/login/facebook/callback',
+        'client_id' => env('APP_ENV') == 'live' ? '' : '643111566214215',
+        'client_secret' => env('APP_ENV') == 'live' ? '' : 'ab30781433cbe36cadb613e6f4d632fe',
+        'redirect' => env('APP_ENV') == 'live' ? '' : 'https://staging.hapity.com/login/facebook/callback',
     ],
 
     'twitter' => [
-        'client_id' => env('APP_ENV') == 'local' ?   env('DEV_TWITTER_CLIENT_ID') : env('LIVE_TWITTER_CLIENT_ID'),
+        'client_id' => env('APP_ENV') == 'local' ? env('DEV_TWITTER_CLIENT_ID') : env('LIVE_TWITTER_CLIENT_ID'),
         'client_secret' => env('APP_ENV') == 'local' ? env('DEV_TWITTER_CLIENT_SECRET') : env('LIVE_TWITTER_CLIENT_SECRET'),
         'redirect' => '/login/twitter/callback',
     ],
