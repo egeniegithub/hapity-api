@@ -373,10 +373,13 @@ class BroadcastsController extends Controller
         $rules = array(
             'title' => 'required',            
             'description' => 'required',            
-            'video' => 'required',
-            'image' => 'required'
-            
+            'video' => 'required|mimes:mp4|max:528000',
+            'image' =>  'required'
         );
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
 
         $request->validate($rules);
     
@@ -438,19 +441,15 @@ class BroadcastsController extends Controller
     public function edit_content_submission(Request $request){
 
         $rules = array(
-            'title' => 'required',
-            'description' => 'required',
-            'user_id' => 'required',
-            'stream_id' => 'required',
-            'stream_url' => 'required',
+            'title' => 'required',            
+            'description' => 'required',            
+            'video' => 'required|mimes:mp4|max:528000',
         );
-        $messages = array(
-            'title.required' => 'Title is required.',
-            'description.required' => 'Description is required.',
-            'user_id.required' => 'User ID is required.',
-            'stream_id.required' => 'Broadcast ID is required.',
-            'stream_url.required' => 'Stream URL is required.',
-        );
+        $validator = \Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator);
+        }
+
         $update_broad = array();
         $stream_urlx = md5(microtime() . rand()) . ".stream";
         $input = $request->all();

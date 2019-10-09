@@ -41,6 +41,9 @@
                                 Upload video
                                 <input type="file" name="video" value="Video" required accept="video/mp4,video/x-m4v,video/*" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" id="video-upload-btn" onchange=''/>
                                 </a>
+                                @if($errors->has('video')) 
+                                    {{ $errors->first('video') }} 
+                                @endif
                                 <div class="uploaded-container left-uploaded-conteiner">
                                     <video id="upload-video" style="display:none;" autoplay muted>
                                         <source src="" type="video/mp4">
@@ -58,6 +61,9 @@
                                 <input type="file" name="image" required value="Image" accept="image/x-png,image/gif,image/jpeg" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40"  onchange='document.getElementById("upload-image").src = window.URL.createObjectURL(this.files[0])' />
                                
                                 </a>
+                                 @if($errors->has('image')) 
+                                    {{ $errors->first('image') }} 
+                                @endif
                                   <div class="uploaded-container">
                                 	<img id="upload-image" src="https://www.hapity.com/assets/images/picture.png" />
                                   </div>
