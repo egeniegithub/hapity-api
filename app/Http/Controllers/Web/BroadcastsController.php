@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
-use App\BroadcastViewer;
 use App\Broadcast;
+use App\BroadcastViewer;
+use App\Http\Controllers\Controller;
 use App\PluginId;
 use App\User;
 use Auth;
 use DB;
-use URL;
 use File;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Validator;
+use URL;
 
 class BroadcastsController extends Controller
 {
@@ -24,7 +25,7 @@ class BroadcastsController extends Controller
     {
         $this->server = $this->getRandIp();
     }
-    
+
     public function start_web_cast()
     {
         $data = User::with('profile')->where('id', Auth::id())->first();
@@ -95,7 +96,7 @@ class BroadcastsController extends Controller
                 $broadcast_data['created_at'] = $date;
                 $broadcast_data['is_sensitive'] = $is_sensitive;
                 $broadcast_data['status'] = 'offline';
-                $broadcast_data['filename'] = $filename.".mp4";
+                $broadcast_data['filename'] = $filename . ".mp4";
                 $broadcast_data['video_name'] = '';
                 $broadcast_data['broadcast_image'] = $broadcast_image;
                 $broadcast_data['share_url'] = '';
@@ -359,7 +360,8 @@ class BroadcastsController extends Controller
 
     }
 
-    public function getRandIp(){
+    public function getRandIp()
+    {
         if (env('APP_ENV') == 'local') {
             return '72.255.38.246';
         } else {
@@ -369,20 +371,21 @@ class BroadcastsController extends Controller
         }
     }
 
-    public function create_content_submission(Request $request){
+    public function create_content_submission(Request $request)
+    {
         $rules = array(
-            'title' => 'required',            
-            'description' => 'required',            
-            'video' => 'required|mimes:mp4|max:528000',
-            'image' =>  'required'
+            'title' => 'required',
+            'description' => 'required',
+            'video' => 'required|mimes:mp4|size:524288',
+            'image' => 'required',
         );
-        $validator = \Validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
 
         $request->validate($rules);
-    
+
         //Handle file upload;
         $video_name_with_ext = '';
         if ($request->hasFile('video')) {
@@ -417,7 +420,7 @@ class BroadcastsController extends Controller
 
         $user = Auth::user();
         $user_profile = $user->profile()->get();
-        
+
         $broadcast = new Broadcast();
         $broadcast->user_id = Auth::id();
         $broadcast->title = $request->title;
@@ -438,11 +441,12 @@ class BroadcastsController extends Controller
         return redirect::to('dashboard')->with('flash_message', 'Broadcast Uploaded Successfull');
     }
 
-    public function edit_content_submission(Request $request){
+    public function edit_content_submission(Request $request)
+    {
 
         $rules = array(
-            'title' => 'required',            
-            'description' => 'required',            
+            'title' => 'required',
+            'description' => 'required',
             'video' => 'required|mimes:mp4|max:528000',
         );
         $validator = \Validator::make($request->all(), $rules);
@@ -514,7 +518,8 @@ class BroadcastsController extends Controller
         return redirect::to('dashboard')->with('flash_message', 'Broadcast Updated Successfull');
     }
 
-    public function view_broadcast($broadcast_id){
+    public function view_broadcast($broadcast_id)
+    {
         $filename = '';
         $user_id = \Auth::user()->id;
         $broadcast = Broadcast::with('broadcastsComments')->where('id', $broadcast_id)->first();
@@ -525,7 +530,7 @@ class BroadcastsController extends Controller
                 $filename = $this->get_name_from_link($broadcast['stream_url']);
                 return view('view-broadcast', compact('broadcast', 'data'));
             } else {
-      
+
                 $filename = $this->get_name_from_link($broadcast['stream_url']);
             }
             return view('view-broadcast', compact('broadcast', 'filename'));
@@ -534,7 +539,8 @@ class BroadcastsController extends Controller
         }
 
     }
-    public function update_img_broadcast($broadcast_id, $path){
+    public function update_img_broadcast($broadcast_id, $path)
+    {
         $data = array(
             'broadcast_image' => $path,
         );
@@ -542,7 +548,8 @@ class BroadcastsController extends Controller
         return $path;
     }
 
-    public function make_plugin_call_upload($bid, $uid){
+    public function make_plugin_call_upload($bid, $uid)
+    {
 
         $share_url = "";
         $broadcast_id = $bid;
@@ -647,7 +654,8 @@ class BroadcastsController extends Controller
         return $share_url;
     }
 
-    public function get_name_from_link($link){
+    public function get_name_from_link($link)
+    {
         $name = "";
         $token = strtok($link, '/');
         while ($token !== false) {
@@ -659,10 +667,11 @@ class BroadcastsController extends Controller
     }
 
     //params - token, user_id, stream_id, stream_url
-    public function deleteBroadcast(Request $request){
+    public function deleteBroadcast(Request $request)
+    {
         $user_id = $request->user_id;
         $stream_id = $request->stream_id;
-     
+
         $streamURL = Broadcast::where(['id' => $stream_id])->first();
         $filename = $streamURL['filename'];
         $broadcast_image = $streamURL['broadcast_image'];
