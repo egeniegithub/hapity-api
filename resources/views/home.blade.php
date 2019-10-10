@@ -99,14 +99,15 @@
                                 $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                                 $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-                                $stream_url = urlencode('//' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                                $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
                                 if($broadcast->status == 'online') {
                                     $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );                                    
-                                    $stream_url = urlencode('rtmp://' . $ip .  ':1935/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
+                                    $stream_url = urlencode('rtmp://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
                                 }
                                 //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
                                 //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8 
                                 //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream%2Fplaylist.m3u8
+                                //https://media.hapity.com/stage_vod/_definst_/mp4:8e192b3711cfd29cafe41297d9fa725b.stream.mp4/playlist.m3u8
 
                                 //echo $stream_url; 
 
@@ -157,26 +158,9 @@
                                             {{-- <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div> --}}
 
                                             <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
-                                        </div>
-                                        <script>
-                                            jwplayer("w-broadcast-<?php echo $b_id; ?>").setup({
-                                                        
-                                                    file: '{{ $stream_url }}',
-                                                    playButton: "{{ asset('assets')}}/images/play.png",
-                                                    height: 380,
-                                                    width: "100%",
-                                                    image: '{{ $thumbnail_image }}',
-                                                    skin: 'stormtrooper',
-                                                    });
-                                                    
-                                                   /* $(document).ready(function(){
-                                                        $(".jw-reset").click(function(){
-                                                            jwplayer("w-broadcast-<?php echo $b_id; ?>").play('play');
-                                                        });
-                                                    });*/
-                                        </script>
+                                        </div>                                       
 
-                                       {{-- <script>
+                                        <script>
                                             WowzaPlayer.create('w-broadcast-{{ $b_id }}',
                                             {
                                                 "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
@@ -194,7 +178,7 @@
                                                 }
                                             );
 
-                                        </script>  --}}
+                                        </script>
                                     @endif
                                 </a> 
                                 <div class="bordcast-inner-data">
