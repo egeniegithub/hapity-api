@@ -40,7 +40,7 @@
                     $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
                     $share_url = $broadcast->share_url;
                     $b_description = $broadcast->description;
-                    $stream_url = urlencode('http://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                    $stream_url = urlencode('https://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
                     
 
                     $status = $broadcast->status;
