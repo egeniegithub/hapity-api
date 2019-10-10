@@ -9,7 +9,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
-use Validator;
+use Illuminate\Validation\Validator;
 
 class BroadcastsController extends Controller
 {
@@ -197,7 +197,7 @@ class BroadcastsController extends Controller
 
         $user = User::find($request->input('user_id'));
 
-        $broadcast = Broadcast::find($request->input('broadcast_id'));
+        $broadcast = Broadcast::find($request->input(' broadcast_id'));
 
         if ($request->has('title') && !is_null($request->input('title')) && !empty($request->input('title'))) {
             $broadcast->title = $request->input('title');
