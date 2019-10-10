@@ -12,9 +12,9 @@ use DB;
 use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
-use URL;
 
 class BroadcastsController extends Controller
 {
