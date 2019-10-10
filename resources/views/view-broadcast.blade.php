@@ -40,9 +40,12 @@
                     $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
                     $share_url = $broadcast->share_url;
                     $b_description = $broadcast->description;
-                    $stream_url = urlencode('https://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
-                    
 
+                    $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+                    $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+
+                    $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app . '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                    
                     $status = $broadcast->status;
 
                     $video_file_name = $broadcast->filename;

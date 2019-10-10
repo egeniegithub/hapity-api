@@ -122,18 +122,26 @@
                                 </div>
                                 <div class="modal-body">
                                     <div id="broadcast-<?php echo $broadcast['id'];?>" class="player"></div>
+
+                                    @php
+                                        
+                                        $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+                                        $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+
+                                    @endphp
+
                                     <script type="text/javascript">
                                         jwplayer("broadcast-<?php echo $broadcast['id'];?>").setup({
                                             sources: [{
                                                 file: "<?php  if($status == "online")
                                              echo str_replace("rtsp","rtmp",$stream_url);
                                              else
-                                             echo "rtmp://".$ip.":1935/vod/".$video_file_name;?>"
+                                             echo "rtmp://".$ip.":1935/" . $live_app . "/".$video_file_name;?>"
                                             },{
                                                 file:"<?php  if($status == "online")
                                              echo str_replace(array("rtsp","rtmp"),"https",$stream_url);
                                              else
-                                             echo "https://".$ip.":1935/vod/".$video_file_name;?>"
+                                             echo "https://".$ip.":1935/" . $vod_app .  "/".$video_file_name;?>"
                                             }],
                                             playButton: 'https://www.hapity.com/images/play.png',
                                             height: 380,
