@@ -668,8 +668,10 @@ class BroadcastsController extends Controller
     {
 
         //Making Stream URL
-        $application = $live ? 'live' : 'vod';
-        $protocol = $live ? 'rtmp:' : 'http:';
+        $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+        $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+
+        $protocol = $live ? 'rtmp:' : 'http:';        
 
         $file_info = pathinfo($file_name);
         $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
@@ -677,9 +679,9 @@ class BroadcastsController extends Controller
         $ext = $ext == 'stream' ? 'mp4' : $ext;
 
         if ($live == true) {
-            $stream_url = $protocol . "//" . $server . ":8088/" . $application . "/" . $file_name . '/playlist.m3u8';
+            $stream_url = $protocol . "//" . $server . ":8088/" . $live_app . "/" . $file_name . '/playlist.m3u8';
         } else {
-            $stream_url = $protocol . "//" . $server . ":1935/" . $application . "/" . $ext . ':' . $file_name . '/playlist.m3u8';
+            $stream_url = $protocol . "//" . $server . ":1935/" . $vod_app . "/" . $ext . ':' . $file_name . '/playlist.m3u8';
         }
 
         return $stream_url;
