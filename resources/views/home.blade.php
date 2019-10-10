@@ -96,14 +96,13 @@
                                 $share_url = $broadcast->share_url;
                                 $b_description = $broadcast->description;
 
-                            
+                                $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+                                $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-
-                                $stream_url = urlencode('https://' . $ip .  ':1935/vod/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                                $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $file_name . '/playlist.m3u8') ;
                                 if($broadcast->status == 'online') {
-                                    $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );
-                                    
-                                    $stream_url = urlencode('rtmp://' . $ip .  ':1935/live/' .  $file . '/playlist.m3u8') ;
+                                    $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );                                    
+                                    $stream_url = urlencode('rtmp://' . $ip .  ':1935/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
                                 }
                                 //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
                                 //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8 
