@@ -243,7 +243,7 @@ class BroadcastsController extends Controller
 
         $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $broadcast->user_id);
 
-        if (!empty($stream_image_name)) {            
+        if (!empty($stream_image_name)) {
             $broadcast->broadcast_image = $stream_image_name;
             $broadcast->save();
         }
@@ -344,15 +344,18 @@ class BroadcastsController extends Controller
 
         $broadcasts = [];
 
+        $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+        $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+
         foreach ($allUserBroadcast as $key => $broadcast) {
 
             $file_info = !empty($broadcast->filename) ? pathinfo($broadcast->filename) : [];
 
             $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
 
-            $stream_url = !empty($broadcast->filename) ? 'http://' . $this->getRandIp() . ':1935/vod/' . $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
+            $stream_url = !empty($broadcast->filename) ? 'http://' . $this->getRandIp() . ':1935/' . $vod_app . '/' . $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
             if ($broadcast->status == 'online') {
-                $stream_url = !empty($broadcast->filename) ? 'rtmp://' . $this->getRandIp() . ':1935/live/' . $broadcast->filename . '/playlist.m3u8' : '';
+                $stream_url = !empty($broadcast->filename) ? 'rtmp://' . $this->getRandIp() . ':1935/' . $live_app . '/' . $broadcast->filename . '/playlist.m3u8' : '';
             }
 
             $broadcastObj = [];
@@ -671,7 +674,7 @@ class BroadcastsController extends Controller
         $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
         $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
 
-        $protocol = $live ? 'rtmp:' : 'http:';        
+        $protocol = $live ? 'rtmp:' : 'http:';
 
         $file_info = pathinfo($file_name);
         $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
@@ -774,13 +777,13 @@ class BroadcastsController extends Controller
 
         if (!empty($image) && !is_null($image)) {
             $thumbnail_image = md5(time()) . '.jpg';
-            
+
             $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
 
             if (!is_dir($path)) {
                 mkdir($path);
             }
-            
+
             $base_64_data = $request->input('image');
 
             $base_64_data = str_replace('datagea:im/jpeg;base64,', '', $base_64_data);
@@ -790,8 +793,6 @@ class BroadcastsController extends Controller
 
             return $thumbnail_image;
         }
-
-        
 
         return $thumbnail_image;
     }
