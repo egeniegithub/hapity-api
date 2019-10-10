@@ -8,7 +8,8 @@ use App\ReportBroadcast;
 use App\ReportUser;
 use App\Broadcast;
 use App\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -37,7 +38,7 @@ class AdminController extends Controller
         $newpass = bcrypt($request->newpass);
         $user = User::find(Auth::user()->id);
 
-        if (\Hash::check($request->oldpass,$user->password)) {
+        if (Hash::check($request->oldpass,$user->password)) {
             $data = array('password' => $newpass);
             $result = User::where('id',$user->id)->update($data);
             return back()->with('flash_message','Password Update Successfully');

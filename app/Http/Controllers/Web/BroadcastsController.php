@@ -7,7 +7,6 @@ use App\BroadcastViewer;
 use App\Http\Controllers\Controller;
 use App\PluginId;
 use App\User;
-use File;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -389,7 +388,7 @@ class BroadcastsController extends Controller
         //Handle file upload;
         $video_name_with_ext = '';
         if ($request->hasFile('video')) {
-            $video_file = $request->file('video');
+            $video_file = $request->file()('video');
 
             //Generate File name
             $file_name = md5(time()) . '.stream';

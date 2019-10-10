@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Web;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Validator;
+
 use App\User;
 use App\UserProfile;
 use App\UserSocial;
+use Illuminate\Validation\Validator;
 
 class TwitterController extends Controller
 {

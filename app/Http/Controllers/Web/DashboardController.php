@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Broadcast;
 use App\Http\Controllers\Controller;
 use App\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {

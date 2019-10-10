@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Broadcast;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Broadcast;
-// use App\ReportBroadcast;
 use App\User;
-use DB; 
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class AdminBroadcastController extends Controller
 {

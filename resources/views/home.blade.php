@@ -99,7 +99,7 @@
                                 $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                                 $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-                                $stream_url = urlencode('http://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                                $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
                                 if($broadcast->status == 'online') {
                                     $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );                                    
                                     $stream_url = urlencode('rtmp://' . $ip .  ':1935/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
@@ -159,6 +159,33 @@
                                             <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
                                         </div>
                                         <script>
+                                            jwplayer("w-broadcast-<?php echo $b_id; ?>").setup({
+                                                        sources: [{
+                                                            file: "<?php  if($status == "online")
+                                                         echo $stream_url;
+                                                         else
+                                                         echo "rtmp://".$ip.":1935/vod/".$video_file_name;?>"
+                                                        },{
+                                                            file:"<?php  if($status == "online")
+                                                         echo $stream_url;
+                                                         else
+                                                         echo "https://".$ip.":1935/vod/".$video_file_name."/playlist.m3u8";?>"
+                                                        }],
+                                                    playButton: "{{ asset('assets')}}/images/play.png",
+                                                    height: 380,
+                                                    width: "100%",
+                                                    image: '{{ $thumbnail_image }}',
+                                                    skin: 'stormtrooper',
+                                                    });
+                                                    
+                                                   /* $(document).ready(function(){
+                                                        $(".jw-reset").click(function(){
+                                                            jwplayer("w-broadcast-<?php echo $b_id; ?>").play('play');
+                                                        });
+                                                    });*/
+                                        </script>
+
+                                       {{-- <script>
                                             WowzaPlayer.create('w-broadcast-{{ $b_id }}',
                                             {
                                                 "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
@@ -176,7 +203,7 @@
                                                 }
                                             );
 
-                                        </script>
+                                        </script>  --}}
                                     @endif
                                 </a> 
                                 <div class="bordcast-inner-data">

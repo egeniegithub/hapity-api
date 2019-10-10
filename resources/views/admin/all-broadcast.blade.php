@@ -27,9 +27,10 @@
                 <!--Reported Broadcost listing start-->
 
                 @php
-                // $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
-                // $index = rand(0,1);
-                $ip = '52.18.33.132';//$ipArr[$index];  
+                    $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+                    $index = rand(0,1);                            
+                    $ip =  env('APP_ENV') == 'local' ? '192.168.20.251' : $ipArr[$index];
+
                 @endphp
                 @if(isset($broadcasts) && !empty($broadcasts))
                 @foreach ($broadcasts as $broadcast) 
@@ -45,7 +46,24 @@
                     } else {
                         $b_title = "Untitled";
                     }
-                    $stream_url = $broadcast['stream_url'];
+                    $file_info = pathinfo($broadcast['filename']);
+
+                    $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
+
+                    $share_url = $broadcast['share_url'];
+                    $b_description = $broadcast['description'];
+
+                    $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+                    $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+
+                    $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast['filename'] . '/playlist.m3u8') ;
+                    if($broadcast->status == 'online') {
+                        $file = pathinfo($broadcast['filename'], PATHINFO_FILENAME );                                    
+                        $stream_url = urlencode('rtmp://' . $ip .  ':1935/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
+                    }
+
+                    // $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast['stream_url'] . '/playlist.m3u8') ;
+                    // $stream_url = $broadcast['stream_url'];
 
                     $video_file_name = $broadcast['filename'];
                     if(!$b_image){
@@ -134,19 +152,19 @@
                                         jwplayer("broadcast-<?php echo $broadcast['id'];?>").setup({
                                             sources: [{
                                                 file: "<?php  if($status == "online")
-                                             echo str_replace("rtsp","rtmp",$stream_url);
+                                             echo $stream_url;
                                              else
                                              echo "rtmp://".$ip.":1935/" . $live_app . "/".$video_file_name;?>"
                                             },{
                                                 file:"<?php  if($status == "online")
-                                             echo str_replace(array("rtsp","rtmp"),"https",$stream_url);
+                                             echo $stream_url;
                                              else
-                                             echo "http://".$ip.":1935/" . $vod_app .  "/".$video_file_name;?>"
+                                             echo "https://".$ip.":1935/" . $vod_app .  "/".$video_file_name;?>"
                                             }],
-                                            playButton: 'https://www.hapity.com/images/play.png',
+                                            playButton: "{{ asset('assets')}}/images/play.png",
                                             height: 380,
                                             width: "100%",
-                                            image: '<?php echo $b_image; ?>',
+                                            image: '{{ $thumbnail_image }}',
                                             skin: 'stormtrooper',
                                         });
                                        
