@@ -44,7 +44,7 @@
                     $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                     $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-                    $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app . '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                    $stream_url = urlencode('http://' . $ip .  ':1935/' . $vod_app . '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
                     
                     $status = $broadcast->status;
 

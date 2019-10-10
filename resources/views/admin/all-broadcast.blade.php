@@ -141,7 +141,7 @@
                                                 file:"<?php  if($status == "online")
                                              echo str_replace(array("rtsp","rtmp"),"https",$stream_url);
                                              else
-                                             echo "https://".$ip.":1935/" . $vod_app .  "/".$video_file_name;?>"
+                                             echo "http://".$ip.":1935/" . $vod_app .  "/".$video_file_name;?>"
                                             }],
                                             playButton: 'https://www.hapity.com/images/play.png',
                                             height: 380,
