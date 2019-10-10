@@ -8,7 +8,6 @@ use App\PluginId;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Input;
 use Illuminate\Validation\Validator;
 
 class BroadcastsController extends Controller
