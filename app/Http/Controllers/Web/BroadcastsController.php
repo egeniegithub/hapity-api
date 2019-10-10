@@ -10,7 +10,6 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Validator;
@@ -375,20 +374,15 @@ class BroadcastsController extends Controller
         $rules = array(
             'title' => 'required',
             'description' => 'required',
-            'video' => 'required|mimes:mp4|size:524288',
+            'video' => 'required|mimes:mp4|max:524288',
             'image' => 'required',
         );
-        $validator = Validator::make($request->all(), $rules);
-        if ($validator->fails()) {
-            return back()->withErrors($validator);
-        }
-
-        $request->validate($rules);
+        $request->validate($rules);       
 
         //Handle file upload;
         $video_name_with_ext = '';
         if ($request->hasFile('video')) {
-            $video_file = $request->file()('video');
+            $video_file = $request->file('video');
 
             //Generate File name
             $file_name = md5(time()) . '.stream';
@@ -437,7 +431,7 @@ class BroadcastsController extends Controller
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
         $broadcast->save();
 
-        return redirect::to('dashboard')->with('flash_message', 'Broadcast Uploaded Successfull');
+        return redirect()->to('dashboard')->with('flash_message', 'Broadcast Uploaded Successfull');
     }
 
     public function edit_content_submission(Request $request)
@@ -514,7 +508,7 @@ class BroadcastsController extends Controller
         if (isset($input['token']) && !empty($input['token'])) {
             $this->make_plugin_call_edit($broadcast_id, Auth::user()->id);
         }
-        return redirect::to('dashboard')->with('flash_message', 'Broadcast Updated Successfull');
+        return redirect()->to('dashboard')->with('flash_message', 'Broadcast Updated Successfull');
     }
 
     public function view_broadcast($broadcast_id)

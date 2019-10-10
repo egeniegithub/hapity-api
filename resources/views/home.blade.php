@@ -99,7 +99,7 @@
                                 $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                                 $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-                                $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                                $stream_url = urlencode('//' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
                                 if($broadcast->status == 'online') {
                                     $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );                                    
                                     $stream_url = urlencode('rtmp://' . $ip .  ':1935/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
@@ -160,17 +160,8 @@
                                         </div>
                                         <script>
                                             jwplayer("w-broadcast-<?php echo $b_id; ?>").setup({
-                                                        sources: [{
-                                                            file: "<?php  if($status == "online")
-                                                         echo $stream_url;
-                                                         else
-                                                         echo "rtmp://".$ip.":1935/vod/".$video_file_name;?>"
-                                                        },{
-                                                            file:"<?php  if($status == "online")
-                                                         echo $stream_url;
-                                                         else
-                                                         echo "https://".$ip.":1935/vod/".$video_file_name."/playlist.m3u8";?>"
-                                                        }],
+                                                        
+                                                    file: '{{ $stream_url }}',
                                                     playButton: "{{ asset('assets')}}/images/play.png",
                                                     height: 380,
                                                     width: "100%",
