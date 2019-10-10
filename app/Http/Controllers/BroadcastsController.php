@@ -27,7 +27,7 @@ class BroadcastsController extends Controller
 
         $messages = array(
             'user_id.required' => 'User ID is required.',
-            'video' => 'size:1048576',
+            'video' => 'size:524288|mimes:mp4',
         );
 
         $validator = Validator::make($request->all(), $rules, $messages);
