@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use App\User;
 use App\UserProfile;
 use App\UserSocial;
-use Illuminate\Validation\Validator;
+use \Validator;
 
 class TwitterController extends Controller
 {
