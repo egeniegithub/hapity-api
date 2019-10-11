@@ -23,6 +23,9 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Auth::routes();
 
+Route::get('view-broadcast/{id}', 'Web\BroadcastsController@view_broadcast')->name('broadcast.view');
+Route::get('broadcast/views/update-count/{id}', 'Web\BroadcastsController@update_view_count')->name('broadcast.update.view.count');
+
 Route::group([
     'middleware' => 'user.access',
 ], function ($router) {
@@ -36,7 +39,7 @@ Route::group([
     Route::post('create_content_submission', 'Web\BroadcastsController@create_content_submission')->name('create_content_submission');
     Route::post('edit_content_submission', 'Web\BroadcastsController@edit_content_submission')->name('edit_content_submission');
     Route::post('deleteBroadcast', 'Web\BroadcastsController@deleteBroadcast')->name('deleteBroadcast');
-    Route::get('view-broadcast/{id}', 'Web\BroadcastsController@view_broadcast')->name('broadcast.view');
+    
     Route::post('startwebbroadcast', 'Web\BroadcastsController@startwebbroadcast')->name('startwebbroadcast');
     Route::post('update_timestamp_broadcast', 'Web\BroadcastsController@update_timestamp_broadcast')->name('update_timestamp_broadcast');
     Route::post('offline_broadcast', 'Web\BroadcastsController@offline_broadcast')->name('offline_broadcast');

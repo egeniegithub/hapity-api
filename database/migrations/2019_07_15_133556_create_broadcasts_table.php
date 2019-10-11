@@ -28,6 +28,7 @@ class CreateBroadcastsTable extends Migration
             $table->bigInteger('is_deleted')->default(0);
             $table->longText('filename')->nullable();
             $table->string('is_sensitive', 10)->nullable();
+            $table->bigInteger('view_count')->nullable();
             $table->bigInteger('post_id')->nullable();
             $table->bigInteger('post_id_joomla')->nullable();
             $table->bigInteger('post_id_drupal')->nullable();
