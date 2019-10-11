@@ -192,9 +192,7 @@ class BroadcastsController extends Controller
                 'message' => $messages[0],
             );
             return response()->json($response);
-        }
-
-        $user = User::find($request->input('user_id'));
+        }        
 
         $broadcast = Broadcast::find($request->input(' broadcast_id'));
 
