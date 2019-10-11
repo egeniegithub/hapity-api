@@ -178,6 +178,25 @@
                                                 }
                                             );
 
+                                            var my_player = WowzaPlayer.get('w-broadcast-{{ $b_id }}'); 
+
+                                            playListener = function ( playEvent ) {
+                                                var broadcast_id = '{{ $b_id }}';
+
+                                                var my_request;
+
+                                                my_request = $.ajax({
+                                                    url: "{{ route('broadcast.update.view.count', $b_id) }}",
+                                                    type: 'GET'
+                                                });
+
+                                                my_request.done(function(response){
+                                                    console.log(response);
+                                                });
+
+                                            };
+                                            my_player.onPlay( playListener );
+
                                         </script>
                                     @endif
                                 </a> 

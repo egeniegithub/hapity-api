@@ -691,4 +691,19 @@ class BroadcastsController extends Controller
         return response()->json($response);
 
     }
+
+    public function update_view_count(Request $request, $id) {
+        $count = 0; 
+        if($id > 0) {
+            $broadcast = Broadcast::find($id);
+
+            $count = $broadcast->view_count + 1;
+
+            $broadcast->view_count = $count;
+            $broadcast->save();  
+        
+        }
+
+        return response()->json(['view_count' => $count]);
+    }
 }

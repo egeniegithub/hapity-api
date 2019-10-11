@@ -121,8 +121,8 @@
                             @if(isset($_GET['dev']))
                                 <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="<?php echo $broadcast['stream_url'];?>">{{ $broadcast['stream_url'] }}</a> </span></p>
                             @endif
-                            <?php $stream_count = "https://api.hapity.com/webservice/stream_count?id=".$broadcast['id']; ?>
-                            <p>  <span class="reportdate">Views :</span> <span class="report-result-display"> <?php  echo file_get_contents($stream_count); ?> </span></p>
+                            
+                            <p>  <span class="reportdate">Views :</span> <span class="report-result-display"> {{ $broadcast->view_count }} </span></p>
                             
                             <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast['created_at']));?> </span></p>
                         </div>
