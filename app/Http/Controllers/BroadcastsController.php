@@ -352,9 +352,9 @@ class BroadcastsController extends Controller
 
             $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
 
-            $stream_url = !empty($broadcast->filename) ? 'http://' . $this->getRandIp() . ':1935/' . $vod_app . '/' . $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
+            $stream_url = !empty($broadcast->filename) ? 'https://media.hapity.com/' . $vod_app . '/' . $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
             if ($broadcast->status == 'online') {
-                $stream_url = !empty($broadcast->filename) ? 'rtmp://' . $this->getRandIp() . ':1935/' . $live_app . '/' . $broadcast->filename . '/playlist.m3u8' : '';
+                $stream_url = !empty($broadcast->filename) ? 'rtmp://media.hapity.com/' . $live_app . '/' . $broadcast->filename . '/playlist.m3u8' : '';
             }
 
             $broadcastObj = [];
@@ -681,9 +681,9 @@ class BroadcastsController extends Controller
         $ext = $ext == 'stream' ? 'mp4' : $ext;
 
         if ($live == true) {
-            $stream_url = $protocol . "//" . $server . ":8088/" . $live_app . "/" . $file_name . '/playlist.m3u8';
+            $stream_url = $protocol . "//media.hapity.com/" . $live_app . "/" . $file_name . '/playlist.m3u8';
         } else {
-            $stream_url = $protocol . "//" . $server . ":1935/" . $vod_app . "/" . $ext . ':' . $file_name . '/playlist.m3u8';
+            $stream_url = $protocol . "//media.hapity.com/" . $vod_app . "/" . $ext . ':' . $file_name . '/playlist.m3u8';
         }
 
         return $stream_url;
