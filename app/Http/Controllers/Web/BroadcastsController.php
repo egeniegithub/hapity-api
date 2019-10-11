@@ -105,7 +105,12 @@ class BroadcastsController extends Controller
                 $share_url = URL::to('/view-broadcast') . '/' . $broadcast_id;
                 $data['share_url'] = $share_url;
                 Broadcast::where('id', $broadcast_id)->update($data);
-                $response = array('status' => 'success', 'broadcast_id' => $broadcast_id, 'share_url' => $share_url);
+                $response = array(
+                    'status' => 'success', 
+                    'broadcast_id' => $broadcast_id, 
+                    'share_url' => $share_url,
+                    'file_name' => $filename
+                );
 
                 if ($post_plugin == 'true') {
                     $this->make_plugin_call($broadcast_id, $broadcast_image);
