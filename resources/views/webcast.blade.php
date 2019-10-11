@@ -204,7 +204,7 @@
 
                         var my_embed = $('<embed />');
                         my_embed.attr('src', "{{ asset('assets/flashstreamer/webcam.swf') }}");
-                        my_embed.attr('flashvars', "server=rtmp://media.hapity.com/stage_live/" + data.filename );
+                        my_embed.attr('flashvars', "server=rtmp://media.hapity.com:1935/stage_live/" + data.filename );
                         my_embed.attr('bgcolor', "#FFFFFF");
                         my_embed.attr('width', "100%");
                         my_embed.attr('height', "auto");
