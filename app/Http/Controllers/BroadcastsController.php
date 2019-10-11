@@ -192,16 +192,17 @@ class BroadcastsController extends Controller
                 'message' => $messages[0],
             );
             return response()->json($response);
-        }        
+        }
 
-        $broadcast = Broadcast::find($request->input(' broadcast_id'));
-
+        $broadcast_id = $request->input('broadcast_id');
         $title = $request->input('title');
         $geo_location = $request->input('geo_location');
         $description = $request->input('description');
         $is_sensitive = $request->input('is_sensitive');
         $status = $request->input('status');
-        
+
+        $broadcast = Broadcast::find($broadcast_id);
+
         if (!is_null($title) && !empty($title)) {
             $broadcast->title = $title;
             $broadcast->save();
