@@ -113,10 +113,10 @@
                         </a>
 
                         <div class="reported-bc-detail">
-                            <p> <span class="title btitle">{{ ucwords($broadcast['title']) }}</span></p>
-                            <p> <span class="postby">Posted By : </span> <span class="report-result-display"> {{ $broadcast['username'] }} </span></p>
-                            <p>  <span class="reportby">Status :</span> <span class="report-result-display"> {{ $broadcast['status'] }} </span></p>
-                            <p>  <span class="reportdate">Source :</span> <span class="report-result-display"> <a href="{{ $broadcast['share_url'] }}">{{ $broadcast['share_url'] }}</a> </span></p>
+                            <p><span class="title btitle">{{ ucwords($broadcast['title']) }}</span></p>
+                            <p><span class="postby">Posted By : </span> <span class="report-result-display"> {{ $broadcast['username'] }} </span></p>
+                            <p><span class="reportby">Status :</span> <span class="report-result-display"> {{ $broadcast['status'] }} </span></p>
+                            <p><span class="reportdate">Source :</span> <span class="report-result-display"> <a href="{{ $broadcast['share_url'] }}">{{ $broadcast['share_url'] }}</a> </span></p>
 
                             @if(isset($_GET['dev']))
                                 <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="<?php echo $broadcast['stream_url'];?>">{{ $broadcast['stream_url'] }}</a> </span></p>

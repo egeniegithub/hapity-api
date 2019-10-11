@@ -518,25 +518,16 @@ class BroadcastsController extends Controller
 
     public function view_broadcast($broadcast_id)
     {
-        $filename = '';
-        $user_id = \Auth::user()->id;
-        $broadcast = Broadcast::with('broadcastsComments')->where('id', $broadcast_id)->first();
+        $filename = '';        
+        $broadcast = Broadcast::with(['user'])->find($broadcast_id);
 
-        if (!empty($broadcast)) {
-            if ($user_id == '') {
-
-                $filename = $this->get_name_from_link($broadcast['stream_url']);
-                return view('view-broadcast', compact('broadcast', 'data'));
-            } else {
-
-                $filename = $this->get_name_from_link($broadcast['stream_url']);
-            }
-            return view('view-broadcast', compact('broadcast', 'filename'));
+        if (!is_null($broadcast)) {
+            return view('view-broadcast', compact('broadcast'));
         } else {
             return back();
         }
-
     }
+
     public function update_img_broadcast($broadcast_id, $path)
     {
         $data = array(

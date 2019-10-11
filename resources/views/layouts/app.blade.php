@@ -45,61 +45,11 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     
     <script type="text/javascript" src="http://www.hapity.com/assets/js/fb.js"></script>
-        <script src="{{ asset('assets/js/jwplayer.js') }}"></script>
-            <script type='text/javascript'>jwplayer.key='fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=';</script>    </head>
+    <script src="{{ asset('assets/js/jwplayer.js') }}"></script>
+    <script type='text/javascript'>jwplayer.key='fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=';</script>    
+  </head>
  
-    <script type="text/javascript">
-    // Load the SDK asynchronously
-    window.fbAsyncInit = function() {
-        FB.init({
-            // appId      : '1412967295699368',
-            appId      : '474375376243023',
-            cookie     : true,  // enable cookies to allow the server to access
-                                // the session
-            xfbml      : true,  // parse social plugins on this page
-            version    : 'v2.2' // use version 2.2
-        });
-
-    };
-    $(document).ready(function(){
-
-        (function(d, s, id) {
-            var js, fjs = d.getElementsByTagName(s)[0];
-            if (d.getElementById(id)) return;
-            js = d.createElement(s); js.id = id;
-            js.src = "https://connect.facebook.net/en_US/sdk.js";
-            fjs.parentNode.insertBefore(js, fjs);
-        }(document, 'script', 'facebook-jssdk'));
-    });
-
-  // Here we run a very simple test of the Graph API after login is
-  // successful.  See statusChangeCallback() for when this call is made.
-  function testAPI() {
-      FB.api('/me', {fields: 'id,email,name,picture'}, function (response) {
-          $.ajax({
-              url: "{{url('fbloginUser')}}",
-              type: 'POST',
-              data: {
-                  _token: "{{ csrf_token() }}",
-                  social_id: response.id,
-                  name: response.name,
-                  email: response.email,
-                  profile_picture: response.picture.data.url
-              },
-              success: function (msg) {
-                  if (msg == 'found') {
-                      window.location = '{{url("main")}}';
-                  }
-                  else if (msg == 'not found') {
-                      window.location = '{{route("register")}}';
-                  }
-
-              }
-          });
-      }); //fb-api-end
-  }
-    </script>
-    <script type="text/javascript" src="{{ asset('assets/js/fb.js')}}"></script>
+    
 
     <style type="text/css">
       .error-test-color{
