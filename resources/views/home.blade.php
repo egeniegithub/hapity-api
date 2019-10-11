@@ -102,7 +102,7 @@
                                 $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
                                 if($broadcast->status == 'online') {
                                     $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );                                    
-                                    $stream_url = urlencode('rtsp://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
+                                    $stream_url = urlencode('https://media.hapity.com/stage_live/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
                                 }
                                 //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
                                 //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8 
