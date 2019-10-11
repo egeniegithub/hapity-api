@@ -64,22 +64,27 @@
                     </div>
                     <div class="video-frame">
 
-                    <div id="flashContent">        
-                        <object type="application/x-shockwave-flash" width="100%" height="330" id="externalInterface" data-movie="{{asset('assets/js/web-back.swf')}}" name="externalInterface">
-                            <param name="movie" value="{{asset('assets/js/web-back.swf')}}" />
-                            <param name="quality" value="high" />
-                            <param name="bgcolor" value="#ffffff" />
-                            <param name="play" value="true" />
-                            <param name="loop" value="true" />
-                            <param name="wmode" value="window" />
-                            <param name="scale" value="showall" />
-                            <param name="menu" value="true" />
-                            <param name="devicefont" value="false" />
-                            <param name="salign" value="" />
-                            <param name="allowScriptAccess" value="always" />
-                            <param name="allowFullScreen" value="true" />
-                        </object>
-                    </div>
+                        <div id="flashContent">        
+                            <!--
+                            <object type="application/x-shockwave-flash" width="100%" height="330" id="externalInterface" data-movie="{{asset('assets/js/web-back.swf')}}" name="externalInterface">
+                                <param name="movie" value="{{asset('assets/js/web-back.swf')}}" />
+                                <param name="quality" value="high" />
+                                <param name="bgcolor" value="#ffffff" />
+                                <param name="play" value="true" />
+                                <param name="loop" value="true" />
+                                <param name="wmode" value="window" />
+                                <param name="scale" value="showall" />
+                                <param name="menu" value="true" />
+                                <param name="devicefont" value="false" />
+                                <param name="salign" value="" />
+                                <param name="allowScriptAccess" value="always" />
+                                <param name="allowFullScreen" value="true" />
+                            </object>
+                            -->
+
+                            <div id="insert_embed_here" class="embed-responsive embed-responsive-16by9">                            </div>
+
+                        </div>
                     </div>
                     <div class="live-broadcats-strip margin-bottom">
                         <div class="stream-status">
@@ -184,12 +189,41 @@
                     },
                     success: function (data) {
                         bid = data.broadcast_id;
-                        
+
+                        /*
+                        <embed id="flashstreamer"
+                                    src="{{ asset('assets/flashstreamer/webcam.swf') }}"
+                                    flashvars="server=rtmp://media.hapity.com/stage_live/"
+                                    bgcolor="#ffffff"
+                                    width="800"
+                                    height="900"
+                                    quality="high"
+                                    allowScriptAccess="always"
+                                    type="application/x-shockwave-flash"
+                                    pluginspage="http://www.macromedia.com/go/getflashplayer" />*/
+
+                        var my_embed = $('<embed />');
+                        my_embed.attr('src', "{{ asset('assets/flashstreamer/webcam.swf') }}");
+                        my_embed.attr('flashvars', "server=https://media.hapity.com/stage_live/" + data.filename );
+                        my_embed.attr('bgcolor', "#FFFFFF");
+                        //my_embed.attr('width', "100%");
+                        //my_embed.attr('height', "600%");
+                        my_embed.attr('quality', "high");
+                        my_embed.attr('allowScriptAccess', "always");
+                        my_embed.attr('type', "application/x-shockwave-flash");
+                        my_embed.attr('pluginspage', "http://www.macromedia.com/go/getflashplayer");
+
+                        $('#insert_embed_here').append(my_embed);
+
+
+                        /*
                             document['externalInterface'].title(time);
                     
                         setTimeout(function(){
                             document['externalInterface'].record();
                         },3000);
+
+                        */
                         setInterval(function(){
                             $.ajax({
                                 url: "{{route('update_timestamp_broadcast')}}",
