@@ -198,27 +198,33 @@ class BroadcastsController extends Controller
 
         $broadcast = Broadcast::find($request->input(' broadcast_id'));
 
-        if ($request->has('title') && !is_null($request->input('title')) && !empty($request->input('title'))) {
-            $broadcast->title = $request->input('title');
+        $title = $request->input('title');
+        $geo_location = $request->input('geo_location');
+        $description = $request->input('description');
+        $is_sensitive = $request->input('is_sensitive');
+        $status = $request->input('status');
+        
+        if (!is_null($title) && !empty($title)) {
+            $broadcast->title = $title;
             $broadcast->save();
         }
 
-        if ($request->has('geo_location') && !is_null($request->input('geo_location')) && !empty($request->input('geo_location'))) {
-            $broadcast->geo_location = $request->input('geo_location');
+        if (!is_null($geo_location) && !empty($geo_location)) {
+            $broadcast->geo_location = $geo_location;
             $broadcast->save();
         }
 
-        if ($request->has('description') && !is_null($request->input('description')) && !empty($request->input('description'))) {
-            $broadcast->description = $request->input('description');
+        if (!is_null($description) && !empty($description)) {
+            $broadcast->description = $description;
             $broadcast->save();
         }
 
-        if ($request->has('is_sensitive') && !is_null($request->input('is_sensitive')) && !empty($request->input('is_sensitive'))) {
-            $broadcast->is_sensitive = $request->input('is_sensitive');
+        if (!is_null($is_sensitive) && !empty($is_sensitive)) {
+            $broadcast->is_sensitive = $is_sensitive;
             $broadcast->save();
         }
 
-        if ($request->has('status') && !is_null($request->input('status')) && !empty($request->input('status'))) {
+        if (!is_null($status) && !empty($request->input('status'))) {
             $broadcast->status = $request->input('status');
             $broadcast->save();
         }
