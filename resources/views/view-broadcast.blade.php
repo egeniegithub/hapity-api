@@ -5,7 +5,7 @@
 @endpush
 @section('content')
 
-
+<script type="text/javascript" src="https://player.wowza.com/player/latest/wowzaplayer.min.js"></script>
 
 @php
     $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
@@ -26,39 +26,60 @@
         
         <div class="col-xs-12 col-sm-3 col-md-3"></div>
         <div class="col-xs-12 col-sm-6 col-md-6">
+
             <div class="my-bordcast-single bordcast-active">
-                   @php 
-                    $image_classes = '';
-                    $b_image = '';
-                    $b_id = isset($broadcast->id) ? $broadcast->id : '';
-                    if($broadcast->title){
-                        $b_title = $broadcast->title;
-                    } else {
-                        $b_title = "Untitled";
-                    }
-                    $file_info = pathinfo($broadcast->filename);
-                    $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
-                    $share_url = $broadcast->share_url;
-                    $b_description = $broadcast->description;
+                         
+                    @php 
+                        $image_classes = '';
+                        $b_image = '';
+                        // $broadcast->broadcast_image;
+                        $b_id = isset($broadcast->id) ? $broadcast->id : '';
 
-                    $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
-                    $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+                        if($broadcast->title){
+                            $b_title = $broadcast->title;
+                        } else {
+                            $b_title = "Untitled";
+                        }
 
-                    $stream_url = urlencode('http://' . $ip .  ':1935/' . $vod_app . '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
-                    
-                    $status = $broadcast->status;
+                        $file_info = pathinfo($broadcast->filename);
 
-                    $video_file_name = $broadcast->filename;
-                    
-                    if(!$b_image){
-                        $b_image = 'default001.jpg';
-                    }
+                        $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
 
-                    if($video_file_name){
-                        $image_classes = 'has_video';
-                    }
+                        $share_url = $broadcast->share_url;
+                        $b_description = $broadcast->description;
+
+                        $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+                        $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+
+                        $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                        if($broadcast->status == 'online') {
+                            $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );                                    
+                            $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
+                        }
+                        //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
+                        //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8 
+                        //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream%2Fplaylist.m3u8
+                        //https://media.hapity.com/stage_vod/_definst_/mp4:8e192b3711cfd29cafe41297d9fa725b.stream.mp4/playlist.m3u8
+
+                        //echo $stream_url; 
+
+                        $status = $broadcast->status;
+
+                        $video_file_name = $broadcast->filename;
+                        
+                        if(!$b_image){
+                            $b_image = 'default001.jpg';
+                        }
+
+                        if($video_file_name){
+                            $image_classes = 'has_video';
+                        }
+
                     @endphp
                     @if($video_file_name)
+                        <div class="video-container video-conteiner-init">
+                            <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
+                        </div>        
                         <script>
                             WowzaPlayer.create('w-broadcast-{{ $b_id }}',
                             {
@@ -80,16 +101,8 @@
                         </script>
                     @endif
                     
-                    @php
-                        if($status == 'offline'){
-                            $stream_url = str_replace('/live/', '/vod/', $stream_url);
-                        } 
-                        // echo $stream_url;
-                    @endphp
-                    <iframe height="600" width="100%" scrolling="no" frameborder="0" 
-                    src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $broadcast->status;?>&broadcast_image=<?php echo $b_image;?>">
-                    </iframe>
-
+                  
+                    
                
                 <?php if($broadcast['status'] == "online") : ?>
                     <span class="broadcast-live"></span>
@@ -101,12 +114,13 @@
 
                 <ul class="post-options clearfix share-with-icons-live">
                     <li class="username">
-                            @if(isset(auth::user()->profile->profile_picture) && !empty(auth::user()->profile->profile_picture))
-                            <img src="{{asset('images/profile_pictures/'.auth::user()->profile->profile_picture)}}">
-                          @else
-                             <img src="{{ asset('assets/images/null.png') }}">
-                          @endif
-                        &nbsp; <span>{{ auth::user()->username }}</span>
+                        @if(!is_null($broadcast->user) && !empty($broadcast->user->profile->profile_picture))
+                            <img src="{{asset('images/profile_pictures/' . $broadcast->user->profile->profile_picture)}}" />
+                        @else
+                            <img src="{{ asset('assets/images/null.png') }}" />
+                        @endif
+
+                        &nbsp; <span>{{ $broadcast->user->username }}</span>
                     </li>
                     <li><a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $broadcast['id'];?>" class="code-icon"><i class="fa fa-code"></i></a></li>
                     <li class="twitter-icon"><a href="https://twitter.com/home?status=<?php echo $broadcast['share_url'] ?>" target="_blank" class="twitter"><i class="fa fa-twitter"></i></a></li>
@@ -140,13 +154,5 @@
 
 @push('script')
 
-<script type="text/javascript">
-    
-    $(document).ready(function(){
-        var channel = pusher.subscribe('comments-<?php echo $broadcast['id'];?>');
-        channel.bind('new_comment', displayComment);
-    });
-
-</script>
 
 @endpush
