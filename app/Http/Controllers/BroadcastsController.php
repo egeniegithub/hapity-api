@@ -357,7 +357,7 @@ class BroadcastsController extends Controller
 
             $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
 
-            $stream_url = !empty($broadcast->filename) ? 'https://media.hapity.com/' . $vod_app . '/' . $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
+            $stream_url = !empty($broadcast->filename) ? 'http://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $broadcast->filename . '/playlist.m3u8' : '';
             if ($broadcast->status == 'online') {
                 $stream_url = !empty($broadcast->filename) ? 'https://media.hapity.com/' . $live_app . '/' . $broadcast->filename . '/playlist.m3u8' : '';
             }
