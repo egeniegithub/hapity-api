@@ -37,7 +37,7 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
               <label for="g-recaptcha">Captcha</label>
-              <div class="g-recaptcha" data-sitekey="6Lf9xLoUAAAAANkPex8syVDugeSH73EJeeTeqByn"></div>
+              <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
               
               <p>&nbsp;</p>
             </div>
