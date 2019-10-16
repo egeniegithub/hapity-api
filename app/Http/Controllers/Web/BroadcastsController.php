@@ -177,7 +177,6 @@ class BroadcastsController extends Controller
             ->rightJoin('plugin_ids as pl', 'pl.user_id', '=', 'u.id')
             ->where('broadcasts.id', $broadcast_id)
             ->get();
-        dd($broadcast); 
         if (count($broadcast) > 0) {
             foreach ($broadcast as $data) {
                 $title = $data['title'];
@@ -233,7 +232,6 @@ class BroadcastsController extends Controller
                 ),
                 );
                 $context = stream_context_create($opts);
-                dd($context);
                 if ($data['type'] == 'wordpress') {
                     $go = $data['url'] . '?action=hpb_hp_new_broadcast';
                 } else if ($data['type'] == 'drupal') {
@@ -270,7 +268,6 @@ class BroadcastsController extends Controller
             }
         }
 
-        dd("plugin ");
     }
 
     public function make_plugin_call_edit($broadcast_id)
@@ -641,7 +638,6 @@ class BroadcastsController extends Controller
                 }
             }
         }
-        dd($share_url);
         return $share_url;
     }
 
