@@ -55,8 +55,9 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
               <label for="g-recaptcha">Captcha</label>
-              <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
-              
+              <div class="captcha_wrapper">
+                <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+              </div>
               <p>&nbsp;</p>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
@@ -78,6 +79,13 @@
 
 @push('script')
   <script src="https://www.google.com/recaptcha/api.js?render={{env('GOOGLE_RECAPTCHA_KEY')}}" async defer></script>
+  <script>
+      grecaptcha.ready(function() {
+          grecaptcha.execute("{{env('GOOGLE_RECAPTCHA_KEY')}}", {action: "{{route('about')}}"}).then(function(token) {
+             ...
+          });
+      });
+</script>
 @endpush
 
 
