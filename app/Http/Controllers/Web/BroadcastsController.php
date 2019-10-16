@@ -41,7 +41,7 @@ class BroadcastsController extends Controller
 
     public function startwebbroadcast(Request $request)
     {
-
+ 
         $title = $request->title;
         $description = "";
         $geo_location = $request->geo_location;
@@ -177,7 +177,7 @@ class BroadcastsController extends Controller
             ->rightJoin('plugin_ids as pl', 'pl.user_id', '=', 'u.id')
             ->where('broadcasts.id', $broadcast_id)
             ->get();
-
+        dd($broadcast); 
         if (count($broadcast) > 0) {
             foreach ($broadcast as $data) {
                 $title = $data['title'];
@@ -233,7 +233,7 @@ class BroadcastsController extends Controller
                 ),
                 );
                 $context = stream_context_create($opts);
-
+                dd($context);
                 if ($data['type'] == 'wordpress') {
                     $go = $data['url'] . '?action=hpb_hp_new_broadcast';
                 } else if ($data['type'] == 'drupal') {
@@ -269,6 +269,8 @@ class BroadcastsController extends Controller
                 }
             }
         }
+
+        dd("plugin ");
     }
 
     public function make_plugin_call_edit($broadcast_id)
@@ -533,7 +535,7 @@ class BroadcastsController extends Controller
         $data = array(
             'broadcast_image' => $path,
         );
-        $this->db->update('broadcast', $data, "id = $broadcast_id ");
+        Broadcast::where('id',$broadcast_id)->update($data);
         return $path;
     }
 
@@ -639,7 +641,7 @@ class BroadcastsController extends Controller
                 }
             }
         }
-
+        dd($share_url);
         return $share_url;
     }
 
