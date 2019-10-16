@@ -374,4 +374,34 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
+
+    public function validate_key($auth_key,$type,$url){
+        
+        if(isset($key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal') && isset($url)){
+            $userProfile = Profile::where('auth_key',$auth_key)->first();
+            if(count($userProfile) > 0){
+                    $plugin_ids = PluginId::where('user_id',$userProfile->user_id)->where('type',$type)->first();
+                    if(count($plugin_ids)==0){
+                        $data = array(
+                            'user_id'   =>  $userProfile->user_id,
+                            'type'   =>  $type,
+                            'url'   =>  $url
+                        );
+                        PluginId::insert($data);
+                        $var = 1;
+                    }else{
+                        $data = array(
+                            'type'   =>  $type,
+                            'url'   =>  $url
+                        );
+                        PluginId::where('id',$plugin_ids->id)->update($data);
+                        $var = 1;
+                    }
+            }else{
+                $var = 0;
+            }
+            $this->response(array('status' => 'success','message'=>$var), 200);
+        }else
+            $this->response(array('status' => 'failure','message'=>'invalid parameters'), 200);
+    }
 }

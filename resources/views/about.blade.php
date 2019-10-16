@@ -1,5 +1,23 @@
 @extends('layouts.app')
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+
+@push('css')
+<style>
+.navbar-custom .navbar-toggle {
+    background: #fff !important;
+    margin-top: 30px;
+}
+.navbar-custom .navbar-toggle .icon-bar {
+    background: #391751;
+}
+.navbar-custom .navbar-toggle .icon-bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+}
+</style>
+@endpush
+
 @section('content')
 	<!--include hapity header file-->
 
@@ -58,20 +76,9 @@
 @endsection
 
 
+@push('script')
+  <script src="https://www.google.com/recaptcha/api.js?render={{env('GOOGLE_RECAPTCHA_KEY')}}" async defer></script>
+@endpush
 
 
-<style>
-.navbar-custom .navbar-toggle {
-    background: #fff !important;
-    margin-top: 30px;
-}
-.navbar-custom .navbar-toggle .icon-bar {
-    background: #391751;
-}
-.navbar-custom .navbar-toggle .icon-bar {
-    display: block;
-    width: 22px;
-    height: 2px;
-    border-radius: 1px;
-}
-</style>
+
