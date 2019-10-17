@@ -47,10 +47,8 @@
     <script type="text/javascript" src="http://www.hapity.com/assets/js/fb.js"></script>
     <script src="{{ asset('assets/js/jwplayer.js') }}"></script>
     <script type='text/javascript'>jwplayer.key='fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=';</script>    
-  </head>
- 
-    
 
+ 
     <style type="text/css">
       .error-test-color{
         color:#fff;

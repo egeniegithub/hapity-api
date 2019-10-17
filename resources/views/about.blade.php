@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @push('css')
+
 <style>
 .navbar-custom .navbar-toggle {
     background: #fff !important;
@@ -16,6 +17,30 @@
     border-radius: 1px;
 }
 </style>
+
+
+    <script type="text/javascript">
+        function callbackThen(response){
+            // read HTTP status
+            console.log(response.status);
+            
+            // read Promise object
+            response.json().then(function(data){
+                console.log(data);
+            });
+        }
+        function callbackCatch(error){
+            console.error('Error:', error)
+        }   
+    </script>    
+    
+   {{--  {!! htmlScriptTagJsApi([
+        'action' => 'homepage',
+        'callback_then' => 'callbackThen',
+        'callback_catch' => 'callbackCatch'
+    ]) !!}  --}}
+
+
 @endpush
 
 @section('content')
@@ -44,20 +69,32 @@
             <div class="col-xs-6">
               <label for="name">Name</label>
               <input class="form-control" id="name" name="name" type="text" required/>
+              @if($errors->has('name')) 
+                  {{ $errors->first('name') }} 
+              @endif
             </div>
             <div class="col-xs-6">
               <label for="Email">Email</label>
               <input class="form-control" id="Email" name="email" type="email" required/>
+              @if($errors->has('email')) 
+                  {{ $errors->first('email') }} 
+              @endif
             </div>
             <div class="col-xs-12">
               <label for="Message">Message</label>
               <textarea class="form-control" id="Message" name="message" required></textarea>
+              @if($errors->has('message')) 
+                  {{ $errors->first('message') }} 
+              @endif
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
               <label for="g-recaptcha">Captcha</label>
               <div class="captcha_wrapper">
-                <div class="g-recaptcha" data-sitekey="{{ env('GOOGLE_RECAPTCHA_KEY') }}"></div>
+                <div id="g-recaptcha-response"></div>
               </div>
+              @if($errors->has('g-recaptcha-response')) 
+                {{ $errors->first('g-recaptcha-response') }} 
+              @endif
               <p>&nbsp;</p>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
@@ -80,12 +117,25 @@
 @push('script')
   <script src="https://www.google.com/recaptcha/api.js?render={{env('GOOGLE_RECAPTCHA_KEY')}}" async defer></script>
   <script>
+  var interval = setInterval(function(){
+    if(window.grecaptcha){
+          grecaptcha.ready(function() {
+              grecaptcha.execute("{{env('GOOGLE_RECAPTCHA_KEY')}}", {action: "{{route('about')}}"}).then(function(token) {
+                $('#g-recaptcha-response').prepend('<input type="hidden" name="g-recaptcha-response" value="' + token + '">');
+              });
+          });
+      clearInterval(interval);
+    }
+  }, 100);
+</script>
+{{-- 
+  <script>
       grecaptcha.ready(function() {
           grecaptcha.execute("{{env('GOOGLE_RECAPTCHA_KEY')}}", {action: "{{route('about')}}"}).then(function(token) {
-             ...
+             // ...
           });
       });
-</script>
+</script> --}}
 @endpush
 
 
