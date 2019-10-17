@@ -34,13 +34,9 @@
         }   
     </script>    
     
-   {{--  {!! htmlScriptTagJsApi([
-        'action' => 'homepage',
-        'callback_then' => 'callbackThen',
-        'callback_catch' => 'callbackCatch'
-    ]) !!}  --}}
 
 
+    <script src="https://www.google.com/recaptcha/api.js?render={{env('GOOGLE_RECAPTCHA_KEY')}}" async defer></script>
 @endpush
 
 @section('content')
@@ -89,9 +85,7 @@
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
               <label for="g-recaptcha">Captcha</label>
-              <div class="captcha_wrapper">
-                <div id="g-recaptcha-response"></div>
-              </div>
+                {!! htmlFormSnippet() !!}
               @if($errors->has('g-recaptcha-response')) 
                 {{ $errors->first('g-recaptcha-response') }} 
               @endif
@@ -115,19 +109,7 @@
 
 
 @push('script')
-  <script src="https://www.google.com/recaptcha/api.js?render={{env('GOOGLE_RECAPTCHA_KEY')}}" async defer></script>
-  <script>
-  var interval = setInterval(function(){
-    if(window.grecaptcha){
-          grecaptcha.ready(function() {
-              grecaptcha.execute("{{env('GOOGLE_RECAPTCHA_KEY')}}", {action: "{{route('about')}}"}).then(function(token) {
-                $('#g-recaptcha-response').prepend('<input type="hidden" name="g-recaptcha-response" value="' + token + '">');
-              });
-          });
-      clearInterval(interval);
-    }
-  }, 100);
-</script>
+
 {{-- 
   <script>
       grecaptcha.ready(function() {
