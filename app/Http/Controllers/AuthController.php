@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function __construct()
     {
         auth()->setDefaultDriver('api');
-        $this->middleware('auth:api', ['except' => ['login', 'register', 'validate_key:auth_key,type,url']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register','validate_key']]);
     }
 
     /**
@@ -375,7 +375,19 @@ class AuthController extends Controller
         ]);
     }
 
-    public function validate_key($auth_key,$type,$url){
+    public function validate_key(Request $request){
+       
+        if((!isset($request->auth_key) && !isset($request->type) && !isset($request->url)) && (empty($request->auth_key) && empty($request->type) && empty($request->url))){
+            $response = array(
+                'status' => 'failure',
+                'message' => "auth_key , type and url field requires ",
+            );
+            return response()->json($response);
+        }
+
+        $auth_key = $request->auth_key;
+        $type = $request->type;
+        $url = $request->url;
         if(isset($key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal') && isset($url)){
             $userProfile = Profile::where('auth_key',$auth_key)->first();
             if(count($userProfile) > 0){
