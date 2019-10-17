@@ -4,24 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "464654d3ece0f5a5d4d4583a6f091aa1",
+    "content-hash": "8cbf99549a33c0e17e4b261b1d5ff701",
     "packages": [
         {
             "name": "biscolab/laravel-recaptcha",
-            "version": "4.0.1",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/biscolab/laravel-recaptcha.git",
-                "reference": "3e990f54b712d5c82c004139840f48dd34662cff"
+                "reference": "f97b791b6fce17307b426f7121c85cb75c152fda"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/biscolab/laravel-recaptcha/zipball/3e990f54b712d5c82c004139840f48dd34662cff",
-                "reference": "3e990f54b712d5c82c004139840f48dd34662cff",
+                "url": "https://api.github.com/repos/biscolab/laravel-recaptcha/zipball/f97b791b6fce17307b426f7121c85cb75c152fda",
+                "reference": "f97b791b6fce17307b426f7121c85cb75c152fda",
                 "shasum": ""
             },
             "require": {
-                "laravel/framework": "^5.5|^6.0",
+                "laravel/framework": "^5.5",
                 "php": "^7.1"
             },
             "require-dev": {
@@ -29,16 +29,6 @@
                 "phpunit/phpunit": "6.*|7.*"
             },
             "type": "library",
-            "extra": {
-                "laravel": {
-                    "providers": [
-                        "Biscolab\\ReCaptcha\\ReCaptchaServiceProvider"
-                    ],
-                    "aliases": {
-                        "ReCaptcha": "Biscolab\\ReCaptcha\\Facades\\ReCaptcha"
-                    }
-                }
-            },
             "autoload": {
                 "psr-4": {
                     "Biscolab\\ReCaptcha\\": "src/"
@@ -54,20 +44,11 @@
             "authors": [
                 {
                     "name": "Roberto Belotti",
-                    "email": "roby.belotti@gmail.com",
-                    "homepage": "https://biscolab.com",
-                    "role": "Developer"
+                    "email": "boby.belotti@gmail.com"
                 }
             ],
-            "description": "Simple ReCaptcha package for Laravel 5 and 6",
-            "homepage": "https://biscolab.com/laravel-recaptcha",
-            "keywords": [
-                "captcha",
-                "laravel",
-                "recaptcha",
-                "validation"
-            ],
-            "time": "2019-09-11T19:01:40+00:00"
+            "description": "Simple ReCaptcha package for Laravel 5",
+            "time": "2018-09-12T20:27:08+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

@@ -21,6 +21,21 @@ class ContactusController extends Controller
 
     public function sendmail_contactus(Request $request)
     {
+        $validator = \validator::make(request()->all(), [
+            'name'                  =>  'required',
+            'email'                 =>  'required',
+            'message'               =>  'required',
+            'g-recaptcha-response'  => 'recaptcha',
+            // OR since v4.0.0
+            // recaptchaFieldName() => recaptchaRuleName()
+        ]);
+
+        // check if validator fails
+        if($validator->fails()) {
+            $errors = $validator->errors();
+            return back()->with('errors',$errors);
+        }
+
         $email = $request->email;
         $data = array(
             'name' => $request->name,
