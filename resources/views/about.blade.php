@@ -35,8 +35,8 @@
     </script>    
     
 
-
-    <script src="https://www.google.com/recaptcha/api.js?render={{env('GOOGLE_RECAPTCHA_KEY')}}" async defer></script>
+    {!! ReCaptcha::htmlScriptTagJsApi(['lang' => 'en']) !!}
+    {{-- <script src="https://www.google.com/recaptcha/api.js?render={{env('GOOGLE_RECAPTCHA_KEY')}}" async defer></script> --}}
 @endpush
 
 @section('content')
