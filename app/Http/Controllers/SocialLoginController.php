@@ -64,7 +64,7 @@ class SocialLoginController extends Controller
             $new_user_profile = new UserProfile();
             $new_user_profile->user_id = $new_user->id;
             $new_user_profile->email = $new_user->email;
-            $new_user_profile->auth_key = bcrypt($new_user->username);
+            $new_user_profile->auth_key = md5($new_user->username);
             if (!empty($profile_picture_name)) {
                 $new_user_profile->profile_picture = $profile_picture_name;
             }

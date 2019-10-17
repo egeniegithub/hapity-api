@@ -62,7 +62,7 @@ class TwitterController extends Controller
             $UserProfile = new UserProfile();
             $UserProfile->user_id = $User->id;
             $UserProfile->email = $input['email'];
-            $UserProfile->auth_key = bcrypt($input['username']);
+            $UserProfile->auth_key = md5($input['username']);
             $UserProfile->profile_picture = $input['profile_picture'];
             $UserProfile->save();
 
