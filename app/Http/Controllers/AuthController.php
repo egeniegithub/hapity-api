@@ -391,9 +391,9 @@ class AuthController extends Controller
         $type = $request['type'];
         $url = $request['url'];
         if(isset($auth_key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal') && isset($url)){
-
+            
             $userProfile = UserProfile::where('auth_key',$auth_key)->first();
-            if($userProfile->count() > 0){
+            if(!empty($userProfile) && $userProfile->id > 0){
                     $plugin_ids = PluginId::where('user_id',$userProfile->user_id)->where('type',$type)->first();
                     if(empty($plugin_ids)){
                         $data = array(
