@@ -87,7 +87,8 @@
               <label for="g-recaptcha">Captcha</label>
                 {!! htmlFormSnippet() !!}
               @if($errors->has('g-recaptcha-response')) 
-                {{ $errors->first('g-recaptcha-response') }} 
+                <strong class="text-danger">You must confirm you are not a robot</strong>
+                {{-- {{ $errors->first('g-recaptcha-response') }}  --}}
               @endif
               <p>&nbsp;</p>
             </div>
