@@ -31,7 +31,7 @@
                 @csrf
                     <ul>
                         <li><input type="text" name="title" placeholder="Title" value="<?php echo $broadcast_data['title']; ?>" id="title" required autocomplete="off"></li>
-                        <li><textarea name="description" id="description" placeholder="Description"><?php echo $broadcast_data['description']; ?></textarea></li>
+                        <li><textarea name="description" id="description" placeholder="Description" required><?php echo $broadcast_data['description']; ?></textarea></li>
                     </ul>   
                     <div class="upload-actions">
                         <h3>Upload a Video or Picture</h3>
