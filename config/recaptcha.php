@@ -1,7 +1,7 @@
 <?php
 return [
-    'api_site_key'                  => env('GOOGLE_RECAPTCHA_KEY', ''),
-    'api_secret_key'                => env('GOOGLE_RECAPTCHA_SECRET', ''),
+    'api_site_key'                  => env('RECAPTCHA_SITE_KEY', ''),
+    'api_secret_key'                => env('RECAPTCHA_SECRET_KEY', ''),
     // changed in v4.0.0
     'version'                       => 'v2', // supported: "v3"|"v2"|"invisible"
     // @since v3.4.3 changed in v4.0.0
