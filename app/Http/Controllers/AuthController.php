@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\PluginId;
 use App\User;
 use App\UserProfile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
@@ -377,33 +379,37 @@ class AuthController extends Controller
 
     public function validate_key(Request $request){
        
-        if((!isset($request->auth_key) && !isset($request->type) && !isset($request->url)) && (empty($request->auth_key) && empty($request->type) && empty($request->url))){
+        if((!isset($request['auth_key']) && !isset($request['type']) && !isset($request['url'])) && (empty($request['auth_key']) && empty($request['type']) && empty($request['url']))){
             $response = array(
                 'status' => 'failure',
                 'message' => "auth_key , type and url field requires ",
             );
             return response()->json($response);
         }
+       
+        $auth_key = $request['auth_key'];
+        $type = $request['type'];
+        $url = $request['url'];
+        if(isset($auth_key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal') && isset($url)){
 
-        $auth_key = $request->auth_key;
-        $type = $request->type;
-        $url = $request->url;
-        if(isset($key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal') && isset($url)){
-            $userProfile = Profile::where('auth_key',$auth_key)->first();
-            if(count($userProfile) > 0){
+            $userProfile = UserProfile::where('auth_key',$auth_key)->first();
+            if($userProfile->count() > 0){
                     $plugin_ids = PluginId::where('user_id',$userProfile->user_id)->where('type',$type)->first();
-                    if(count($plugin_ids)==0){
+                    if(empty($plugin_ids)){
                         $data = array(
                             'user_id'   =>  $userProfile->user_id,
                             'type'   =>  $type,
-                            'url'   =>  $url
+                            'url'   =>  $url,
+                            'created_at' => Carbon::now(),
+                            'updated_at' => Carbon::now()
                         );
                         PluginId::insert($data);
                         $var = 1;
                     }else{
                         $data = array(
                             'type'   =>  $type,
-                            'url'   =>  $url
+                            'url'   =>  $url,
+                            'updated_at' => Carbon::now()
                         );
                         PluginId::where('id',$plugin_ids->id)->update($data);
                         $var = 1;
