@@ -267,7 +267,7 @@
             <div class="row no-margin">
               <div class="col-md-12 no-padding">
                 <div class="download-guide text-center">
-                   <a href="https://www.hapity.com/guide/new-docs/hapity-for-custom-website.pdf">
+                   <a href="javascript::/guide/new-docs/hapity-for-custom-website.pdf">
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
@@ -280,7 +280,7 @@
           </div>
 
          <div class="transcript-bottom text-center">
-            <a href="#">
+            <a href="javascript::void()">
               <p><h4><span>Transcript</span></h4></p>
             </a>
           </div>
@@ -311,7 +311,7 @@
             <div class="row no-margin">
              <div class="col-md-12 no-padding">
                 <div class="download-guide text-center">
-                  <a href="">
+                  <a href="javascript::void()">
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
@@ -324,7 +324,7 @@
           </div>
 
           <div class="transcript-bottom text-center">
-            <a href="{{ asset('assets/docs/Hapity Mobile Broadcast Guide Script.pdf') }}">
+            <a href="{{ asset('assets') }}/docs/Hapity Mobile Broadcast Guide Script.pdf">
               <p><h4><span>Transcript</span></h4></p>
             </a>
           </div>
@@ -345,7 +345,7 @@
            <div class="row no-margin">
               <div class="col-md-12 no-padding">
                 <div class="download-guide text-center">
-                  <a href="#">
+                  <a href="javascript::void()">
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
@@ -358,7 +358,7 @@
           </div>
 
           <div class="transcript-bottom text-center">
-            <a href="{{ asset('assets/docs/Haptity PC Broadcast Guide Script.pdf') }}">
+            <a href="{{ asset('assets') }}/docs/Haptity PC Broadcast Guide Script.pdf">
               <p><h4><span>Transcript</span></h4></p>
             </a>
           </div>
@@ -378,7 +378,7 @@
             <div class="row no-margin">
               <div class="col-md-12 no-padding">
                 <div class="download-guide text-center">
-                  <a href="{{ asset('assets/docs/help-docs/Hapity – Enabling Flash player in Chrome.docx') }}">
+                  <a href="{{ asset('assets') }}/docs/help-docs/Hapity – Enabling Flash player in Chrome.docx">
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
@@ -391,7 +391,7 @@
           </div>
 
         <div class="transcript-bottom text-center">
-            <a href="#">
+            <a href="javascript::void()">
               <p><h4><span>Transcript</span></h4></p>
             </a>
           </div>

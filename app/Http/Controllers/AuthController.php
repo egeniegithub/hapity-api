@@ -23,7 +23,7 @@ class AuthController extends Controller
     public function __construct()
     {
         auth()->setDefaultDriver('api');
-        $this->middleware('auth:api', ['except' => ['login', 'register']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'validate_key:auth_key,type,url']]);
     }
 
     /**
@@ -128,7 +128,7 @@ class AuthController extends Controller
             //  Saving User Profile
             $profile = new UserProfile();
             $profile->email = $email;
-            $profile->auth_key = bcrypt($username);
+            $profile->auth_key = md5($username);
 
             if (!empty($imageName)) {
                 $profile->profile_picture = $imageName;
@@ -376,7 +376,6 @@ class AuthController extends Controller
     }
 
     public function validate_key($auth_key,$type,$url){
-        
         if(isset($key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal') && isset($url)){
             $userProfile = Profile::where('auth_key',$auth_key)->first();
             if(count($userProfile) > 0){
@@ -400,8 +399,9 @@ class AuthController extends Controller
             }else{
                 $var = 0;
             }
-            $this->response(array('status' => 'success','message'=>$var), 200);
-        }else
-            $this->response(array('status' => 'failure','message'=>'invalid parameters'), 200);
+             return response()->json(['status' => 'success', 'message'=>$var], 200);
+        }else{
+            return response()->json(['status' => 'failure', 'message'=>'invalid parameters'], 200);
+        }
     }
 }
