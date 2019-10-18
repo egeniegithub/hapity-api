@@ -375,6 +375,9 @@ class BroadcastsController extends Controller
 
     public function create_content_submission(Request $request)
     {
+
+        $post_plugin = true;
+        
         $rules = array(
             'title' => 'required',
             'description' => 'required',
@@ -431,16 +434,18 @@ class BroadcastsController extends Controller
         $broadcast->share_url = '';
         $broadcast->video_name = $video_name_with_ext;
         $broadcast->save();
-
-        $broadcast->share_url = route('broadcast.view', $broadcast->id);
+        $result = $this->make_plugin_call_upload($broadcast->id,Auth::id());
+        if(!empty($result)){
+            $broadcast->share_url = $result;
+        }else{
+            $broadcast->share_url = route('broadcast.view', $broadcast->id);
+        }
         $broadcast->save();
-
         return redirect()->to('dashboard')->with('flash_message', 'Broadcast Uploaded Successfull');
     }
 
     public function edit_content_submission(Request $request)
     {
-
         $rules = array(
             'title' => 'required',
             'description' => 'required',
@@ -538,20 +543,21 @@ class BroadcastsController extends Controller
 
     public function make_plugin_call_upload($bid, $uid)
     {
-
+    
         $share_url = "";
         $broadcast_id = $bid;
         $broadcast = Broadcast::find($bid);
         $user = User::find($uid);
-        $plugins = PluginId::where(['user_id' => $uid]);
-        if (is_array($plugins) && count($plugins) > 0) {
-            foreach ($plugins as $data) {
+        $plugins = PluginId::where(['user_id' => $uid])->first();
+        if (isset($plugins) && !empty($plugins) && $plugins['id'] > 0) {
+            // dd($plugins);
+            // foreach ($plugins as $key => $value) {
                 $title = $broadcast['title'];
                 $share_url = $broadcast['share_url'];
                 $description = $broadcast['description'];
                 $stream_url = str_replace("/live/", "/vod/", $broadcast['stream_url']);
-
-                if ($data['type'] == 'drupal') {
+           
+                if ($plugins['type'] == 'drupal') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
@@ -564,7 +570,7 @@ class BroadcastsController extends Controller
                             'action' => 'hpb_hp_new_broadcast',
                         )
                     );
-                } else if ($data['type'] == 'wordpress') {
+                } else if ($plugins['type'] == 'wordpress') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
@@ -576,7 +582,7 @@ class BroadcastsController extends Controller
                             'description' => $description,
                         )
                     );
-                } else if ($data['type'] == 'joomla') {
+                } else if ($plugins['type'] == 'joomla') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
@@ -598,16 +604,17 @@ class BroadcastsController extends Controller
 
                 $context = stream_context_create($opts);
 
-                if ($data['type'] == 'wordpress') {
-                    $go = $data['url'] . '?action=hpb_hp_new_broadcast';
-                } else if ($data['type'] == 'drupal') {
-                    $go = $data['url'];
-                } else if ($data['type'] == 'joomla') {
-                    $go = $data['url'] . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
+                if ($plugins['type'] == 'wordpress') {
+                    $go = $plugins['url'] . '?action=hpb_hp_new_broadcast';
+                } else if ($plugins['type'] == 'drupal') {
+                    $go = $plugins['url'];
+                } else if ($plugins['type'] == 'joomla') {
+                    $go = $plugins['url'] . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
                 $result = file_get_contents($go, false, $context);
-
-                if (isset($result) && $result != '') {
+                $result = json_decode($result, true);
+            
+                if (!empty($result)) {
                     $update_broadcast = Broadcast::find($bid);
                     $flag = 0;
                     $result = json_decode($result, true);
@@ -637,7 +644,7 @@ class BroadcastsController extends Controller
                     }
                 }
             }
-        }
+
         return $share_url;
     }
 
