@@ -27,7 +27,8 @@ Route::group([
     Route::post('get_profile_info', 'AuthController@getUserProfile')->name('api.getuserprofile');
     Route::post('edit_profile', 'AuthController@editUserProfile')->name('api.edituserprofile');
     Route::post('me', 'AuthController@me')->name('api.me');
-    Route::get('validate_key/','AuthController@validate_key')->name('validate_key');
+
+    Route::get('validate_key/',['middleware'=>'cors','uses'=>'AuthController@validate_key'])->name('validate_key');
     
     Route::post('broadcasts/upload', 'BroadcastsController@upload')->name('api.broadcast.upload');
     Route::post('broadcasts/start', 'BroadcastsController@start')->name('api.broadcast.start');    

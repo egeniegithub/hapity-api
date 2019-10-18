@@ -378,7 +378,6 @@ class AuthController extends Controller
     }
 
     public function validate_key(Request $request){
-       
         if((!isset($request['auth_key']) && !isset($request['type']) && !isset($request['url'])) && (empty($request['auth_key']) && empty($request['type']) && empty($request['url']))){
             $response = array(
                 'status' => 'failure',
