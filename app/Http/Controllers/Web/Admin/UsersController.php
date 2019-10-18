@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\UserProfile;
 use App\ReportUser;
+use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
 {
@@ -32,8 +33,10 @@ class UsersController extends Controller
         return view('admin.all-users',compact('users', 'reported_user_ids'));
     }
     public function deleteuser($user_id){
-        UserProfile::where('user_id',$user_id)->delete();
-        User::find($user_id)->delete();
+        DB::table('user_profiles')->where('user_id',$user_id)->delete();
+        DB::table('users')->where('id',$user_id)->delete();
+        // UserProfile::where('user_id',$user_id)->delete();
+        // User::find($user_id)->delete();
         return back()->with('flash_message','User Delete Successfull ');
     }
     public function approveduser($user_id){
