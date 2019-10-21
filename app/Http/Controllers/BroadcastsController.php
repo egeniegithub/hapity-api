@@ -100,7 +100,7 @@ class BroadcastsController extends Controller
             //TODO debug this
             $plugin = new PluginFunctions();
             $result = $plugin->make_plugin_call_upload($broadcast->id);
-            // $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
+
         }
 
         return response()->json(['response' => $response]);
@@ -173,7 +173,6 @@ class BroadcastsController extends Controller
             //TODO debug this
             $plugin = new PluginFunctions();
             $share_url = $plugin->make_plugin_call_upload($broadcast->id);
-            // $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
         }
 
         return response()->json(['response' => $response]);
@@ -281,7 +280,6 @@ class BroadcastsController extends Controller
             //TODO debug this
             $plugin = new PluginFunctions();
             $share_url = $plugin->make_plugin_call_edit($broadcast_id);
-            // $share_url = $this->make_plugin_call_edit($broadcast->id, $broadcast->user_id);
         }
 
         return response()->json(['response' => $response]);
@@ -490,193 +488,7 @@ class BroadcastsController extends Controller
         }
     }
 
-    private function make_plugin_call_upload($bid, $uid)
-    {
-
-        $share_url = "";
-        $broadcast_id = $bid;
-        $broadcast = Broadcast::find($bid);
-
-        $user = User::find($uid);
-
-        $plugins = PluginId::where(['user_id' => $uid])->get();
-
-        if (sizeof($plugins) > 0) {
-            foreach ($plugins as $data) {
-                $title = $broadcast['title'];
-                $share_url = $broadcast['share_url'];
-                $description = $broadcast['description'];
-                $stream_url = str_replace("/live/", "/vod/", $broadcast['stream_url']);
-
-                if ($data['type'] == 'drupal') {
-                    $postdata = http_build_query(
-                        array(
-                            'title' => $title,
-                            'stream_url' => $stream_url,
-                            'bid' => $broadcast_id,
-                            'status' => 'offline',
-                            'key' => $user['auth_key'],
-                            'broadcast_image' => $broadcast['broadcast_image'],
-                            'description' => $description,
-                            'action' => 'hpb_hp_new_broadcast',
-                        )
-                    );
-                } else if ($data['type'] == 'wordpress') {
-                    $postdata = http_build_query(
-                        array(
-                            'title' => $title,
-                            'stream_url' => $stream_url,
-                            'bid' => $broadcast_id,
-                            'status' => 'offline',
-                            'key' => $user['auth_key'],
-                            'broadcast_image' => $broadcast['broadcast_image'],
-                            'description' => $description,
-                        )
-                    );
-                } else if ($data['type'] == 'joomla') {
-                    $postdata = http_build_query(
-                        array(
-                            'title' => $title,
-                            'stream_url' => $stream_url,
-                            'bid' => $broadcast_id,
-                            'status' => 'offline',
-                            'key' => $user['auth_key'],
-                            'broadcast_image' => $broadcast['broadcast_image'],
-                            'description' => $description,
-                        )
-                    );
-                }
-                $opts = [
-                    'http' => [
-                        'method' => 'POST',
-                        'header' => 'Content-type: application/x-www-form-urlencoded',
-                        'content' => $postdata,
-                    ]];
-
-                $context = stream_context_create($opts);
-
-                if ($data['type'] == 'wordpress') {
-                    $go = $data['url'] . '?action=hpb_hp_new_broadcast';
-                } else if ($data['type'] == 'drupal') {
-                    $go = $data['url'];
-                } else if ($data['type'] == 'joomla') {
-                    $go = $data['url'] . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
-                }
-                $result = file_get_contents($go, false, $context);
-
-                if (isset($result) && $result != '') {
-                    $update_broadcast = Broadcast::find($bid);
-                    $flag = 0;
-                    $result = json_decode($result, true);
-
-                    $update_broadcast->share_url = $result['post_url'];
-
-                    $share_url = $result['post_url'];
-
-                    $wp_post_id = $result['post_id_wp'];
-                    $post_id_joomla = $result['post_id_joomla'];
-                    $drupal_post_id = $result['drupal_post_id'];
-
-                    if ($wp_post_id) {
-                        $update_broadcast->post_id = $wp_post_id;
-                        $flag = 1;
-                    }
-                    if ($post_id_joomla) {
-                        $update_broadcast->post_id_joomla = $post_id_joomla;
-                        $flag = 1;
-                    }
-                    if ($drupal_post_id) {
-                        $update_broadcast->post_id_drupal = $drupal_post_id;
-                        $flag = 1;
-                    }
-                    if ($flag) {
-                        $update_broadcast->save();
-                    }
-                }
-            }
-        }
-
-        return $share_url;
-    }
-
-    private function make_plugin_call_edit($bid, $uid)
-    {
-        $broadcast_id = $bid;
-        $broadcast = Broadcast::find($bid);
-        $user = User::find($uid);
-        $plugins = PluginId::where(['user_id' => $uid]);
-        if (sizeof($plugins) > 0) {
-            foreach ($plugins as $data) {
-                $title = $broadcast['title'];
-                $description = $broadcast['description'];
-                $stream_url = str_replace("/live/", "/vod/", $broadcast['stream_url']);
-                $image = $broadcast['broadcast_image'];
-
-                $headers = array(
-                    'Content-type: application/xwww-form-urlencoded',
-                );
-
-                if ($data['type'] == 'drupal') {
-                    $postdata = http_build_query(
-                        array(
-                            'title' => $title,
-                            'stream_url' => $stream_url,
-                            'bid' => $broadcast_id,
-                            'status' => 'offline',
-                            'key' => $user['auth_key'],
-                            'broadcast_image' => $image,
-                            'description' => $description,
-                            'post_id_drupal' => $broadcast['post_id_drupal'],
-                        )
-                    );
-                } else if ($data['type'] == 'wordpress') {
-                    $postdata = http_build_query(
-                        array(
-                            'title' => $title,
-                            'stream_url' => $stream_url,
-                            'bid' => $broadcast_id,
-                            'status' => 'offline',
-                            'key' => $user['auth_key'],
-                            'broadcast_image' => $image,
-                            'description' => $description,
-                            'post_id_wp' => $broadcast['post_id'],
-                        )
-                    );
-                } else if ($data['type'] == 'joomla') {
-                    $postdata = http_build_query(
-                        array(
-                            'title' => $title,
-                            'stream_url' => $stream_url,
-                            'bid' => $broadcast_id,
-                            'status' => 'offline',
-                            'key' => $user['auth_key'],
-                            'broadcast_image' => $image,
-                            'description' => $description,
-                            'post_id_joomla' => $broadcast['post_id_joomla'],
-                        )
-                    );
-                }
-
-                $opts = array('http' => array(
-                    'method' => 'POST',
-                    'header' => 'Content-type: application/x-www-form-urlencoded',
-                    'content' => $postdata,
-                ),
-                );
-
-                $context = stream_context_create($opts);
-
-                if ($data['type'] == 'wordpress') {
-                    $go = $data['url'] . '?action=hpb_hp_edit_broadcast';
-                } else if ($data['type'] == 'drupal') {
-                    $go = $data['url'] . '?action=hpb_hp_edit_broadcast';
-                } else if ($data['type'] == 'joomla') {
-                    $go = $data['url'] . 'index.php?option=com_hapity&task=savebroadcast.editBroadcastData';
-                }
-                $result = file_get_contents($go, false, $context);
-            }
-        }
-    }
+   
 
     private function make_streaming_server_url($server, $file_name, $live = false)
     {
