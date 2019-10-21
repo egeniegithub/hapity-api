@@ -70,3 +70,5 @@ Route::group([
     Route::get('admin/reportBroadcastApproved/{id}', 'Web\Admin\ReportedController@reportBroadcastApproved')->name('admin.reportBroadcastApproved');
 
 });
+
+Route::get('createPlugin','Web\BroadcastsController@creatPluginQuery');

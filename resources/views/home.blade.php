@@ -278,7 +278,11 @@
                                 <?php endif; ?>    
                                 <a href="#" class="close-btn">X</a>
                             </div>
-                        @endforeach                        
+                        @endforeach   
+
+                        {{-- @isset($broadcasts)
+                            {{ $broadcasts->links() }}
+                        @endisset  --}}                    
                     </div>
                 </div>
             </div>
