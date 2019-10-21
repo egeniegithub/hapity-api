@@ -43,9 +43,9 @@ class ContactusController extends Controller
             'message' => $request->message,
         );
         Mail::send('emails/contactus', ['data' => $data], function ($message) use ($email) {
-            $message->to(CONTACTUS_SEND_TO_EMAIL, $email)->subject('New Job Opportunity');
+            $message->to(CONTACTUS_SEND_TO_EMAIL, $email)->subject('Contact Us');
         });
-        return back()->with('flash_message','Email Send Successful;ly ');
+        return back()->with('flash_message','Email Send Successfully ');
         return "Your email has been sent successfully";
     }
 

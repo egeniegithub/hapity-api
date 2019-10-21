@@ -10,7 +10,7 @@
 
     <div class="forget_password login-new-wrapper">
         
-        <div class="logo"><a href="#"><img src="{{ asset('assets/') }}/images/logo.png"></a></div>
+        {{-- <div class="logo"><a href="#"><img src="{{ asset('assets/') }}/images/logo.png"></a></div> --}}
         <div class="form-area">
             @if (session('status'))
                         <div class="alert alert-success" role="alert">

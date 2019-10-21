@@ -9,6 +9,7 @@ use App\UserProfile;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class RegisterController extends Controller
@@ -84,14 +85,15 @@ class RegisterController extends Controller
             'auth_key' => md5($data['username']),
         ]);
 
-        /*
-        $hash = md5($user->id);
-
-        Token::create([
-            'user_id' => $user->id,
-            'token' => $hash,
-        ]);
-        */
+        
+        $email = $user->email;
+        $data = array(
+            'name' => $user->username,
+            'email' => $user->email,
+        );
+        Mail::send('emails/welcome', ['data' => $data], function ($message) use ($email) {
+            $message->to($email,'chris@hapity.com')->subject('Welcome');
+        });
 
         return $user;
     }

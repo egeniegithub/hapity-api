@@ -7,7 +7,7 @@
 
 </head>
 
-<body bgcolor="#333" style="margin:0; margin-top:100px;">
+<body bgcolor="#333" style="margin:0; margin-top:10px;">
 	<div class="email-wrp" style="max-width:840px; margin:0 auto; background-color: #fff; font-family: 'Open Sans', sans-serif;">
 		<table style="width:100%;">
             <tr>

@@ -88,9 +88,9 @@
 </header><!-- header -->      
 <!-- header  ends here -->
 
-        <main class="py-4">
+        {{-- <main class="py-4"> --}}
             @yield('content')
-        </main>
+        {{-- </main> --}}
 
 <!-- footer starts from here -->
     <footer class="footer-wrapper">
