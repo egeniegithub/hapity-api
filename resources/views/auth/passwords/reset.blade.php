@@ -1,8 +1,23 @@
 @extends('layouts.app')
+
+@push('css')
+    <style type="text/css">
+        #app{
+            background: #333;
+        }
+        #reset-submit{
+            width: 362px !important;
+            margin: 0px auto;
+            margin-left: -14px !important;
+        }
+
+    </style>
+@endpush
+
 @section('content')
 <div class="wrapper-outer">
     <div class="reset_password">
-        <div class="logo"><a href="{{route('home')}}"><img src="{{ asset('assets/')}}/images/logo.png"></a></div>
+        {{-- <div class="logo"><a href="{{route('home')}}"><img src="{{ asset('assets/')}}/images/logo.png"></a></div> --}}
         <div class="form-area">
             <form method="POST" action="{{ route('password.update') }}">
                         @csrf
@@ -39,6 +54,6 @@
         </div>
         <div class="clear"></div>
     </div>
-</div>
+    <br><br><br>
 
 @endsection
