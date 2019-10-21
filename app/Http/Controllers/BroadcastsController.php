@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Broadcast;
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\PluginFunctions;
 use App\PluginId;
 use App\User;
 use Illuminate\Http\Request;
@@ -97,7 +98,9 @@ class BroadcastsController extends Controller
 
         if (boolval($request->input('post_plugin'))) {
             //TODO debug this
-            $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
+            $plugin = new PluginFunctions();
+            $result = $plugin->make_plugin_call_upload($broadcast->id);
+            // $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
         }
 
         return response()->json(['response' => $response]);
@@ -168,7 +171,9 @@ class BroadcastsController extends Controller
 
         if (boolval($request->input('post_plugin'))) {
             //TODO debug this
-            $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
+            $plugin = new PluginFunctions();
+            $share_url = $plugin->make_plugin_call_upload($broadcast->id);
+            // $share_url = $this->make_plugin_call_upload($broadcast->id, $request->input('user_id'));
         }
 
         return response()->json(['response' => $response]);
@@ -274,7 +279,9 @@ class BroadcastsController extends Controller
 
         if (boolval($request->input('post_plugin'))) {
             //TODO debug this
-            $share_url = $this->make_plugin_call_edit($broadcast->id, $broadcast->user_id);
+            $plugin = new PluginFunctions();
+            $share_url = $plugin->make_plugin_call_edit($broadcast_id);
+            // $share_url = $this->make_plugin_call_edit($broadcast->id, $broadcast->user_id);
         }
 
         return response()->json(['response' => $response]);
