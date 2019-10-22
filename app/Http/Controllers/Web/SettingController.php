@@ -7,6 +7,7 @@ use App\User;
 use App\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
 
 class SettingController extends Controller
 {
@@ -24,25 +25,32 @@ class SettingController extends Controller
     
     public function save_settings(Request $request)
     {
+        $user_id = $request->user_id;
+         $profile_picture = $request->profile_picture;
+        $user = User::where('username','<>',$request->username)->where('email','<>',$request->email)->first();
+        $profile = UserProfile::where('user_id', $user_id)->first();
+        $profile->profile_picture = $this->handle_profile_picture_upload($request,$user_id,$profile_picture);
+        // $profile->profile_picture = $profile_picture;
 
-        $user = User::find(Auth::id());
-        $user->username = $request->username;
-        $user->email = $request->email;        
-        $user->save();
-        $profile = UserProfile::where('user_id', $user->id)->first();
-        $profile->full_name = $request->username;
-        $profile->email = $request->email;
+        if(count(collect($user)) > 0){
+            $user = User::find(Auth::id());
+            $user->username = $request->username;
+            $user->email = $request->email;        
+            $user->save();
+            $profile->full_name = $request->username;
+            $profile->email = $request->email;
+        }
+        
         $profile->is_sensitive = $request->is_sensitive;
-        $profile->profile_picture = $request->profile_picture;
         $profile->save();
         return 'true';
         return back()->with("success", "Setting Successfull Update");
     }
 
-    private function handle_profile_picture_upload($user_id, $profile_picture)
+    private function handle_profile_picture_upload($request, $user_id, $profile_picture)
     {
         $imageName = '';
-        if (!empty($profile_picture)) {
+        if ($request->hasFile($profile_picture)) {
             $file = $profile_picture;
             $extension = $file->getClientOriginalExtension(); // getting image extension
             $filename = time() . '.' . $extension;
@@ -51,8 +59,31 @@ class SettingController extends Controller
             $file->move($path, $imageName);
         }
 
+        if (!empty($profile_picture) && !is_null($profile_picture)) {
+            $imageName = 'profile_picture_' . $user_id . '.jpg';
+
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures'.DIRECTORY_SEPARATOR);
+
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+
+            $base_64_data = $request->input('profile_picture');
+
+            $base_64_data = str_replace('datagea:im/jpeg;base64,', '', $base_64_data);
+            $base_64_data = str_replace('data:image/png;base64,', '', $base_64_data);
+
+            File::put($path . $imageName, base64_decode($base_64_data));
+
+            return $imageName;
+        }
+
         return $imageName;
     }
+
+
+
+
 
     public function check_username(Request $request){
         $username = $request->username;

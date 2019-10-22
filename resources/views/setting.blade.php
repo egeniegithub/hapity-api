@@ -221,7 +221,7 @@ $('#account-save').click(function(e){
                         $.loader('close');
                          alertify.alert('Username already exist, please choose different username.');
                     }
-                    else{
+                    // else{
                         $.ajax({
                             type: 'GET',
                             url: "{{route('check_email')}}",
@@ -234,9 +234,8 @@ $('#account-save').click(function(e){
                                 if(msg=='true'){
                                     $.loader('close');
                                     alertify.alert('Email already exist, please choose different email.');
-                                    
                                 }
-                                else{
+                                // else{
 
                                         $.ajax({
                                             type: 'POST',
@@ -263,12 +262,12 @@ $('#account-save').click(function(e){
                                             }
                                         });
 
-                                }
+                                // }
 
                             }
                         });
 
-                    }
+                    // }
                 }
             });
         }
