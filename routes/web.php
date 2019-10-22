@@ -33,6 +33,9 @@ Route::group([
 
     Route::get('settings', 'Web\SettingController@settings')->name('settings');
     Route::post('user/save_setting', 'Web\SettingController@save_settings')->name('settgins.save');
+    Route::get('check_username','Web\SettingController@check_username')->name('check_username');
+    Route::get('check_email','Web\SettingController@check_email')->name('check_email');
+
 
     Route::get('webcast', 'Web\BroadcastsController@start_web_cast')->name('webcast');
     Route::get('create-content', 'Web\BroadcastsController@create_content')->name('create-content');
@@ -71,4 +74,6 @@ Route::group([
 
 });
 
-Route::get('createPlugin','Web\BroadcastsController@creatPluginQuery');
+
+
+

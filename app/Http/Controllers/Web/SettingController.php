@@ -13,7 +13,7 @@ class SettingController extends Controller
     //
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware(['auth','cors']);
     }
 
     public function settings()
@@ -21,48 +21,21 @@ class SettingController extends Controller
         $userinfo = User::with('profile')->where('id', Auth::id())->first()->toArray();
         return view('setting', compact('userinfo'));
     }
-    public function is_user_username($username, $user_id)
-    {
-        dd($username, $user_id);
-    }
-
+    
     public function save_settings(Request $request)
     {
 
         $user = User::find(Auth::id());
-
-        $rules = [];
-
-        if ($user->username != $request->username) {
-            $rules['username'] = 'unique:users,username';
-        }
-
-        if ($user->email != $request->email) {
-            $rules['email'] = 'unique:users,email';
-        }
-
-        $request->validate($rules);
-
-        $profile_picture = $request->file('image');
-
-        //  Saving User Data
-        $image_name = $this->handle_profile_picture_upload(Auth::id(), $profile_picture);
-
         $user->username = $request->username;
-        $user->email = $request->email;
+        $user->email = $request->email;        
         $user->save();
-
         $profile = UserProfile::where('user_id', $user->id)->first();
         $profile->full_name = $request->username;
         $profile->email = $request->email;
         $profile->is_sensitive = $request->is_sensitive;
-
-        if (!empty($image_name)) {
-            $profile->profile_picture = $image_name;
-        }
-
+        $profile->profile_picture = $request->profile_picture;
         $profile->save();
-
+        return 'true';
         return back()->with("success", "Setting Successfull Update");
     }
 
@@ -79,6 +52,30 @@ class SettingController extends Controller
         }
 
         return $imageName;
+    }
+
+    public function check_username(Request $request){
+        $username = $request->username;
+        $user_id = $request->user_id;
+        $user = [];
+        $user = User::where('id',$user_id)->where('username',$username)->first();
+
+        if(isset($user) && !empty($user) && count(collect($user)) > 0){
+            echo "true";
+        }else{
+            echo "false";
+        }
+    }
+    public function check_email(Request $request){
+        $email = $request->email;
+        $user_id = $request->user_id;
+        $user = [];
+        $user = User::where('id',$user_id)->where('email',$email)->first();
+        if(isset($user) && !empty($user) && count(collect($user)) > 0){
+            echo "true";
+        }else{
+            echo "false";
+        }
     }
 
 }

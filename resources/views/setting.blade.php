@@ -33,16 +33,39 @@
                                 <h1>Account Settings</h1>
                                 <span>Change your basic account settings</span>
                             </div>
-                            <form class="" method="post" action="{{route('settgins.save')}}" enctype="multipart/form-data">
+                            <form class=""  enctype="multipart/form-data">
+                                {{-- method="post" --}} {{-- action="{{route('settgins.save')}}" --}}
                                 @csrf
                             <div class="account-settigs-content">
                                 <div class="form-group text-center">
                                     <figure>
-                                    	@if(isset(auth::user()->profile->profile_picture ) && !empty(auth::user()->profile->profile_picture ))
-                                        	<img src='{{ asset('images/profile_pictures/'.auth::user()->profile->profile_picture) }}' class='profile_picture'>
+                                        @php 
+                                        $thumbnail_image = auth::user()->profile->profile_picture;
+                                        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+
+                                    // check if the data is empty 
+                                    @endphp
+                                    @if(!empty($thumbnail_image) && $thumbnail_image != null)
+                                    @php
+                                        // check base64 format
+                                        $explode = explode(',', $thumbnail_image);
+                                        // check if type is allowed
+                                        $format = str_replace(
+                                            ['data:image/', ';', 'base64'], 
+                                            ['', '', '',], 
+                                            $explode[0]
+                                        );  
+                                    @endphp
+                                        @if(in_array($format, $allowedExtensions))
+                                            <img src="{{ $thumbnail_image }}" alt="" />
                                         @else
-                                        	<img src='{{asset('assets/images/null.png')}}' class='profile_picture'>
+                                            <img src="{{ asset('images/profile_pictures' . '/'  .$thumbnail_image) }}" alt="" />
                                         @endif
+                                        
+                                    @else
+                                        <img src='{{asset('assets/images/null.png')}}' class='profile_picture'>
+                                    @endif
+
                                     </figure>
                                     <h2 class="username-title">{{ auth::user()->username }}</h2>
                                     <?php //if($userinfo->login_type == 'simple'){?>
@@ -108,7 +131,7 @@
                                     </div>
                                 </div><!-- form group -->
                                 <div class="form-group text-center field-data">
-                                    <input type="submit" class="save-btn" value="Save" {{-- id='account-save' --}} >
+                                    <input type="submit" class="save-btn" value="Save" id='account-save' >
                                 </div><!-- form group -->
                             </div>
                         </form><!-- form ends here -->
@@ -152,12 +175,107 @@
         }    
     });
 
-
-$('#account-save').click(function(){
-    
-       $.loader({className:"blue", content:"<i class='fa fa-refresh fa-spin fa-3x fa-fw margin-bottom loadingclass'></i>"});
+$('#account-save').click(function(e){
+        e.preventDefault();
+        $.loader({className:"blue", content:"<i class='fa fa-refresh fa-spin fa-3x fa-fw margin-bottom loadingclass'></i>"});
         
-   
+       email = $('#email').val().trim();
+       username = $('#username').val().trim();
+       user_id = $('#user_id').val().trim();
+       logintype= $('#login-type').val().trim();
+       var profile_picture = '';
+
+        if($('#is_sensitive').is(':checked')){
+            is_sensitive = 1;
+        } else {
+            is_sensitive = 0;
+        }
+       if(picture_change=='true')
+           profile_picture = cropper.getDataURL();
+       else if(picture_change=='false')
+           profile_picture = $('#profile_picture').val();
+       
+       if(username==''){
+           $.loader('close');
+            alertify.log('Please enter username.');            
+        }
+       else if(email==''){
+           $.loader('close');
+            alertify.log('Please enter email address.');            
+        }
+       else if(!validateEmail(email)){
+           $.loader('close');
+            alertify.alert('Invalid email address, please enter correct email.');
+            error = 'true';            
+       }
+       else{
+        $.ajax({
+                type: 'GET',
+                url: "{{route('check_username')}}",
+                data: {
+                    username:username,
+                    user_id:user_id
+                },
+                success: function(msg){
+                    if(msg=='true'){
+                        $.loader('close');
+                         alertify.alert('Username already exist, please choose different username.');
+                    }
+                    else{
+                        $.ajax({
+                            type: 'GET',
+                            url: "{{route('check_email')}}",
+                            data: {
+                                email:email,
+                                user_id:user_id
+                            },
+                            success: function(msg){
+                                
+                                if(msg=='true'){
+                                    $.loader('close');
+                                    alertify.alert('Email already exist, please choose different email.');
+                                    
+                                }
+                                else{
+
+                                        $.ajax({
+                                            type: 'POST',
+                                            url: "{{route('settgins.save')}}",
+                                            data: {
+                                                email:email,
+                                                user_id:user_id,
+                                                username:username,
+                                                profile_picture:profile_picture,
+                                                type:'account',
+                                                picture_change:picture_change,
+                                                is_sensitive:is_sensitive,
+                                                _token: "{{ csrf_token() }}",
+                                            },
+                                            success: function(msg){
+                                                if(msg=='success'){
+                                                    $.loader('close');
+                                                    alertify.alert('Account settings have been successfully changed..');
+                                                    var url = baseurl+"profile/"+username;
+                                                    var html = '<a href="'+url+'">'+url+'</a>'
+                                                    $('.url').html(html);
+                                                }
+                                                location.reload();
+                                            }
+                                        });
+
+                                }
+
+                            }
+                        });
+
+                    }
+                }
+            });
+        }
+        return false;
 }) ;
+
+
+
     </script>
 @endpush
