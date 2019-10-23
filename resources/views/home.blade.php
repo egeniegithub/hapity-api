@@ -142,13 +142,13 @@
                                         );  
                                     @endphp
                                         @if(in_array($format, $allowedExtensions))
-                                            <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
+                                            <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" class="img-responsive" />
                                         @else
-                                            <img src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$thumbnail_image) }}" alt="{{ $b_title }}" />
+                                            <img src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$thumbnail_image) }}" alt="{{ $b_title }}" class="img-responsive" />
                                         @endif
                                         
                                     @else
-                                        <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
+                                        <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" class="img-responsive" />
                                     @endif
 
                                     @if($video_file_name)
