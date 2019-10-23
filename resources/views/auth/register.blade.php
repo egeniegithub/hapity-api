@@ -55,17 +55,16 @@
         <ul>
           <li>
             <span>
-              <input class="form-check-input" type="checkbox" name="agree_terms_and_conditions" id="agree_terms_and_conditions" {{ old('agree_terms_and_conditions') ? 'checked="checked"' : '' }}  required="" value="1">
-              
+              <input class="form-check-input" type="checkbox" name="agree_terms_and_conditions" id="agree_terms_and_conditions" {{ old('agree_terms_and_conditions') ? 'checked="checked"' : '' }} required="" value="1">
             </span> 
-                    <span class="term-condition"> I agree to the Hapity <a href="{{ route('privacy-policy') }}" target="_blank">Terms and Conditions </a> </span>
-                    <br>
-                    @error('agree_terms_and_conditions')
-                      <span class="invalid-feedback error-test-color text-danger" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                    @enderror
-                    <br>
+            <span class="term-condition"><label for="agree_terms_and_conditions"> I agree to the Hapity</label> <a href="{{ route('privacy-policy') }}" target="_blank">Terms and Conditions </a> </span>
+            <br>
+            @error('agree_terms_and_conditions')
+              <span class="invalid-feedback error-test-color text-danger" role="alert">
+                <strong>{{ $message }}</strong>
+              </span>
+            @enderror
+            <br>
             </li>
             <li>
                 @if (Route::has('password.request'))
