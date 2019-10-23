@@ -11,6 +11,10 @@
             margin-left: -14px !important;
         }
 
+        .error-test-color{
+            color: red !important;
+          }
+
     </style>
 @endpush
 
@@ -26,7 +30,7 @@
                 <input type="hidden" id="reset-email" value="<?php echo $email; ?>">
 
                 <div class="form-group row">
-                        <input id="email" type="email" class="form-fields @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus placeholder="EMAIL">
+                        <input id="email" type="email" class="form-fields @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus placeholder="EMAIL" readonly="">
                         @error('email')
                             <span class="invalid-feedback error-test-color" role="alert">
                                 <strong>{{ $message }}</strong>

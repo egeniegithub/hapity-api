@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Broadcast extends Model
 {
-    // use SoftDeletes;
 
     protected $table = 'broadcasts';
     protected $guarded = [];

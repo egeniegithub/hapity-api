@@ -984,3 +984,14 @@ body { font-family: 'MyriadPro' !important; }
 /*#sg-carousel .carousel-inner .item { min-height: 490px }*/
 #sg-carousel { height: auto; }
 }
+
+.full-width{
+    float: left;
+    width: 100%;
+}
+.change-credentials-form{
+    margin-top: 43px;
+}
+.lock-image{
+    margin-top: -50px;
+}

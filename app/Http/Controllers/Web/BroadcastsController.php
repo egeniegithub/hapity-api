@@ -12,6 +12,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
 
@@ -43,7 +44,7 @@ class BroadcastsController extends Controller
 
     public function startwebbroadcast(Request $request)
     {
- 
+       
         $title = $request->title;
         $description = "";
         $geo_location = $request->geo_location;
@@ -53,7 +54,9 @@ class BroadcastsController extends Controller
         $input_server = $request->server_input;
 
         $post_plugin = $request->post_plugin;
+        
         $broadcast_image = $request->broadcast_image;
+
         $filename = $request->stream_url;
         if (!$post_plugin) {
             $post_plugin = 'false';
@@ -98,11 +101,13 @@ class BroadcastsController extends Controller
                 $broadcast_data['status'] = 'offline';
                 $broadcast_data['filename'] = $filename . ".mp4";
                 $broadcast_data['video_name'] = '';
-                $broadcast_data['broadcast_image'] = $broadcast_image;
+                $broadcast_data['broadcast_image'] = '';
                 $broadcast_data['share_url'] = '';
 
                 DB::table('broadcasts')->insert($broadcast_data);
                 $broadcast_id = DB::getPdo()->lastInsertId();
+
+                $data['broadcast_image'] = $this->handle_image_file_upload($request, $broadcast_id, $user_id);
 
                 $share_url = URL::to('/view-broadcast') . '/' . $broadcast_id;
                 $data['share_url'] = $share_url;
@@ -203,9 +208,7 @@ class BroadcastsController extends Controller
         
         $rules = array(
             'title' => 'required',
-            'description' => 'required',
-            'video' => 'required|mimes:mp4|max:524288',
-            'image' => 'required',
+            'video' => 'mimes:mp4|max:524288',
         );
         $request->validate($rules);       
 
@@ -272,8 +275,7 @@ class BroadcastsController extends Controller
     {
         $rules = array(
             'title' => 'required',
-            'description' => 'required',
-            'video' => 'required|mimes:mp4|max:528000',
+            'video' => 'mimes:mp4|max:528000',
         );
         $validator = \validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -419,4 +421,47 @@ class BroadcastsController extends Controller
 
         return response()->json(['view_count' => $count]);
     }
+
+    private function handle_image_file_upload($request, $broadcast_id, $user_id)
+    {
+        $image = $request->input('broadcast_image');
+
+        $thumbnail_image = '';
+        if ($request->hasFile('broadcast_image')) {
+            $file = $request->file('broadcast_image');
+            $ext = $file->getClientOriginalExtension();
+            $thumbnail_image = md5(time()) . '.' . $ext;
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
+
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+
+            $file->move($path, $thumbnail_image);
+
+            return $thumbnail_image;
+        }
+
+        if (!empty($image) && !is_null($image)) {
+            $thumbnail_image = md5(time()) . '.jpg';
+
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR);
+
+            if (!is_dir($path)) {
+                mkdir($path);
+            }
+
+            $base_64_data = $request->input('broadcast_image');
+
+            $base_64_data = str_replace('datagea:im/jpeg;base64,', '', $base_64_data);
+            $base_64_data = str_replace('data:image/png;base64,', '', $base_64_data);
+
+            File::put($path . $thumbnail_image, base64_decode($base_64_data));
+
+            return $thumbnail_image;
+        }
+
+        return $thumbnail_image;
+    }
+
 }

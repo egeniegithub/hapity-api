@@ -8,6 +8,8 @@ use App\UserProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class SettingController extends Controller
 {
@@ -81,10 +83,6 @@ class SettingController extends Controller
         return $imageName;
     }
 
-
-
-
-
     public function check_username(Request $request){
         $username = $request->username;
         $user_id = $request->user_id;
@@ -107,6 +105,32 @@ class SettingController extends Controller
         }else{
             echo "false";
         }
+    }
+
+    public function reset_password(Request $request){
+
+        $rules = array(
+            'current_password' => 'required',
+            'new_password' => 'required|min:3|required_with:confirm_password|same:confirm_password',
+            'confirm_password' => 'required|min:3'
+        );
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            return back()->withErrors($validator->errors());
+        }
+
+        $newpass = bcrypt($request->new_password);
+        $user = User::find(Auth::user()->id);
+
+        if (Hash::check($request->current_password,$user->password)) {
+            $data = array('password' => $newpass);
+            $result = User::where('id',$user->id)->update($data);
+            return back()->with('flash_message','Password Update Successfully');
+        }else{
+            return back()->with('flash_message_delete','Current Password Is Not Correct Please Enter Correct Password !');
+        }
+
+
     }
 
 }

@@ -1,7 +1,14 @@
 @extends('layouts.app')
 
 @push('css')
- 
+    <style type="text/css">
+        .preview-image{
+            max-width: 100% !important;
+        }
+        .live-streaming{
+            min-height: 760px !important;
+        }
+    </style>
 @endpush
 @section('content')
 
@@ -41,14 +48,22 @@
                         
                     <ul>
                         <li>
-                            <div class="image-upload-btn" style="position:relative;">
-                                <a class='btn-purple upload-custom-image active-this-btn' href='javascript:;'>
-                                    Upload Image
-                                   
-                                    <input type="file" name="image" id="bd_image" value="Image" accept="image/x-png,image/gif,image/jpeg" style='' size="40" />
-                                </a>
-                                <a href="#" class="btn btn-danger reset-image-btn" style="display: none;">Reset Image</a>
-                                
+
+                            <div class="image-upload-btn preview-image" style="position:relative;">
+                                <div class="col-sm-6">
+                                    <a class='btn-purple upload-custom-image active-this-btn' href='javascript:;'>
+                                        Upload Image   
+                                        <input type="file" name="image" id="bd_image"  value="Image" accept="image/x-png,image/gif,image/jpeg" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40"  onchange='document.getElementById("upload-image").src = window.URL.createObjectURL(this.files[0])' />
+
+                                        {{-- <input type="file" name="image" id="bd_image" value="Image" accept="image/x-png,image/gif,image/jpeg" style='' size="40" /> --}}
+                                    </a>
+                                    <a href="#" class="btn btn-danger reset-image-btn" style="display: none;">Reset Image</a>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="uploaded-container">
+                                        <img id="upload-image" src="{{ asset('images/default001.jpg') }}" />
+                                    </div>
+                                </div>
                             </div>
                         </li>
                         <li class="broadcast-btn-style"><input id="start-streamings" class="btn btn-primary" type="button" value="Start"></li>
@@ -126,7 +141,7 @@
             reader.onloadend = function() {
                 console.log('RESULT', reader.result);
                 bd_image = reader.result;
-                $('.live-streaming').css("background-image", "url('" + bd_image + "')");
+                // $('.live-streaming').css("background-image", "url('" + bd_image + "')");
 
                 if($('.upload-custom-image').hasClass('active-this-btn')){
                     $('.upload-custom-image').hide().removeClass('.active-this-btn');

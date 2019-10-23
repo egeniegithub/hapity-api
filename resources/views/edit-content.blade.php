@@ -11,6 +11,18 @@
         height: 111px;
         display: block;
     }
+    .border-color{
+        border: 1px solid #97be0d !important; 
+    }
+    .upload-actions h3 {
+         color: #000; 
+        text-shadow: 0 0 1px #000;
+        margin-top: 10px;
+    }
+    .or-text.separator{
+        color: #000 !important;
+        border: 1px solid #97be0d !important;
+    }
 </style>
 @endpush
 @section('content')
@@ -30,8 +42,8 @@
             <form method="post" data-type="edit" action="{{route('edit_content_submission')}}" enctype="multipart/form-data">
                 @csrf
                     <ul>
-                        <li><input type="text" name="title" placeholder="Title" value="<?php echo $broadcast_data['title']; ?>" id="title" required autocomplete="off"></li>
-                        <li><textarea name="description" id="description" placeholder="Description" required><?php echo $broadcast_data['description']; ?></textarea></li>
+                        <li><input class="border-color" type="text" name="title" placeholder="Title" value="<?php echo $broadcast_data['title']; ?>" id="title" required autocomplete="off"></li>
+                        <li><textarea class="border-color" name="description" id="description" placeholder="Description" ><?php echo $broadcast_data['description']; ?></textarea></li>
                     </ul>   
                     <div class="upload-actions">
                         <h3>Upload a Video or Picture</h3>

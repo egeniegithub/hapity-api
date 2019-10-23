@@ -229,6 +229,7 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
         'PluginFunctions' => App\Http\Helpers\PluginFunctions::class,
+        'Input' => Illuminate\Support\Facades\Input::class,
 
     ],
 

@@ -30,7 +30,7 @@
                     @csrf
                     <ul class="title-desc-section">
                         <li><input type="text" name="title" placeholder="Title" id="title" required autocomplete="off"></li>
-                        <li><textarea name="description" id="description" placeholder="Description" required></textarea></li>
+                        <li><textarea name="description" id="description" placeholder="Description" ></textarea></li>
                     </ul><!-- title-desc-section -->   
                     <div class="upload-actions">
                        
@@ -39,7 +39,7 @@
                                 
                                 <a class='btn-purple' href='javascript:;'>
                                 Upload video
-                                <input type="file" name="video" value="Video" required accept="video/mp4,video/x-m4v,video/*" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" id="video-upload-btn" onchange=''/>
+                                <input type="file" name="video" value="Video" accept="video/mp4,video/x-m4v,video/*" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40" id="video-upload-btn" onchange=''/>
                                 </a>
                                 @if($errors->has('video')) 
                                     {{ $errors->first('video') }} 
@@ -58,7 +58,7 @@
                             <a class='btn-purple' href='javascript:;'>
                                 Upload image
                                 <!-- <span><i class="fa fa-image"></i> Image</span> -->
-                                <input type="file" name="image" required value="Image" accept="image/x-png,image/gif,image/jpeg" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40"  onchange='document.getElementById("upload-image").src = window.URL.createObjectURL(this.files[0])' />
+                                <input type="file" name="image"  value="Image" accept="image/x-png,image/gif,image/jpeg" style='position:absolute;z-index:2;top:0;left:0;filter: alpha(opacity=0);-ms-filter:"progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";opacity:0;background-color:transparent;color:transparent;' size="40"  onchange='document.getElementById("upload-image").src = window.URL.createObjectURL(this.files[0])' />
                                
                                 </a>
                                  @if($errors->has('image')) 
