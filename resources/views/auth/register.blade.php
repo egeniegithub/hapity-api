@@ -88,9 +88,5 @@
 @endsection
 
 @push('script')
- {{--  <script type="text/javascript">
-    $('#term_condition').on('change', function(){
-       $('#term_condition').val(this.checked ? 1 : 0);
-    });
-  </script> --}}
+
 @endpush

@@ -89,29 +89,27 @@ class BroadcastsController extends Controller
                 if ($allow_user_messages == '') {
                     $allow_user_messages = 'yes';
                 }
+                $broadcast = new Broadcast();
+                $broadcast->title = $title;
+                $broadcast->description = $description;
+                $broadcast->geo_location = $geo_location;
+                $broadcast->allow_user_messages = $allow_user_messages;
+                $broadcast->user_id = $user_id;
+                $broadcast->stream_url = $stream_url;
+                $broadcast->created_at = $date;
+                $broadcast->is_sensitive = $is_sensitive;
+                $broadcast->status = 'offline';
+                $broadcast->filename = $filename . ".mp4";
+                $broadcast->video_name = '';
+                $broadcast->broadcast_image = '';
+                $broadcast->share_url = '';
+                $broadcast->save();
+                $broadcast_id = $broadcast->id;
 
-                $broadcast_data['title'] = $title;
-                $broadcast_data['description'] = $description;
-                $broadcast_data['geo_location'] = $geo_location;
-                $broadcast_data['allow_user_messages'] = $allow_user_messages;
-                $broadcast_data['user_id'] = $user_id;
-                $broadcast_data['stream_url'] = $stream_url;
-                $broadcast_data['created_at'] = $date;
-                $broadcast_data['is_sensitive'] = $is_sensitive;
-                $broadcast_data['status'] = 'offline';
-                $broadcast_data['filename'] = $filename . ".mp4";
-                $broadcast_data['video_name'] = '';
-                $broadcast_data['broadcast_image'] = '';
-                $broadcast_data['share_url'] = '';
-
-                DB::table('broadcasts')->insert($broadcast_data);
-                $broadcast_id = DB::getPdo()->lastInsertId();
-
-                $data['broadcast_image'] = $this->handle_image_file_upload($request, $broadcast_id, $user_id);
-
-                $share_url = URL::to('/view-broadcast') . '/' . $broadcast_id;
-                $data['share_url'] = $share_url;
-                Broadcast::where('id', $broadcast_id)->update($data);
+                $broadcast->broadcast_image = $this->handle_image_file_upload($request, $broadcast_id, $user_id);
+                $share_url = route('broadcast.view', $broadcast_id);
+                $broadcast->share_url = $share_url;
+                $broadcast->save();
                 $response = array(
                     'status' => 'success', 
                     'broadcast_id' => $broadcast_id, 

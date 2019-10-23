@@ -71,15 +71,6 @@ class RegisterController extends Controller
     {
         $agree_terms_and_conditions = isset($data['agree_terms_and_conditions']) && !empty($data['agree_terms_and_conditions'])  ? 1 : 0;
 
-/*
-        $user = User::create([
-            'name'              => $data['username'],
-            'username'          => $data['username'],
-            'email'             => $data['email'],
-            'password'          => Hash::make($data['password']),
-            'agree_terms_and_conditions'    => $agree_terms_and_conditions
-        ]);
-*/
         $user = new User();
         $user->name = $data['username'];
         $user->username = $data['username'];

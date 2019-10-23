@@ -35,7 +35,4 @@ class Broadcast extends Model
         return $this->belongsTo('App\User', 'user_id')->with('reportedUser');
     }
 
-    // public function isReported() {
-    //     return !null == ReportBroadcast::where('broadcast_id', $this->id)->get();
-    // }
 }
