@@ -18,7 +18,6 @@ class CreateUserRolesTable extends Migration
             $table->bigInteger('user_id')->nullable();
             $table->bigInteger('role_id')->nullable();
             $table->timestamps();
-            // $table->softDeletes();
         });
     }
 

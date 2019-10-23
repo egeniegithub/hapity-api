@@ -30,7 +30,6 @@ class UserProfile extends Migration
             $table->string('screen_name', 512)->nullable();
             $table->bigInteger('is_sensitive')->default('0')->nullable();
             $table->timestamps();
-            // $table->softDeletes();
         });
     }
 

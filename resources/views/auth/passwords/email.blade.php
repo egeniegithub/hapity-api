@@ -1,5 +1,11 @@
 @extends('layouts.app')
-
+@push('css')
+    <style type="text/css">
+        .error-test-color{
+            color: red !important;
+          }
+    </style>
+@endpush
 @section('content')
 
 

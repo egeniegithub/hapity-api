@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Input;
 
 class RegisterController extends Controller
 {
@@ -53,7 +54,7 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            // 'name' => ['required', 'string', 'max:255'],
+            'agree_terms_and_conditions' => 'required',
             'username' => ['required', 'string', 'max:50', 'unique:users'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:3', 'confirmed'],
@@ -68,12 +69,24 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $agree_terms_and_conditions = isset($data['agree_terms_and_conditions']) && !empty($data['agree_terms_and_conditions'])  ? 1 : 0;
+
+/*
         $user = User::create([
-            'name' => $data['username'],
-            'username' => $data['username'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+            'name'              => $data['username'],
+            'username'          => $data['username'],
+            'email'             => $data['email'],
+            'password'          => Hash::make($data['password']),
+            'agree_terms_and_conditions'    => $agree_terms_and_conditions
         ]);
+*/
+        $user = new User();
+        $user->name = $data['username'];
+        $user->username = $data['username'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->agree_terms_and_conditions = $agree_terms_and_conditions;
+        $user->save();
 
         $user->roles()->attach(HAPITY_USER_ROLE_ID);
         

@@ -11,6 +11,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use JWTAuth;
 use Validator;
@@ -152,6 +153,15 @@ class AuthController extends Controller
             $user_info['auth_key'] = $profile->auth_key;
             $user_info['token'] = $token;
             $user_info['join_date'] = $user->created_at;
+
+            $email = $user->email;
+            $data = array(
+                'name' => $user->username,
+                'email' => $user->email,
+            );
+            Mail::send('emails/welcome', ['data' => $data], function ($message) use ($email) {
+                $message->to($email,'chris@hapity.com')->subject('Welcome');
+            });
 
             $returnData['status'] = 'success';
             $returnData['user_info'] = $user_info;

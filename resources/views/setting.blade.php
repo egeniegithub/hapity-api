@@ -7,6 +7,22 @@
 @push('css')
  	<link rel="stylesheet" type="text/css" href="{{asset('assets/css/crop.css')}}"/>
 	<link href="{{asset('assets/css')}}/jquery.loader.css" rel="stylesheet" />
+
+    <style type="text/css">
+        .section-main {
+            float: left;
+            width: 100%;
+            padding: 0px 20px !important;
+            margin: 0px 0 0 0 !important;
+        }
+        form.account_form {
+            padding: 30px 0 5px 10px;
+             width: 100%; 
+        }
+        .text-error{
+            color: red;
+        }
+    </style>
 @endpush
 @section('content')
 
@@ -28,12 +44,12 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-md-5 col-md-offset-4">
+                        <div class="col-md-6">
                             <div class="setting_title text-center">
                                 <h1>Account Settings</h1>
                                 <span>Change your basic account settings</span>
                             </div>
-                            <form class=""  enctype="multipart/form-data">
+                            <form class="full-width"  enctype="multipart/form-data">
                                 {{-- method="post" --}} {{-- action="{{route('settgins.save')}}" --}}
                                 @csrf
                             <div class="account-settigs-content">
@@ -96,7 +112,7 @@
                                 <div class="form-group text-center field-data">
                                     <label>Username</label>
                                     <div class="field-names">
-                                        <input class="input-s" type="text" id='username' name="username" value="{{ auth::user()->username }}" required>
+                                        <input class="input-s" type="text" id='username' name="username" value="{{ auth::user()->username }}" required readonly="">
                                         @if ($errors->has('username'))
                                             <div class="error alert-danger">{{ $errors->first('username') }}</div>
                                         @endif
@@ -106,7 +122,7 @@
                                 <div class="form-group text-center field-data">
                                     <label>Email</label>
                                     <div class="field-names">
-                                        <input class="input-s" type="text" id='email' name="email" value='{{ auth::user()->email }}' required>
+                                        <input class="input-s" type="text" id='email' name="email" value='{{ auth::user()->email }}' required readonly="">
                                         @if ($errors->has('email'))
                                             <div class="error alert-danger">{{ $errors->first('email') }}</div>
                                         @endif
@@ -134,27 +150,76 @@
                                     <input type="submit" class="save-btn" value="Save" id='account-save' >
                                 </div><!-- form group -->
                             </div>
-                        </form><!-- form ends here -->
+                            </form>
                         </div>
+                        <div class="col-md-6">
+                            <div class="account-settigs-content">
+                                <div class="setting_title text-center">
+                                    <h1>Change your password</h1>
+                                    <span>Change your account Login Credentials</span>
+                                </div>
+                                
+                                <form class="account_form " method="post" action="{{ route('reset.password') }}">
+                                    @csrf
+                                    <figure class="text-center lock-image " >
+                                        <img src='{{asset('assets')}}/images/lockgreen.png' class='profile_picture'>
+                                    </figure>
 
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            @if(Session::has('flash_message'))
+                                                <div class="alert @if(Session::has('flash_message')) alert-success @endif ">
+                                                    @if(Session::has('flash_message')) {{ Session::get('flash_message') }} @endif
+                                                </div>
+                                            @else
+                                                <div class="alert @if(Session::has('flash_message_delete')) alert-danger @endif ">
+                                                    @if(Session::has('flash_message_delete')) {{ Session::get('flash_message_delete') }} @endif 
+                                                </div>
+                                            @endif
+                                        </div>
+                                    </div>
+
+                                    <div class="fieldset change-credentials-form">
+                                        <div class="fields-wrap">
+                                            <div class="form-group text-center field-data">
+                                                <label>Current Password</label>
+                                                <div class="field-names">
+                                                    <input class="input-s"  type="password" class="" id='current-password' name="current_password" placeholder="Enter Current Password " required="">
+                                                    @if ($errors->has('current_password'))
+                                                        <div class="error alert-danger">{{ $errors->first('current_password') }}</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group text-center field-data">
+                                                <label>New Password</label>
+                                                <div class="field-names">
+                                                    <input class="input-s"  type="password" class="" id='new-password' name="new_password" placeholder="Enter New Password" required="">
+                                                    @if ($errors->has('new_password'))
+                                                        <div class="error alert-danger">{{ $errors->first('new_password') }}</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group text-center field-data">
+                                                <label>Confirm Password</label>
+                                                <div class="field-names">
+                                                    <input class="input-s"  type="password" class="" id='confirm-password' name="confirm_password" placeholder="Enter Confirm Password" required="">
+                                                    @if ($errors->has('confirm_password'))
+                                                        <div class="error alert-danger">{{ $errors->first('confirm_password') }}</div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                            <div class="form-group text-center field-data">
+                                                <input type="submit" class="save-btn" value="Update Password" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="setting_holder">
-                    <div class="form_holder">
-      
-                    </div>
-
-                    <?php // if($userinfo->login_type=='simple'){?>
-                    <div class="form_holder hide">
-                        <div class="setting_title">
-                            <h1>Privacy Settings</h1>
-                            <span>Change your password or apply privacy on your broadcasts</span>
-                        </div>
-
-                    </div>
-            
-                </div>
+         
+                
             </div>
         </div>
         </div>
