@@ -53,11 +53,9 @@
                 <div class="row">
                     <div class="col-sm-12">
                         @if (Session::has('flash_message'))
-                            {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
                             <div class="alert alert-success">{{ Session::get('flash_message') }}</div>
                         @endif
                         @if(Session::has('flash_message_delete'))
-                            {{-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button> --}}
                             <div class="alert alert-danger">{{ Session::get('flash_message_delete') }}</div>
                         @endif
                         
@@ -155,7 +153,6 @@
 
                                     @if($video_file_name)
                                         <div class="video-container video-conteiner-init" style="display:none;">
-                                            {{-- <div class="broadcast-streaming" id="w-broadcast-{{ $b_id }}">Loading Broadcast</div> --}}
 
                                             <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
                                         </div>                                       
@@ -166,7 +163,6 @@
                                                 "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
                                                 "title":"{{ $b_title }}",
                                                 "description":"{{ $b_description }}",
-                                                //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
                                                 "sourceURL":"{{ $stream_url }}",
                                                 "autoPlay":false,
                                                 "volume":"75",
@@ -230,7 +226,7 @@
                                 @endphp
                                 <ul class="bordcast-edit-actions">
                                     <li class="social-share-action">
-                                        <a href="#" data-toggle="modal" data-target="#share-modal"><!-- <i class="fa fa-share-alt-square"></i> -->
+                                        <a href="#" data-toggle="modal" data-target="#share-modal">
                                             <img src="{{ asset('assets')}}/images/share.png" width="28" alt="social Media">
                                         </a>
                                         <ul class="share-with-icons">
@@ -253,10 +249,10 @@
                                             </li>
                                         </ul>
                                     </li>
-                                    <li><a href="{{ route('edit_broadcast_content',$b_id) }}" data-toggle="modal"><!-- <i class="fa fa-edit"></i> -->
+                                    <li><a href="{{ route('edit_broadcast_content',$b_id) }}" data-toggle="modal">
                                         <img src="{{ asset('assets') }}/images/edit.png" width="28" alt="Edit">
                                     </a></li>
-                                    <li><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn"><!-- <i class="fa fa-trash-o"></i> -->
+                                    <li><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn">
                                         <img src="{{ asset('assets') }}/images/delete.png" width="28" alt="Delete">
                                     </a></li>
                                 </ul>
@@ -280,15 +276,13 @@
                             </div>
                         @endforeach   
 
-                        {{-- @isset($broadcasts)
-                            {{ $broadcasts->links() }}
-                        @endisset  --}}                    
+                
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <?php //echo $hapity_footer_view; ?>
+
     </div>
     <div class="clear"></div>
     <!-- Modal -->
