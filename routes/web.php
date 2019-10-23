@@ -78,3 +78,4 @@ Route::group([
 
 
 
+Route::get('/test', 'Web\HomeController@test')->name('test');
