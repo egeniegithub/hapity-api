@@ -127,7 +127,10 @@ form.account_form { width: 90%; }
 .bordcast-edit-actions { margin: 0 !important }
 .my-bordcast-title{ margin-top:0;}
 .bordcast-active .my-bordcast-title { clear:both;}
-.bordcast-active .image-section{ width: 100%; float: left; margin-bottom: 15px;}
+.bordcast-active .image-section{ width: 100%; float: left; height: auto; margin-bottom: 15px;}
+.bordcast-active .image-section img{
+    display: none !important;
+}
 .bordcast-active{ text-align:center;}
 .bordcast-active ul{ float:none; display: inline-block;}
 .new_design .create-content-wrap{ height:auto !important;} 
