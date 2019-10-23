@@ -2155,6 +2155,12 @@ div#footer {
     max-width: 100%;
     
 }
+.bordcast-active .video-conteiner-init{
+    padding: 0;
+}
+.bordcast-active.has_video .image-section{
+    height: auto;
+}
 .bordcast-active .image-section {
     width: 100%;
     height: 400px;
