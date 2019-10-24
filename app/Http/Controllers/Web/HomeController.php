@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Broadcast;
 use App\Http\Controllers\Controller;
+use App\PluginId;
 use App\User;
 use App\UserProfile;
 use App\UsersCI;
@@ -28,11 +29,10 @@ class HomeController extends Controller
 
     public function test()
     {
-        $this->seed_users_from_old_db();
-
+        $this->seed_users_from_old_db(true, true);
     }
 
-    private function seed_users_from_old_db()
+    private function seed_users_from_old_db($pull_profile_pictures = false, $pull_broadcast_pictures = false)
     {
         echo 'Processing Start <hr /> <pre>'; // Remove This
 
@@ -42,22 +42,26 @@ class HomeController extends Controller
             $email_count = User::where('email', $ci_user->email)->count();
             $username_count = User::where('username', $ci_user->username)->count();
 
-            
-
             if ($email_count <= 0 && $username_count <= 0) {
                 $new_user = new User();
                 $new_user->name = $ci_user->username;
                 $new_user->username = $ci_user->username;
                 $new_user->email = !empty($ci_user->email) ? $ci_user->email : $ci_user->username . '@example.com';
                 $new_user->password = '';
+                $new_user->created_at = $ci_user->join_date;
                 $new_user->save();
+
+                $profile_picture_name = '';
+                if ($pull_profile_pictures == true) {
+                    $profile_picture_name = $this->fetch_image('profile_picture', $new_user->id, $ci_user->profile_picture, 'profile_pictures');
+                }
 
                 $new_user_profile = new UserProfile();
                 $new_user_profile->user_id = $new_user->id;
                 $new_user_profile->first_name = '';
                 $new_user_profile->last_name = '';
                 $new_user_profile->email = $new_user->email;
-                $new_user_profile->profile_picture = '';
+                $new_user_profile->profile_picture = !empty($profile_picture_name) ? $profile_picture_name : '';
                 $new_user_profile->gender = null;
                 $new_user_profile->online_status = 'offline';
                 $new_user_profile->banned = $ci_user->banned;
@@ -68,6 +72,50 @@ class HomeController extends Controller
                 $new_user_profile->is_sensitive = $ci_user->is_sensitive == 'no' ? 0 : 1;
                 $new_user_profile->save();
 
+                $ci_user_plugins = $ci_user->plugins()->get();
+
+                foreach ($ci_user_plugins as $ci_user_plugin) {
+                    $new_user_plugin = new PluginId();
+                    $new_user_plugin->user_id = $new_user->id;
+                    $new_user_plugin->url = $ci_user_plugin->url;
+                    $new_user_plugin->type = $ci_user_plugin->type;
+                    $new_user_plugin->save();
+                }
+
+                $ci_user_broadcasts = $ci_user->broadcasts()->get();
+
+                foreach ($ci_user_broadcasts as $ci_user_broadcast) {
+
+                    $new_user_broadcast = new Broadcast();
+                    $new_user_broadcast->user_id = $new_user->id;
+                    $new_user_broadcast->title = $ci_user_broadcast->title;
+                    $new_user_broadcast->description = $ci_user_broadcast->description;
+                    $new_user_broadcast->broadcast_image = $ci_user_broadcast->broadcast_image;
+                    $new_user_broadcast->geo_location = '';
+                    $new_user_broadcast->allow_user_messages = '';
+                    $new_user_broadcast->stream_url = '';
+                    $new_user_broadcast->share_url = '';
+                    $new_user_broadcast->is_deleted = 0;
+                    $new_user_broadcast->filename = '';
+                    $new_user_broadcast->video_name = '';
+                    $new_user_broadcast->is_sensitive = 0;
+                    $new_user_broadcast->post_id = 0;
+                    $new_user_broadcast->post_id_joomla = 0;
+                    $new_user_broadcast->post_id_drupal = 0;
+                    $new_user_broadcast->timestamp = null;
+                    $new_user_broadcast->save();
+
+                    $broadcast_image = '';
+                    if ($pull_broadcast_pictures == true) {
+                        $broadcast_image = $this->fetch_image('broadcast', $new_user_broadcast->id, $ci_user_broadcast->broadcast_image, 'broadcasts');
+                        if (!empty($broadcast_image)) {
+                            $new_user_broadcast->broadcast_image = $broadcast_image;
+                            $new_user_broadcast->save();
+                        }
+                    }
+
+                }
+
                 echo $new_user->id . ' done' . PHP_EOL;
             }
         }
@@ -75,20 +123,32 @@ class HomeController extends Controller
         echo '</pre>'; //Remove This
     }
 
-    private function save_picture_to_local($picture_url, $picture_path, $file_name_with_ext)
+    private function fetch_image($prefix, $id, $image_url, $public_folder)
     {
-        if (!empty($picture_url)) {
-            $picture_content = file_get_contents($picture_url);
+        $picture_name = '';
+        if (
+            !empty($image_url) &&
+            strpos($image_url, 'http') !== false &&
+            strpos($image_url, 'null.') === false &&
+            strpos($image_url, 'default001.') === false
+        ) {
+            $headers = get_headers($image_url, 1);
 
-            $picture_extension = pathinfo($picture_url, PATHINFO_EXTENSION);
+            if (!empty($headers) && isset($headers[0])) {
+                if ($headers[0] == 'HTTP/1.1 200 OK') {
 
-            $picture_extension = !empty($picture_extension) ? $picture_extension : 'jpg';
+                    $picture_extension = pathinfo($image_url, PATHINFO_EXTENSION);
+                    $picture_extension = !empty($picture_extension) ? $picture_extension : 'jpg';
 
-            file_put_contents(public_path($picture_path . $file_name_with_ext), $picture_content);
+                    $picture_name = $prefix . '_' . $id . '.' . $picture_extension;
 
+                    $picture_content = file_get_contents($image_url);
+                    file_put_contents(public_path('images' . DIRECTORY_SEPARATOR . $public_folder . DIRECTORY_SEPARATOR . $picture_name), $picture_content);
+                }
+            }
         }
 
-        return $file_name_with_ext;
+        return $picture_name;
     }
 
 }
