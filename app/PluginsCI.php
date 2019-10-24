@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 class PluginsCI extends Model
 {
     protected $connection = 'mysql2';
-    protected $table = 'broadcast';
+    protected $table = 'plugin_ids';
 }
