@@ -87,7 +87,7 @@ class BroadcastsController extends Controller
         if ($broadcast->broadcast_image) {
             $response['image'] = asset('images/broadcasts/' . $request->input('user_id') . '/' . $broadcast->broadcast_image);
         } else {
-            $response['image'] = asset('images/images/default001.jpg');
+            $response['image'] = asset('images/default-image-mobile.png');
         }
 
         if (!empty($stream_video_info) && isset($stream_video_info['file_server'])) {
@@ -164,7 +164,7 @@ class BroadcastsController extends Controller
         if ($broadcast->broadcast_image) {
             $response['image'] = asset('images/broadcasts/' . $request->input('user_id') . '/' . $broadcast->broadcast_image);
         } else {
-            $response['image'] = asset('images/images/default001.jpg');
+            $response['image'] = asset('images/default-image-mobile.png');
         }
         $response['server'] = $server;
         $response['response'] = 'startbroadcast';
@@ -268,7 +268,7 @@ class BroadcastsController extends Controller
         if (!empty($broadcast->broadcast_image)) {
             $response['image'] = asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image);
         } else {
-            $response['image'] = asset('images/default001.jpg');
+            $response['image'] = asset('images/default-image-mobile.png');
         }
 
         if (!empty($stream_video_info)) {
@@ -376,7 +376,7 @@ class BroadcastsController extends Controller
             $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
             $broadcastObj['stream_url'] = $stream_url;
             $broadcastObj['status'] = $broadcast->status;
-            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg');
+            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default-image-mobile.png');
             $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
