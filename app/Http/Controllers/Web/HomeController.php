@@ -91,18 +91,22 @@ class HomeController extends Controller
                     $new_user_broadcast->title = $ci_user_broadcast->title;
                     $new_user_broadcast->description = $ci_user_broadcast->description;
                     $new_user_broadcast->broadcast_image = $ci_user_broadcast->broadcast_image;
-                    $new_user_broadcast->geo_location = '';
-                    $new_user_broadcast->allow_user_messages = '';
-                    $new_user_broadcast->stream_url = '';
+                    $new_user_broadcast->status = 'offline';
+                    $new_user_broadcast->geo_location = $ci_user_broadcast->geo_location; 
+                    $new_user_broadcast->allow_user_messages = $ci_user_broadcast->allow_user_messages;
+                    $new_user_broadcast->stream_url = $ci_user_broadcast->stream_url;
                     $new_user_broadcast->share_url = '';
-                    $new_user_broadcast->is_deleted = 0;
-                    $new_user_broadcast->filename = '';
-                    $new_user_broadcast->video_name = '';
-                    $new_user_broadcast->is_sensitive = 0;
-                    $new_user_broadcast->post_id = 0;
-                    $new_user_broadcast->post_id_joomla = 0;
-                    $new_user_broadcast->post_id_drupal = 0;
-                    $new_user_broadcast->timestamp = null;
+                    $new_user_broadcast->is_deleted = $ci_user_broadcast->is_deleted;
+                    $new_user_broadcast->filename = pathinfo($ci_user_broadcast->stream_url, PATHINFO_BASENAME);
+                    $new_user_broadcast->video_name = pathinfo($ci_user_broadcast->stream_url, PATHINFO_BASENAME);
+                    $new_user_broadcast->is_sensitive = $ci_user_broadcast->is_sensitive;
+                    $new_user_broadcast->post_id = $ci_user_broadcast->post_id;
+                    $new_user_broadcast->post_id_joomla = $ci_user_broadcast->post_id_joomla;
+                    $new_user_broadcast->post_id_drupal = $ci_user_broadcast->post_id_drupal;
+                    $new_user_broadcast->timestamp = $ci_user_broadcast->timestamp;
+                    $new_user_broadcast->save();
+
+                    $new_user_broadcast->share_url = route('broadcast.view', [$new_user_broadcast->id]);
                     $new_user_broadcast->save();
 
                     $broadcast_image = '';
