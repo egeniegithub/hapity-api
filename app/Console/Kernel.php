@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //
-        Commands\BroadcastUpdateChangeLiveStatusCron::class,
+        Commands\BroadcastUpdateLiveStatusCron::class,
     ];
 
     /**
@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')
         //          ->hourly();
 
-        $schedule->command('broadcastupdatechangelivestatus:cron')
+        $schedule->command('broadcastupdatelivestatus:cron')
                  ->everyMinute();
     }
 
