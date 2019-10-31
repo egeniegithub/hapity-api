@@ -64,21 +64,21 @@
           <div class="form-group row">
             <div class="col-xs-6">
               <label for="name">Name</label>
-              <input class="form-control" id="name" name="name" type="text" required/>
+              <input class="form-control" id="name" name="name" type="text" required  value="{{ old('name') }}" />
               @if($errors->has('name')) 
                   {{ $errors->first('name') }} 
               @endif
             </div>
             <div class="col-xs-6">
               <label for="Email">Email</label>
-              <input class="form-control" id="Email" name="email" type="email" required/>
+              <input class="form-control" id="Email" name="email" type="email" required value="{{ old('email') }}" />
               @if($errors->has('email')) 
                   {{ $errors->first('email') }} 
               @endif
             </div>
             <div class="col-xs-12">
               <label for="Message">Message</label>
-              <textarea class="form-control" id="Message" name="message" required></textarea>
+              <textarea class="form-control" id="Message" name="message" required>{{{ Input::old('message') }}}</textarea>
               @if($errors->has('message')) 
                   {{ $errors->first('message') }} 
               @endif

@@ -35,6 +35,7 @@ Route::group([
     Route::post('user/save_setting', 'Web\SettingController@save_settings')->name('settgins.save');
     Route::get('check_username','Web\SettingController@check_username')->name('check_username');
     Route::get('check_email','Web\SettingController@check_email')->name('check_email');
+    Route::get('resetpassword','Web\SettingController@resetpassword')->name('resetpassword');
     Route::post('reset_password','Web\SettingController@reset_password')->name('reset.password');
 
 

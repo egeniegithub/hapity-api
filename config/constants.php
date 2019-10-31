@@ -2,7 +2,7 @@
 
 define('SUPER_ADMIN_ROLE_ID', 1);
 define('HAPITY_USER_ROLE_ID', 2);
-define('CONTACTUS_SEND_TO_EMAIL', 'masteruser@hapity.com');
+define('CONTACTUS_SEND_TO_EMAIL', ["masteruser@hapity.com","gohapity@gmail.com"]);
 define('MAIL_FROM_ADDRESS','do-not-reply@hapity.com');
 define('MAIL_FROM_NAME', 'Hapity');
 

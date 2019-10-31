@@ -34,9 +34,9 @@
   </div>
   <div class="forgot-password-area">
     <ul>
-      <li><a href="#">
+      <li><a href="javascript::void()">
         <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-               Keep me logged in</a></li>
+               <label for="remember">Keep me logged in</label></a></li>
         <li>
             @if (Route::has('password.request'))
                 <a class="btn btn-link" href="{{ route('password.request') }}">

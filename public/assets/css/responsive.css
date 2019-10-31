@@ -48,6 +48,11 @@
 .streamimg-logo img { width: 200px; }
 .live-broadcast-form label { display: inline; }
 .login-new-wrapper { padding: 225px 0 50px 0; }
+.navbar-default .main-nav .dropdown ul.dropdown-menu{
+	width: 100%;
+	position: relative;
+	background-color: #8aaf06;
+}
 }
 @media(max-width: 480px) {
 .section-main { margin: 50px 0 0 0; }

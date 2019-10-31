@@ -26,17 +26,17 @@ class ContactusController extends Controller
             'email'                 =>  'required',
             'message'               =>  'required',
             'g-recaptcha-response'  => 'recaptcha',
-            // OR since v4.0.0
-            // recaptchaFieldName() => recaptchaRuleName()
         ]);
 
         // check if validator fails
         if($validator->fails()) {
             $errors = $validator->errors();
-            return back()->with('errors',$errors);
+            return back()->with('errors',$errors)
+                        ->withInput($request->all());
         }
 
         $email = $request->email;
+
         $data = array(
             'name' => $request->name,
             'email' => $request->email,
