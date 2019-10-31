@@ -1,6 +1,6 @@
 <!-- Collect the nav links, forms, and other content for toggling -->
 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-    <ul class="nav navbar-nav navbar-right nav-color">
+    <ul class="main-nav nav navbar-nav navbar-right nav-color">
 
       <li><a href="{{route('home')}}">Home</a></li>
       @if(Auth::check())
@@ -8,7 +8,15 @@
           <li><a href="{{route('admin.dashboard')}}" class="sign_in">Admin</a></li>
         @else 
           <li><a href="{{route('user.dashboard')}}" class="sign_in">dashboard</a></li>
-          <li><a href="{{route('settings')}}" class="sign_in">settings</a></li>
+
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Settings</a>
+            <ul class="dropdown-menu">
+              <li><a href="{{route('settings')}}">Account Settings</a></li>
+              <li><a href="{{route('resetpassword')}}">Reset Password </span></a></li>
+         
+            </ul>
+          </li>
         @endif
       @else
       <li><a href="{{route('login')}}">Login</a></li>

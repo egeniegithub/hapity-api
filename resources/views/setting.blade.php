@@ -22,6 +22,10 @@
         .text-error{
             color: red;
         }
+        .setting-page{
+            margin:0px auto !important;
+            float: none;
+        }
     </style>
 @endpush
 @section('content')
@@ -44,7 +48,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-md-6">
+                        <div class="col-md-6 setting-page">
                             <div class="setting_title text-center">
                                 <h1>Account Settings</h1>
                                 <span>Change your basic account settings</span>
@@ -152,7 +156,7 @@
                             </div>
                             </form>
                         </div>
-                        <div class="col-md-6">
+                        {{-- <div class="col-md-6">
                             <div class="account-settigs-content">
                                 <div class="setting_title text-center">
                                     <h1>Change your password</h1>
@@ -215,7 +219,7 @@
                                     </div>
                                 </form>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                 </div>
          

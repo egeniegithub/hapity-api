@@ -129,8 +129,10 @@ class SettingController extends Controller
         }else{
             return back()->with('flash_message_delete','Current Password Is Not Correct Please Enter Correct Password !');
         }
+    }
 
-
+    public function resetpassword(){
+        return view('resetpassword');
     }
 
 }
