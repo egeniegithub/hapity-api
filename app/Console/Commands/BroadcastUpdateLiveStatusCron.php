@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Broadcast;
+use DateTime;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
@@ -39,36 +40,41 @@ class BroadcastUpdateLiveStatusCron extends Command
      */
     public function handle()
     {
-        
+
         Log::info("Cron is working fine!");
-     
-        $broadcast = Broadcast::select('id','status','timestamp')->where('status','online')->get();
-        $cur_time=date("Y-m-d H:i:s");
-        $duration='+30 seconds';
-        $checkDateTime = date('Y-m-d H:i:s', strtotime($duration, strtotime($cur_time)));
 
-        if (!empty($broadcast) && !is_null($broadcast)) {
-            foreach ($broadcast as $key => $value) {
-                if (!is_null($value->timestamp)) {
-                    if ($value->timestamp < $checkDateTime) {
+        $date = new DateTime();
+        $date->modify('-1 minute');
 
-                        $broadcasts = Broadcast::find($value->id);
-                        $broadcasts->status = 'offline';
-                        $broadcasts->save();
-    
-                    } 
-                } else {
-                    $broadcasts = Broadcast::find($value->id);
-                    $broadcasts->status = 'offline';
-                    $broadcasts->save();
+        $null_case_date = new DateTime();
+        $null_case_date->modify('-5 minute');
+
+        $broadcasts = Broadcast::select('id', 'status', 'timestamp')->where('status', 'online')->get();
+
+        if (!empty($broadcasts) && !is_null($broadcasts)) {
+            foreach ($broadcasts as $key => $broadcast) {
+                // Log::info(json_encode($broadcasts->toArray()));
+
+                $broadcast_timestamp = !is_null($broadcast->timestamp) && !empty($broadcast->timestamp)
+                ? DateTime::createFromFormat('Y-m-d H:i:s', $broadcast->timestamp)
+                : $null_case_date;
+
+                $broadcast_unix = $broadcast_timestamp->getTimeStamp();
+                $check_unix = $date->getTimeStamp();
+
+                // Log::info($broadcast_unix . ' - ' . $check_unix);
+
+                if ($broadcast_unix < $check_unix) {
+                    $broadcast->status = 'offline';
+                    $broadcast->save();
                 }
-                
+
             }
         } else {
 
             $this->info('Status:Cron Command Run successfully but record not found !');
         }
-      
+
         $this->info('Status:Cron Command Run successfully!');
     }
 }
