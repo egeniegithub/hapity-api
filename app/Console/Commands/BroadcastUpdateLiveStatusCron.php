@@ -6,14 +6,14 @@ use App\Broadcast;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
 
-class BroadcastUpdateChangeLiveStatusCron extends Command
+class BroadcastUpdateLiveStatusCron extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'broadcastupdatechangelivestatus:cron';
+    protected $signature = 'broadcastupdatelivestatus:cron';
 
     /**
      * The console command description.
