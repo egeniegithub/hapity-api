@@ -154,7 +154,7 @@
                                     @if($video_file_name)
                                         <div class="video-container video-conteiner-init" style="display:none;">
 
-                                            <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
+                                            <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0" ></div>
                                         </div>                                       
 
                                         <script>
@@ -193,6 +193,7 @@
                                             };
                                             my_player.onPlay( playListener );
 
+                                            
                                         </script>
                                     @endif
                                 </a> 
@@ -272,7 +273,7 @@
                                         </div>
                                     </div>
                                 <?php endif; ?>    
-                                <a href="#" class="close-btn">X</a>
+                                <a href="#" class="close-btn" onClick="closeModel(this.id)" id="{{ $b_id }}">X</a>
                             </div>
                         @endforeach   
 
@@ -373,11 +374,12 @@
                 type: 'POST'
             });
         });
-
+        var broadcastId = 0; 
         jQuery(document).on('click', '.bordcast-play', function(event) {
             event.preventDefault();
             var bordcast = jQuery(this).parents('.my-bordcast-single');
             bordcast_id = bordcast.attr('id');
+            broadcastId = bordcast.attr('id');
             playOnlyOne(bordcast_id);
 
             jQuery('.bordcast-play img').show();
@@ -400,5 +402,13 @@
                 }
             }
         }
+
+        function closeModel(id){
+            var my_player = WowzaPlayer.get('w-broadcast-'+id); 
+            my_player.finish();
+            console.log(my_player);
+        }
+
+
     </script>
 @endpush
