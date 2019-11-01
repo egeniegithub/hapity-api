@@ -388,6 +388,15 @@
                 bordcast.find('img').hide();
                 bordcast.find('.video-container').show();
             } 
+            if($(".my-bordcast-single.bordcast-active").attr('id')){
+                var previousVideoPlayerId = $(".my-bordcast-single.bordcast-active").attr('id');
+                if(previousVideoPlayerId !== undefined){
+                    previousVideoPlayerId = previousVideoPlayerId.replace('bordcast-single-','');
+                    closeModel(previousVideoPlayerId);
+                }
+            }
+            
+
             jQuery('.my-bordcast-single.bordcast-active').removeClass('bordcast-active');
             bordcast.addClass('bordcast-active');
             
@@ -404,8 +413,10 @@
         }
 
         function closeModel(id){
-            var my_player = WowzaPlayer.get('w-broadcast-'+id); 
-            my_player.finish();
+            var my_player = WowzaPlayer.get('w-broadcast-'+id);
+            if(my_player !== null){
+                my_player.finish();
+            }
             console.log(my_player);
         }
 
