@@ -375,6 +375,7 @@
             });
         });
         var broadcastId = 0; 
+        var checkVideoPlayerId = 0;
         $(document).on('click', '.bordcast-play', function(event) {
             event.preventDefault();
             var bordcast = $(this).parents('.my-bordcast-single');
@@ -388,13 +389,17 @@
                 bordcast.find('img').hide();
                 bordcast.find('.video-container').show();
             } 
-            if($(".my-bordcast-single.bordcast-active").attr('id')){
-                var previousVideoPlayerId = $(".my-bordcast-single.bordcast-active").attr('id');
-                if(previousVideoPlayerId !== undefined){
-                    previousVideoPlayerId = previousVideoPlayerId.replace('bordcast-single-','');
-                    closeModel(previousVideoPlayerId);
+            if(broadcastId !== checkVideoPlayerId){
+                checkVideoPlayerId = broadcastId;
+                if($(".my-bordcast-single.bordcast-active").attr('id')){
+                    var previousVideoPlayerId = $(".my-bordcast-single.bordcast-active").attr('id');
+                    if(previousVideoPlayerId !== undefined){
+                        previousVideoPlayerId = previousVideoPlayerId.replace('bordcast-single-','');
+                        closeModel(previousVideoPlayerId);
+                    }
                 }
             }
+            
             
 
             $('.my-bordcast-single.bordcast-active').removeClass('bordcast-active');
