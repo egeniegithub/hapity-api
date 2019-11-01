@@ -312,44 +312,44 @@
 @push('script')
    <script type="text/javascript" src="{{ asset('assets/js/infiniteScroll.js') }}"></script>
     <script type="text/javascript">
-        jQuery(document).ready(function($) {           
+        $(document).ready(function($) {           
 
-            jQuery(document).on('click', '.bordcast-active .close-btn', function(event) {
+            $(document).on('click', '.bordcast-active .close-btn', function(event) {
                 event.preventDefault();
-                var bordcast = jQuery(this).parents('.my-bordcast-single');
+                var bordcast = $(this).parents('.my-bordcast-single');
                 bordcast.removeClass('bordcast-active');
                 bordcast.find('img').show();
                 bordcast.find('.video-container').hide();
             });
 
-            jQuery('.delete-btn').on('click', function(event) {
+            $('.delete-btn').on('click', function(event) {
                 event.preventDefault();
-                jQuery('#delete-modal #brodcast-id').val(jQuery(this).data('broadcast-id'));
-                jQuery('#delete-modal #brodcast-url').val(jQuery(this).data('broadcast-url'));
+                $('#delete-modal #brodcast-id').val($(this).data('broadcast-id'));
+                $('#delete-modal #brodcast-url').val($(this).data('broadcast-url'));
             });
 
-            jQuery('.short-desc > span').on('click', function(event) {
-                jQuery(this).parents('.short-desc').hide().next('.full-desc').show();
+            $('.short-desc > span').on('click', function(event) {
+                $(this).parents('.short-desc').hide().next('.full-desc').show();
             });
 
-            jQuery( ".social-share-action" ).hover(
+            $( ".social-share-action" ).hover(
                 function () {
-                    jQuery(this).addClass('on-hover').find('ul').stop().show();
+                    $(this).addClass('on-hover').find('ul').stop().show();
                 }, 
                 function () {
-                    jQuery(this).removeClass('on-hover').find('ul').stop().hide();
+                    $(this).removeClass('on-hover').find('ul').stop().hide();
                 }
             );
             
         });
 
-        jQuery(document).on('click', '.delete-brodcast-action', function(event) {
+        $(document).on('click', '.delete-brodcast-action', function(event) {
             event.preventDefault();
-            var delete_model = jQuery(this).parents('#delete-modal');
+            var delete_model = $(this).parents('#delete-modal');
             var stream_id = delete_model.find('#brodcast-id').val();
             var stream_url = delete_model.find('#brodcast-url').val();
-            jQuery('.delete-model-dismiss').hide();
-            jQuery(this).text('Deleting...');
+            $('.delete-model-dismiss').hide();
+            $(this).text('Deleting...');
             $.ajax({
                 url: "{{route('deleteBroadcast')}}",
                 data: {
@@ -364,26 +364,26 @@
                 dataType: 'json',
                 success: function(data) {
                     console.log(data)
-                    jQuery('.delete-brodcast-action').text(data.message);
+                    $('.delete-brodcast-action').text(data.message);
                     setTimeout(function(){
-                        jQuery('#bordcast-single-'+stream_id).remove();
-                        jQuery('.delete-model-dismiss').trigger('click');
-                        jQuery('.delete-brodcast-action').text('Delete');
+                        $('#bordcast-single-'+stream_id).remove();
+                        $('.delete-model-dismiss').trigger('click');
+                        $('.delete-brodcast-action').text('Delete');
                     }, 900);
                 },
                 type: 'POST'
             });
         });
         var broadcastId = 0; 
-        jQuery(document).on('click', '.bordcast-play', function(event) {
+        $(document).on('click', '.bordcast-play', function(event) {
             event.preventDefault();
-            var bordcast = jQuery(this).parents('.my-bordcast-single');
+            var bordcast = $(this).parents('.my-bordcast-single');
             bordcast_id = bordcast.attr('id');
             broadcastId = bordcast.attr('id');
             playOnlyOne(bordcast_id);
 
-            jQuery('.bordcast-play img').show();
-            jQuery('.bordcast-play .video-container').hide();
+            $('.bordcast-play img').show();
+            $('.bordcast-play .video-container').hide();
             if(bordcast.hasClass('has_video')){
                 bordcast.find('img').hide();
                 bordcast.find('.video-container').show();
@@ -397,7 +397,7 @@
             }
             
 
-            jQuery('.my-bordcast-single.bordcast-active').removeClass('bordcast-active');
+            $('.my-bordcast-single.bordcast-active').removeClass('bordcast-active');
             bordcast.addClass('bordcast-active');
             
         });
