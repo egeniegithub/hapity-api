@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\User;
 use App\UserProfile;
+use App\UsersCI;
 use App\UserSocial;
 use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -59,6 +60,21 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
+        //Authenticate user from Old DB
+        $old_user = UsersCI::where('email', $request->input('email'))->where('password', md5($request->input('password')))->where('synced_to_new_db', 0)->first();
+
+        if (!is_null($old_user)) {
+            $new_user = User::where('email', $request->input('email'))->orWhere('username', $request->input('login'))->first();
+            if (!is_null($new_user)) {
+                $new_user->password = bcrypt($request->input('passowrd'));
+                $new_user->save();
+
+                $old_user->synced_to_new_db = 1;
+                $old_user->save();
+            }
+        }
+
+        //Authenticate User from New DB
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -77,7 +93,7 @@ class LoginController extends Controller
         // user surpasses their maximum number of attempts they will get locked out.
         $this->incrementLoginAttempts($request);
 
-         if ($this->attemptLogin($request)) {
+        if ($this->attemptLogin($request)) {
             return $this->sendLoginResponse($request);
         }
 
