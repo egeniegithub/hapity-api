@@ -139,7 +139,7 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close close-video" id="model-cross" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <button type="button" class="close close-video" id="model-cross" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="{{ $broadcast['id'] }}" onClick="closeModel(this.id)">&times;</span></button>
                                     <h4 class="modal-title" id="myModalLabel"><?php echo ucwords($broadcast['title']); ?></h4>
                                 </div>
                                 <div class="modal-body">
@@ -219,7 +219,7 @@
 
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-default close-video" id="close-btn" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-default close-video close-btn" id="{{ $b_id }}" onClick="closeModel(this.id)" data-dismiss="modal" >Close</button>
                                 </div>
                             </div>
                         </div>
@@ -245,5 +245,13 @@
 @endsection
 
 @push('admin-script')
-
+    <script type="text/javascript">
+        function closeModel(id){
+            var my_player = WowzaPlayer.get('w-broadcast-'+id);
+            if(my_player !== null){
+                my_player.finish();
+            }
+            console.log(my_player);
+        }
+    </script>
 @endpush
