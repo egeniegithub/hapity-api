@@ -36,7 +36,7 @@ class HomeController extends Controller
     {
         echo 'Processing Start <hr /> <pre>'; // Remove This
 
-        $ci_users = UsersCI::with(['broadcasts', 'plugins'])->get();
+        $ci_users = UsersCI::with(['broadcasts', 'plugins'])->orderBy('sid', 'ASC')->get();
 
         foreach ($ci_users as $ci_user) {
             $email_count = User::where('email', $ci_user->email)->count();
@@ -50,6 +50,8 @@ class HomeController extends Controller
                 $new_user->password = '';
                 $new_user->created_at = $ci_user->join_date;
                 $new_user->save();
+
+                $new_user->roles()->attach(HAPITY_USER_ROLE_ID);
 
                 $profile_picture_name = '';
                 if ($pull_profile_pictures == true) {
@@ -90,9 +92,9 @@ class HomeController extends Controller
                     $new_user_broadcast->user_id = $new_user->id;
                     $new_user_broadcast->title = $ci_user_broadcast->title;
                     $new_user_broadcast->description = $ci_user_broadcast->description;
-                    $new_user_broadcast->broadcast_image = $ci_user_broadcast->broadcast_image;
+                    $new_user_broadcast->broadcast_image = '';
                     $new_user_broadcast->status = 'offline';
-                    $new_user_broadcast->geo_location = $ci_user_broadcast->geo_location; 
+                    $new_user_broadcast->geo_location = $ci_user_broadcast->geo_location;
                     $new_user_broadcast->allow_user_messages = $ci_user_broadcast->allow_user_messages;
                     $new_user_broadcast->stream_url = $ci_user_broadcast->stream_url;
                     $new_user_broadcast->share_url = '';
@@ -106,17 +108,13 @@ class HomeController extends Controller
                     $new_user_broadcast->timestamp = $ci_user_broadcast->timestamp;
                     $new_user_broadcast->save();
 
-                    $new_user_broadcast->share_url = route('broadcast.view', [$new_user_broadcast->id]);
-                    $new_user_broadcast->save();
-
                     $broadcast_image = '';
                     if ($pull_broadcast_pictures == true) {
                         $broadcast_image = $this->fetch_image('broadcast', $new_user_broadcast->id, $ci_user_broadcast->broadcast_image, 'broadcasts');
-                        if (!empty($broadcast_image)) {
-                            $new_user_broadcast->broadcast_image = $broadcast_image;
-                            $new_user_broadcast->save();
-                        }
                     }
+
+                    $new_user_broadcast->broadcast_image = $broadcast_image;
+                    $new_user_broadcast->save();
 
                 }
 

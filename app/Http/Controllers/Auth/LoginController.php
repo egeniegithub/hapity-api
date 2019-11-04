@@ -61,12 +61,13 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         //Authenticate user from Old DB
-        $old_user = UsersCI::where('email', $request->input('email'))->where('password', md5($request->input('password')))->where('synced_to_new_db', 0)->first();
+        $old_user = UsersCI::where('email', $request->input('email'))->orWhere('username', $request->input('login'))->where('password', md5($request->input('password')))->where('synced_to_new_db', 0)->first();
 
         if (!is_null($old_user)) {
             $new_user = User::where('email', $request->input('email'))->orWhere('username', $request->input('login'))->first();
             if (!is_null($new_user)) {
-                $new_user->password = bcrypt($request->input('passowrd'));
+                $new_user->agree_terms_and_conditions = 1;
+                $new_user->password = bcrypt($request->input('password'));
                 $new_user->save();
 
                 $old_user->synced_to_new_db = 1;
