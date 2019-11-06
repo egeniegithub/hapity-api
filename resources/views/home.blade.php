@@ -144,7 +144,7 @@
                                         @if(in_array($format, $allowedExtensions))
                                             <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
                                         @else
-                                            <img src="{{ asset('images/broadcasts/' . $broadcast->broadcast_image) }}" alt="{{ $b_title }}" />
+                                            <img src="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}" alt="{{ $b_title }}" />
                                         @endif
                                         
                                     @else

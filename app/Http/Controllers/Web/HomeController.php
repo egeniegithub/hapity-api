@@ -110,7 +110,7 @@ class HomeController extends Controller
 
                     $broadcast_image = '';
                     if ($pull_broadcast_pictures == true) {
-                        $broadcast_image = $this->fetch_image('broadcast', $new_user_broadcast->id, $ci_user_broadcast->broadcast_image, 'broadcasts');
+                        $broadcast_image = $this->fetch_image('broadcast', $new_user_broadcast->id, $ci_user_broadcast->broadcast_image, 'broadcasts', $new_user->id);
                     }
 
                     $new_user_broadcast->broadcast_image = $broadcast_image;
@@ -125,7 +125,7 @@ class HomeController extends Controller
         echo '</pre>'; //Remove This
     }
 
-    private function fetch_image($prefix, $id, $image_url, $public_folder)
+    private function fetch_image($prefix, $id, $image_url, $public_folder, $user_id = 0)
     {
         $picture_name = '';
         if (
@@ -145,7 +145,17 @@ class HomeController extends Controller
                     $picture_name = $prefix . '_' . $id . '.' . $picture_extension;
 
                     $picture_content = file_get_contents($image_url);
-                    file_put_contents(public_path('images' . DIRECTORY_SEPARATOR . $public_folder . DIRECTORY_SEPARATOR . $picture_name), $picture_content);
+
+                    if($prefix == 'broadcast' && $user_id > 0) {
+                        $path = 'images' . DIRECTORY_SEPARATOR . $public_folder . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR;
+                        if(!is_dir($path)) {
+                            mkdir($path);
+                        }
+
+                        file_put_contents(public_path($path . $picture_name), $picture_content);
+                    } else {
+                        file_put_contents(public_path('images' . DIRECTORY_SEPARATOR . $public_folder . DIRECTORY_SEPARATOR . $picture_name), $picture_content);
+                    }
                 }
             }
         }
