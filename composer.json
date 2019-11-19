@@ -42,7 +42,8 @@
             "App\\": "app/"
         },
         "files": [
-            "app/Http/Helpers/PluginFunctions.php"
+            "app/Http/Helpers/PluginFunctions.php",
+            "app/Http/Helpers/FFMPegFileUploadPath.php"   
         ]
         ,
         "classmap": [
