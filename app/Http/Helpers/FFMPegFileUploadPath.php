@@ -7,9 +7,7 @@ function ffmpeg_upload_file_path($source_file_path){
 
     if(file_exists($source_file_path)) {
         
-        $file_path_info = basename($source_file_path);
-
-        $file_name = $file_path_info;
+        $file_name = basename($source_file_path);
 
         $temp_file_path = $temp_pathtosave . DIRECTORY_SEPARATOR . $file_name;
 
