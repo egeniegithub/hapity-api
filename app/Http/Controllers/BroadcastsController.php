@@ -542,7 +542,7 @@ class BroadcastsController extends Controller
 
             if (env('APP_ENV') != 'local') {
                 
-                ffmpeg_upload_file_path($video_path);
+                ffmpeg_upload_file_path($video_path->getRealPath());
                 //TODO to be debuged
                 /*
             $temp_pathtosave = "/home/san/live/temp-" . $filename;
