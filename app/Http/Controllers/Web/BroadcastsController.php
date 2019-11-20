@@ -220,7 +220,9 @@ class BroadcastsController extends Controller
             $extension = $video_file->getClientOriginalExtension();
             $video_name_with_ext = $file_name . '.' . $extension;
             $path = base_path('wowza_store');
-            $video_file->move($path, $video_name_with_ext);
+            $video_path = $video_file->move($path, $video_name_with_ext);
+
+            ffmpeg_upload_file_path($video_path);
         }
 
         //server ip
