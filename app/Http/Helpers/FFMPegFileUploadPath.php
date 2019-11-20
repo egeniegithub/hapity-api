@@ -12,9 +12,9 @@
 
         $shell_exec = shell_exec('cp ' . $source_file_path . ' ' . $temp_file_path);
         
-        unlink($source_file_path);
         $shell_exec = shell_exec("ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 $temp_pathtosave");
         if($shell_exec == 90){
+            unlink($source_file_path);
             $shell_exec = shell_exec('ffmpeg -i "'.$temp_pathtosave.'" -vf "transpose=1,transpose=2" '. $source_file_path);
             shell_exec('rm '.$temp_pathtosave);
         }
