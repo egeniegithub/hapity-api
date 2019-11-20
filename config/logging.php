@@ -53,6 +53,12 @@ return [
             'days' => 14,
         ],
 
+        'ffmpeg_logs' => [
+            'driver' => 'single',
+            'path' => storage_path('logs/ffmpeg_logs/ffmpeg_logs.log'),
+            'level' => 'info',
+        ],
+
         'slack' => [
             'driver' => 'slack',
             'url' => env('LOG_SLACK_WEBHOOK_URL'),
