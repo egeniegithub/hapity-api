@@ -12,22 +12,27 @@ function ffmpeg_upload_file_path($source_file_path){
 
         $temp_file_path = $temp_pathtosave . DIRECTORY_SEPARATOR . $file_name;
 
-        $shell_exec = shell_exec('cp ' . $source_file_path . ' ' . $temp_file_path);
-        Log::channel('ffmpeg_logs')->info('command:   shell_exec(cp ' . $source_file_path . ' ' . $temp_file_path);
-
-        $shell_exec = shell_exec("ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 $temp_pathtosave");
+        $copy_command = 'cp ' . $source_file_path . ' ' . $temp_file_path;
         
-        Log::channel('ffmpeg_logs')->info('ffprobe command :  shell_exec(ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1'. $temp_pathtosave);
+        $shell_exec = shell_exec($copy_command);
+        Log::channel('ffmpeg_logs')->info('command :   '.$copy_command);
+
+        $ffprobe_command = "ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 $temp_pathtosave";
+        $shell_exec = shell_exec($ffprobe_command);
+        
+        Log::channel('ffmpeg_logs')->info('ffprobe command :  '.$ffprobe_command);
 
         if($shell_exec == 90){
             unlink($source_file_path);
-            $shell_exec = shell_exec('ffmpeg -i "'.$temp_pathtosave.'" -vf "transpose=1,transpose=2" '. $source_file_path);
+            $ffmpeg_command = 'ffmpeg -i "'.$temp_pathtosave.'" -vf "transpose=1,transpose=2" '. $source_file_path;
+            $shell_exec = shell_exec($ffmpeg_command);
             
-            Log::channel('ffmpeg_logs')->info('ffmpeg command :  shell_exec(ffmpeg -i '.$temp_pathtosave.' -vf "transpose=1,transpose=2 '. $source_file_path);
+            Log::channel('ffmpeg_logs')->info('ffmpeg command :  '.$ffmpeg_command);
             
-            $shell_exec = shell_exec('rm '.$temp_pathtosave);
+            $remove_command = 'rm '.$temp_pathtosave;
+            $shell_exec = shell_exec($remove_command);
            
-            Log::channel('ffmpeg_logs')->info('rm command :  shell_exec(rm '.$temp_pathtosave);
+            Log::channel('ffmpeg_logs')->info('rm command :  '.$remove_command);
 
         }
     }
