@@ -5,17 +5,12 @@ namespace App\Http\Controllers\Web;
 use App\Broadcast;
 use App\BroadcastViewer;
 use App\Http\Controllers\Controller;
-use App\Http\Helpers\Helper;
 use App\Http\Helpers\PluginFunctions;
-use App\PluginId;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Str;
-
 
 class BroadcastsController extends Controller
 {
@@ -44,7 +39,7 @@ class BroadcastsController extends Controller
 
     public function startwebbroadcast(Request $request)
     {
-       
+
         $title = $request->title;
         $description = "";
         $geo_location = $request->geo_location;
@@ -54,7 +49,7 @@ class BroadcastsController extends Controller
         $input_server = $request->server_input;
 
         $post_plugin = $request->post_plugin;
-        
+
         $broadcast_image = $request->broadcast_image;
 
         $filename = $request->stream_url;
@@ -111,10 +106,10 @@ class BroadcastsController extends Controller
                 $broadcast->share_url = $share_url;
                 $broadcast->save();
                 $response = array(
-                    'status' => 'success', 
-                    'broadcast_id' => $broadcast_id, 
+                    'status' => 'success',
+                    'broadcast_id' => $broadcast_id,
                     'share_url' => $share_url,
-                    'file_name' => $filename
+                    'file_name' => $filename,
                 );
 
                 if ($post_plugin == 'true') {
@@ -176,7 +171,6 @@ class BroadcastsController extends Controller
         }
     }
 
-
     public function edit_broadcast_content($broadcast_id)
     {
         if (User::find(Auth::user()->id)->exists() && Auth::user()->id != " " && Auth::user()->id != null) {
@@ -203,12 +197,12 @@ class BroadcastsController extends Controller
     {
 
         $post_plugin = true;
-        
+
         $rules = array(
             'title' => 'required',
-            'video' => 'mimes:mp4|max:524288',
+            'video' => 'max:524288',
         );
-        $request->validate($rules);       
+        $request->validate($rules);
 
         //Handle file upload;
         $video_name_with_ext = '';
@@ -262,9 +256,9 @@ class BroadcastsController extends Controller
         $broadcast->save();
         $plugin = new PluginFunctions();
         $result = $plugin->make_plugin_call_upload($broadcast->id);
-        if(!empty($result)){
+        if (!empty($result)) {
             $broadcast->share_url = $result;
-        }else{
+        } else {
             $broadcast->share_url = route('broadcast.view', $broadcast->id);
         }
         $broadcast->save();
@@ -275,7 +269,7 @@ class BroadcastsController extends Controller
     {
         $rules = array(
             'title' => 'required',
-            'video' => 'mimes:mp4|max:528000',
+            'video' => 'max:524288',
         );
         $validator = \validator::make($request->all(), $rules);
         if ($validator->fails()) {
@@ -348,7 +342,7 @@ class BroadcastsController extends Controller
 
     public function view_broadcast($broadcast_id)
     {
-        $filename = '';        
+        $filename = '';
         $broadcast = Broadcast::with(['user'])->find($broadcast_id);
 
         if (!is_null($broadcast)) {
@@ -363,7 +357,7 @@ class BroadcastsController extends Controller
         $data = array(
             'broadcast_image' => $path,
         );
-        Broadcast::where('id',$broadcast_id)->update($data);
+        Broadcast::where('id', $broadcast_id)->update($data);
         return $path;
     }
 
@@ -407,16 +401,17 @@ class BroadcastsController extends Controller
 
     }
 
-    public function update_view_count(Request $request, $id) {
-        $count = 0; 
-        if($id > 0) {
+    public function update_view_count(Request $request, $id)
+    {
+        $count = 0;
+        if ($id > 0) {
             $broadcast = Broadcast::find($id);
 
             $count = $broadcast->view_count + 1;
 
             $broadcast->view_count = $count;
-            $broadcast->save();  
-        
+            $broadcast->save();
+
         }
 
         return response()->json(['view_count' => $count]);
