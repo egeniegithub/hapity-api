@@ -550,23 +550,6 @@ class BroadcastsController extends Controller
                 'file_stream_url' => $stream_url,
                 'file_server' => $server,
             ];
-
-            if (env('APP_ENV') != 'local') {
-                
-                
-                //TODO to be debuged
-                /*
-            $temp_pathtosave = "/home/san/live/temp-" . $filename;
-            $pathtosave = "/home/san/live/" . $filename;
-
-            $shell_exec = shell_exec("ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 $path.$filename");
-
-            if ($shell_exec == 90) {
-            shell_exec('rm ' . $path . $filename);
-            shell_exec('ffmpeg -i "' . $path . $filename . '" -vf "transpose=1,transpose=2" ' . $path . $filename);
-            }
-             */
-            }
         }
 
         return $to_return;
