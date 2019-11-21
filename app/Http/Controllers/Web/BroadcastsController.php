@@ -217,8 +217,7 @@ class BroadcastsController extends Controller
             $wowza_path = base_path('wowza_store');
 
             $video_path = $video_file->move($temp_path, $file_name);
-            //$video_file->move($wowza_path, $file_name);
-
+            
             copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $file_name);
 
             ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path);
