@@ -24,6 +24,7 @@ if (!function_exists('ffmpeg_upload_file_path')) {
                 $commands .= 'rm "' . $source_file_path . '"' . PHP_EOL;
                 $commands .= 'ffmpeg -i "' . $temp_file_path . '" -vf "transpose=1,transpose=2" "' . $source_file_path . '"' . PHP_EOL;
                 $commands .= 'rm "' . $temp_file_path . '"' . PHP_EOL;
+                
                 $shell_exec = shell_exec($commands);
                 Log::channel('ffmpeg_logs')->info('Start ============================================================================================================');
                 Log::channel('ffmpeg_logs')->info($commands);
