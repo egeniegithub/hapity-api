@@ -523,10 +523,17 @@ class BroadcastsController extends Controller
             $video_original_name = $video_file->getClientOriginalName();
             $ext = $video_file->getClientOriginalExtension();
 
-            $file_name = md5(time()) . ".stream." . $ext;
-            $path = base_path('wowza_store');
+            $temp_path = storage_path('temp');
 
-            $video_path = $video_file->move($path, $file_name);
+            $file_name = md5(time()) . ".stream." . $ext;
+            $wowza_path = base_path('wowza_store');
+
+            $video_path = $video_file->move($temp_path, $file_name);
+            
+            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $file_name);
+
+            ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path);
+
 
             $server = $this->getRandIp();
 
@@ -535,14 +542,14 @@ class BroadcastsController extends Controller
             $to_return = [
                 'file_original_name' => $video_original_name,
                 'file_name' => $file_name,
-                'file_path' => $video_path,
+                'file_path' => $wowza_path . DIRECTORY_SEPARATOR . $file_name,
                 'file_stream_url' => $stream_url,
                 'file_server' => $server,
             ];
 
             if (env('APP_ENV') != 'local') {
                 
-                ffmpeg_upload_file_path($video_path->getRealPath());
+                
                 //TODO to be debuged
                 /*
             $temp_pathtosave = "/home/san/live/temp-" . $filename;
