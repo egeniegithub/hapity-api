@@ -11,8 +11,6 @@ if (!function_exists('ffmpeg_upload_file_path')) {
             $file_name = pathinfo($source_file_path, PATHINFO_BASENAME);
             $directory_name = pathinfo($source_file_path, PATHINFO_DIRNAME);
 
-            $temp_file_name = 'temp-' . $file_name;
-
             $ffprobe_command = "ffprobe -loglevel error -select_streams v:0 -show_entries stream_tags=rotate -of default=nw=1:nk=1 \"$source_file_path\"";
             $shell_exec = shell_exec($ffprobe_command);
 
@@ -21,7 +19,7 @@ if (!function_exists('ffmpeg_upload_file_path')) {
 
             if (intval($shell_exec) == 90) {
                 $commands = '';
-                $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" "' . $final_path . DIRECTORY_SEPARATOR . $file_name . '" &> /dev/null' . PHP_EOL;
+                $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
 
                 $shell_exec = shell_exec($commands);
                 Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
@@ -29,7 +27,7 @@ if (!function_exists('ffmpeg_upload_file_path')) {
                 Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
             } else {
                 $commands = '';
-                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . DIRECTORY_SEPARATOR . $file_name . '" -hide_banner &> /dev/null' . PHP_EOL;
+                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
 
                 $shell_exec = shell_exec($commands);
                 Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
