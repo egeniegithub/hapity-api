@@ -208,22 +208,43 @@ class BroadcastsController extends Controller
         $video_name_with_ext = '';
         if ($request->hasFile('video')) {
             $video_file = $request->file('video');
+            $video_original_name = $video_file->getClientOriginalName();
+            $ext = $video_file->getClientOriginalExtension();
+
+            $temp_path = storage_path('temp');
+
+            $file_name = md5(time()) . ".stream." . $ext;
+            $wowza_path = base_path('wowza_store');
+
+            $video_path = $video_file->move($temp_path, $file_name);
+            //$video_file->move($wowza_path, $file_name);
+
+            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $file_name);
+
+            ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path);
+
+
+            /*
+            $video_file = $request->file('video');
 
             //Generate File name
             $file_name = md5(time()) . '.stream';
             $extension = $video_file->getClientOriginalExtension();
             $video_name_with_ext = $file_name . '.' . $extension;
             $path = base_path('wowza_store');
+
+
             $video_path = $video_file->move($path, $video_name_with_ext);
             // dd($video_path->getRealPath());
             ffmpeg_upload_file_path($video_path->getRealPath());
+            */
         }
 
         //server ip
         $server_ip = $this->getRandIp();
 
         //stream url
-        $stream_url = 'rtmp://' . $server_ip . ':1935/vod/' . $video_name_with_ext;
+        $stream_url = 'rtmp://' . $server_ip . ':1935/vod/' . $file_name;
 
         $image_file_name_with_ext = '';
         //handle image upload
@@ -249,10 +270,10 @@ class BroadcastsController extends Controller
         $broadcast->is_sensitive = $request->is_sensitive;
         $broadcast->stream_url = $stream_url;
         $broadcast->broadcast_image = $image_file_name_with_ext;
-        $broadcast->filename = $video_name_with_ext;
+        $broadcast->filename = $file_name;
         $broadcast->status = 'offline';
         $broadcast->share_url = '';
-        $broadcast->video_name = $video_name_with_ext;
+        $broadcast->video_name = $file_name;
         $broadcast->save();
         $plugin = new PluginFunctions();
         $result = $plugin->make_plugin_call_upload($broadcast->id);

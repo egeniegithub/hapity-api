@@ -25,3 +25,6 @@ yarn-error.log
 /public/images/broadcasts/*
 /public/assets/videos
 /public/assets/videos/*
+
+/storage/temp
+/storage/temp/*
