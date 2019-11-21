@@ -523,16 +523,20 @@ class BroadcastsController extends Controller
             $video_original_name = $video_file->getClientOriginalName();
             $ext = $video_file->getClientOriginalExtension();
 
-            $temp_path = storage_path('temp');
+            $temp_path = storage_path('temp');          
+            
 
             $file_name = md5(time()) . ".stream." . $ext;
             $wowza_path = base_path('wowza_store');
 
+
+            $output_file_name = md5(time()) . ".stream.mp4";
+
             $video_path = $video_file->move($temp_path, $file_name);
             
-            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $file_name);
+            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
 
-            ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path);
+            ffmpeg_upload_file_path($video_path->getRealPath(), $output_file_name);
 
 
             $server = $this->getRandIp();
@@ -541,8 +545,8 @@ class BroadcastsController extends Controller
 
             $to_return = [
                 'file_original_name' => $video_original_name,
-                'file_name' => $file_name,
-                'file_path' => $wowza_path . DIRECTORY_SEPARATOR . $file_name,
+                'file_name' => $output_file_name,
+                'file_path' => $wowza_path . DIRECTORY_SEPARATOR . $output_file_name,
                 'file_stream_url' => $stream_url,
                 'file_server' => $server,
             ];

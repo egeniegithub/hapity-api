@@ -216,9 +216,11 @@ class BroadcastsController extends Controller
             $file_name = md5(time()) . ".stream." . $ext;
             $wowza_path = base_path('wowza_store');
 
+            $output_file_name = md5(time()) . ".stream.mp4";
+
             $video_path = $video_file->move($temp_path, $file_name);
             
-            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $file_name);
+            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
 
             ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path);
 
@@ -243,7 +245,7 @@ class BroadcastsController extends Controller
         $server_ip = $this->getRandIp();
 
         //stream url
-        $stream_url = 'rtmp://' . $server_ip . ':1935/vod/' . $file_name;
+        $stream_url = 'rtmp://' . $server_ip . ':1935/vod/' . $output_file_name;
 
         $image_file_name_with_ext = '';
         //handle image upload
@@ -269,10 +271,10 @@ class BroadcastsController extends Controller
         $broadcast->is_sensitive = $request->is_sensitive;
         $broadcast->stream_url = $stream_url;
         $broadcast->broadcast_image = $image_file_name_with_ext;
-        $broadcast->filename = $file_name;
+        $broadcast->filename = $output_file_name;
         $broadcast->status = 'offline';
         $broadcast->share_url = '';
-        $broadcast->video_name = $file_name;
+        $broadcast->video_name = $output_file_name;
         $broadcast->save();
         $plugin = new PluginFunctions();
         $result = $plugin->make_plugin_call_upload($broadcast->id);
