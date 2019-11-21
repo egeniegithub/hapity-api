@@ -219,26 +219,10 @@ class BroadcastsController extends Controller
             $output_file_name = md5(time()) . ".stream.mp4";
 
             $video_path = $video_file->move($temp_path, $file_name);
-            
+
             copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
 
-            ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path . DIRECTORY_SEPARATOR . $output_file_name );
-
-
-            /*
-            $video_file = $request->file('video');
-
-            //Generate File name
-            $file_name = md5(time()) . '.stream';
-            $extension = $video_file->getClientOriginalExtension();
-            $video_name_with_ext = $file_name . '.' . $extension;
-            $path = base_path('wowza_store');
-
-
-            $video_path = $video_file->move($path, $video_name_with_ext);
-            // dd($video_path->getRealPath());
-            ffmpeg_upload_file_path($video_path->getRealPath());
-            */
+            ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
         }
 
         //server ip
@@ -312,27 +296,43 @@ class BroadcastsController extends Controller
         }
         if ($request->hasFile('video')) {
             $video_file = $request->file('video');
-            $info = pathinfo($video_file->getClientOriginalName());
-            $ext = $info['extension'];
-            $filename = $stream_urlx . "." . $ext;
+            $video_original_name = $video_file->getClientOriginalName();
+            $ext = $video_file->getClientOriginalExtension();
 
-            $path = base_path('wowza_store');
-            $video_path = $video_file->move($path, $filename);
-            //Making Stream URL
-            $stream_url = "rtmp://";
-            $server = $this->getRandIp();
-            $stream_url .= $server;
-            $stream_url .= ":1935/live/" . $stream_urlx;
-            $update_broad['stream_url'] = $stream_url;
-            $update_broad['filename'] = $filename;
-            $streamURL = Broadcast::where(['id' => $broadcast_id])->first();
-            $filename = $streamURL['filename'];
-            $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $filename);
-            if (is_file($file_path)) {
-                unlink($file_path);
+            $temp_path = storage_path('temp');
+
+            $file_name = md5(time()) . ".stream." . $ext;
+            $wowza_path = base_path('wowza_store');
+
+            $output_file_name = md5(time()) . ".stream.mp4";
+
+            $video_path = $video_file->move($temp_path, $file_name);
+
+            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
+
+            ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
+
+            $broadcast = Broadcast::find($broadcast_id);
+
+            $old_video_file_name = $broadcast->video_name;
+
+            if (is_file($wowza_path . DIRECTORY_SEPARATOR . $old_video_file_name)) {
+                unlink($wowza_path . DIRECTORY_SEPARATOR . $old_video_file_name);
             }
 
+            //server ip
+            $server_ip = $this->getRandIp();
+
+            //stream url
+            $stream_url = 'rtmp://' . $server_ip . ':1935/vod/' . $output_file_name;
+
+            $broadcast->video_name = $output_file_name;
+            $broadcast->stream_url = $stream_url;
+            $broadcast->filename = $output_file_name;
+            $broadcast->save();   
+
         }
+        
         if ($request->hasFile('image')) {
 
             $file = $request->file('image');
