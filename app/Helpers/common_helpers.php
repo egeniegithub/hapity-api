@@ -26,7 +26,7 @@ if (!function_exists('ffmpeg_upload_file_path')) {
                 $commands .= 'rm "' . $directory_name . DIRECTORY_SEPARATOR . $temp_file_name . '"' . PHP_EOL;
 
                 if (!empty($final_path)) {
-                    $commands .= 'cp "' . $source_file_path . '" "' . $final_path . DIRECTORY_SEPARATOR . $file_name . '"' . PHP_EOL;
+                    $commands .= 'cp -f "' . $source_file_path . '" "' . $final_path . DIRECTORY_SEPARATOR . $file_name . '"' . PHP_EOL;
                     $commands .= 'rm "' . $source_file_path . '"' . PHP_EOL;
                 }
 
