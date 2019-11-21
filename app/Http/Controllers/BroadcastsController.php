@@ -536,7 +536,7 @@ class BroadcastsController extends Controller
             
             copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
 
-            ffmpeg_upload_file_path($video_path->getRealPath(), $output_file_name);
+            ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
 
 
             $server = $this->getRandIp();
