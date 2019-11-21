@@ -19,24 +19,30 @@ if (!function_exists('ffmpeg_upload_file_path')) {
             Log::channel('ffmpeg_logs')->info('ffprobe:  ' . $ffprobe_command);
             Log::channel('ffmpeg_logs')->info('ffprobe Result:  ' . $shell_exec);
 
-            if ($shell_exec == 90) {
-                $copy_command = 'cp "' . $source_file_path . '" "' . $temp_file_path . '"';
-                $shell_exec = shell_exec($copy_command);
-                Log::channel('ffmpeg_logs')->info('Copy:   ' . $copy_command);
-
-                unlink($source_file_path);
-
-                $ffmpeg_command = 'ffmpeg -i "' . $temp_file_path . '" -vf "transpose=1,transpose=2" ' . $source_file_path;
-                $shell_exec = shell_exec($ffmpeg_command);
-
-                Log::channel('ffmpeg_logs')->info('ffmpeg: ' . $ffmpeg_command);
-
-                $remove_command = 'rm "' . $temp_file_path . '"';
-                $shell_exec = shell_exec($remove_command);
-
-                Log::channel('ffmpeg_logs')->info('rm:  ' . $remove_command);
-                Log::channel('ffmpeg_logs')->info('============================================================================================================');
+            if (intval($shell_exec) == 90) {
+                $commands = 'cp "' . $source_file_path . '" "' . $temp_file_path . '"' . PHP_EOL;
+                $commands .= 'rm "' . $source_file_path . '"' . PHP_EOL;
+                $commands .= 'ffmpeg -i "' . $temp_file_path . '" -vf "transpose=1,transpose=2" "' . $source_file_path . '"' . PHP_EOL;
+                $commands .= 'rm "' . $temp_file_path . '"' . PHP_EOL;
+                $shell_exec = shell_exec($commands);
+                Log::channel('ffmpeg_logs')->info('Start ============================================================================================================');
+                Log::channel('ffmpeg_logs')->info($commands);
+                Log::channel('ffmpeg_logs')->info('End ============================================================================================================');
             }
+
+            //Convert Routine
+            //ffmpeg -i example.mov -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac example.mp4 -hide_banner
+
+            $commands = 'cp "' . $source_file_path . '" "' . $temp_file_path . '"' . PHP_EOL;
+            $commands .= 'rm "' . $source_file_path . '"' . PHP_EOL;
+            $commands .= 'ffmpeg -i "' . $temp_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $source_file_path . '" -hide_banner' . PHP_EOL;
+            $commands .= 'rm "' . $temp_file_path . '"' . PHP_EOL;
+            $shell_exec = shell_exec($commands);
+
+            Log::channel('ffmpeg_logs')->info('Convert Routine Start ============================================================================================================');
+            Log::channel('ffmpeg_logs')->info($commands);
+            Log::channel('ffmpeg_logs')->info('Convert Routine End ============================================================================================================');
+
         }
     }
 }
