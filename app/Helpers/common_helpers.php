@@ -20,16 +20,9 @@ if (!function_exists('ffmpeg_upload_file_path')) {
             Log::channel('ffmpeg_logs')->info('ffprobe Result:  ' . $shell_exec);
 
             if (intval($shell_exec) == 90) {
-                $commands = '';
-                $commands .= 'cp "' . $source_file_path . '" "' . $directory_name . DIRECTORY_SEPARATOR . $temp_file_name . '"' . PHP_EOL;
-                $commands .= 'ffmpeg -y -i "' . $temp_file_name . '" -vf "transpose=1,transpose=2" "' . $source_file_path . '"' . PHP_EOL;
-                $commands .= 'rm "' . $directory_name . DIRECTORY_SEPARATOR . $temp_file_name . '"' . PHP_EOL;
-
-                if (!empty($final_path)) {
-                    $commands .= 'cp -f "' . $source_file_path . '" "' . $final_path . DIRECTORY_SEPARATOR . $file_name . '"' . PHP_EOL;
-                    $commands .= 'rm "' . $source_file_path . '"' . PHP_EOL;
-                }
-
+                $commands = '';                
+                $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" "' . $final_path . DIRECTORY_SEPARATOR . $file_name . '"' . PHP_EOL;
+                
                 $shell_exec = shell_exec($commands);
                 Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
                 Log::channel('ffmpeg_logs')->info($commands);
