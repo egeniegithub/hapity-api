@@ -17,7 +17,7 @@ if (!function_exists('ffmpeg_upload_file_path')) {
             Log::channel('ffmpeg_logs')->info('ffprobe:  ' . $ffprobe_command);
             Log::channel('ffmpeg_logs')->info('ffprobe Result:  ' . $shell_exec);
 
-            if (intval($shell_exec) == 90) {
+//            if (intval($shell_exec) == 90) {
                 $commands = '';
                 $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
 
@@ -25,16 +25,16 @@ if (!function_exists('ffmpeg_upload_file_path')) {
                 Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
                 Log::channel('ffmpeg_logs')->info($commands);
                 Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
-            } else {
-                $commands = '';
-                $commands .= 'ffmpeg -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
-
-                $shell_exec = shell_exec($commands);
-                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
-                Log::channel('ffmpeg_logs')->info($commands);
-                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
-
-            }
+//            } else {
+//                $commands = '';
+//                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
+//
+//                $shell_exec = shell_exec($commands);
+//                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
+//                Log::channel('ffmpeg_logs')->info($commands);
+//                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
+//
+//            }
         }
     }
 }
