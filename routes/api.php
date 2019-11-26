@@ -43,5 +43,5 @@ Route::group([
     Route::get('broadcasts/download', 'BroadcastsController@download')->name('api.broadcast.download');
 
     // is user plugin get
-    Route::post('plugins/is-user-plugin','WebserviceController@is_user_plugin_get')->name('is_user_plugin_get');    
+    Route::post('plugins/is-user-plugin','PluginsController@is_user_plugin_get')->name('is_user_plugin_get');    
 });
