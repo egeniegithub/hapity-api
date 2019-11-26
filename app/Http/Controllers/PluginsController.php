@@ -6,7 +6,7 @@ use App\PluginId;
 use App\Token;
 use Illuminate\Http\Request;
 
-class WebserviceController extends Controller
+class PluginsController extends Controller
 {
     public function is_user_plugin_get(Request $request) {
         $user_id = $request->input('user_id');
