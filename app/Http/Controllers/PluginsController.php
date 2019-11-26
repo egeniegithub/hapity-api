@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class PluginsController extends Controller
 {
-    public function is_user_plugin_get(Request $request) {
+    public function is_user_plugin(Request $request) {
         $user_id = $request->input('user_id');
         $token = $request->input('token');
         if (!$this->validate_token($token)) {
