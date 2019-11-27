@@ -43,9 +43,19 @@ class AdminBroadcastController extends Controller
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
             if (file_exists($file_path)) {
                 if (is_file($file_path)) {
-                    exec('rm -f ' . $file_path);
+                    unlink($file_path);
+                    // exec('rm -f ' . $file_path);
                 }
             }
+        }
+        if(isset($broadcast) && !empty($broadcast->broadcast_image)){
+            $image_file_path = public_path('images'.DIRECTORY_SEPARATOR.'broadcasts'. DIRECTORY_SEPARATOR . $broadcast->user_id . DIRECTORY_SEPARATOR . $broadcast->broadcast_image);
+            if (file_exists($image_file_path)) {    
+                if (is_file($image_file_path)) {
+                    unlink($image_file_path);
+                    // exec('rm -f ' . $file_path);
+                }
+            }    
         }
 
         DB::table('broadcasts')->where('id',$broadcast_id)->delete();

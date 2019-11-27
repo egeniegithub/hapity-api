@@ -410,10 +410,11 @@ class BroadcastsController extends Controller
             unlink($file_path);
         }
 
-        $file_image_path = public_path('images/broadcasts' . DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $stream_id . DIRECTORY_SEPARATOR . $broadcast_image);
+        $file_image_path = public_path('images/broadcasts' . DIRECTORY_SEPARATOR . Auth::user()->id . DIRECTORY_SEPARATOR . $broadcast_image);
         if (is_file($file_image_path)) {
             unlink($file_image_path);
         }
+
 
         $response['status'] = "success";
         $response['response'] = "deletebroadcast";
