@@ -15,7 +15,7 @@ class BroadcastsController extends Controller
 {
     public function __construct()
     {
-        auth()->setDefaultDriver('api');
+        // auth()->setDefaultDriver('api');
 //        $this->middleware('auth:api', ['except' => ['uploadBroadcast', 'editBroadcast', 'deleteBroadcast']]);
     }
 
@@ -316,7 +316,7 @@ class BroadcastsController extends Controller
                 unlink($file_path);
                 // exec('rm -f ' . $file_path);
             }
-            if(!empty($streamURL['broadcast_image'];)){
+            if(!empty($streamURL['broadcast_image'])){
                 $image_name = $streamURL['broadcast_image'];
                 $image_file_path = public_path('images'.DIRECTORY_SEPARATOR.'broadcasts'. DIRECTORY_SEPARATOR . $input['user_id'] . DIRECTORY_SEPARATOR . $image_name);
                 if (file_exists($image_file_path)) {    
@@ -493,7 +493,7 @@ class BroadcastsController extends Controller
         } else {
             $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
             $index = rand(0, 1);
-            return $ip[$index];
+            return $ip[0];
         }
     }
 

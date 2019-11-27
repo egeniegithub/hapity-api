@@ -189,7 +189,7 @@ class BroadcastsController extends Controller
         } else {
             $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
             $index = rand(0, 1);
-            return $ip[$index];
+            return $ip[0];
         }
     }
 
