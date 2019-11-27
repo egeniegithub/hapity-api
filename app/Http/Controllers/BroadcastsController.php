@@ -313,7 +313,16 @@ class BroadcastsController extends Controller
 
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
             if (file_exists($file_path)) {
-                exec('rm -f ' . $file_path);
+                unlink($file_path);
+                // exec('rm -f ' . $file_path);
+            }
+            if(!empty($streamURL['broadcast_image'];)){
+                $image_name = $streamURL['broadcast_image'];
+                $image_file_path = public_path('images'.DIRECTORY_SEPARATOR.'broadcasts'. DIRECTORY_SEPARATOR . $input['user_id'] . DIRECTORY_SEPARATOR . $image_name);
+                if (file_exists($image_file_path)) {    
+                    unlink($image_file_path);
+                    // exec('rm -f ' . $file_path);
+                }    
             }
 
             $response['status'] = "success";
