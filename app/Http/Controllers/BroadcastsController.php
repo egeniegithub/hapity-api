@@ -15,7 +15,7 @@ class BroadcastsController extends Controller
 {
     public function __construct()
     {
-        // auth()->setDefaultDriver('api');
+        auth()->setDefaultDriver('api');
 //        $this->middleware('auth:api', ['except' => ['uploadBroadcast', 'editBroadcast', 'deleteBroadcast']]);
     }
 
