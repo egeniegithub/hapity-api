@@ -32,9 +32,28 @@ class WidgetController extends Controller
 		    if($request['status'] != 'online'){
 		        $stream = str_replace("live", "vod", $stream);
 		    }
-		    $data['stream_url'] = str_replace(array("rtmp", "rtsp"), "https", $stream).'/playlist.m3u8';
+		    $data['stream_url'] = urlencode(str_replace(array("rtmp", "rtsp"), "https", $stream).'/playlist.m3u8');
 
 
+
+	       //  $file_info = pathinfo($request['stream_url']);
+
+	       //  $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
+
+	       //  $data['b_description'] = isset($request['description']) ? $request['description'] : '';
+
+	       //  $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+	       //  $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+	       //  $vod_app = 'stage_vod';
+	       //  $live_app = 'stage_live';
+
+	       //  $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $request['stream'] . '/playlist.m3u8') ;
+	       //  if($request['status'] == 'online') {
+	       //      $file = pathinfo($request['stream'], PATHINFO_FILENAME );                                    
+	       //      $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
+	       //  }
+	       // // $data['stream_url'] = $stream_url;
+	       // dd($data,$stream_url);
 		    return view('widget.widget',$data);
 		}
 		else{
