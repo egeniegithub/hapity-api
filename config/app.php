@@ -230,7 +230,7 @@ return [
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
         'PluginFunctions' => App\Http\Helpers\PluginFunctions::class,
         'Input' => Illuminate\Support\Facades\Input::class,
-
+        'Image' => Intervention\Image\ImageManagerStatic::class,
     ],
 
 ];

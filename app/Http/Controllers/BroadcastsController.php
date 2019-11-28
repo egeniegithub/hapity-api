@@ -8,7 +8,7 @@ use App\Http\Helpers\PluginFunctions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Intervention\Image\Image;
+use Image;
 use \Validator;
 
 class BroadcastsController extends Controller
