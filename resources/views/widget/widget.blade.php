@@ -14,7 +14,8 @@
 
 
     <h1><?php echo strtoupper($b_title);?></h1>
-    <div id="broadcast-<?php echo $b_id;?>"><h1>Loading Stream</h1></div>
+    
+    <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0" ></div>
 
       <script>
         WowzaPlayer.create('w-broadcast-{{ $b_id }}',

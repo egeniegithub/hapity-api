@@ -283,7 +283,7 @@ class BroadcastsController extends Controller
         }
 
         $update_broad = array();
-        $stream_urlx = md5(microtime() . rand()) . ".stream";
+        $stream_url = md5(microtime() . rand()) . ".stream";
         $input = $request->all();
         $broadcast_id = $request->bid;
         $update_broad = array();
