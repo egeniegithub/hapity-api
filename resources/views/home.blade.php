@@ -92,7 +92,7 @@
                                 $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
 
                                 $share_url = $broadcast->share_url;
-                                $b_description = $broadcast->description;
+                                $b_description = preg_replace("/\r\n|\r|\n/",'<br/>',$broadcast->description);
 
                                 $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                                 $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
@@ -162,7 +162,7 @@
                                             {
                                                 "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
                                                 "title":"{{ $b_title }}",
-                                                "description":"{{ $b_description }}",
+                                                "description":"{{ preg_replace("<br/>","",$b_description) }}",
                                                 "sourceURL":"{{ $stream_url }}",
                                                 "autoPlay":false,
                                                 "volume":"75",
