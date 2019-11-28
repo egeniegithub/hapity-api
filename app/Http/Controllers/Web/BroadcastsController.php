@@ -204,6 +204,8 @@ class BroadcastsController extends Controller
         );
         $request->validate($rules);
 
+        $output_file_name = '';
+
         //Handle file upload;
         $video_name_with_ext = '';
         if ($request->hasFile('video')) {
@@ -229,7 +231,7 @@ class BroadcastsController extends Controller
         $server_ip = $this->getRandIp();
 
         //stream url
-        $stream_url = 'rtmp://' . $server_ip . ':1935/vod/' . $output_file_name;
+        $stream_url = !empty($output_file_name) ? 'rtmp://' . $server_ip . ':1935/vod/' . $output_file_name : '';
 
         $image_file_name_with_ext = '';
         //handle image upload
@@ -329,10 +331,10 @@ class BroadcastsController extends Controller
             $broadcast->video_name = $output_file_name;
             $broadcast->stream_url = $stream_url;
             $broadcast->filename = $output_file_name;
-            $broadcast->save();   
+            $broadcast->save();
 
         }
-        
+
         if ($request->hasFile('image')) {
 
             $file = $request->file('image');
@@ -414,7 +416,6 @@ class BroadcastsController extends Controller
         if (is_file($file_image_path)) {
             unlink($file_image_path);
         }
-
 
         $response['status'] = "success";
         $response['response'] = "deletebroadcast";
