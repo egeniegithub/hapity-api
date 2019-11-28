@@ -24,6 +24,8 @@
             "title":"{{ $b_title }}",
             "description":"{{ $b_description }}",
             "sourceURL":"{{ $stream_url }}",
+            "posterFrameURL":"{{ $broadcast_image }}",
+            "uiPosterFrameFillMode":"fit",
             "autoPlay":false,
             "volume":"75",
             "mute":false,
