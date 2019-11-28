@@ -626,7 +626,7 @@ class BroadcastsController extends Controller
 
     private function fix_image_orientation($image_absolute_path)
     {
-        $image = Image::file($image_absolute_path);
+        $image = Image::make($image_absolute_path);
 
         $image->orientate();
 
