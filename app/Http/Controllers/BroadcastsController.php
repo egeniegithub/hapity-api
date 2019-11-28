@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Broadcast;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\PluginFunctions;
-use App\PluginId;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Intervention\Image\Image;
 use \Validator;
 
 class BroadcastsController extends Controller
@@ -316,13 +316,13 @@ class BroadcastsController extends Controller
                 unlink($file_path);
                 // exec('rm -f ' . $file_path);
             }
-            if(!empty($streamURL['broadcast_image'])){
+            if (!empty($streamURL['broadcast_image'])) {
                 $image_name = $streamURL['broadcast_image'];
-                $image_file_path = public_path('images'.DIRECTORY_SEPARATOR.'broadcasts'. DIRECTORY_SEPARATOR . $input['user_id'] . DIRECTORY_SEPARATOR . $image_name);
-                if (file_exists($image_file_path)) {    
+                $image_file_path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $input['user_id'] . DIRECTORY_SEPARATOR . $image_name);
+                if (file_exists($image_file_path)) {
                     unlink($image_file_path);
                     // exec('rm -f ' . $file_path);
-                }    
+                }
             }
 
             $response['status'] = "success";
@@ -497,8 +497,6 @@ class BroadcastsController extends Controller
         }
     }
 
-   
-
     private function make_streaming_server_url($server, $file_name, $live = false)
     {
 
@@ -532,21 +530,18 @@ class BroadcastsController extends Controller
             $video_original_name = $video_file->getClientOriginalName();
             $ext = $video_file->getClientOriginalExtension();
 
-            $temp_path = storage_path('temp');          
-            
+            $temp_path = storage_path('temp');
 
             $file_name = md5(time()) . ".stream." . $ext;
             $wowza_path = base_path('wowza_store');
 
-
             $output_file_name = md5(time()) . ".stream.mp4";
 
             $video_path = $video_file->move($temp_path, $file_name);
-            
+
             copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
 
             ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
-
 
             $server = $this->getRandIp();
 
@@ -600,6 +595,8 @@ class BroadcastsController extends Controller
 
             $file->move($path, $thumbnail_image);
 
+            $this->fix_image_orientation($path . $thumbnail_image);
+
             return $thumbnail_image;
         }
 
@@ -619,10 +616,23 @@ class BroadcastsController extends Controller
 
             File::put($path . $thumbnail_image, base64_decode($base_64_data));
 
+            $this->fix_image_orientation($path . $thumbnail_image);
+
             return $thumbnail_image;
         }
 
         return $thumbnail_image;
+    }
+
+    private function fix_image_orientation($image_absolute_path)
+    {
+        $image = Image::file($image_absolute_path);
+
+        $image->orientate();
+
+        unlink($image_absolute_path);
+
+        $image->save($image_absolute_path);
     }
 
     private function delete_file_from_wowza_store($file_path)
