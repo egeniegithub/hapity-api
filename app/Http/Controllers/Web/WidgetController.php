@@ -44,7 +44,7 @@ class WidgetController extends Controller
 		    return view('widget.widget',$data);
 		}
 		else{
-			return response()->json("<h1>No broadcast found</h1>");
+			return "<h1>No broadcast found</h1>";
 		}
 
     }
