@@ -12,6 +12,7 @@ class WidgetController extends Controller
    		
     	$data['b_description'] = '';
     	if(isset($request['stream'])){
+    		$user_id = isset($request['user_id']) ? $request['user_id'] : '0';
 
 	    	$data['b_id'] = isset($request['bid']) ? $request['bid'] : '';  
 
@@ -19,9 +20,9 @@ class WidgetController extends Controller
 	        $data['b_description  '] = isset($request['description']) ? $request['description'] : '';
 
 	        if(isset($request['broadcast_image']) && $request['broadcast_image']!=''){
-			        $data['broadcast_image'] = $request['broadcast_image'];
+			        $data['broadcast_image'] = route('home').DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'broadcasts'.DIRECTORY_SEPARATOR.$user_id.DIRECTORY_SEPARATOR.$request['broadcast_image'];
 		    }else{
-		        $data['broadcast_image'] = public_path('images/default001.jpg');
+		        $data['broadcast_image'] = route('home').DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'default001.jpg';
 		    }
 
 		    $file_info = pathinfo($request['stream']);
