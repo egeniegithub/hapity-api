@@ -22,9 +22,12 @@ class WidgetController extends Controller
 		        $data['broadcast_image'] = public_path('images/default001.jpg');
 		    }
 		    $stream = $request['stream'];
+		    
+		    $stream = str_replace('/playlist.m3u8', '', $stream);
+		    
 		    $stream = str_replace("rtsp", "rtmp", $stream);
 		    // Temporary change IP address
-		    $stream = str_replace("52.17.132.36", "52.18.33.132", $stream);
+		    $stream = str_replace("52.17.132.36", "52.18.33.132", $stream.'/playlist.m3u8');
 		    // Remove Port
 		    $stream = str_replace(":1935", "", $stream);
 		    // Replace Ip Address With SubDomain
