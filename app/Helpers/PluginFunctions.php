@@ -18,12 +18,14 @@ class PluginFunctions
             foreach ($broadcast as $data) {
                 $title = $data->title;
                 $description = $data->description;
-                $stream_url = str_replace("/live/", "/vod/", $data->stream_url);
+                // $stream_url = str_replace("/live/", "/vod/", $data->stream_url);
+            
+                $stream_url = $data->filename;                
 
                 if ($data->broadcast_image) {
                     $image = $data->broadcast_image;
                 } else {
-                    $image = 'https://staging.hapity.com/images/default001.jpg';
+                    $image = public_path('images/default001.jpg');
                 }
 
                 if ($data->type == 'drupal') {
@@ -128,7 +130,7 @@ class PluginFunctions
             foreach ($broadcast as $data) {
                 $title = $data->title;
                 $description = $data->description;
-                $stream_url = $data->stream_url;
+                $stream_url = $data->filename;
                 $status = $data->status;
 
                 $headers = array(
@@ -233,7 +235,7 @@ class PluginFunctions
             foreach ($broadcast as $data) {
                 $title = $data['title'];
                 $description = $data->description;
-                $stream_url = str_replace("/live/", "/vod/", $data->stream_url);
+                $stream_url =  $data->filename;
                 $image = $data->broadcast_image;
 
                 $headers = array(
