@@ -19,8 +19,8 @@ class PluginFunctions
                 $title = $data->title;
                 $description = $data->description;
                 // $stream_url = str_replace("/live/", "/vod/", $data->stream_url);
-            
-                $stream_url = $data->filename;                
+                $status = isset($data->status) ? $data->status : 'offline';
+                $stream_url = $data->filename;                  
 
                 if ($data->broadcast_image) {
                     $image = $data->broadcast_image;
@@ -35,7 +35,7 @@ class PluginFunctions
                             'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
-                            'status' => 'offline',
+                            'status' => $status,
                             'key' => $data->auth_key,
                             'broadcast_image' => $data->broadcast_image,
                             'description' => $description,
@@ -49,7 +49,7 @@ class PluginFunctions
                             'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
-                            'status' => 'offline',
+                            'status' => $status,
                             'key' => $data->auth_key,
                             'broadcast_image' => $data->broadcast_image,
                             'description' => $description,
@@ -62,7 +62,7 @@ class PluginFunctions
                             'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
-                            'status' => 'offline',
+                            'status' => $status,
                             'key' => $data->auth_key,
                             'broadcast_image' => $data->broadcast_image,
                             'description' => $description,
@@ -135,7 +135,7 @@ class PluginFunctions
                 $title = $data->title;
                 $description = $data->description;
                 $stream_url = $data->filename;
-                $status = $data->status;
+                $status = isset($data->status) ? $data->status : 'offline';
 
                 $headers = array(
                     'Content-type: application/xwww-form-urlencoded',
@@ -245,6 +245,8 @@ class PluginFunctions
                 $stream_url =  $data->filename;
                 $image = $data->broadcast_image;
 
+                $status = isset($data->status) ? $data->status : 'offline';
+
                 $headers = array(
                     'Content-type: application/xwww-form-urlencoded',
                 );
@@ -256,7 +258,7 @@ class PluginFunctions
                             'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
-                            'status' => 'offline',
+                            'status' => $status,
                             'key' => $data->auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
@@ -270,7 +272,7 @@ class PluginFunctions
                             'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
-                            'status' => 'offline',
+                            'status' => $status,
                             'key' => $data->auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
@@ -284,7 +286,7 @@ class PluginFunctions
                             'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
-                            'status' => 'offline',
+                            'status' => $status,
                             'key' => $data->auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
