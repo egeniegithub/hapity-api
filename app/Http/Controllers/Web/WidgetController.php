@@ -9,8 +9,10 @@ class WidgetController extends Controller
 {
     
     public function index(Request $request){
+   		
     	$data['b_description'] = '';
     	if(isset($request['stream'])){
+
 	    	$data['b_id'] = isset($request['bid']) ? $request['bid'] : '';  
 
 	        $data['b_title'] = isset($request['title']) ? $request['title'] : 'Untitled';
@@ -21,21 +23,21 @@ class WidgetController extends Controller
 		    }else{
 		        $data['broadcast_image'] = public_path('images/default001.jpg');
 		    }
-		    $stream = $request['stream'];
-		    
-		    $stream = str_replace('/playlist.m3u8', '', $stream);
-		    
-		    $stream = str_replace("rtsp", "rtmp", $stream);
-		    // Temporary change IP address
-		    $stream = str_replace("52.17.132.36", "52.18.33.132", $stream.'/playlist.m3u8');
-		    // Remove Port
-		    $stream = str_replace(":1935", "", $stream);
-		    // Replace Ip Address With SubDomain
-		    $stream = str_replace(["52.17.132.36", "52.18.33.132"], 'media.hapity.com', $stream);
-		    if($request['status'] != 'online'){
-		        $stream = str_replace("live", "vod", $stream);
-		    }
-		    $data['stream_url'] = urlencode(str_replace(array("rtmp", "rtsp"), "https", $stream));
+
+		    $file_info = pathinfo($request['stream']);
+
+            $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
+
+            $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+            $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+
+            $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $request['stream'] . '/playlist.m3u8') ;
+            if($request['status'] == 'online') {
+                $file = pathinfo($request['stream'], PATHINFO_FILENAME );                                    
+                $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
+            }
+
+            $data['stream_url'] = $stream_url;
 
 		    return view('widget.widget',$data);
 		}
