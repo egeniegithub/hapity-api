@@ -13,7 +13,7 @@ class PluginFunctions
             ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
             ->rightJoin('plugin_ids as pid', 'pid.user_id', '=', 'u.id')
             ->where('broadcasts.id', $broadcast_id)->get();
-
+ 
         if (sizeof($broadcast) > 0) {
             foreach ($broadcast as $data) {
                 $title = $data->title;
@@ -32,6 +32,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => 'offline',
@@ -45,6 +46,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => 'offline',
@@ -57,6 +59,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => 'offline',
@@ -82,6 +85,7 @@ class PluginFunctions
                 } else if ($data->type == 'joomla') {
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
+            
                 $result = file_get_contents($go, false, $context);
                 $result = json_decode($result, true);
 
@@ -140,6 +144,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
@@ -153,6 +158,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
@@ -165,6 +171,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
@@ -246,6 +253,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => 'offline',
@@ -259,6 +267,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => 'offline',
@@ -272,6 +281,7 @@ class PluginFunctions
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
+                            'user_id' => $data->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => 'offline',
