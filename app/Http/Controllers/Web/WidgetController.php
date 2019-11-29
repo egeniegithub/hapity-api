@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Broadcast;
 
 class WidgetController extends Controller
 {
@@ -20,9 +21,9 @@ class WidgetController extends Controller
 	        $data['b_description  '] = isset($request['description']) ? $request['description'] : '';
 
 	        if(isset($request['broadcast_image']) && $request['broadcast_image']!=''){
-			        $data['broadcast_image'] = route('home').DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'broadcasts'.DIRECTORY_SEPARATOR.$user_id.DIRECTORY_SEPARATOR.$request['broadcast_image'];
+			        $data['broadcast_image'] = asset('home/images/broadcasts/'.$user_id.'/'.$request['broadcast_image']);
 		    }else{
-		        $data['broadcast_image'] = route('home').DIRECTORY_SEPARATOR.'images'.DIRECTORY_SEPARATOR.'default001.jpg';
+		        $data['broadcast_image'] = asset('images/default001.jpg');
 		    }
 
 		    $file_info = pathinfo($request['stream']);
@@ -34,8 +35,8 @@ class WidgetController extends Controller
 
             $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $request['stream'] . '/playlist.m3u8') ;
             $status = $request['status'];
-            if(Broadcast::find($data['b_id']))
-            	$broadcast = Broadcast::find($data['b_id']);
+            $broadcast = Broadcast::find($data['b_id']);
+            if(!is_null($broadcast)){
             	$status = $broadcast->status;
         	}
 
