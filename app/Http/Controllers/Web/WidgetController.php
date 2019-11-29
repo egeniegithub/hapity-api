@@ -33,7 +33,13 @@ class WidgetController extends Controller
             $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
             $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $request['stream'] . '/playlist.m3u8') ;
-            if($request['status'] == 'online') {
+            $status = $request['status'];
+            if(Broadcast::find($data['b_id']))
+            	$broadcast = Broadcast::find($data['b_id']);
+            	$status = $broadcast->status;
+        	}
+
+            if($status == 'online') {
                 $file = pathinfo($request['stream'], PATHINFO_FILENAME );                                    
                 $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
             }
