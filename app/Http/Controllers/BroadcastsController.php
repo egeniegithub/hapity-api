@@ -309,6 +309,10 @@ class BroadcastsController extends Controller
         if (!is_null($streamURL)) {
             $streamURL = $streamURL->toArray();
             $file_name = $streamURL['filename'];
+
+            $plugin = new PluginFunctions();
+            $plugin->make_plugin_call_delete($input['broadcast_id']);
+
             Broadcast::where('user_id', $input['user_id'])->where(['id' => $input['broadcast_id']])->delete();
 
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
@@ -325,8 +329,6 @@ class BroadcastsController extends Controller
                 }
             }
 
-            $plugin = new PluginFunctions();
-            $plugin->make_plugin_call_delete($input['broadcast_id']);
 
             $response['status'] = "success";
             $response['response'] = "deletebroadcast";
