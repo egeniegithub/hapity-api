@@ -328,7 +328,7 @@ class PluginFunctions
             ->rightJoin('plugin_ids as pid', 'pid.user_id', '=', 'u.id')
             ->where('broadcasts.id', $broadcast_id)->get();
 
-        if (is_array($broadcast) && sizeof($broadcast) > 0) {
+        if (!empty($broadcast) && count($broadcast) > 0) {
             foreach ($broadcast as $data) {
                 if ($data->type == 'wordpress') {
                     $go = $data->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_wp=' . $data->post_id;
@@ -340,6 +340,6 @@ class PluginFunctions
                 $result = file_get_contents($go);
                 return $result;
             }
-        }
+        } 
     }
 }
