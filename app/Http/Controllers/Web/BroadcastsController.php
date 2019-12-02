@@ -416,6 +416,9 @@ class BroadcastsController extends Controller
         if (is_file($file_image_path)) {
             unlink($file_image_path);
         }
+        
+        $plugin = new PluginFunctions();
+        $plugin->make_plugin_call_delete($stream_id);
 
         $response['status'] = "success";
         $response['response'] = "deletebroadcast";
