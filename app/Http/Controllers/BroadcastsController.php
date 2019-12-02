@@ -325,6 +325,9 @@ class BroadcastsController extends Controller
                 }
             }
 
+            $plugin = new PluginFunctions();
+            $plugin->make_plugin_call_delete($input['broadcast_id']);
+
             $response['status'] = "success";
             $response['response'] = "deletebroadcast";
             $response['message'] = "deleted successfully";

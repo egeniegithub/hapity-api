@@ -319,4 +319,27 @@ class PluginFunctions
             }
         }
     }
+
+    public function make_plugin_call_delete($broadcast_id) 
+    {
+        $broadcast = array();
+        $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
+            ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
+            ->rightJoin('plugin_ids as pid', 'pid.user_id', '=', 'u.id')
+            ->where('broadcasts.id', $broadcast_id)->get();
+
+        if (is_array($broadcast) && sizeof($broadcast) > 0) {
+            foreach ($broadcast as $data) {
+                if ($data->type == 'wordpress') {
+                    $go = $data->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_wp=' . $data->post_id;
+                } else if ($data->type == 'drupal') {
+                    $go = $data->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_drupal=' . $data->post_id_drupal;
+                } else if ($data->type == 'joomla') {
+                    $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.deleteBroadcastData&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_joomla=' . $data->post_id_joomla;
+                }
+                $result = file_get_contents($go);
+                return $result;
+            }
+        }
+    }
 }
