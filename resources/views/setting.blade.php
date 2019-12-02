@@ -288,7 +288,7 @@ $('#account-save').click(function(e){
                 success: function(msg){
                     if(msg=='true'){
                         $.loader('close');
-                         alertify.alert('Username already exist, please choose different username.');
+                         //alertify.alert('Username already exist, please choose different username.');
                     }
                     // else{
                         $.ajax({
@@ -302,7 +302,7 @@ $('#account-save').click(function(e){
                                 
                                 if(msg=='true'){
                                     $.loader('close');
-                                    alertify.alert('Email already exist, please choose different email.');
+                                   // alertify.alert('Email already exist, please choose different email.');
                                 }
                                 // else{
 
