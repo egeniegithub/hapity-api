@@ -21,7 +21,7 @@ class WidgetController extends Controller
 	        $data['b_description  '] = isset($request['description']) ? $request['description'] : '';
 
 	        if(isset($request['broadcast_image']) && $request['broadcast_image']!=''){
-			        $data['broadcast_image'] = asset('home/images/broadcasts/'.$user_id.'/'.$request['broadcast_image']);
+			        $data['broadcast_image'] = asset('images/broadcasts/'.$user_id.'/'.$request['broadcast_image']);
 		    }else{
 		        $data['broadcast_image'] = asset('images/default001.jpg');
 		    }
