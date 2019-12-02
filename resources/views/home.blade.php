@@ -266,7 +266,7 @@
                                             <div class="embedcode-modal-innser">
                                                 <textarea readonly="">
                                                     <iframe height="600" width="100%" scrolling="no" frameborder="0" 
-                                                    src="https://api.hapity.com/widget.php?stream=<?php echo $stream_url;?>&title=<?php echo urlencode($b_title);?>&status=<?php echo $broadcast->status;?>&broadcast_image=<?php echo $b_image;?>">
+                                                    src="https://staging.hapity.com/widget?stream={{$broadcast->filename}}&title={{$broadcast->b_title}}&status={{$broadcast->status}}&bid={{$broadcast->id}}&broadcast_image={{$broadcast->broadcast_image}}&user_id={{$broadcast->user_id}}">
                                                     </iframe>
                                                 </textarea>                        
                                             </div>
