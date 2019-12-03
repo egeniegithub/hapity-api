@@ -75,7 +75,7 @@
                 <span class="icon-bar"></span>
               </button>
               <a class="navbar-brand" href="http://dev.api.hapity.local">
-                <img src="http://dev.api.hapity.local/assets/images/home-new/logo.png" width="90px">
+                <img src="{{asset('assets/images')}}/home-new/logo.png" width="90px">
               </a>
             </div>
 
