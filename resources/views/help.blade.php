@@ -267,7 +267,7 @@
             <div class="row no-margin">
               <div class="col-md-12 no-padding">
                 <div class="download-guide text-center">
-                   <a href="javascript::/guide/new-docs/hapity-for-custom-website.pdf">
+                <a href="{{asset('assets/docs')}}/hapity-for-custom.pdf" target="_blank">
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>

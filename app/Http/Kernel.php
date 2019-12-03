@@ -19,6 +19,8 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
+
+        \App\Http\Middleware\CheckMaintenanceMode::class,
     ];
 
     /**
@@ -35,6 +37,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            
         ],
 
         'api' => [
@@ -63,6 +66,7 @@ class Kernel extends HttpKernel
         'admin.access' => \App\Http\Middleware\AdminAccess::class,
         'user.access' => \App\Http\Middleware\UserAccess::class,
         'cors' => \App\Http\Middleware\Cors::class,
+        
     ];
 
     /**
