@@ -134,6 +134,13 @@ class HomeController extends Controller
             strpos($image_url, 'null.') === false &&
             strpos($image_url, 'default001.') === false
         ) {
+            stream_context_set_default( [
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                ],
+            ]);
+            
             $headers = get_headers($image_url, 1);
 
             if (!empty($headers) && isset($headers[0])) {
