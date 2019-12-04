@@ -29,7 +29,7 @@ class WidgetController extends Controller
             $data['b_title'] = isset($request['title']) ? $request['title'] : 'Untitled';
             $data['b_description  '] = isset($request['description']) ? $request['description'] : '';
 
-            if ($user_id > 0 && isset($request['broadcast_image']) && $request['broadcast_image'] != '') {
+            if ($user_id > 0 && isset($request['broadcast_image']) && $request['broadcast_image'] != 'stream_360p') {
                 $data['broadcast_image'] = asset('images/broadcasts/' . $user_id . '/' . $broadcast->broadcast_image);
             } else {
                 $data['broadcast_image'] = asset('images/default001.jpg');
@@ -40,7 +40,7 @@ class WidgetController extends Controller
             $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
 
             $file_name = $request['stream'];
-            if ($file_ext == 'stream') {
+            if ($file_ext == 'stream' || $file_ext == 'stream_160p' || $file_ext == 'stream_360p') {
                 $file_name = $request['stream'] . '.mp4';
                 $file_ext = 'mp4';
             }
