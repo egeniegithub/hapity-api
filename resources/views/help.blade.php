@@ -191,7 +191,7 @@
 
               <div class="col-md-6 no-padding">
                 <div class="download-plugin text-center">
-                  <a href="{{asset('assets')}}/plugin/hapity-drupal.zip">
+                  <a href="https://www.drupal.org/project/hapity" target="_blank">
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-plugin.png" alt="logo"></li>
                       <li><h4>Download Plugin</h4></li>

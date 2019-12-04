@@ -85,7 +85,7 @@ class PluginFunctions
                 } else if ($data->type == 'joomla') {
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
-            
+                $this->stream_context_default();
                 $result = file_get_contents($go, false, $context);
                 $result = json_decode($result, true);
 
@@ -195,7 +195,7 @@ class PluginFunctions
                 } else if ($data->type == 'joomla') {
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
-
+                $this->stream_context_default();
                 $result = file_get_contents($go, false, $context);
                 $result = json_decode($result, true);
 
@@ -311,7 +311,7 @@ class PluginFunctions
                 } else if ($data->type == 'joomla') {
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.editBroadcastData';
                 }
-
+                $this->stream_context_default();
                 $result = file_get_contents($go, false, stream_context_create($opts));
                 $result = json_decode($result, true);
                 return $result;
@@ -337,9 +337,19 @@ class PluginFunctions
                 } else if ($data->type == 'joomla') {
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.deleteBroadcastData&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_joomla=' . $data->post_id_joomla;
                 }
+                $this->stream_context_default();
                 $result = file_get_contents($go);
                 return $result;
             }
         } 
+    }
+
+    public function stream_context_default(){
+        stream_context_set_default( [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false,
+            ],
+        ]);
     }
 }
