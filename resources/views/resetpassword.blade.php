@@ -29,6 +29,9 @@
         .change-credentials-form {
             margin-top: 0px !important;
         }
+        .lock-image{
+            margin: 0px auto !important;
+        }
     </style>
 @endpush
 @section('content')
@@ -59,7 +62,7 @@
                                     <span>Change your account Login Credentials</span>
                                 </div>
                                 
-                                <form class="account_form " method="post" action="{{ route('reset.password') }}">
+                                <form class="account_form text-center" method="post" action="{{ route('reset.password') }}">
                                     @csrf
                                     <figure class="text-center lock-image " >
                                         <img src='{{asset('assets')}}/images/lockgreen.png' class='profile_picture'>
