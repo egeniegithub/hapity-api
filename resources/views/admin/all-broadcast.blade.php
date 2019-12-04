@@ -169,7 +169,7 @@
                                     
                                     $file_name = $broadcast['filename'];
                                     if ($file_ext == 'stream') {
-                                        $file_name = $request['stream'] . '.mp4';
+                                        $file_name = $broadcast['filename'] . '.mp4';
                                         $file_ext = 'mp4';
                                     }
 
