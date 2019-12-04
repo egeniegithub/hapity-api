@@ -43,7 +43,7 @@ class WidgetController extends Controller
             
 
             if($status == 'online') {
-                $file = pathinfo($request['stream'], PATHINFO_FILENAME );                                    
+                $file = pathinfo($request['stream'], PATHINFO_BASENAME);                                    
                 $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
             }
 
