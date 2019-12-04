@@ -97,7 +97,13 @@
                                 $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                                 $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-                                $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
+                                $file_name = $broadcast->filename;
+                                if ($file_ext == 'stream' || $file_ext == 'stream_160p' || $file_ext == 'stream_360p') {
+                                    $file_name = $broadcast->filename . '.mp4';
+                                    $file_ext = 'mp4';
+                                }
+                                
+                                $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $file_name . '/playlist.m3u8') ;
                                 if($broadcast->status == 'online') {
                                     $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );                                    
                                     $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
