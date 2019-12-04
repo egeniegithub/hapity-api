@@ -44,7 +44,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     
-    <script type="text/javascript" src="http://www.hapity.com/assets/js/fb.js"></script>
+    <script type="text/javascript" src="{{asset('assets/js/fb.js')}}"></script>
     <script src="{{ asset('assets/js/jwplayer.js') }}"></script>
     <script type='text/javascript'>jwplayer.key='fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=';</script>    
 
@@ -74,7 +74,7 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
               </button>
-              <a class="navbar-brand" href="http://dev.api.hapity.local">
+              <a class="navbar-brand" href="{{route('home')}}">
                 <img src="{{asset('assets/images')}}/home-new/logo.png" width="90px">
               </a>
             </div>
