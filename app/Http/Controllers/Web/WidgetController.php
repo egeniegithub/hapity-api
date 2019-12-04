@@ -16,6 +16,8 @@ class WidgetController extends Controller
         if (isset($request['stream'])) {
             $user_id = isset($request['user_id']) ? $request['user_id'] : '0';
 
+            $status = $request['status'];
+
             $data['b_id'] = isset($request['bid']) ? $request['bid'] : '';
             $broadcast = Broadcast::find($data['b_id']);
             if (!is_null($broadcast)) {
@@ -38,15 +40,14 @@ class WidgetController extends Controller
 
             $file_name = $request['stream'];
             if ($file_ext == 'stream') {
-				$file_name = $request['stream'] . '.mp4';
-				$file_ext = 'mp4';
+                $file_name = $request['stream'] . '.mp4';
+                $file_ext = 'mp4';
             }
 
             $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
             $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
             $stream_url = urlencode('https://media.hapity.com/' . $vod_app . '/_definst_/' . $file_ext . ':' . $file_name . '/playlist.m3u8');
-            $status = $request['status'];
 
             if ($status == 'online') {
                 $file = pathinfo($request['stream'], PATHINFO_FILENAME);
