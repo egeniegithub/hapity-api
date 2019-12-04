@@ -20,6 +20,7 @@ class WidgetController extends Controller
 
             $data['b_id'] = isset($request['bid']) ? $request['bid'] : '';
             $broadcast = Broadcast::find($data['b_id']);
+
             if (!is_null($broadcast)) {
                 $status = $broadcast->status;
                 $user_id = $broadcast->user_id;
@@ -29,7 +30,7 @@ class WidgetController extends Controller
             $data['b_description  '] = isset($request['description']) ? $request['description'] : '';
 
             if ($user_id > 0 && isset($request['broadcast_image']) && $request['broadcast_image'] != '') {
-                $data['broadcast_image'] = asset('images/broadcasts/' . $user_id . '/' . $request['broadcast_image']);
+                $data['broadcast_image'] = asset('images/broadcasts/' . $user_id . '/' . $broadcast->broadcast_image);
             } else {
                 $data['broadcast_image'] = asset('images/default001.jpg');
             }
