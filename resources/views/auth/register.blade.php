@@ -80,7 +80,10 @@
   </div>
   <div class="clear"></div>
   <div class="or-text-new-register">OR</div>
-  <div class="social-media-login"> <a class="facebook fb-cursor" onClick="fb_login();">login with facebook</a> <a class="twitter" href="https://api.twitter.com/oauth/authenticate?oauth_token=HXTTgQAAAAAAhe0BAAABbYHsYKE">login with twitter</a> </div>
+  <div class="social-media-login"> 
+    <a class="facebook fb-cursor" href="{{ route('auth.social', 'facebook') }}">login with facebook</a> 
+    <a class="twitter" href="{{ route('auth.social','twitter') }}">login with twitter</a> 
+  </div>
 </div>
 
 
