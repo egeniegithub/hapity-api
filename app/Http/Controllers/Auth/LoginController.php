@@ -155,7 +155,7 @@ class LoginController extends Controller
      */
     public function handleProviderCallback($provider)
     {
-
+        dd($provider);
         switch ($provider) {
             case 'facebook':
                 try {
@@ -235,7 +235,7 @@ class LoginController extends Controller
             case 'twitter':
                 try {
                     $user = Socialite::driver($provider)->user();
-                   
+                    dd($user);
                     if (!is_null($user)) {
                         $twit_user = $user->user;
 
