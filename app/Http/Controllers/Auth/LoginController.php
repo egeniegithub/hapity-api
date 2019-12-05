@@ -235,74 +235,74 @@ class LoginController extends Controller
             case 'twitter':
                 try {
                     $user = Socialite::driver($provider)->user();
-                    dd("twitter logins ", $user);
-                    // if (!is_null($user)) {
-                    //     $twit_user = $user->user;
+                    // dd("twitter logins ", $user);
+                    if (!is_null($user)) {
+                        $twit_user = $user;
 
-                    //     $user_name_info = explode(' ', $twit_user['name']);
+                        $user_name_info = explode(' ', $twit_user['name']);
 
-                    //     $first_name = '';
-                    //     $last_name = '';
+                        $first_name = '';
+                        $last_name = '';
 
-                    //     if (!empty($user_name_info)) {
-                    //         $first_name = count($user_name_info) > 0 ? $user_name_info[0] : "";
-                    //         $last_name = count($user_name_info) > 1 ? $user_name_info[1] : "";
-                    //     }
+                        if (!empty($user_name_info)) {
+                            $first_name = count($user_name_info) > 0 ? $user_name_info[0] : "";
+                            $last_name = count($user_name_info) > 1 ? $user_name_info[1] : "";
+                        }
 
-                    //     if (!empty($twit_user)) {
-                    //         $local_user = User::where('email', $twit_user['email'])->with(['profile', 'social'])->first();
+                        if (!empty($twit_user)) {
+                            $local_user = User::where('email', $twit_user['email'])->with(['profile', 'social'])->first();
 
-                    //         if (is_null($local_user)) {
-                    //             $new_user = new User();
-                    //             $new_user->email = $twit_user['email'];
-                    //             $new_user->username = strtolower(str_replace(' ', '_', $twit_user['name'])) . '_' . time();
-                    //             $new_user->password = bcrypt('h@p!ty_soc!@l_signup');
-                    //             $new_user->save();
+                            if (is_null($local_user)) {
+                                $new_user = new User();
+                                $new_user->email = $twit_user['email'];
+                                $new_user->username = strtolower(str_replace(' ', '_', $twit_user['name'])) . '_' . time();
+                                $new_user->password = bcrypt('h@p!ty_soc!@l_signup');
+                                $new_user->save();
 
-                    //             $new_user->roles()->attach(HAPITY_USER_ROLE_ID);
+                                $new_user->roles()->attach(HAPITY_USER_ROLE_ID);
 
-                    //             $new_user_profile = new UserProfile();
-                    //             $new_user_profile->user_id = $new_user->id;
-                    //             $new_user_profile->first_name = $first_name;
-                    //             $new_user_profile->last_name = $last_name;
-                    //             $new_user_profile->full_name = $twit_user['name'];
-                    //             $new_user_profile->screen_name = $twit_user['name'];
-                    //             $new_user_profile->email = $new_user->email;
-                    //             $new_user_profile->screen_name = $new_user->email;
-                    //             $new_user_profile->auth_key = md5($new_user->username);
-                    //             $new_user_profile->save();
+                                $new_user_profile = new UserProfile();
+                                $new_user_profile->user_id = $new_user->id;
+                                $new_user_profile->first_name = $first_name;
+                                $new_user_profile->last_name = $last_name;
+                                $new_user_profile->full_name = $twit_user['name'];
+                                $new_user_profile->screen_name = $twit_user['name'];
+                                $new_user_profile->email = $new_user->email;
+                                $new_user_profile->screen_name = $new_user->email;
+                                $new_user_profile->auth_key = md5($new_user->username);
+                                $new_user_profile->save();
 
-                    //             $new_user_social = new UserSocial();
-                    //             $new_user_social->user_id = $new_user->id;
-                    //             $new_user_social->social_id = $twit_user['id'];
-                    //             $new_user_social->email = $new_user->email;
-                    //             $new_user_social->platform = $provider;
-                    //             $new_user_social->save();
+                                $new_user_social = new UserSocial();
+                                $new_user_social->user_id = $new_user->id;
+                                $new_user_social->social_id = $twit_user['id'];
+                                $new_user_social->email = $new_user->email;
+                                $new_user_social->platform = $provider;
+                                $new_user_social->save();
 
-                    //             Auth::login($new_user);
+                                Auth::login($new_user);
 
-                    //             return redirect()->route('user.dashboard');
+                                return redirect()->route('user.dashboard');
 
-                    //         } else {
-                    //             $user_existing_social = UserSocial::where('social_id', $twit_user['id'])->where('user_id', $local_user->id)->first();
+                            } else {
+                                $user_existing_social = UserSocial::where('social_id', $twit_user['id'])->where('user_id', $local_user->id)->first();
 
-                    //             if (is_null($user_existing_social)) {
-                    //                 $new_user_social = new UserSocial();
-                    //                 $new_user_social->user_id = $local_user->id;
-                    //                 $new_user_social->social_id = $twit_user['id'];
-                    //                 $new_user_social->email = $new_user->email;
-                    //                 $new_user_social->platform = $provider;
-                    //                 $new_user_social->save();
-                    //             }
+                                if (is_null($user_existing_social)) {
+                                    $new_user_social = new UserSocial();
+                                    $new_user_social->user_id = $local_user->id;
+                                    $new_user_social->social_id = $twit_user['id'];
+                                    $new_user_social->email = $new_user->email;
+                                    $new_user_social->platform = $provider;
+                                    $new_user_social->save();
+                                }
 
-                    //             Auth::login($local_user);
+                                Auth::login($local_user);
 
-                    //             return redirect()->route('user.dashboard');
+                                return redirect()->route('user.dashboard');
 
-                    //         }
+                            }
 
-                    //     }
-                    // }
+                        }
+                    }
                 } catch (Exception $e) {
                     Log::debug($provider . ' login failed: ' . $e->getMessage());
                 }
