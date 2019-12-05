@@ -238,7 +238,7 @@ class LoginController extends Controller
                     // dd("twitter logins ", $user);
                     if (!is_null($user)) {
                         $twit_user = $user;
-
+                        dd($twit_user);
                         $user_name_info = explode(' ', $twit_user['name']);
 
                         $first_name = '';
