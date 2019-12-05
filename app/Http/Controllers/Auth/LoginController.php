@@ -155,7 +155,7 @@ class LoginController extends Controller
      */
     public function handleProviderCallback($provider)
     {
-        dd($provider);
+        
         switch ($provider) {
             case 'facebook':
                 try {
