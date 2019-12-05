@@ -54,6 +54,12 @@
           width: 100%;
         }
       }
+      .maintenan-text{
+        font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      .panel-default{
+        border: none;
+      }
     </style>
     </head>
 <body>
@@ -103,7 +109,18 @@
           </p>    
           
           <br>
-          <h2 class="text-center">Maintenance Mode</h2>
+          <div class="panel panel-default" >
+            <div class="panel-body" >
+              <h3 class="text-left container maintenan-text">
+                Dear users, <br>
+                We are launching our brand new platform. We are waiting for the Apple app store and Google Playstore to approve our apps. As soon as we get the approval you will be able to start creating your videos. <br>
+                Thank you for your patience. <br>
+                Hapity team.
+              </h3>
+            </div>
+          </div>
+
+     
       </div>
     </div>
   
