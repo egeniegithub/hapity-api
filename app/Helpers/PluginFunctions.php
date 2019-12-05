@@ -86,7 +86,7 @@ class PluginFunctions
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
                 $this->stream_context_default();
-                if (!$this->is_localhost()) {
+                if(strpos($data->url, 'localhost') === false){ 
                     $result = file_get_contents($go, false, $context);
                     $result = json_decode($result, true);
 
@@ -199,7 +199,7 @@ class PluginFunctions
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
                 $this->stream_context_default();
-                if (!$this->is_localhost()) {
+                if(strpos($data->url, 'localhost') === false){ 
                     $result = file_get_contents($go, false, $context);
                     $result = json_decode($result, true);
 
@@ -318,7 +318,7 @@ class PluginFunctions
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.editBroadcastData';
                 }
                 $this->stream_context_default();
-                if (!$this->is_localhost()) {
+                if(strpos($data->url, 'localhost') === false){ 
                     $result = file_get_contents($go, false, stream_context_create($opts));
                     $result = json_decode($result, true);
                     return $result;
@@ -345,7 +345,7 @@ class PluginFunctions
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.deleteBroadcastData&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_joomla=' . $data->post_id_joomla;
                 }
                 $this->stream_context_default();
-                if (!$this->is_localhost()) {
+                if(strpos($data->url, 'localhost') === false){ 
                     $result = file_get_contents($go);
                     return $result;
                 }
@@ -364,9 +364,5 @@ class PluginFunctions
         ]);
     }
 
-    public function is_localhost($whitelist = ['127.0.0.1', '::1'])
-    {
-        return in_array($_SERVER['REMOTE_ADDR'], $whitelist);
-    }
 
 }
