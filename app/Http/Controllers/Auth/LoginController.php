@@ -194,7 +194,7 @@ class LoginController extends Controller
                                 $new_user_profile->screen_name = $fb_user['name'];
                                 $new_user_profile->email = $new_user->email;
                                 $new_user_profile->screen_name = $new_user->email;
-                                $new_user_profile->auth_key = bcrypt($new_user->username);
+                                $new_user_profile->auth_key = md5($new_user->username);
                                 $new_user_profile->save();
 
                                 $new_user_social = new UserSocial();
