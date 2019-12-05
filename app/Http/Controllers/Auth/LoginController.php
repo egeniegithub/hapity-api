@@ -235,7 +235,7 @@ class LoginController extends Controller
             case 'twitter':
                 try {
                     $user = Socialite::driver($provider)->user();
-                    // dd("twitter logins ", $user);
+                  
                     if (!is_null($user)) {
                         $twit_user = $user;
                         dd($twit_user->nickname);
