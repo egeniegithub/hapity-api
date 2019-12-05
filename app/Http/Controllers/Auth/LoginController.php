@@ -238,8 +238,8 @@ class LoginController extends Controller
                   
                     if (!is_null($user)) {
                         $twit_user = $user;
-                        dd($twit_user->nickname);
-                        $user_name_info = explode(' ', $twit_user['name']);
+
+                        $user_name_info = explode(' ', $twit_user->name);
 
                         $first_name = '';
                         $last_name = '';
@@ -250,12 +250,12 @@ class LoginController extends Controller
                         }
 
                         if (!empty($twit_user)) {
-                            $local_user = User::where('email', $twit_user['email'])->with(['profile', 'social'])->first();
+                            $local_user = User::where('email', $twit_user->email)->with(['profile', 'social'])->first();
 
                             if (is_null($local_user)) {
                                 $new_user = new User();
-                                $new_user->email = $twit_user['email'];
-                                $new_user->username = strtolower(str_replace(' ', '_', $twit_user['name'])) . '_' . time();
+                                $new_user->email = $twit_user->email;
+                                $new_user->username = strtolower(str_replace(' ', '_', $twit_user->name)) . '_' . time();
                                 $new_user->password = bcrypt('h@p!ty_soc!@l_signup');
                                 $new_user->save();
 
@@ -265,8 +265,8 @@ class LoginController extends Controller
                                 $new_user_profile->user_id = $new_user->id;
                                 $new_user_profile->first_name = $first_name;
                                 $new_user_profile->last_name = $last_name;
-                                $new_user_profile->full_name = $twit_user['name'];
-                                $new_user_profile->screen_name = $twit_user['name'];
+                                $new_user_profile->full_name = $twit_user->name;
+                                $new_user_profile->screen_name = $twit_user->nickname;
                                 $new_user_profile->email = $new_user->email;
                                 $new_user_profile->screen_name = $new_user->email;
                                 $new_user_profile->auth_key = md5($new_user->username);
@@ -274,7 +274,7 @@ class LoginController extends Controller
 
                                 $new_user_social = new UserSocial();
                                 $new_user_social->user_id = $new_user->id;
-                                $new_user_social->social_id = $twit_user['id'];
+                                $new_user_social->social_id = $twit_user->id;
                                 $new_user_social->email = $new_user->email;
                                 $new_user_social->platform = $provider;
                                 $new_user_social->save();
@@ -284,12 +284,12 @@ class LoginController extends Controller
                                 return redirect()->route('user.dashboard');
 
                             } else {
-                                $user_existing_social = UserSocial::where('social_id', $twit_user['id'])->where('user_id', $local_user->id)->first();
+                                $user_existing_social = UserSocial::where('social_id', $twit_user->id)->where('user_id', $local_user->id)->first();
 
                                 if (is_null($user_existing_social)) {
                                     $new_user_social = new UserSocial();
                                     $new_user_social->user_id = $local_user->id;
-                                    $new_user_social->social_id = $twit_user['id'];
+                                    $new_user_social->social_id = $twit_user->id;
                                     $new_user_social->email = $new_user->email;
                                     $new_user_social->platform = $provider;
                                     $new_user_social->save();
