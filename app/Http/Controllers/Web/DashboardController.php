@@ -21,10 +21,19 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $userdata = User::with('profile')->where('id', Auth::id())->first()->toArray();
+        $post_share_url = '';
+        $type = '';
+        $userdata = User::with(['profile', 'plugins'])->where('id', Auth::id())->first()->toArray();
         $broadcasts = Broadcast::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
+        if(!is_null($userdata['plugins'])){
+            if(!is_null($userdata['plugins']['0']['url'])){
+                $url = parse_url($userdata['plugins']['0']['url']);
+                $post_share_url = $url['scheme'].'://'.$url['host'];
+                $type = $userdata['plugins']['0']['type'];
+            }
+        }
 
-        return view('home', compact('userdata', 'broadcasts'));
+        return view('home', compact('userdata', 'broadcasts','post_share_url','type'));
     }
 
 }

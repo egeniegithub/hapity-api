@@ -244,6 +244,18 @@
                                                     </a>
                                                 </li>
                                                 @endif
+                                            @php
+                                                if(!empty($type) && !empty($post_share_url)){
+                                                    if($userdata['plugins']['0']['type'] == 'wordpress'){
+                                                        $share_url = $post_share_url.'/?p='.$broadcast->id;
+                                                    }elseif($userdata['plugins']['0']['type'] == 'drupal'){
+                                                        $share_url = $post_share_url.'/node'.'/'.$broadcast->id;
+                                                    }
+                                                    elseif($userdata['plugins']['0']['type'] == 'joomla'){
+                                                        $share_url = $post_share_url.'/?post='.$broadcast->id;
+                                                    }
+                                                }  
+                                            @endphp
                                             <li>
                                                 <a href="https://twitter.com/intent/tweet?url=<?php echo $share_url; ?>" target="_blank" class="twitter">
                                                     <i class="fa fa-twitter"></i>
