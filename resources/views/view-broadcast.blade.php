@@ -157,7 +157,7 @@
                         </a>
                     </li>
                     <li class="twitter-icon">
-                        <a href="https://twitter.com/home?status={{ $broadcast->share_url }}" target="_blank" class="twitter">
+                        <a href="https://twitter.com/intent/tweet?url={{ $broadcast->share_url }}" target="_blank" class="twitter">
                             <i class="fa fa-twitter"></i>
                         </a>
                     </li>
