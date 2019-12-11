@@ -3,16 +3,27 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@gohapity" />
     <meta name="twitter:creator" content="@gohapity" />
-    <meta property="og:url" content="{{ $broadcast->share_url }}" />
-    <meta property="og:title" content="{{ $broadcast->title }}" />
-    <meta property="og:description" content="{{ $broadcast->description }}" />
-    <meta property="og:image" content="{{ $broadcast->broadcast_image }}" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="{{ $broadcast->title }}" />
+    <meta name="twitter:description" content="{{ $broadcast->description }}" />
+    <meta name="twitter:image" content="{{ $broadcast->broadcast_image }}" />
+    <meta name="twitter:url" content="{{ $broadcast->share_url }}" />
 
     <meta property="og:url" content="{{ $broadcast->share_url }}" />
-    <meta property="og:type" content="Broadcast" />
     <meta property="og:title" content="{{ $broadcast->title }}" />
     <meta property="og:description" content="{{ $broadcast->description }}" />
     <meta property="og:image" content="{{ $broadcast->broadcast_image }}" />
+    <meta property="og:type" content="Broadcast" />
+    <meta property="og:local" content="en_US" />
+    <meta property="article:section" content="brooadcast" />
+    <meta property="article:published_time" content="{{ date("d M Y, h:a:s", strtotime($broadcast->created_at)) }}" />
+    <meta property="article:modified_time" content="{{ date("d M Y, h:a:s ", strtotime($broadcast->created_at)) }}" />
+
+    <!--  Non-Essential, But Recommended -->
+    <meta property="og:site_name" content="Hapity.com">    
+    <!--  Non-Essential, But Required for Analytics -->
+    <meta property="fb:app_id" content="1412967295699368" />
+
 
 @endpush
 @push('css')
