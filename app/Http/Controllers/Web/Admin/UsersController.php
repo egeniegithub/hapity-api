@@ -27,7 +27,7 @@ class UsersController extends Controller
 
         if($request['search']!='')
         {
-            $data = $data->where('username','like','%'.$request['search'].'%');
+            $data = $data->where('username','like','%'.$request['search'].'%')->orWhere('email','like','%'.$request['search'].'%');
         }
         $users = $data->orderBy('users.id','DESC')->paginate(20);
         return view('admin.all-users',compact('users', 'reported_user_ids'));
