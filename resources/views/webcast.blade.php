@@ -78,27 +78,8 @@
                         <p id="vid-title">It is weekend here.</p>
                     </div>
                     <div class="video-frame">
-
-                        <div id="flashContent">        
-                            <!--
-                            <object type="application/x-shockwave-flash" width="100%" height="330" id="externalInterface" data-movie="{{asset('assets/js/web-back.swf')}}" name="externalInterface">
-                                <param name="movie" value="{{asset('assets/js/web-back.swf')}}" />
-                                <param name="quality" value="high" />
-                                <param name="bgcolor" value="#ffffff" />
-                                <param name="play" value="true" />
-                                <param name="loop" value="true" />
-                                <param name="wmode" value="window" />
-                                <param name="scale" value="showall" />
-                                <param name="menu" value="true" />
-                                <param name="devicefont" value="false" />
-                                <param name="salign" value="" />
-                                <param name="allowScriptAccess" value="always" />
-                                <param name="allowFullScreen" value="true" />
-                            </object>
-                            -->
-
-                            <div id="insert_embed_here" class="embed-responsive embed-responsive-16by9">                            </div>
-
+                        <div id="flashContent">  
+                            <div id="insert_embed_here"></div>
                         </div>
                     </div>
                     <div class="live-broadcats-strip margin-bottom">
@@ -203,6 +184,8 @@
                         user_id:'{{ auth::user()->id }}',
                     },
                     success: function (data) {
+                        console.log(data);
+
                         bid = data.broadcast_id;
 
                         /*
@@ -219,7 +202,7 @@
 
                         var my_embed = $('<embed />');
                         my_embed.attr('src', "{{ asset('assets/flashstreamer/webcam.swf') }}");
-                        my_embed.attr('flashvars', "server=rtmp://52.18.33.132:1935/stage_live/" + data.filename );
+                        my_embed.attr('flashvars', "server=rtmp://52.18.33.132:1935/live/" + data.file_name );
                         my_embed.attr('bgcolor', "#FFFFFF");
                         my_embed.attr('width', "100%");
                         my_embed.attr('height', "auto");
@@ -230,15 +213,8 @@
 
                         $('#insert_embed_here').append(my_embed);
 
-
-                        /*
-                            document['externalInterface'].title(time);
-                    
-                        setTimeout(function(){
-                            document['externalInterface'].record();
-                        },3000);
-
-                        */
+                        console.log(my_embed);
+                        
                         setInterval(function(){
                             $.ajax({
                                 url: "{{route('update_timestamp_broadcast')}}",
