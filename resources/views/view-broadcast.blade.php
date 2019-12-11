@@ -1,6 +1,22 @@
 @extends('layouts.app')
+@push('sharing_post_card')
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@gohapity" />
+    <meta name="twitter:creator" content="@gohapity" />
+    <meta property="og:url" content="{{ $broadcast->share_url }}" />
+    <meta property="og:title" content="{{ $broadcast->title }}" />
+    <meta property="og:description" content="{{ $broadcast->description }}" />
+    <meta property="og:image" content="{{ $broadcast->broadcast_image }}" />
 
+    <meta property="og:url" content="{{ $broadcast->share_url }}" />
+    <meta property="og:type" content="Broadcast" />
+    <meta property="og:title" content="{{ $broadcast->title }}" />
+    <meta property="og:description" content="{{ $broadcast->description }}" />
+    <meta property="og:image" content="{{ $broadcast->broadcast_image }}" />
+
+@endpush
 @push('css')
+
 
 @endpush
 @section('content')
@@ -46,7 +62,7 @@
                         $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
 
                         $share_url = $broadcast->share_url;
-                        $b_description = $broadcast->description;
+                        $b_description = preg_replace("/\r\n|\r|\n/",'<br/>',$broadcast->description);
 
                         $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                         $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
@@ -85,9 +101,11 @@
                             {
                                 "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
                                 "title":"{{ $b_title }}",
-                                "description":"{{ $b_description }}",
+                                "description":"{{ str_replace("<br/>"," ",$b_description) }}",
                                 //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
                                 "sourceURL":"{{ $stream_url }}",
+                                "posterFrameURL":"{{ $broadcast->broadcast_image }}",
+                                "uiPosterFrameFillMode":"fit",
                                 "autoPlay":false,
                                 "volume":"75",
                                 "mute":false,
@@ -122,9 +140,21 @@
 
                         &nbsp; <span>{{ $broadcast->user->username }}</span>
                     </li>
-                    <li><a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $broadcast['id'];?>" class="code-icon"><i class="fa fa-code"></i></a></li>
-                    <li class="twitter-icon"><a href="https://twitter.com/home?status=<?php echo $broadcast['share_url'] ?>" target="_blank" class="twitter"><i class="fa fa-twitter"></i></a></li>
-                    <li class="facebook-icon"><a href="javascript:void(0)" onclick="fbshare('fbtest','<?php echo $broadcast['stream_url'];?>','<?php echo $broadcast['broadcast_image'];?>')"><i class="fa fa-facebook"></i></a></li>                           
+                    <li>
+                        <a href="javascript:;" data-modal-id="embed-code-popup-{{ $broadcast->id }}" class="code-icon">
+                            <i class="fa fa-code"></i>
+                        </a>
+                    </li>
+                    <li class="twitter-icon">
+                        <a href="https://twitter.com/home?status={{ $broadcast->share_url }}" target="_blank" class="twitter">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </li>
+                    <li class="facebook-icon"> 
+                        <a  href="https://www.facebook.com/sharer/sharer.php?u={{ $broadcast->share_url }}" target="_blank">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </li>                           
                 </ul>
                 <div id="embed-code-popup-<?php echo $broadcast['id'];?>" class="modal-box_popup">
                     <header> <a href="javascript:;" class="js-modal-close close">×</a>

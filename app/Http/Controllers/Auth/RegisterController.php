@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Token;
 use App\User;
 use App\UserProfile;
+use DateTime;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -71,12 +72,18 @@ class RegisterController extends Controller
     {
         $agree_terms_and_conditions = isset($data['agree_terms_and_conditions']) && !empty($data['agree_terms_and_conditions'])  ? 1 : 0;
 
+        $dt = new DateTime();
+        $timestamp = $dt->format('Y-m-d H:i:s');
+
+
         $user = new User();
         $user->name = $data['username'];
         $user->username = $data['username'];
         $user->email = $data['email'];
         $user->password = bcrypt($data['password']);
         $user->agree_terms_and_conditions = $agree_terms_and_conditions;
+        $user->created_at = $timestamp;
+        $user->updated_at = $timestamp;
         $user->save();
 
         $user->roles()->attach(HAPITY_USER_ROLE_ID);
@@ -87,6 +94,8 @@ class RegisterController extends Controller
             'full_name' => $data['username'],
             'email' => $data['email'],
             'auth_key' => md5($data['username']),
+            'created_at' => $timestamp,
+            'updated_at' => $timestamp
         ]);
 
         

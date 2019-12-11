@@ -10,6 +10,7 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class BroadcastsController extends Controller
@@ -279,7 +280,7 @@ class BroadcastsController extends Controller
             'title' => 'required',
             'video' => 'max:524288',
         );
-        $validator = \validator::make($request->all(), $rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             return back()->withErrors($validator);
         }
@@ -368,8 +369,13 @@ class BroadcastsController extends Controller
     {
         $filename = '';
         $broadcast = Broadcast::with(['user'])->find($broadcast_id);
-
+        
         if (!is_null($broadcast)) {
+            if (isset($broadcast->broadcast_image) && ($broadcast->broadcast_image != '')) {
+                $broadcast['broadcast_image'] = asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image);
+            } else {
+                $broadcast['broadcast_image'] = asset('images/default001.jpg');
+            }
             return view('view-broadcast', compact('broadcast'));
         } else {
             return back();

@@ -6,7 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
+    @stack('sharing_post_card')
     
     @if(isset($broadcast) && !empty($broadcast))
     
