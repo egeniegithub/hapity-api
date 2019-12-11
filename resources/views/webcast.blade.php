@@ -79,7 +79,21 @@
                     </div>
                     <div class="video-frame">
                         <div id="flashContent">  
-                            <div id="insert_embed_here"></div>
+                            <!--<div id="insert_embed_here"></div>-->
+                            <object type="application/x-shockwave-flash" width="100%" height="330" id="externalInterface" data="{{ asset('assets/js/web-back.swf') }}" name="externalInterface">
+                                <param name="movie" value="{{ asset('assets/js/web-back.swf') }}" />
+                                <param name="quality" value="high" />
+                                <param name="bgcolor" value="#ffffff" />
+                                <param name="play" value="true" />
+                                <param name="loop" value="true" />
+                                <param name="wmode" value="window" />
+                                <param name="scale" value="showall" />
+                                <param name="menu" value="true" />
+                                <param name="devicefont" value="false" />
+                                <param name="salign" value="" />
+                                <param name="allowScriptAccess" value="always" />
+                                <param name="allowFullScreen" value="true" />
+                            </object>
                         </div>
                     </div>
                     <div class="live-broadcats-strip margin-bottom">
@@ -188,32 +202,26 @@
 
                         bid = data.broadcast_id;
 
-                        /*
-                        <embed id="flashstreamer"
-                                    src="{{ asset('assets/flashstreamer/webcam.swf') }}"
-                                    flashvars="server=rtmp://media.hapity.com/stage_live/"
-                                    bgcolor="#ffffff"
-                                    width="800"
-                                    height="900"
-                                    quality="high"
-                                    allowScriptAccess="always"
-                                    type="application/x-shockwave-flash"
-                                    pluginspage="http://www.macromedia.com/go/getflashplayer" />*/
+                        document['externalInterface'].title(time);
+                        //},2000);
+                        //console.log(server);
+                        setTimeout(function(){
+                            document['externalInterface'].record();
+                        },3000);
+                        /*setInterval(function(){
+                            $.ajax({
+                                url: baseurl+'main/update_timestamp_broadcast/',
+                                dataType: 'jsonp',
+                                type: 'GET',
+                                data: {
+                                    token: token,
+                                    broadcast_id: bid
+                                },
+                                success: function (data) {
 
-                        var my_embed = $('<embed />');
-                        my_embed.attr('src', "{{ asset('assets/js/web-back.swf') }}");
-                        my_embed.attr('flashvars', "server=rtmp://52.18.33.132:1935/live/" + data.file_name );
-                        my_embed.attr('bgcolor', "#FFFFFF");
-                        my_embed.attr('width', "100%");
-                        my_embed.attr('height', "auto");
-                        my_embed.attr('quality', "high");
-                        my_embed.attr('allowScriptAccess', "always");
-                        my_embed.attr('type', "application/x-shockwave-flash");
-                        my_embed.attr('pluginspage', "http://www.macromedia.com/go/getflashplayer");
-
-                        $('#insert_embed_here').append(my_embed);
-
-                        console.log(my_embed);
+                                }
+                            });
+                        }, 30000);*/
                         
                         setInterval(function(){
                             $.ajax({
