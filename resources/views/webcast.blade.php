@@ -201,7 +201,7 @@
                                     pluginspage="http://www.macromedia.com/go/getflashplayer" />*/
 
                         var my_embed = $('<embed />');
-                        my_embed.attr('src', "{{ asset('assets/flashstreamer/webcam.swf') }}");
+                        my_embed.attr('src', "{{ asset('assets/js/web-back.swf') }}");
                         my_embed.attr('flashvars', "server=rtmp://52.18.33.132:1935/live/" + data.file_name );
                         my_embed.attr('bgcolor', "#FFFFFF");
                         my_embed.attr('width', "100%");
