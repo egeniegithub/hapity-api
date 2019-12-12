@@ -81,7 +81,7 @@
                     </div>
                     <div class="video-frame">
                         <div class="embed-responsive embed-responsive-16by9">  
-                            <!--<div id="insert_embed_here"></div>-->                            
+                            <!--<div id="insert_embed_here"></div>-->    
                             <object 
                                 type="application/x-shockwave-flash" 
                                 data="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" 
@@ -95,7 +95,7 @@
                                 <param name="allowFullScreen" value="true" />
                                 <param name="allowScriptAccess" value="" />
                                 <param name="flashVars" 
-                                value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma" />
+                                value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=false&recording=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma" />
                             </object>                        
                         </div>
                     </div>
@@ -134,6 +134,7 @@
     $(document).ready(function (){
         var streamer = getFlashMovie("broadcaster");
         streamer.setProperty('record', false);
+        streamer.setProperty('recording', false);
     
         var bd_image;
         var bid ;
@@ -213,9 +214,7 @@
                         bid = data.broadcast_id;
                         var streamer = getFlashMovie("broadcaster");
                         streamer.setProperty('record', true);
-
-                        
-
+                        streamer.setProperty('recording', true);
                     }
                 });
             } else {
@@ -229,6 +228,8 @@
         $("#stop-streaming").click(function(){
             var streamer = getFlashMovie("broadcaster");
             streamer.setProperty('record', false);
+            streamer.setProperty('recording', false);
+            
             $.ajax({
                 url: "{{route('offline_broadcast')}}",
                 dataType: 'json',
