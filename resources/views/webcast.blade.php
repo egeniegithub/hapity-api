@@ -81,8 +81,7 @@
                     </div>
                     <div class="video-frame">
                         <div class="embed-responsive embed-responsive-16by9">  
-                            <!--<div id="insert_embed_here"></div>-->
-
+                            <!--<div id="insert_embed_here"></div>-->                            
                             <object type="application/x-shockwave-flash" data="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" id="live-broadcast" width="100%" height="Auto">
                                 <param name="movie" value="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" />
                                 <param name="quality" value="high" />
@@ -90,8 +89,8 @@
                                 <param name="allowFullScreen" value="true" />
                                 <param name="allowScriptAccess" value="" />
                                 <param name="flashVars" 
-                                value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=true&cameraQuality=100&videoCodec=H264Avc&codec=pcma" />
-                            </object>
+                                value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma" />
+                            </object>                        
                         </div>
                     </div>
                     <div class="live-broadcats-strip margin-bottom">
@@ -121,8 +120,17 @@
 
 @push('script')
 <script type="text/javascript">
+    function getFlashMovie(movieName) {
+        var isIE = navigator.appName.indexOf("Microsoft") != -1;
+        return (isIE) ? window[movieName] : document[movieName];  
+    }
+    streamer = getFlashMovie("live-broadcast");
+    streamer.setProperty('record', false);
     
     $(document).ready(function (){
+       
+
+
         var bd_image;
         var bid ;
         var server;
@@ -199,6 +207,8 @@
                         console.log(data);
 
                         bid = data.broadcast_id;
+
+                        streamer.setProperty('record', true);
 
                         
 
