@@ -225,6 +225,7 @@
 
         });
         $("#stop-streaming").click(function(){
+            streamer.setProperty('record', false);
             $.ajax({
                 url: "{{route('offline_broadcast')}}",
                 dataType: 'json',
@@ -235,7 +236,7 @@
                     broadcast_id: bid
                 },
                 success: function () {
-                    window.location.href = '{{route('user.dashboard')}}';
+                    window.location.href = "{{route('user.dashboard')}}";
                     // document['externalInterface'].stopRec();
                 }
             });
