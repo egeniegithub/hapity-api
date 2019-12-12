@@ -259,6 +259,7 @@
                                         </ul>
                                     </li>
                                     @php
+                                    $facebook_share_urls = [];
                                         if(!empty($plugin_ids)){
                                             foreach ($userdata['plugins'] as $key => $value) {
                                                 if(!is_null($value['url'])){
@@ -303,6 +304,7 @@
                                     </li>
                                     @endif
                                     @php
+                                    $twitter_share_urls = [];
                                         if(!empty($plugin_ids)){
                                             foreach ($userdata['plugins'] as $key => $value) {
                                                 if(!is_null($value['url'])){
