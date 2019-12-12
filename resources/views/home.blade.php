@@ -234,7 +234,7 @@
                                         <a href="#" data-toggle="modal" data-target="#share-modal">
                                             <img src="{{ asset('assets')}}/images/share.png" width="28" alt="social Media">
                                         </a>
-                                        <ul class="share-with-icons">
+                                        <ul class="social-share-on">
                                                 @if($stream_url)
                                                 <li>
                                                     <a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $b_id;?>" class="code-icon">
