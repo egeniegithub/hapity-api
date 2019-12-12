@@ -89,7 +89,8 @@
                                 <param name="bgcolor" value="#000000" />
                                 <param name="allowFullScreen" value="true" />
                                 <param name="allowScriptAccess" value="" />
-                                <param name="flashVars" value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=true" />
+                                <param name="flashVars" 
+                                value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=true&cameraQuality=100&videoCodec=H264Avc" />
                             </object>
                         </div>
                     </div>

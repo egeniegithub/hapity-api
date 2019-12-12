@@ -97,7 +97,7 @@
 
                                 $file_name = $broadcast->filename;
                                 if ($file_ext == 'stream' || $file_ext == 'stream_160p' || $file_ext == 'stream_360p') {
-                                    $file_name = $broadcast->filename . '_360p.mp4';
+                                    $file_name = $broadcast->filename . '.mp4';
                                     $file_ext = 'mp4';
                                 }
                                 
@@ -234,7 +234,7 @@
                                         <a href="#" data-toggle="modal" data-target="#share-modal">
                                             <img src="{{ asset('assets')}}/images/share.png" width="28" alt="social Media">
                                         </a>
-                                        <ul class="social-share-on">
+                                        <ul class="share-with-icons">
                                                 @if($stream_url)
                                                 <li>
                                                     <a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $b_id;?>" class="code-icon">
@@ -246,7 +246,7 @@
 
                                                 <li>
                                                     <a href="https://twitter.com/intent/tweet?url='.$share_url.'" target="_blank" class="twitter">
-                                                        <i class="fa fa-twitter icon-color"></i>
+                                                        <i class="fa fa-twitter"></i>
                                                     </a>
                                                 </li>
                                                 <li>
@@ -259,7 +259,6 @@
                                         </ul>
                                     </li>
                                     @php
-                                    $facebook_share_urls = [];
                                         if(!empty($plugin_ids)){
                                             foreach ($userdata['plugins'] as $key => $value) {
                                                 if(!is_null($value['url'])){
@@ -304,7 +303,6 @@
                                     </li>
                                     @endif
                                     @php
-                                    $twitter_share_urls = [];
                                         if(!empty($plugin_ids)){
                                             foreach ($userdata['plugins'] as $key => $value) {
                                                 if(!is_null($value['url'])){
