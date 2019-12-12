@@ -2101,7 +2101,7 @@ div#footer {
     position: relative;
     margin: 8px 0;
     text-align: center;
-    width: 28px;
+    width: 40px;
 }
 .social-share-action a img {
     width: 24px !important;
@@ -2115,6 +2115,17 @@ div#footer {
     border-radius: 6px;
     text-align: center;
     display: none;
+}
+.social-share-on:before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    margin-top: -4px;
+    background-color: #97be0d;
+    transform: rotate(45deg);
 }
 .social-share-on li {
     display: inline-block;
