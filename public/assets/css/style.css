@@ -2095,11 +2095,30 @@ div#footer {
     list-style: none;
     float: right;
     margin: 20px 0;
+    position: relative;
+}
+.social-share-action{
+    position: relative;
+    margin: 8px 0;
+}
+.social-share-on {
+    position: absolute;
+    top: 2px;
+    right: 100%;
+    width: 110px;
+    background-color: #97be0d;
+    border-radius: 6px;
+    text-align: center;
+    display: none;
+}
+.social-share-on li {
+    display: inline-block;
+    margin: 0 6px;
+    list-style: none;
 }
 .bordcast-edit-actions li a {
-    font-size: 25px;
-    color: #97be0d;
-    display: inline-block;
+    font-size: 18px;
+    color: #fff;
 }
 .bordcast-edit-actions li a:focus {
     outline: none;
@@ -2189,6 +2208,13 @@ div#footer {
 }
 .bordcast-active .bordcast-edit-actions {
     margin: 0;
+    display: none;
+}
+.bordcast-active .bordcast-edit-actions li .social-share-on{
+    top: auto;
+    bottom: 100%;
+    right: 50%;
+    transform: translateX(50%);
 }
 .modal-dialog {
     margin: 130px auto !important;
@@ -2927,20 +2953,21 @@ div#footer {
     background: #97be0d;
     border: 1px solid #97be0d;
     list-style: none;
-    width: 81px;
+    width: 110px;
     position: absolute;
-    right: 38px;
-    top: 36px;
+    right: 100%;
+    top: 1px;
     display: none;
+    text-align: center;
     border-radius: 5px;
 }
 .share-with-icons li {
-    float: left;
     margin: 0 6px;
+    display: inline-block;
 }
 .share-with-icons li a {
-    font-size: 14px;
-    color: #3b5998;
+    font-size: 18px;
+    color: #fff;
 }
 .share-with-icons li a.twitter,
 .share-with-icons-live li a.twitter {
@@ -2970,14 +2997,16 @@ div#footer {
     list-style: none;
     width: 22px;
     position: absolute;
-    right: 20px;
-    bottom: 34px;
+    right: 3px;
+    bottom: 100%;
     display: none;
     border-radius: 5px;
     top: inherit;
+    text-align: center;
 }
 .bordcast-active .share-with-icons li {
-    margin: 0 3px !important;
+    margin: 0 !important;
+    width: 100%;
 }
 .bordcast-active .share-with-icons li:last-child {
     margin-bottom: 5px !important;
