@@ -12,6 +12,8 @@
 @endpush
 @section('content')
 
+@php $time = time(); @endphp
+
 <div class="profile-page new_design webcast-page-wrapper">
     <div class="live-streaming">
         <div class="stream-conatiner" id="stream-conatiner-wrp">
@@ -80,19 +82,13 @@
                     <div class="video-frame">
                         <div id="flashContent">  
                             <!--<div id="insert_embed_here"></div>-->
-                            <object type="application/x-shockwave-flash" width="100%" height="330" id="externalInterface" data="{{ asset('assets/js/web-back.swf') }}" name="externalInterface">
-                                <param name="movie" value="{{ asset('assets/js/web-back.swf') }}" />
+                            <object type="application/x-shockwave-flash" data="{{ asset('assets/VideoIO-3.3/VideoIO.swf') }}" id="live-broadcast" width="320" height="240">
+                                <param name="movie" value="{{ asset('assets/VideoIO-3.3/VideoIO.swf') }}" />
                                 <param name="quality" value="high" />
-                                <param name="bgcolor" value="#ffffff" />
-                                <param name="play" value="true" />
-                                <param name="loop" value="true" />
-                                <param name="wmode" value="window" />
-                                <param name="scale" value="showall" />
-                                <param name="menu" value="true" />
-                                <param name="devicefont" value="false" />
-                                <param name="salign" value="" />
-                                <param name="allowScriptAccess" value="always" />
+                                <param name="bgcolor" value="#000000" />
                                 <param name="allowFullScreen" value="true" />
+                                <param name="allowScriptAccess" value="" />
+                            <param name="flashVars" value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish=file1&record=true" />
                             </object>
                         </div>
                     </div>
@@ -161,7 +157,7 @@
                 $(this).parents().find('#stream-conatiner-wrp').fadeOut('fast');
                 $(this).parents().find('#stream-stop-conatiner-wrp').fadeIn('fast');
                 $('#stream-stop-conatiner-wrp').css("visibility", 'visible');
-                var time = $.now()+'.stream';
+                var time = '{{ $time }}.stream';
                 $('#vid-title').html(t);
                 var sens = 'no';
                 if($('#senstive-info').is(':checked'))
@@ -202,42 +198,7 @@
 
                         bid = data.broadcast_id;
 
-                        document['externalInterface'].title(time);
-                        //},2000);
-                        //console.log(server);
-                        setTimeout(function(){
-                            document['externalInterface'].record();
-                        },3000);
-                        /*setInterval(function(){
-                            $.ajax({
-                                url: baseurl+'main/update_timestamp_broadcast/',
-                                dataType: 'jsonp',
-                                type: 'GET',
-                                data: {
-                                    token: token,
-                                    broadcast_id: bid
-                                },
-                                success: function (data) {
-
-                                }
-                            });
-                        }, 30000);*/
                         
-                        setInterval(function(){
-                            $.ajax({
-                                url: "{{route('update_timestamp_broadcast')}}",
-                                dataType: 'jsonp',
-                                type: 'POST',
-                                data: {
-                                    _token: "{{ csrf_token() }}",
-                                    token: token,
-                                    broadcast_id: bid
-                                },
-                                success: function (data) {
-
-                                }
-                            });
-                        }, 30000);
 
                     }
                 });
