@@ -260,6 +260,7 @@
                                     </li>
                                     @php
                                         if(!empty($plugin_ids)){
+                                            $facebook_share_urls = [];
                                             foreach ($userdata['plugins'] as $key => $value) {
                                                 if(!is_null($value['url'])){
                                                         $url = parse_url($value['url']);
@@ -304,6 +305,7 @@
                                     @endif
                                     @php
                                         if(!empty($plugin_ids)){
+                                            $twitter_share_urls = [];
                                             foreach ($userdata['plugins'] as $key => $value) {
                                                 if(!is_null($value['url'])){
                                                         $url = parse_url($value['url']);
