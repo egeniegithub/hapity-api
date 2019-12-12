@@ -80,9 +80,10 @@
                         <p id="vid-title">It is weekend here.</p>
                     </div>
                     <div class="video-frame">
-                        <div id="flashContent">  
+                        <div class="embed-responsive embed-responsive-16by9">  
                             <!--<div id="insert_embed_here"></div>-->
-                            <object type="application/x-shockwave-flash" data="{{ asset('assets/VideoIO-3.3/VideoIO.swf') }}" id="live-broadcast" width="320" height="240">
+
+                            <object type="application/x-shockwave-flash" data="{{ asset('assets/VideoIO-3.3/VideoIO.swf') }}" id="live-broadcast" width="100%" height="Auto">
                                 <param name="movie" value="{{ asset('assets/VideoIO-3.3/VideoIO.swf') }}" />
                                 <param name="quality" value="high" />
                                 <param name="bgcolor" value="#000000" />
