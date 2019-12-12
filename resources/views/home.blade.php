@@ -97,7 +97,7 @@
 
                                 $file_name = $broadcast->filename;
                                 if ($file_ext == 'stream' || $file_ext == 'stream_160p' || $file_ext == 'stream_360p') {
-                                    $file_name = $broadcast->filename . '.mp4';
+                                    $file_name = $broadcast->filename . '_360p.mp4';
                                     $file_ext = 'mp4';
                                 }
                                 
