@@ -130,10 +130,11 @@
         var isIE = navigator.appName.indexOf("Microsoft") != -1;
         return (isIE) ? window[movieName] : document[movieName];  
     }
-    var streamer = getFlashMovie("broadcaster");
-    streamer.setProperty('record', false);
     
     $(document).ready(function (){
+        var streamer = getFlashMovie("broadcaster");
+        streamer.setProperty('record', false);
+    
         var bd_image;
         var bid ;
         var server;
