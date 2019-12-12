@@ -81,8 +81,8 @@
                     </div>
                     <div class="video-frame">
                         <div class="embed-responsive embed-responsive-16by9">  
-                            <!--<div id="insert_embed_here"></div>-->    
-                            <object 
+                            <div id="insert_embed_here"></div>   
+                            <!--<object 
                                 type="application/x-shockwave-flash" 
                                 data="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" 
                                 id="broadcaster" 
@@ -93,10 +93,10 @@
                                 <param name="quality" value="high" />
                                 <param name="bgcolor" value="#000000" />
                                 <param name="allowFullScreen" value="true" />
-                                <param name="allowScriptAccess" value="" />
+                                <param name="allowScriptAccess" value="true" />
                                 <param name="flashVars" 
                                 value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=false&recording=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma" />
-                            </object>                        
+                            </object>-->                        
                         </div>
                     </div>
                     <div class="live-broadcats-strip margin-bottom">
@@ -126,16 +126,8 @@
 
 @push('script')
 <script type="text/javascript">
-    function getFlashMovie(movieName) {
-        var isIE = navigator.appName.indexOf("Microsoft") != -1;
-        return (isIE) ? window[movieName] : document[movieName];  
-    }
     
-    $(document).ready(function (){
-        var streamer = getFlashMovie("broadcaster");
-        streamer.setProperty('record', false);
-        streamer.setProperty('recording', false);
-    
+    $(document).ready(function (){        
         var bd_image;
         var bid ;
         var server;
@@ -209,12 +201,53 @@
                         user_id:'{{ auth::user()->id }}',
                     },
                     success: function (data) {
-                        console.log(data);
-
                         bid = data.broadcast_id;
-                        var streamer = getFlashMovie("broadcaster");
-                        streamer.setProperty('record', true);
-                        streamer.setProperty('recording', true);
+
+                        let myObj = $('<object />');
+                        myObj.attr('type', 'application/x-shockwave-flash');
+                        myObj.attr('data', '{{ asset("assets/VideoIO-3.3/VideoIO11.swf") }}');
+                        myObj.attr('id', 'broadcaster');
+                        myObj.attr('id', 'broadcaster');
+                        myObj.attr('id', 'broadcaster');
+                        myObj.attr('id', 'broadcaster');
+                        myObj.attr('width', '100%');
+                        myObj.attr('height', 'auto');
+
+                        let myParam = $('<param />');
+
+                        myParam = $('<param />');
+                        myParam.attr('name', 'movie');
+                        myParam.attr('value', '{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}');
+                        myParam.appendTo(myObj);
+
+                        myParam = $('<param />');
+                        myParam.attr('name', 'quality');
+                        myParam.attr('value', 'high');
+                        myParam.appendTo(myObj);
+
+                        myParam = $('<param />');
+                        myParam.attr('name', 'bgcolor');
+                        myParam.attr('value', '#000000');
+                        myParam.appendTo(myObj);
+
+                        myParam = $('<param />');
+                        myParam.attr('name', 'allowFullScreen');
+                        myParam.attr('value', 'true');
+                        myParam.appendTo(myObj);
+
+                        myParam = $('<param />');
+                        myParam.attr('name', 'allowScriptAccess');
+                        myParam.attr('value', 'true');
+                        myParam.appendTo(myObj);
+
+                        myParam = $('<param />');
+                        myParam.attr('name', 'flashVars');
+                        myParam.attr('value', 'controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=false&recording=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma');
+                        myParam.appendTo(myObj);
+
+
+                        myObj.appendTo('#insert_embed_here');
+
                     }
                 });
             } else {
@@ -226,10 +259,7 @@
 
         });
         $("#stop-streaming").click(function(){
-            var streamer = getFlashMovie("broadcaster");
-            streamer.setProperty('record', false);
-            streamer.setProperty('recording', false);
-            
+            $('#insert_embed_here').html('');
             $.ajax({
                 url: "{{route('offline_broadcast')}}",
                 dataType: 'json',
