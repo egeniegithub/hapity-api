@@ -246,7 +246,7 @@
 
                                                 <li>
                                                     <a href="https://twitter.com/intent/tweet?url='.$share_url.'" target="_blank" class="twitter">
-                                                        <i class="fa fa-twitter"></i>
+                                                        <i class="fa fa-twitter icon-color"></i>
                                                     </a>
                                                 </li>
                                                 <li>
