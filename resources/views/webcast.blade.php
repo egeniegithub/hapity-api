@@ -82,7 +82,13 @@
                     <div class="video-frame">
                         <div class="embed-responsive embed-responsive-16by9">  
                             <!--<div id="insert_embed_here"></div>-->                            
-                            <object type="application/x-shockwave-flash" data="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" id="live-broadcast" width="100%" height="Auto">
+                            <object 
+                                type="application/x-shockwave-flash" 
+                                data="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" 
+                                id="broadcaster" 
+                                width="100%" 
+                                height="Auto">
+
                                 <param name="movie" value="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" />
                                 <param name="quality" value="high" />
                                 <param name="bgcolor" value="#000000" />
@@ -124,13 +130,10 @@
         var isIE = navigator.appName.indexOf("Microsoft") != -1;
         return (isIE) ? window[movieName] : document[movieName];  
     }
-    streamer = getFlashMovie("live-broadcast");
+    var streamer = getFlashMovie("broadcaster");
     streamer.setProperty('record', false);
     
     $(document).ready(function (){
-       
-
-
         var bd_image;
         var bid ;
         var server;
@@ -207,16 +210,14 @@
                         console.log(data);
 
                         bid = data.broadcast_id;
-
+                        var streamer = getFlashMovie("broadcaster");
                         streamer.setProperty('record', true);
 
                         
 
                     }
                 });
-            }
-            else
-            {
+            } else {
                 if($('.ajs-error').length > 0){
                     $('.ajs-error').css('display', 'none');
                 }
@@ -225,6 +226,7 @@
 
         });
         $("#stop-streaming").click(function(){
+            var streamer = getFlashMovie("broadcaster");
             streamer.setProperty('record', false);
             $.ajax({
                 url: "{{route('offline_broadcast')}}",
