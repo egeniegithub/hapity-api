@@ -83,14 +83,14 @@
                         <div class="embed-responsive embed-responsive-16by9">  
                             <!--<div id="insert_embed_here"></div>-->
 
-                            <object type="application/x-shockwave-flash" data="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" id="live-broadcast" width="100%" height="Auto">
-                                <param name="movie" value="{{ asset('assets/VideoIO-3.3/VideoIO11.swf') }}" />
+                            <object type="application/x-shockwave-flash" data="{{ asset('assets/VideoIO-3.3/VideoIO45.swf') }}" id="live-broadcast" width="100%" height="Auto">
+                                <param name="movie" value="{{ asset('assets/VideoIO-3.3/VideoIO45.swf') }}" />
                                 <param name="quality" value="high" />
                                 <param name="bgcolor" value="#000000" />
                                 <param name="allowFullScreen" value="true" />
                                 <param name="allowScriptAccess" value="" />
                                 <param name="flashVars" 
-                                value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=true&cameraQuality=100&videoCodec=H264Avc" />
+                                value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=true&cameraQuality=100&videoCodec=H264Avc&sound=true&volume=1" />
                             </object>
                         </div>
                     </div>
