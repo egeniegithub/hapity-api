@@ -129,7 +129,7 @@
 
                                     @endphp
 
-                                    <a href="{{ $share_url }}" target="blank">
+                                    <a href="{{ $share_url }}" target="_blank">
                                         {{ $share_url }}
                                     </a> 
                                 </span>
