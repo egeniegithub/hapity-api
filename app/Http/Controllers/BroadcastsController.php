@@ -9,8 +9,9 @@ use App\PluginId;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Validator;
 use Image;
-use \Validator;
+
 
 class BroadcastsController extends Controller
 {
@@ -365,15 +366,7 @@ class BroadcastsController extends Controller
         $allUserBroadcast = Broadcast::orderBy('id', 'desc')->where('user_id', $request->input('user_id'))->get();
         
         $user = User::with('profile')->find($request->input('user_id'))->toArray();
-        $post_share_url = [];
-        $post_url = '';
-        $post_type = '';
-        $post_share_url = PluginId::where('user_id',$request->input('user_id'))->orderBy('id','DESC')->first();
-        if(!empty($post_share_url)){
-            $url = parse_url($post_share_url->url);
-            $post_url = $url['scheme'].'://'.$url['host'];
-            $post_type = $post_share_url->type;
-        }
+        
         $broadcasts = [];
 
         $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
@@ -396,17 +389,7 @@ class BroadcastsController extends Controller
                 $stream_url = !empty($broadcast->filename) ? 'https://media.hapity.com/' . $live_app . '/' . $broadcast->filename . '/playlist.m3u8' : '';
             }
 
-            if(!empty($post_url) && !empty($post_type)){
-                if($post_type == 'wordpress'){
-                    $share_url = $post_url.'/?p='.$broadcast->id;
-                }elseif($post_type == 'drupal'){
-                    $share_url = $post_url.'/node'.'/'.$broadcast->id;
-                }elseif($post_type == 'joomla'){
-                    $share_url = $post_url.'/?post='.$broadcast->id;
-                }
-            }else{
-                $share_url = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
-            }
+            $share_url = post_url_for_admin_broadcast($request->input('user_id'), $broadcast->id , $broadcast->stream_url );
 
             $broadcastObj = [];
             $broadcastObj['id'] = $broadcast->id;
