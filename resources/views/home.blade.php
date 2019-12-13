@@ -235,6 +235,42 @@
                                             <img src="{{ asset('assets')}}/images/share.png" width="28" alt="social Media">
                                         </a>
                                         <ul class="social-share-on">
+                                                @php
+                                                    if(!empty($plugin_ids)){
+                                                            rsort($plugin_ids);
+                                                                $url = parse_url($plugin_ids[0]['url']);
+                                                                $post_share_url = $url['scheme'].'://'.$url['host'];
+                                                            if($plugin_ids[0]['type'] == 'wordpress'){
+                                                                $share_url = $post_share_url.'/?p='.$broadcast->id;
+                                                            }elseif($plugin_ids[0]['type'] == 'drupal'){
+                                                                $share_url = $post_share_url.'/node'.'/'.$broadcast->id;
+                                                            }elseif($plugin_ids[0]['type'] == 'joomla'){
+                                                                $share_url = $post_share_url.'/?post='.$broadcast->id;
+                                                            }
+                                                        $share_links = ' <li>
+                                                                        <a  href="https://twitter.com/intent/tweet?url='.$share_url.'" target="_blank">
+                                                                            <i class="fa fa-twitter"></i>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li>
+                                                                        <a  href="https://www.facebook.com/sharer/sharer.php?u='.$share_url.'" target="_blank">
+                                                                            <i class="fa fa-facebook"></i>
+                                                                        </a>
+                                                                    </li>';
+                                                    }else{
+                                                        $share_links = '<li>
+                                                                            <a href="https://twitter.com/intent/tweet?url='.$share_url.'" target="_blank" class="twitter">
+                                                                                <i class="fa fa-twitter"></i>
+                                                                            </a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a  href="https://www.facebook.com/sharer/sharer.php?u='.$share_url.'" target="_blank">
+                                                                                <i class="fa fa-facebook"></i>
+                                                                            </a>
+                                                                        </li>';
+                                                    }
+                                                @endphp
+
                                                 @if($stream_url)
                                                 <li>
                                                     <a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $b_id;?>" class="code-icon">
@@ -243,112 +279,10 @@
                                                 </li>
                                                 @endif
                                          
-
-                                                <li>
-                                                    <a href="https://twitter.com/intent/tweet?url='.$share_url.'" target="_blank" class="twitter">
-                                                        <i class="fa fa-twitter"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a  href="https://www.facebook.com/sharer/sharer.php?u='.$share_url.'" target="_blank">
-                                                        <i class="fa fa-facebook"></i>
-                                                    </a>
-                                                </li>
-                                           
+                                                {!! $share_links !!}
                                             
                                         </ul>
                                     </li>
-                                    @php
-                                        if(!empty($plugin_ids)){
-                                            $facebook_share_urls = [];
-                                            foreach ($userdata['plugins'] as $key => $value) {
-                                                if(!is_null($value['url'])){
-                                                        $url = parse_url($value['url']);
-                                                        $post_share_url = $url['scheme'].'://'.$url['host'];
-
-                                                    if($value['type'] == 'wordpress'){
-                                                        $share_url = $post_share_url.'/?p='.$broadcast->id;
-                                                        $fa_icon = '<i class="fa fa-wordpress " aria-hidden="true"></i>';
-                                                    }elseif($value['type'] == 'drupal'){
-                                                        $share_url = $post_share_url.'/node'.'/'.$broadcast->id;
-                                                        $fa_icon = '<i class="fa fa-drupal " aria-hidden="true"></i>';
-                                                    }elseif($value['type'] == 'joomla'){
-                                                        $share_url = $post_share_url.'/?post='.$broadcast->id;
-                                                        $fa_icon = '<i class="fa fa-joomla " aria-hidden="true"></i>';
-                                                    }
-                                                $facebook_share_urls[] = ' <li>
-                                                                <a  href="https://www.facebook.com/sharer/sharer.php?u='.$share_url.'" target="_blank">
-                                                                    '.$fa_icon.'
-                                                                </a>
-                                                            </li>';
-                                                }
-                                            }
-                                            
-                                        }
-
-                                    @endphp
-                                    @if(isset($facebook_share_urls) && !empty($facebook_share_urls))
-                                    <li class="social-share-action">
-                                        <a href="#" data-toggle="modal" data-target="#share-modal">
-                                            <img src="{{ asset('assets')}}/images/facebook.png" width="28" alt="social Media">
-                                        </a>
-                                        <ul class="social-share-on">
-                                            
-                                        @if(isset($facebook_share_urls) && is_array($facebook_share_urls))
-                                            @foreach ($facebook_share_urls as $item)
-                                                {!! $item !!} 
-                                            @endforeach
-                                        @endif
-                                                
-                                        </ul>
-                                    </li>
-                                    @endif
-                                    @php
-                                        if(!empty($plugin_ids)){
-                                            $twitter_share_urls = [];
-                                            foreach ($userdata['plugins'] as $key => $value) {
-                                                if(!is_null($value['url'])){
-                                                        $url = parse_url($value['url']);
-                                                        $post_share_url = $url['scheme'].'://'.$url['host'];
-
-                                                    if($value['type'] == 'wordpress'){
-                                                        $share_url = $post_share_url.'/?p='.$broadcast->id;
-                                                        $fa_icon = '<i class="fa fa-wordpress " aria-hidden="true"></i>';
-                                                    }elseif($value['type'] == 'drupal'){
-                                                        $share_url = $post_share_url.'/node'.'/'.$broadcast->id;
-                                                        $fa_icon = '<i class="fa fa-drupal " aria-hidden="true"></i>';
-                                                    }elseif($value['type'] == 'joomla'){
-                                                        $share_url = $post_share_url.'/?post='.$broadcast->id;
-                                                        $fa_icon = '<i class="fa fa-joomla " aria-hidden="true"></i>';
-                                                    }
-                                                $twitter_share_urls[] = '<li>
-                                                                <a href="https://twitter.com/intent/tweet?url='.$share_url.'" target="_blank" class="twitter">
-                                                                    '.$fa_icon.'
-                                                                </a>
-                                                            </li>';
-
-
-                                                }
-                                            }
-                                            
-                                        }
-                                    @endphp
-                                    @if(isset($twitter_share_urls) && !empty($twitter_share_urls))
-                                    <li class="social-share-action">
-                                        <a href="#" data-toggle="modal" data-target="#share-modal">
-                                            <img src="{{ asset('assets')}}/images/twitter-64.png" width="28" alt="social Media">
-                                        </a>
-                                        <ul class="social-share-on">
-                                                
-                                            @if(isset($twitter_share_urls) && is_array($twitter_share_urls))
-                                                @foreach ($twitter_share_urls as $item)
-                                                    {!! $item !!} 
-                                                @endforeach
-                                            @endif
-                                            
-                                        </ul>
-                                    </li>
-                                    @endif
                                     <li class="social-share-action"><a href="{{ route('edit_broadcast_content',$b_id) }}" data-toggle="modal">
                                         <img src="{{ asset('assets') }}/images/edit.png" width="28" alt="Edit">
                                     </a></li>
