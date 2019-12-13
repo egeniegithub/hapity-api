@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Broadcast;
+use App\BroadcastsCI;
 use App\Http\Controllers\Controller;
 use App\PluginId;
 use App\User;
@@ -29,7 +30,31 @@ class HomeController extends Controller
 
     public function test()
     {
-        $this->seed_users_from_old_db(true, true);
+        //$this->seed_users_from_old_db(false, false);
+
+        $this->fix_broadcast_share_url();
+
+    }
+
+    private function fix_broadcast_share_url()
+    {
+        $ci_broadcasts = BroadcastsCI::all();
+        $broadcasts = Broadcast::all();
+
+        foreach ($ci_broadcasts as $ci_broadcast) {
+            foreach ($broadcasts as $broadcast) {
+                if (
+                    ($broadcast->post_id_joomla == $ci_broadcast->post_id_joomla && $broadcast->timestamp == $ci_broadcast->timestamp) ||
+                    ($broadcast->post_id_drupal == $ci_broadcast->post_id_drupal && $broadcast->timestamp == $ci_broadcast->timestamp) ||
+                    ($broadcast->post_id == $ci_broadcast->post_id && $broadcast->timestamp == $ci_broadcast->timestamp)
+                ) {
+                    echo $broadcast->id . ' ' . $broadcast->title . ' ' . $ci_broadcast->share_url . '<br />';
+
+                    $broadcast->share_url = $ci_broadcast->share_url;
+                    $broadcast->save();
+                }
+            }
+        }
     }
 
     private function seed_users_from_old_db($pull_profile_pictures = false, $pull_broadcast_pictures = false)
@@ -134,13 +159,13 @@ class HomeController extends Controller
             strpos($image_url, 'null.') === false &&
             strpos($image_url, 'default001.') === false
         ) {
-            stream_context_set_default( [
+            stream_context_set_default([
                 'ssl' => [
                     'verify_peer' => false,
                     'verify_peer_name' => false,
                 ],
             ]);
-            
+
             $headers = get_headers($image_url, 1);
 
             if (!empty($headers) && isset($headers[0])) {
@@ -153,9 +178,9 @@ class HomeController extends Controller
 
                     $picture_content = file_get_contents($image_url);
 
-                    if($prefix == 'broadcast' && $user_id > 0) {
+                    if ($prefix == 'broadcast' && $user_id > 0) {
                         $path = 'images' . DIRECTORY_SEPARATOR . $public_folder . DIRECTORY_SEPARATOR . $user_id . DIRECTORY_SEPARATOR;
-                        if(!is_dir($path)) {
+                        if (!is_dir($path)) {
                             mkdir($path);
                         }
 
