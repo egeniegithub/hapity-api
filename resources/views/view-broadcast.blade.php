@@ -27,8 +27,13 @@
 
 @endpush
 @push('css')
-
-
+    <style>
+        .section-main{
+            padding-left: 0px !important;
+            padding-right: 0px !important;
+            padding-bottom: 0px !important;
+        }
+    </style>
 @endpush
 @section('content')
 

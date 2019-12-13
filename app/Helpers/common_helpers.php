@@ -1,5 +1,6 @@
 <?php
 
+use App\PluginId;
 use Illuminate\Support\Facades\Log;
 
 if (!function_exists('ffmpeg_upload_file_path')) {
@@ -36,5 +37,32 @@ if (!function_exists('ffmpeg_upload_file_path')) {
 //
 //            }
         }
+    }
+}
+
+
+if(!function_exists('post_url_for_admin_broadcast')){
+    function post_url_for_admin_broadcast($user_id,$broadcast_id,$share_url){
+        $share_url = '';
+        $post_share_url = PluginId::where('user_id',$user_id)->orderBy('id','DESC')->first();
+        if(!empty($post_share_url)){
+            $url = parse_url($post_share_url->url);
+            $post_url = $url['scheme'].'://'.$url['host'];
+            $post_type = $post_share_url->type;
+            if(!empty($post_url) && !empty($post_type)){
+                if($post_type == 'wordpress'){
+                    $share_url = $post_url.'/?p='.$broadcast_id;
+                }elseif($post_type == 'drupal'){
+                    $share_url = $post_url.'/node'.'/'.$broadcast_id;
+                }elseif($post_type == 'joomla'){
+                    $share_url = $post_url.'/?post='.$broadcast_id;
+                }
+            }else{
+                $share_url = !empty($share_url) ? $share_url : route('broadcast.view', $broadcast_id);
+            }
+        }else{
+            $share_url = !empty($share_url) ? $share_url : route('broadcast.view', $broadcast_id);
+        }
+        return $share_url;
     }
 }
