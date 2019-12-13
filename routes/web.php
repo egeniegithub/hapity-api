@@ -23,6 +23,7 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
 Auth::routes();
 
+Route::get('main/view_broadcast/{id}','Web\BroadcastsController@handle_old_view_broadcast')->name('redirect.old.view.broadcast');
 Route::get('view-broadcast/{id}', 'Web\BroadcastsController@view_broadcast')->name('broadcast.view');
 Route::get('broadcast/views/update-count/{id}', 'Web\BroadcastsController@update_view_count')->name('broadcast.update.view.count');
 
