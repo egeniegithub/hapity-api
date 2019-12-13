@@ -94,7 +94,7 @@ class PluginFunctions
 
                     $email = "fahim.egenie@gmail.com";
                     
-                    Mail::send('emails/contactus', ['data' => $result], function ($message) use ($email) {
+                    Mail::send('emails/post_mail', ['data' => $result], function ($message) use ($email) {
                         $message->to("fahim.egenie@gmail.com", $email)->subject('Contact Us');
                     });
 
