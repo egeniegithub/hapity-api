@@ -54,7 +54,7 @@
 
                     $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
 
-                    $share_url = $broadcast['share_url'];
+                    $share_url = !empty($broadcast['share_url']) ? $broadcast['share_url'] : route('broadcast.view', $broadcast['id']);
                     $b_description = $broadcast['description'];
 
                     $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
@@ -124,10 +124,6 @@
                                 <span class="reportdate">Source :</span> 
                                 <span class="report-result-display">
 
-                                    @php 
-                                        $share_url = post_url_for_admin_broadcast($broadcast['user_id'],$broadcast['id'],$broadcast['stream_url']);
-
-                                    @endphp
 
                                     <a href="{{ $share_url }}" target="_blank">
                                         {{ $share_url }}
