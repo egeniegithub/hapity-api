@@ -89,7 +89,7 @@
 
                                 $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
 
-                                $share_url = $broadcast->share_url;
+                                $share_url = !empty($broadcast->share_url) ? $broadcast->share_url  : route('broadcast.view', $broadcast->id);
                                 $b_description = preg_replace("/\r\n|\r|\n/",'<br/>',$broadcast->description);
 
                                 $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
@@ -242,16 +242,14 @@
                                                     </a>
                                                 </li>
                                                 @endif
-                                                @php 
-                                                    $share_urls = post_url_for_admin_broadcast($broadcast->user_id, $broadcast->id, $broadcast->share_url);
-                                                @endphp
+                                                
                                                 <li>
-                                                    <a href="https://twitter.com/intent/tweet?url={{ $share_urls }}" target="_blank" class="twitter">
+                                                    <a href="https://twitter.com/intent/tweet?url={{ $share_url }}" target="_blank" class="twitter">
                                                         <i class="fa fa-twitter"></i>
                                                     </a>
                                                 </li>
                                                 <li>
-                                                    <a  href="https://www.facebook.com/sharer/sharer.php?u={{ $share_urls }}" target="_blank">
+                                                    <a  href="https://www.facebook.com/sharer/sharer.php?u={{ $share_url }}" target="_blank">
                                                         <i class="fa fa-facebook"></i>
                                                     </a>
                                                 </li>
