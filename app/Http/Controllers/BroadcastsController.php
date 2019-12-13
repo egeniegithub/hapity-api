@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use App\Broadcast;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\PluginFunctions;
-use App\PluginId;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Validator;
 use Image;
-
+use \Validator;
 
 class BroadcastsController extends Controller
 {
@@ -364,9 +362,9 @@ class BroadcastsController extends Controller
         }
 
         $allUserBroadcast = Broadcast::orderBy('id', 'desc')->where('user_id', $request->input('user_id'))->get();
-        
+
         $user = User::with('profile')->find($request->input('user_id'))->toArray();
-        
+
         $broadcasts = [];
 
         $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
@@ -389,8 +387,6 @@ class BroadcastsController extends Controller
                 $stream_url = !empty($broadcast->filename) ? 'https://media.hapity.com/' . $live_app . '/' . $broadcast->filename . '/playlist.m3u8' : '';
             }
 
-            $share_url = post_url_for_admin_broadcast($request->input('user_id'), $broadcast->id , $broadcast->stream_url );
-
             $broadcastObj = [];
             $broadcastObj['id'] = $broadcast->id;
             $broadcastObj['geo_location'] = $broadcast->geo_location;
@@ -401,7 +397,7 @@ class BroadcastsController extends Controller
             $broadcastObj['stream_url'] = $stream_url;
             $broadcastObj['status'] = $broadcast->status;
             $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default-image-mobile.png');
-            $broadcastObj['share_url'] = $share_url;
+            $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
             $broadcastObj['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictuers/' . $user['profile']['profile_picture']) : '';
