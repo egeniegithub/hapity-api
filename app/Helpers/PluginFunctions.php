@@ -2,6 +2,7 @@
 namespace App\Http\Helpers;
 
 use App\Broadcast;
+use Illuminate\Support\Facades\Mail;
 
 class PluginFunctions
 {
@@ -89,6 +90,13 @@ class PluginFunctions
                 if(strpos($data->url, 'localhost') === false){ 
                     $result = file_get_contents($go, false, $context);
                     $result = json_decode($result, true);
+
+
+                    $email = "fahim.egenie@gmail.com";
+                    
+                    Mail::send('emails/contactus', ['data' => $result], function ($message) use ($email) {
+                        $message->to("fahim.egenie@gmail.com", $email)->subject('Contact Us');
+                    });
 
                     if (!empty($result)) {
                         $update_broadcast = Broadcast::find($bid);
