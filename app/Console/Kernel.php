@@ -15,6 +15,9 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         //
         Commands\BroadcastUpdateLiveStatusCron::class,
+        Commands\EmailCron::class,
+        
+
     ];
 
     /**
@@ -29,7 +32,10 @@ class Kernel extends ConsoleKernel
         //          ->hourly();
 
         $schedule->command('broadcastupdatelivestatus:cron')
-                 ->everyMinute();
+                 ->everyFiveMinutes();
+        
+        $schedule->command('email:cron')
+                ->everyFiveMinutes();
     }
 
     /**

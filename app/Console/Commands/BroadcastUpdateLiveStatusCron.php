@@ -51,7 +51,7 @@ class BroadcastUpdateLiveStatusCron extends Command
 
         $broadcasts = Broadcast::select('id', 'status', 'timestamp')->where('status', 'online')->get();
 
-        if (!empty($broadcasts) && !is_null($broadcasts)) {
+        if (!empty($broadcasts->count()) && !is_null($broadcasts->count())) {
             foreach ($broadcasts as $key => $broadcast) {
                 // Log::info(json_encode($broadcasts->toArray()));
 
