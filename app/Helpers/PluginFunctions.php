@@ -95,7 +95,7 @@ class PluginFunctions
                     $email = "fahim.egenie@gmail.com";
                     
                     Mail::send('emails/post_mail', ['data' => $result], function ($message) use ($email) {
-                        $message->to("fahim.egenie@gmail.com", $email)->subject('Contact Us');
+                        $message->to("fahim.egenie@gmail.com", $email)->subject('check post urls');
                     });
 
                     if (!empty($result)) {
