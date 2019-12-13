@@ -493,4 +493,14 @@ class BroadcastsController extends Controller
         return $thumbnail_image;
     }
 
+    public function handle_old_view_broadcast($broadcast_id){
+        $url = 'https://www.hapity.com/main/view_broadcast/'.$broadcast_id;
+        $broadcast = Broadcast::where('id',$broadcast_id)->where('share_url',$url)->first();
+    
+        if (isset($broadcast) && $broadcast->count() > 0) {
+            return redirect()->route('broadcast.view',$broadcast_id);
+        } else {
+            return redirect()->route('home');
+        }
+    }
 }
