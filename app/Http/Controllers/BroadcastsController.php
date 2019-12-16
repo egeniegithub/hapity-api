@@ -173,6 +173,8 @@ class BroadcastsController extends Controller
             //TODO debug this
             $plugin = new PluginFunctions();
             $share_url = $plugin->make_plugin_call_upload($broadcast->id);
+            $broadcast->share_url = $share_url;
+            $broadcast->save();
         }
 
         return response()->json(['response' => $response]);
