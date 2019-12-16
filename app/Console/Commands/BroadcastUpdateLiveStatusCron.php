@@ -44,10 +44,10 @@ class BroadcastUpdateLiveStatusCron extends Command
         Log::info("Cron is working fine!");
 
         $date = new DateTime();
-        $date->modify('-1 minute');
+        $date->modify('-1 minutes 30 seconds');
 
         $null_case_date = new DateTime();
-        $null_case_date->modify('-5 minute');
+        $null_case_date->modify('-5 minutes');
 
         $broadcasts = Broadcast::select('id', 'status', 'timestamp')->where('status', 'online')->get();
 
