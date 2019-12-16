@@ -99,7 +99,10 @@ class BroadcastsController extends Controller
         if (boolval($request->input('post_plugin'))) {
             //TODO debug this
             $plugin = new PluginFunctions();
-            $result = $plugin->make_plugin_call_upload($broadcast->id);
+            $share_url = $plugin->make_plugin_call_upload($broadcast->id);
+            
+            $broadcast->share_url = $share_url;
+            $broadcast->save();
 
         }
 
