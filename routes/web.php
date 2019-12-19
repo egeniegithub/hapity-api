@@ -59,10 +59,10 @@ Route::group([
 ], function ($router) {
 
     Route::get('admin/broadcast', 'Web\Admin\AdminBroadcastController@index')->name('admin.broadcast');
-    Route::get('admin/deletebroadcast/{id}', 'Web\Admin\AdminBroadcastController@deleteBroadcast')->name('admin.deletebroadcast');
+    Route::post('admin/deletebroadcast', 'Web\Admin\AdminBroadcastController@deleteBroadcast')->name('admin.deletebroadcast');
 
-    Route::get('admin/deleteuser/{id}', 'Web\Admin\UsersController@deleteuser')->name('admin.deleteuser');
-    Route::get('admin/approveduser/{id}', 'Web\Admin\UsersController@approveduser')->name('admin.approveduser');
+    Route::post('admin/deleteuser', 'Web\Admin\UsersController@deleteuser')->name('admin.deleteuser');
+    Route::post('admin/approveduser/', 'Web\Admin\UsersController@approveduser')->name('admin.approveduser');
 
     Route::get('admin/dashboard', 'Web\Admin\AdminController@index')->name('admin.dashboard');
     Route::get('admin/settings', 'Web\Admin\AdminController@adminSetting')->name('admin.settings');
@@ -72,8 +72,8 @@ Route::group([
 
     Route::get('admin/reported-broadcast', 'Web\Admin\ReportedController@reportedBroadcasts')->name('admin.reportedBroadcasts');
     Route::get('admin/reported-users', 'Web\Admin\ReportedController@reportedUsers')->name('admin.reportedUsers');
-    Route::get('admin/reportBroadcastDelete/{id}', 'Web\Admin\ReportedController@reportBroadcastDelete')->name('admin.reportBroadcastDelete');
-    Route::get('admin/reportBroadcastApproved/{id}', 'Web\Admin\ReportedController@reportBroadcastApproved')->name('admin.reportBroadcastApproved');
+    Route::post('admin/reportBroadcastDelete', 'Web\Admin\ReportedController@reportBroadcastDelete')->name('admin.reportBroadcastDelete');
+    Route::post('admin/reportBroadcastApproved', 'Web\Admin\ReportedController@reportBroadcastApproved')->name('admin.reportBroadcastApproved');
 
 });
 

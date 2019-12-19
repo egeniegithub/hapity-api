@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\UserProfile;
 use App\ReportUser;
+use Exception;
 use Illuminate\Support\Facades\DB;
 
 class UsersController extends Controller
@@ -32,16 +33,28 @@ class UsersController extends Controller
         $users = $data->orderBy('users.id','DESC')->paginate(20);
         return view('admin.all-users',compact('users', 'reported_user_ids'));
     }
-    public function deleteuser($user_id){
-        DB::table('user_profiles')->where('user_id',$user_id)->delete();
-        DB::table('users')->where('id',$user_id)->delete();
+    public function deleteuser(Request $request){
+        $user_id = $request->user_id;
+        try {
+            DB::table('user_profiles')->where('user_id',$user_id)->delete();
+            DB::table('users')->where('id',$user_id)->delete();
+
+        } catch (Exception $e) {
+            return back()->withError($e->getMessage())->withInput();
+        }
+        
         // UserProfile::where('user_id',$user_id)->delete();
         // User::find($user_id)->delete();
         return back()->with('flash_message','User Delete Successfull ');
     }
-    public function approveduser($user_id){
-
-        ReportUser::where('reported_user_id',$user_id)->delete();
+    public function approveduser(Request $request){
+        $user_id = $request->user_id;
+        try {
+            ReportUser::where('reported_user_id',$user_id)->delete();
+        } catch (Exception $e) {
+            return back()->withError($e->getMessage())->withInput();
+        }
+        
         return back()->with('flash_message','User Approve Successfull ');
        
     }

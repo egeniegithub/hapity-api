@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\ReportBroadcast;
 use App\ReportUser;
 use App\User;
-
+use Exception;
 
 class ReportedController extends Controller
 {
@@ -30,12 +30,24 @@ class ReportedController extends Controller
         return view('admin.reported-users',compact('reported_users'));
     }
 
-    public function reportBroadcastDelete($id){
-        ReportBroadcast::find($id)->delete();
+    public function reportBroadcastDelete(Request $request){
+        $id = $request->broadcast_id;
+        try {
+            ReportBroadcast::find($id)->delete();
+        } catch (Exception $e) {
+            return back()->withError($e->getMessage())->withInput();
+        }
+        
         return back()->with('flash_message','Broadcast Deleted Successfully ');
     }
-    public function reportBroadcastApproved($id){
-        ReportBroadcast::find($id)->delete();
+    public function reportBroadcastApproved(Request $request){
+        $id = $request->broadcast_id;
+        try {
+            ReportBroadcast::find($id)->delete();
+        } catch (Exception $e) {
+            return back()->withError($e->getMessage())->withInput();
+        }
+        
         return back()->with('flash_message','ReportedBroadcast Approved Successfully ');
     }
 }
