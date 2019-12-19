@@ -17,6 +17,16 @@
                 </div>
             </div>
 
+            <br>
+                <div class="col-sm-12">
+                    @if (session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
+                    @endif
+                    @if (session('flash_message'))
+                        <div class="alert alert-success">{{ session('flash_message') }}</div>
+                    @endif
+                </div>
+
             <!--Reported Broadcast listing start-->
             @foreach ($users as $user)
                 @if(!in_array($user->id, $reported_user_ids) && !$user->hasRole(SUPER_ADMIN_ROLE_ID))
@@ -38,7 +48,13 @@
                         </div>
 
                         <div class="report-bc-action-div">
-                        <a href="{{route('admin.deleteuser',$user['id'])}}" class="delete-block-bc del-all-bc-single">Delete</a>
+                            <form method="post" action="{{ route('admin.deleteuser') }}" id="form-{{ $user['id'] }}">
+                                @csrf
+                                <input type="hidden" name="user_id" value="{{ $user['id'] }}">
+                                <input type="button" name="" class="delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $user['id'] }})">
+                            </form>
+
+                        
                         </div>
                     </div>
                 </div>
@@ -60,5 +76,17 @@
 @endsection
 
 @push('admin-script')
-
+    
+    <script type="text/javascript">
+        function confirmDelete(user_id){
+            alertify.confirm('Are you sure you want to delete? ',function(e){
+            if(e) {
+                $('#form-'+user_id).submit();
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+    </script>
 @endpush

@@ -28,6 +28,16 @@
                     </div>
                 </div>
 
+                <br>
+                <div class="col-sm-12">
+                    @if (session('error'))
+                        <div class="alert alert-danger">{{ session('error') }}</div>
+                    @endif
+                    @if (session('flash_message'))
+                        <div class="alert alert-success">{{ session('flash_message') }}</div>
+                    @endif
+                </div>
+
                 <!--Reported Broadcost listing start-->
 
                 @php
@@ -141,7 +151,12 @@
                         </div>
 
                         <div class="report-bc-action-div">
-                        <a href="{{route('admin.deletebroadcast',$broadcast['id'])}}" class="delete-block-bc del-all-bc-single">Delete</a>
+                            <form method="post" action="{{ route('admin.deletebroadcast') }}" id="form-{{ $broadcast['id'] }}">
+                                @csrf
+                                <input type="hidden" name="broadcast_id" value="{{ $broadcast['id'] }}">
+                                <input type="button" name="" class="delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast['id'] }})">
+                            </form>
+                        
                         </div>
                     </div>
                     <div class="modal fade" id="broadcastModel-<?php echo ($broadcast['id']); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
@@ -268,5 +283,18 @@
             }
             console.log(my_player);
         }
+
+
+        function confirmDelete(broadcast_id){
+            alertify.confirm('Are you sure you want to delete? ',function(e){
+            if(e) {
+                $('#form-'+broadcast_id).submit();
+                return true;
+            } else {
+                return false;
+            }
+        });
+    }
+
     </script>
 @endpush
