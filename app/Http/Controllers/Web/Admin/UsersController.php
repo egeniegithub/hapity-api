@@ -8,7 +8,7 @@ use App\User;
 use App\UserProfile;
 use App\ReportUser;
 use Exception;
-use Illuminate\Support\Facades\DB;
+
 
 class UsersController extends Controller
 {
@@ -36,15 +36,13 @@ class UsersController extends Controller
     public function deleteuser(Request $request){
         $user_id = $request->user_id;
         try {
-            DB::table('user_profiles')->where('user_id',$user_id)->delete();
-            DB::table('users')->where('id',$user_id)->delete();
-
+            UserProfile::where('user_id',$user_id)->delete();
+            User::find($user_id)->delete();
+            
         } catch (Exception $e) {
             return back()->withError($e->getMessage())->withInput();
         }
-        
-        // UserProfile::where('user_id',$user_id)->delete();
-        // User::find($user_id)->delete();
+ 
         return back()->with('flash_message','User Delete Successfull ');
     }
     public function approveduser(Request $request){

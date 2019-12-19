@@ -4,11 +4,12 @@ namespace App\Http\Controllers\Web\Admin;
 
 use App\Broadcast;
 use App\Http\Controllers\Controller;
+use App\ReportBroadcast;
 use App\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
+
 
 class AdminBroadcastController extends Controller
 {
@@ -62,9 +63,8 @@ class AdminBroadcastController extends Controller
                     }
                 }
             }
-
-            DB::table('broadcasts')->where('id', $broadcast_id)->delete();
-            DB::table('report_broadcasts')->where('broadcast_id', $broadcast_id)->delete();
+            Broadcast::find($broadcast_id)->delete();
+            ReportBroadcast::where('broadcast_id', $broadcast_id)->delete();
         } catch (Exception $e) {
             return back()->withError($e->getMessage())->withInput();
         }
