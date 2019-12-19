@@ -154,7 +154,7 @@
                             <form method="post" action="{{ route('admin.deletebroadcast') }}" id="form-{{ $broadcast['id'] }}">
                                 @csrf
                                 <input type="hidden" name="broadcast_id" value="{{ $broadcast['id'] }}">
-                                <input type="button" name="" class="delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast['id'] }})">
+                                <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast['id'] }})">
                             </form>
                         
                         </div>
@@ -293,7 +293,7 @@
             } else {
                 return false;
             }
-        });
+        }).setHeader('<em> Delete Broadcast</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});
     }
 
     </script>

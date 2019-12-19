@@ -55,13 +55,13 @@
                                     <form method="post" action="{{ route('admin.approveduser') }}" id="approved-form-{{ $user['id'] }}">
                                         @csrf
                                         <input type="hidden" name="user_id" value="{{ $user['id'] }}">
-                                        <input type="button" name="" class="approve-block-bc" value="Approve" onclick="confirmApproved({{ $user['id'] }})">
+                                        <input type="button" name="" class="btn btn-primary approve-block-bc" value="Approve" onclick="confirmApproved({{ $user['id'] }})">
                                     </form>
 
                                 <form method="post" action="{{ route('admin.deleteuser') }}" id="delete-form-{{ $user['id'] }}">
                                     @csrf
                                     <input type="hidden" name="user_id" value="{{ $user['id'] }}">
-                                    <input type="button" name="" class="delete-block-bc del-all-bc-single delete-button" value="Delete" onclick="confirmDelete({{ $user['id'] }})" id="">
+                                    <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single delete-button" value="Delete" onclick="confirmDelete({{ $user['id'] }})" id="">
                                 </form>
 
                                 </div>
@@ -109,7 +109,7 @@
             } else {
                 return false;
             }
-        });
+        }).setHeader('<em> Delete User</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});;
     }
     
     function confirmApproved(user_id){
@@ -120,7 +120,7 @@
             } else {
                 return false;
             }
-        });
+        }).setHeader('<em> Approve User</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});;
     }
     </script>
 @endpush
