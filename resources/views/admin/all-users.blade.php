@@ -1,6 +1,6 @@
 @extends('admin.master-layout')
 @push('admin-css')
-
+    
 @endpush
 @section('content')
 <div class="col-lg-10 col-md-10 col-sm-8 col-xs-12" id="height-section">
@@ -51,7 +51,7 @@
                             <form method="post" action="{{ route('admin.deleteuser') }}" id="form-{{ $user['id'] }}">
                                 @csrf
                                 <input type="hidden" name="user_id" value="{{ $user['id'] }}">
-                                <input type="button" name="" class="delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $user['id'] }})">
+                                <input type="button" name="" class="delete-block-bc btn btn-danger del-all-bc-single" value="Delete" onclick="confirmDelete({{ $user['id'] }})">
                             </form>
 
                         
@@ -78,7 +78,9 @@
 @push('admin-script')
     
     <script type="text/javascript">
+
         function confirmDelete(user_id){
+           
             alertify.confirm('Are you sure you want to delete? ',function(e){
             if(e) {
                 $('#form-'+user_id).submit();
@@ -86,7 +88,8 @@
             } else {
                 return false;
             }
-        });
+        }).setHeader('<em> Delete User</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});
     }
+
     </script>
 @endpush

@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/admin')}}/css/font-awesome.css">
     <link rel="stylesheet" type="text/css" href="{{asset('/assets/admin')}}/css/responsive.css">
     <link rel="stylesheet" href="{{asset('assets/admin')}}/css/alertify/themes/default.css">
-    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/alertify/alertify.rtl.css">
+    <link rel="stylesheet" href="{{asset('assets/admin')}}/css/alertify/alertify.min.css">
     
 
     <script src="{{asset('/assets/admin')}}/js/jquery.js"></script>
@@ -19,7 +19,47 @@
     <script type='text/javascript'>
         jwplayer.key='fyA++R3ayz2ubL4Ae9YeON9gCFRk3VUZo+tDubFgov8=';
     </script>
-   
+    <style type="text/css">
+        .alertify .ajs-dialog {
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.alertify .ajs-header {
+	background: #67a04f !important;
+	color: #fff !important;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+}
+
+.alertify .ajs-commands button.ajs-close {
+	background-color: #fff !important;
+	border-radius: 20px;
+	color: #fff !important;
+}
+
+.alertify .ajs-footer {
+	padding: 5px;
+}
+
+.alertify .ajs-footer .ajs-buttons .ajs-button {
+	border: 1px solid #67a04f !important;
+	font-weight: normal !important;
+	border-radius: 4px !important;
+	background-color: #67a04f ;
+	color: #fff !important;
+	cursor: pointer;
+}
+
+.alertify .ajs-footer .ajs-buttons .ajs-button.ajs-cancel {
+	background-color: #55acee;
+	border-color: #55acee !important;
+}
+    </style>
+
     @stack('admin-css')
 </head>
 <body id="close-modal">

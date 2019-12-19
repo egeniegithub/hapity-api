@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+use App\Broadcast;
 use App\Http\Controllers\Controller;
+use App\ReportBroadcast;
 use App\ReportUser;
 use App\User;
 use App\UserProfile;
@@ -38,7 +40,11 @@ class UsersController extends Controller
         try {
             UserProfile::where('user_id', $user_id)->delete();
             User::find($user_id)->delete();
-
+            $broadcast = Broadcast::where('user_id', $user_id)->get();
+            foreach ($broadcast as $key => $value) {
+                ReportBroadcast::where('broadcast_id', $value->id)->delete();
+            }
+            Broadcast::where('user_id', $user_id)->delete();
         } catch (Exception $e) {
             return back()->withError($e->getMessage())->withInput();
         }

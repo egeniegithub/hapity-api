@@ -1,7 +1,7 @@
     <!--Footer Section Start-->
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <footer>
-                <div class="copyright-text">Copyright &copy; 20015-2016 Hapity. All rights reserved.</div>
+                <div class="copyright-text">Copyright &copy; {{ date('Y')}} Hapity. All rights reserved.</div>
             </footer>
         </div>
     <!--Footer Section End-->

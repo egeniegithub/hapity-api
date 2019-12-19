@@ -62,13 +62,13 @@
                                 <form method="post" action="{{ route('admin.reportBroadcastApproved') }}" id="approved-form-{{ $broadcast['id'] }}">
                                     @csrf
                                     <input type="hidden" name="broadcast_id" value="{{ $broadcast['id'] }}">
-                                    <input type="button" name="" class="approve-block-bc" value="Approve" onclick="confirmApproved({{ $broadcast['id'] }})">
+                                    <input type="button" name="" class="btn btn-primary approve-block-bc" value="Approve" onclick="confirmApproved({{ $broadcast['id'] }})">
                                 </form>
 
                             <form method="post" action="{{ route('admin.reportBroadcastDelete') }}" id="delete-form-{{ $broadcast['id'] }}">
                                 @csrf
                                 <input type="hidden" name="broadcast_id" value="{{ $broadcast['id'] }}">
-                                <input type="button" name="" class="delete-block-bc del-all-bc-single delete-button" value="Delete" onclick="confirmDelete({{ $broadcast['id'] }})" id="">
+                                <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single delete-button" value="Delete" onclick="confirmDelete({{ $broadcast['id'] }})" id="">
                             </form>
                             
                             </div>
@@ -163,7 +163,7 @@
             } else {
                 return false;
             }
-        });
+        }).setHeader('<em> Delete Broadcast</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});;
     }
     
     function confirmApproved(broadcast_id){
@@ -174,7 +174,7 @@
             } else {
                 return false;
             }
-        });
+        }).setHeader('<em> Approve Broadcast</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});;
     }
 </script>
 @endpush
