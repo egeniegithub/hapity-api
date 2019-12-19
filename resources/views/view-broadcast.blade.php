@@ -180,7 +180,7 @@
                         <div class="embedcode-modal-innser">
                             <textarea readonly="">
                                 <iframe height="600" width="100%" scrolling="no" frameborder="0" 
-                                src="{{ route('widget.index') }}?stream={{ $broadcast['stream_url'] }}&title={{ urlencode($broadcast['title']) }}&status={{ $broadcast['status'] }}&bid={{ $broadcast['id'] }}&broadcast_image={{ $broadcast['broadcast_image'] }}">
+                                src="{{ route('widget.index') }}?stream={{ $broadcast['filename'] }}&title={{ urlencode($broadcast['title']) }}&status={{ $broadcast['status'] }}&bid={{ $broadcast['id'] }}&broadcast_image={{ $broadcast['broadcast_image'] }}">
                                 </iframe>
                             </textarea>                        
                         </div>
