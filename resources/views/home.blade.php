@@ -272,7 +272,7 @@
                                             <div class="embedcode-modal-innser">
                                                 <textarea readonly="">
                                                     <iframe height="600" width="100%" scrolling="no" frameborder="0" 
-                                                src="{{ route('home') }}/widget?stream={{$broadcast->filename}}&title={{$broadcast->b_title}}&status={{$broadcast->status}}&bid={{$broadcast->id}}&broadcast_image={{$broadcast->broadcast_image}}&user_id={{$broadcast->user_id}}">
+                                                src="{{ route('widget.index') }}?stream={{$broadcast->filename}}&title={{$broadcast->b_title}}&status={{$broadcast->status}}&bid={{$broadcast->id}}&broadcast_image={{$broadcast->broadcast_image}}&user_id={{$broadcast->user_id}}">
                                                     </iframe>
                                                 </textarea>                        
                                             </div>
