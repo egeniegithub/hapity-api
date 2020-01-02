@@ -100,7 +100,7 @@ class BroadcastsController extends Controller
             //TODO debug this
             $plugin = new PluginFunctions();
             $share_url = $plugin->make_plugin_call_upload($broadcast->id);
-            
+
             $broadcast->share_url = $share_url;
             $broadcast->save();
 
@@ -334,7 +334,6 @@ class BroadcastsController extends Controller
                 }
             }
 
-
             $response['status'] = "success";
             $response['response'] = "deletebroadcast";
             $response['message'] = "deleted successfully";
@@ -380,10 +379,10 @@ class BroadcastsController extends Controller
             $file_info = !empty($broadcast->filename) ? pathinfo($broadcast->filename) : [];
 
             $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
-            
+
             $file_name = $broadcast->filename;
             if ($ext == 'stream' || $ext == 'stream_160p' || $ext == 'stream_360p') {
-                $file_name = $broadcast->filename. '.mp4';
+                $file_name = $broadcast->filename . '.mp4';
                 $ext = 'mp4';
             }
 
@@ -407,7 +406,14 @@ class BroadcastsController extends Controller
             $broadcastObj['user_id'] = $user['id'];
             $broadcastObj['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictuers/' . $user['profile']['profile_picture']) : '';
 
-            $broadcasts[] = $broadcastObj;
+            $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
+            $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
+            $ext = $ext == 'mp4' ? '' : '.mp4';
+            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
+            if (file_exists($broadcast_stream_file_path) || (!empty($broadcast->broadcast_image) && empty($broadcast->stream_url)) || $broadcast->status == 'online') {
+                $broadcasts[] = $broadcastObj;
+            }
+
         }
 
         $response = [];

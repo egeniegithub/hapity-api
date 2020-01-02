@@ -127,7 +127,7 @@
 
                             @endphp
 
-                            @if($broadcast->file_exists || (!empty($broadcast->broadcast_image) && empty($broadcast->stream_url)))
+                            @if($broadcast->file_exists || (!empty($broadcast->broadcast_image) && empty($broadcast->stream_url)) || $broadcast->status == 'online')
                                 <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
                                     <a href="#" class="bordcast-play image-section">
                                         @php 
