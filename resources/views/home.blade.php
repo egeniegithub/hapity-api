@@ -126,161 +126,164 @@
                                 }
 
                             @endphp
-                            <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
-                                <a href="#" class="bordcast-play image-section">
-                                    @php 
-                                        $thumbnail_image = $broadcast->broadcast_image;
-                                        $allowedExtensions = ['png', 'jpg', 'jpeg'];
 
-                                    // check if the data is empty 
-                                    @endphp
-                                    @if(!empty($thumbnail_image) && $thumbnail_image != null)
-                                    @php
-                                        // check base64 format
-                                        $explode = explode(',', $thumbnail_image);
-                                        // check if type is allowed
-                                        $format = str_replace(
-                                            ['data:image/', ';', 'base64'], 
-                                            ['', '', '',], 
-                                            $explode[0]
-                                        );  
-                                    @endphp
-                                        @if(in_array($format, $allowedExtensions))
-                                            <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
+                            @if($broadcast->file_exists || (!empty($broadcast->broadcast_image) && empty($broadcast->stream_url)))
+                                <div id="bordcast-single-{{ $b_id }}" class="my-bordcast-single clearfix  {{ $image_classes }}">
+                                    <a href="#" class="bordcast-play image-section">
+                                        @php 
+                                            $thumbnail_image = $broadcast->broadcast_image;
+                                            $allowedExtensions = ['png', 'jpg', 'jpeg'];
+
+                                        // check if the data is empty 
+                                        @endphp
+                                        @if(!empty($thumbnail_image) && $thumbnail_image != null)
+                                        @php
+                                            // check base64 format
+                                            $explode = explode(',', $thumbnail_image);
+                                            // check if type is allowed
+                                            $format = str_replace(
+                                                ['data:image/', ';', 'base64'], 
+                                                ['', '', '',], 
+                                                $explode[0]
+                                            );  
+                                        @endphp
+                                            @if(in_array($format, $allowedExtensions))
+                                                <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
+                                            @else
+                                                <img src="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}" alt="{{ $b_title }}" />
+                                            @endif
+                                            
                                         @else
-                                            <img src="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}" alt="{{ $b_title }}" />
+                                            <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
                                         @endif
-                                        
-                                    @else
-                                        <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
-                                    @endif
 
-                                    @if($video_file_name)
-                                        <div class="video-container video-conteiner-init" style="display:none;">
+                                        @if($video_file_name)
+                                            <div class="video-container video-conteiner-init" style="display:none;">
 
-                                            <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0" ></div>
-                                        </div>                                       
+                                                <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0" ></div>
+                                            </div>                                       
 
-                                        <script>
-                                            WowzaPlayer.create('w-broadcast-{{ $b_id }}',
-                                            {
-                                                "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
-                                                "title":"{{ $b_title }}",
-                                                "description":"{{ str_replace("<br/>"," ",$b_description) }}",
-                                                "sourceURL":"{{ $stream_url }}",
-                                                "autoPlay":false,
-                                                "volume":"75",
-                                                "mute":false,
-                                                "loop":false,
-                                                "audioOnly":false,
-                                                "uiShowQuickRewind":true,
-                                                "uiQuickRewindSeconds":"30"
-                                                }
-                                            );
+                                            <script>
+                                                WowzaPlayer.create('w-broadcast-{{ $b_id }}',
+                                                {
+                                                    "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
+                                                    "title":"{{ $b_title }}",
+                                                    "description":"{{ str_replace("<br/>"," ",$b_description) }}",
+                                                    "sourceURL":"{{ $stream_url }}",
+                                                    "autoPlay":false,
+                                                    "volume":"75",
+                                                    "mute":false,
+                                                    "loop":false,
+                                                    "audioOnly":false,
+                                                    "uiShowQuickRewind":true,
+                                                    "uiQuickRewindSeconds":"30"
+                                                    }
+                                                );
 
-                                            var my_player = WowzaPlayer.get('w-broadcast-{{ $b_id }}'); 
+                                                var my_player = WowzaPlayer.get('w-broadcast-{{ $b_id }}'); 
 
-                                            playListener = function ( playEvent ) {
-                                                var broadcast_id = '{{ $b_id }}';
+                                                playListener = function ( playEvent ) {
+                                                    var broadcast_id = '{{ $b_id }}';
 
-                                                var my_request;
+                                                    var my_request;
 
-                                                my_request = $.ajax({
-                                                    url: "{{ route('broadcast.update.view.count', $b_id) }}",
-                                                    type: 'GET'
-                                                });
+                                                    my_request = $.ajax({
+                                                        url: "{{ route('broadcast.update.view.count', $b_id) }}",
+                                                        type: 'GET'
+                                                    });
 
-                                                my_request.done(function(response){
-                                                    console.log(response);
-                                                });
+                                                    my_request.done(function(response){
+                                                        console.log(response);
+                                                    });
 
-                                            };
-                                            my_player.onPlay( playListener );
+                                                };
+                                                my_player.onPlay( playListener );
 
-                                            
-                                        </script>
-                                    @endif
-                                </a> 
-                                <div class="bordcast-inner-data">
-                                    <h3 class="my-bordcast-title">
-                                        <a href="#" class="bordcast-play"><?php echo $b_title; ?></a>
-                                    </h3>
-                                    <?php if($b_description): ?>
-                                        <p class="description">
-                                            <p class="short-desc">
-                                                <?php echo substr($b_description, 0, 300); ?>
-                                                <?php if (strlen($b_description)>300){
-                                                    echo '.... <span>Load More</span>';
-                                                } ?>
-                                            </p>
-                                            <p class="full-desc" style="display: none">
-                                                {{ $b_description }}
-                                            </p>
-                                        </p>
-                                    <?php endif; ?>    
-                                    <?php if($broadcast->status == "online") : ?>
-                                        <span class="broadcast-live"></span>
-                                    <?php else : ?>
-                                        <span class="broadcast-offline"></span>
-                                    <?php endif; ?>
-                                </div>
-                                @php
-                                    if($status == 'offline'){
-                                        $stream_url = str_replace('/live/', '/vod/', $stream_url);
-                                    } 
-                                @endphp
-                                <ul class="bordcast-edit-actions">
-                                    <li class="social-share-action">
-                                        <a href="#" data-toggle="modal" data-target="#share-modal">
-                                            <img src="{{ asset('assets')}}/images/share.png" width="28" alt="social Media">
-                                        </a>
-                                        <ul class="social-share-on">
-                                                @if($stream_url)
-                                                <li>
-                                                    <a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $b_id;?>" class="code-icon">
-                                                        <i class="fa fa-code"></i>
-                                                    </a>
-                                                </li>
-                                                @endif
                                                 
-                                                <li>
-                                                    <a href="https://twitter.com/intent/tweet?url={{ $share_url }}" target="_blank" class="twitter">
-                                                        <i class="fa fa-twitter"></i>
-                                                    </a>
-                                                </li>
-                                                <li>
-                                                    <a  href="https://www.facebook.com/sharer/sharer.php?u={{ $share_url }}" target="_blank">
-                                                        <i class="fa fa-facebook"></i>
-                                                    </a>
-                                                </li>
-                                            
-                                        </ul>
-                                    </li>
-                                    <li class="social-share-action"><a href="{{ route('edit_broadcast_content',$b_id) }}" data-toggle="modal">
-                                        <img src="{{ asset('assets') }}/images/edit.png" width="28" alt="Edit">
-                                    </a></li>
-                                    <li class="social-share-action"><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn">
-                                        <img src="{{ asset('assets') }}/images/delete.png" width="28" alt="Delete">
-                                    </a></li>
-                                </ul>
-                                <?php if($stream_url): ?>
-                                    <div id="embed-code-popup-{{ $b_id }}" class="modal-box_popup">
-                                        <header> <a href="javascript:;" class="js-modal-close close">×</a>
-                                            <h3>Copy & Paste below code in your website</h3>
-                                        </header>
-                                        <div class="modal-body">
-                                            <div class="embedcode-modal-innser">
-                                                <textarea readonly="">
-                                                    <iframe height="600" width="100%" scrolling="no" frameborder="0" 
-                                                src="{{ route('widget.index') }}?stream={{$broadcast->filename}}&title={{$broadcast->b_title}}&status={{$broadcast->status}}&bid={{$broadcast->id}}&broadcast_image={{$broadcast->broadcast_image}}&user_id={{$broadcast->user_id}}">
-                                                    </iframe>
-                                                </textarea>                        
+                                            </script>
+                                        @endif
+                                    </a> 
+                                    <div class="bordcast-inner-data">
+                                        <h3 class="my-bordcast-title">
+                                            <a href="#" class="bordcast-play"><?php echo $b_title; ?></a>
+                                        </h3>
+                                        <?php if($b_description): ?>
+                                            <p class="description">
+                                                <p class="short-desc">
+                                                    <?php echo substr($b_description, 0, 300); ?>
+                                                    <?php if (strlen($b_description)>300){
+                                                        echo '.... <span>Load More</span>';
+                                                    } ?>
+                                                </p>
+                                                <p class="full-desc" style="display: none">
+                                                    {{ $b_description }}
+                                                </p>
+                                            </p>
+                                        <?php endif; ?>    
+                                        <?php if($broadcast->status == "online") : ?>
+                                            <span class="broadcast-live"></span>
+                                        <?php else : ?>
+                                            <span class="broadcast-offline"></span>
+                                        <?php endif; ?>
+                                    </div>
+                                    @php
+                                        if($status == 'offline'){
+                                            $stream_url = str_replace('/live/', '/vod/', $stream_url);
+                                        } 
+                                    @endphp
+                                    <ul class="bordcast-edit-actions">
+                                        <li class="social-share-action">
+                                            <a href="#" data-toggle="modal" data-target="#share-modal">
+                                                <img src="{{ asset('assets')}}/images/share.png" width="28" alt="social Media">
+                                            </a>
+                                            <ul class="social-share-on">
+                                                    @if($stream_url)
+                                                    <li>
+                                                        <a href="javascript:;" data-modal-id="embed-code-popup-<?php echo $b_id;?>" class="code-icon">
+                                                            <i class="fa fa-code"></i>
+                                                        </a>
+                                                    </li>
+                                                    @endif
+                                                    
+                                                    <li>
+                                                        <a href="https://twitter.com/intent/tweet?url={{ $share_url }}" target="_blank" class="twitter">
+                                                            <i class="fa fa-twitter"></i>
+                                                        </a>
+                                                    </li>
+                                                    <li>
+                                                        <a  href="https://www.facebook.com/sharer/sharer.php?u={{ $share_url }}" target="_blank">
+                                                            <i class="fa fa-facebook"></i>
+                                                        </a>
+                                                    </li>
+                                                
+                                            </ul>
+                                        </li>
+                                        <li class="social-share-action"><a href="{{ route('edit_broadcast_content',$b_id) }}" data-toggle="modal">
+                                            <img src="{{ asset('assets') }}/images/edit.png" width="28" alt="Edit">
+                                        </a></li>
+                                        <li class="social-share-action"><a href="#" data-toggle="modal" data-broadcast-id="<?php echo $b_id; ?>"  data-broadcast-url="<?php echo $stream_url; ?>" data-target="#delete-modal" class="delete-btn">
+                                            <img src="{{ asset('assets') }}/images/delete.png" width="28" alt="Delete">
+                                        </a></li>
+                                    </ul>
+                                    <?php if($stream_url): ?>
+                                        <div id="embed-code-popup-{{ $b_id }}" class="modal-box_popup">
+                                            <header> <a href="javascript:;" class="js-modal-close close">×</a>
+                                                <h3>Copy & Paste below code in your website</h3>
+                                            </header>
+                                            <div class="modal-body">
+                                                <div class="embedcode-modal-innser">
+                                                    <textarea readonly="">
+                                                        <iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                                    src="{{ route('widget.index') }}?stream={{$broadcast->filename}}&title={{$broadcast->b_title}}&status={{$broadcast->status}}&bid={{$broadcast->id}}&broadcast_image={{$broadcast->broadcast_image}}&user_id={{$broadcast->user_id}}">
+                                                        </iframe>
+                                                    </textarea>                        
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                <?php endif; ?>    
-                                <a href="#" class="close-btn" onClick="closeModel(this.id)" id="{{ $b_id }}">X</a>
-                            </div>
+                                    <?php endif; ?>    
+                                    <a href="#" class="close-btn" onClick="closeModel(this.id)" id="{{ $b_id }}">X</a>
+                                </div>
+                            @endif
                         @endforeach   
 
                 
