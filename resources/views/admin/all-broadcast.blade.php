@@ -91,6 +91,7 @@
                     @endphp
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="listing-reported-broadcost">
+                        @if($broadcast->file_exists) 
                         <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast['title']); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast['id']); ?>">
                             <div class="reporting-bc-image">
                                 @php 
@@ -125,6 +126,42 @@
                                 <div class="overlay"></div>
                             </div>
                         </a>
+                        @else 
+                        <a href="javascript:streamFileDoesNotExist();" class="pop-report-bc-link">
+                            <div class="reporting-bc-image">
+                                @php 
+                                        $thumbnail_image = $broadcast['broadcast_image'];
+                                        $allowedExtensions = ['png', 'jpg', 'jpeg'];
+
+                                    // check if the data is empty 
+                                    @endphp
+                                    @if(!empty($thumbnail_image) && $thumbnail_image != null)
+                                    @php
+                                        // check base64 format
+                                        $explode = explode(',', $thumbnail_image);
+                                        // check if type is allowed
+                                        $format = str_replace(
+                                            ['data:image/', ';', 'base64'], 
+                                            ['', '', '',], 
+                                            $explode[0]
+                                        );  
+                                    @endphp
+                                        @if(in_array($format, $allowedExtensions))
+                                            <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
+                                        @else
+                                            <img src="{{ asset('images/broadcasts/' . $broadcast['user_id'] . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
+                                        @endif
+                                        
+                                    @else
+                                        <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
+                                    @endif
+                                            <span class="play-report-icon">
+                                                <i class="fa fa-play"></i>
+                                            </span>
+                                <div class="overlay"></div>
+                            </div>
+                        </a>
+                        @endif
 
                         <div class="reported-bc-detail">
                             <p><span class="title btitle">{{ ucwords($broadcast['title']) }}</span></p>
@@ -145,7 +182,7 @@
                                 <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="<?php echo $broadcast['stream_url'];?>">{{ $broadcast['stream_url'] }}</a> </span></p>
                             @endif
                             
-                            <p>  <span class="reportdate">Views :</span> <span class="report-result-display"> {{ $broadcast->view_count }} </span></p>
+                            <p>  <span class="reportdate">Views :</span> <span class="report-result-display"> {{ !is_null($broadcast->view_count) ? $broadcast->view_count : 0 }} </span></p>
                             
                             <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast['created_at']));?> </span></p>
                         </div>
@@ -284,6 +321,9 @@
             console.log(my_player);
         }
 
+        function streamFileDoesNotExist() {
+            alertify.error('Stream File Does Not Exist!');
+        }
 
         function confirmDelete(broadcast_id){
             alertify.confirm('Are you sure you want to delete? ',function(e){
