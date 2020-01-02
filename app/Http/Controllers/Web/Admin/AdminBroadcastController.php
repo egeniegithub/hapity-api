@@ -38,10 +38,12 @@ class AdminBroadcastController extends Controller
         $broadcasts = $data->orderBy('broadcasts.id', 'DESC')->paginate('20');
 
         $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
-        
-        foreach($broadcasts as $key => $broadcast) {
-            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . '.mp4';
-            if(file_exists($broadcast_stream_file_path)) {
+
+        foreach ($broadcasts as $key => $broadcast) {
+            $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
+            $ext = $ext == 'mp4' ? '' : '.mp4';
+            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
+            if (file_exists($broadcast_stream_file_path)) {
                 $broadcast['file_exists'] = true;
             } else {
                 $broadcast['file_exists'] = false;
