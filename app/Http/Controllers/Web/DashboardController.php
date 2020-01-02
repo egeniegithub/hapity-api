@@ -28,6 +28,20 @@ class DashboardController extends Controller
             $plugin_ids = $userdata['plugins'];
         }
 
+        $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
+
+        foreach($broadcasts as $key => $broadcast) {
+            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . '.mp4';
+            if(file_exists($broadcast_stream_file_path)) {
+                $broadcast['file_exists'] = true;
+            } else {
+                $broadcast['file_exists'] = false;
+            }
+
+            $broadcasts[$key] = $broadcast;
+        }
+
+
         return view('home', compact('userdata', 'broadcasts','plugin_ids'));
     }
 

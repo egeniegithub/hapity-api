@@ -188,11 +188,23 @@
                         </div>
 
                         <div class="report-bc-action-div">
-                            <form method="post" action="{{ route('admin.deletebroadcast') }}" id="form-{{ $broadcast['id'] }}">
-                                @csrf
-                                <input type="hidden" name="broadcast_id" value="{{ $broadcast['id'] }}">
-                                <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast['id'] }})">
-                            </form>
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <div style="width: 50px; height: 50px; display:inline-block;">
+                                        <img src="{{ $broadcast->file_exists ? asset('images/document-tick-icon.png') : asset('images/document-remove-icon.png') }}" class="img-responsive" />
+                                    </div>
+                                </div>                         
+                            </div>
+                            <div class="row">                                
+                                <div class="col-xs-12">
+                                    <form method="post" action="{{ route('admin.deletebroadcast') }}" id="form-{{ $broadcast['id'] }}">
+                                        @csrf
+                                        <input type="hidden" name="broadcast_id" value="{{ $broadcast['id'] }}">
+                                        <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast['id'] }})">
+                                    </form>
+                                </div>                                  
+                            </div>
+                            
                         
                         </div>
                     </div>
