@@ -50,6 +50,17 @@ Route::group([
     Route::post('offline_broadcast', 'Web\BroadcastsController@offline_broadcast')->name('offline_broadcast');
     Route::get('edit-content/{broadcast_id}', 'Web\BroadcastsController@edit_broadcast_content')->name('edit_broadcast_content');
 
+
+    //Ant Media Broadcasts
+    Route::get('broadcasts', 'Web\AntMediaBroadcastsController@index')->name('broadcasts.index');
+    Route::get('broadcasts/create', 'Web\AntMediaBroadcastsController@create')->name('broadcasts.create');
+    Route::get('broadcasts/edit/{id}', 'Web\AntMediaBroadcastsController@edit')->name('broadcasts.edit');
+    Route::get('broadcasts/view/{id}', 'Web\AntMediaBroadcastsController@view')->name('broadcasts.view');
+    
+    Route::post('broadcasts/upload/image', 'Web\AntMediaBroadcastsController@upload_image')->name('broadcasts.upload_image');
+    Route::post('broadcasts/ajax', 'Web\AntMediaBroadcastsController@ajax_responder')->name('broadcasts.ajax');
+    
+
 });
 
 ////  admin routes
