@@ -218,15 +218,15 @@
         function stopPublishing() {
 
             $('.broadcast-overlay').show();
-            webRTCAdaptor.stop(streamId);
+            webRTCAdaptor.stop($('#stream_name').val());
         }
         
         function enableDesktopCapture(enable) {
             if (enable == true) {
-                webRTCAdaptor.switchDesktopCapture(streamId);
+                webRTCAdaptor.switchDesktopCapture($('#stream_name').val());
             }
             else {
-                webRTCAdaptor.switchVideoCapture(streamId);
+                webRTCAdaptor.switchVideoCapture($('#stream_name').val());
             }
         }
         
@@ -234,9 +234,9 @@
     
             $("#broadcastingInfo").fadeIn(800, function () {
               $("#broadcastingInfo").fadeOut(800, function () {
-                var state = webRTCAdaptor.signallingState(streamId);
+                var state = webRTCAdaptor.signallingState($('#stream_name').val());
                 if (state != null && state != "closed") {
-                    var iceState = webRTCAdaptor.iceConnectionState(streamId);
+                    var iceState = webRTCAdaptor.iceConnectionState($('#stream_name').val());
                     if (iceState != null && iceState != "failed" && iceState != "disconnected") {
                           startAnimation();
                     }
