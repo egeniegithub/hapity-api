@@ -265,7 +265,7 @@
     
         //var appName = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
         //var path =  location.hostname + ":" + location.port + appName + "websocket";
-        var path =  host + ":" + port + appName + "websocket";
+        var path =  `${host}:${port}/WebRTCApp/websocket`;
         var websocketURL =  "ws://" + path;
         
         if (location.protocol.startsWith("https")) {
