@@ -65,7 +65,7 @@
 
                 <hr />
                 @foreach($broadcasts as $broadcast_key => $broadcast)    
-                   <a data-fancybox data-src="#{{ 'broadcast_' . $broadcast->id }}"  href="javascript:void();">                
+                   <a data-fancybox data-width="720" data-height="480" data-src="#{{ 'broadcast_' . $broadcast->id }}"  href="javascript:void();">                
                         <div class="row">                  
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="panel panel-success panel-broadcast">
