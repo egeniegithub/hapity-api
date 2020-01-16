@@ -330,6 +330,7 @@
             callbackError : function(error, message) {
                 //some of the possible errors, NotFoundError, SecurityError,PermissionDeniedError
                 
+                /*
                 console.log("error callback: " +  JSON.stringify(error));
                 var errorMessage = JSON.stringify(error);
                 if (typeof message != "undefined") {
@@ -351,10 +352,11 @@
                 else if (error.indexOf("TypeError") != -1) {
                     errorMessage = "Video/Audio is required";
                 }
+                */
             
-                alertify.error(errorMessage);
-
-                $('#start_publish_button').prop('disabled', true);
+                //alertify.error(errorMessage);
+                console.log(error, message);
+                
             }
         });
     </script>
