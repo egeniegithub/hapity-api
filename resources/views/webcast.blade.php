@@ -242,7 +242,8 @@
 
                         myParam = $('<param />');
                         myParam.attr('name', 'flashVars');
-                        myParam.attr('value', 'controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=false&recording=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma');
+                        //myParam.attr('value', 'controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=false&recording=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma');
+                        myParam.attr('value', 'controls=true&live=true&url=rtmp://3.248.36.69:1935/hapity/alpha&publish={{ $time. '.stream' }}&record=false&recording=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma');
                         myParam.appendTo(myObj);
 
 

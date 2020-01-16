@@ -18,3 +18,5 @@ switch (env('APP_URL')) {
 		# code...
 		break;
 }
+
+define('ANT_MEDIA_SERVER_STAGING', 'http://34.255.219.25:5080/');
