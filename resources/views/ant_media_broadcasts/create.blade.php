@@ -268,9 +268,9 @@
         var path =  `${host}:${port}/WebRTCApp/websocket`;
         var websocketURL =  "ws://" + path;
         
-        if (location.protocol.startsWith("https")) {
+        /*if (location.protocol.startsWith("https")) {
             websocketURL = "wss://" + path;
-        }
+        }*/
         
         
         var webRTCAdaptor = new WebRTCAdaptor({
