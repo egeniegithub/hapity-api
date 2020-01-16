@@ -259,8 +259,8 @@
             audio : true
         };
 
-        var host = '34.255.219.25';
-        var port = '5080';
+        var host = 'stg-media.hapity.com';
+        var port = '5443';
         var appName = 'WebRTCApp/';
     
         //var appName = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
@@ -268,9 +268,9 @@
         var path =  `${host}:${port}/WebRTCApp/websocket`;
         var websocketURL =  "ws://" + path;
         
-        /*if (location.protocol.startsWith("https")) {
+        if (location.protocol.startsWith("https")) {
             websocketURL = "wss://" + path;
-        }*/
+        }
         
         
         var webRTCAdaptor = new WebRTCAdaptor({
