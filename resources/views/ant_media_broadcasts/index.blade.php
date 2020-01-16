@@ -65,7 +65,12 @@
 
                 <hr />
                 @foreach($broadcasts as $broadcast_key => $broadcast)    
-                   <a data-fancybox data-width="720" data-height="480" data-src="#{{ 'broadcast_' . $broadcast->id }}"  href="javascript:void();">                
+                   <a data-fancybox 
+                        data-width="720" 
+                        data-height="480" 
+                        href="javascript:void();" 
+                        data-type="iframe" 
+                        data-src="{{ '//stg-media.hapity.com:5443/WebRTCApp/play.html?name=' . pathinfo($broadcast->filename,  PATHINFO_FILENAME) }}"  href="javascript:void();">                
                         <div class="row">                  
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="panel panel-success panel-broadcast">
@@ -128,13 +133,9 @@
                             </div>
                         </div> 
                    </a>
-                   <div style="display: none;" id="{{ 'broadcast_' . $broadcast->id }}" class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="embed-responsive embed-responsive-16by9">
-                                <iframe  src="//stg-media.hapity.com:5443/WebRTCApp/play.html?name={{ pathinfo($broadcast->filename,  PATHINFO_FILENAME) }}" frameborder="0" allowfullscreen></iframe>
-                              </div>                            
-                        </div>                        
-                   </div>
+                   
+                   
+                              
                     
                 @endforeach                              
             </div>
@@ -149,10 +150,12 @@
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    <link href="https://vjs.zencdn.net/7.6.6/video-js.css" rel="stylesheet" />
 @endpush
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
     <script>
         $(document).ready(function(){
             $('body').on('click', '.delete-btn', function(){
