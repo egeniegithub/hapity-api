@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Broadcast;
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -14,6 +15,12 @@ class AntMediaBroadcastsController extends Controller
     public function index(Request $request)
     {
         $view_data = [];
+
+        $user = User::with(['profile', 'plugins'])->where('id', Auth::id())->first()->toArray();
+        $view_data['user'] = $user;
+
+        $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $view_data['broadcasts'] = $broadcasts;
 
         return view('ant_media_broadcasts.index', $view_data);
     }
@@ -35,6 +42,27 @@ class AntMediaBroadcastsController extends Controller
     public function view(Request $request)
     {
 
+    }
+
+    public function upload(Request $request) 
+    {
+        $view_data = [];
+
+        return view('ant_media_broadcasts.upload', $view_data);
+    }
+
+    public function delete(Request $request)
+    {
+        $broadcast = Broadcast::where('id', $request->input('broadcast_id'))->where('user_id', Auth::id())->first();       
+
+        if (!is_null($broadcast) && $broadcast->id > 0) {
+            $broadcast->delete();
+            return back()->with('message_success', 'Broadcast Successfully Deleted!');
+        }
+
+        return back()->with('message_error', 'Broadcast Could Not Be Deleted!');
+
+        
     }
 
     public function ajax_responder(Request $request)
