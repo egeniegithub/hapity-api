@@ -177,6 +177,9 @@ return [
         // google recaptcha
         Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
 
+        Aws\Laravel\AwsServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
+
     ],
 
     /*
@@ -230,7 +233,8 @@ return [
         'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
         'PluginFunctions' => App\Http\Helpers\PluginFunctions::class,
         'Input' => Illuminate\Support\Facades\Input::class,
-        'Image' => Intervention\Image\ImageManagerStatic::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        'AWS' => Aws\Laravel\AwsFacade::class,
     ],
 
 ];
