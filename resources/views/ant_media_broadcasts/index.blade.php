@@ -65,7 +65,8 @@
 
                 <hr />
                 @foreach($broadcasts as $broadcast_key => $broadcast)    
-                   <a data-fancybox                         
+                   <a data-fancybox 
+                        data-width="720" 
                         href="javascript:void();" 
                         data-type="iframe" 
                         data-src="{{ '//stg-media.hapity.com:5443/WebRTCApp/play.html?name=' . pathinfo($broadcast->filename,  PATHINFO_FILENAME) }}"  href="javascript:void();">                
