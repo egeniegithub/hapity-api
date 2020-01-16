@@ -261,7 +261,7 @@
 
         var host = '34.255.219.25';
         var port = '5080';
-        var appName = 'WebRTCApp';
+        var appName = 'WebRTCApp/';
     
         //var appName = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
         //var path =  location.hostname + ":" + location.port + appName + "websocket";
