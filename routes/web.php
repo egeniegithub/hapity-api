@@ -56,8 +56,10 @@ Route::group([
     Route::get('broadcasts/create', 'Web\AntMediaBroadcastsController@create')->name('broadcasts.create');
     Route::get('broadcasts/edit/{id}', 'Web\AntMediaBroadcastsController@edit')->name('broadcasts.edit');
     Route::get('broadcasts/view/{id}', 'Web\AntMediaBroadcastsController@view')->name('broadcasts.view');
+    Route::get('broadcasts/upload', 'Web\AntMediaBroadcastsController@upload')->name('broadcasts.upload');
     
     Route::post('broadcasts/upload/image', 'Web\AntMediaBroadcastsController@upload_image')->name('broadcasts.upload_image');
+    Route::post('broadcasts/delete', 'Web\AntMediaBroadcastsController@delete')->name('broadcasts.delete');
     Route::post('broadcasts/ajax', 'Web\AntMediaBroadcastsController@ajax_responder')->name('broadcasts.ajax');
     
 
