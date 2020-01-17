@@ -3,7 +3,7 @@
     <div class="container">          
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                <h1 class="broadcast-heading">Broadcast for Web</h1>
+                <h1 class="broadcast-heading">Lets Create Something Awesome<br /><small>A New Broadcast</small></h1>
             </div>
         </div>
         <div class="row">
@@ -56,7 +56,7 @@
                 </form>
             </div>
         </div>
-               
+        <hr />
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <button type="button" onclick="startPublishing()" class="btn btn-lg btn-success" id="start_publish_button">Start Publishing</button>
