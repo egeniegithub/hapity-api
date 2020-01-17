@@ -65,78 +65,114 @@
 
                 <hr />
                 @foreach($broadcasts as $broadcast_key => $broadcast)    
-                   <a data-fancybox 
-                        data-width="720" 
-                        data-height="480"
-                        href="javascript:void();" 
-                        data-type="iframe" 
-                        data-src="{{ '//stg-media.hapity.com:5443/WebRTCApp/play.html?name=' . pathinfo($broadcast->filename,  PATHINFO_FILENAME) }}"  href="javascript:void();">                
-                        <div class="row">                  
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="panel panel-success panel-broadcast">
-                                    <div class="panel-body">
-                                        <div class="row">
-                                            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-                                                <div class="thumbnail">
-                                                    <img src="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}" alt="" />
+                    @if($broadcast->file_exists)
+                        <a data-fancybox data-src="#video_player_{{ $broadcast->id }}" href="javascript:;">                
+                            <div class="row">                  
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="panel panel-success panel-broadcast">
+                                        <div class="panel-body">
+                                            <div class="row">
+                                                <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                                                    <div class="thumbnail">
+                                                        <img src="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}" alt="" />
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                                                <h3 class="broadcast-title">{{ $broadcast->title }}</h3>
-                                                <p class="short-desc">{{ $broadcast->description }}</p>
-                                            </div>
-                                            <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 text-right">
-                                                <ul class="bordcast-edit-actions">
-                                                    <li class="social-share-action">
-                                                        <a href="#" data-toggle="modal" data-target="#share-modal">
-                                                            <img src="http://dev.hapity.local/assets/images/share.png" alt="social Media" width="28">
-                                                        </a>
-                                                        <ul class="social-share-on" style="display: none;">
-                                                            <li>
-                                                                <a href="javascript:;" data-modal-id="embed-code-popup-{{ $broadcast->id }}" class="code-icon">
-                                                                    <i class="fa fa-code"></i>
-                                                                </a>
-                                                            </li>                                                                                                                
-                                                            <li>
-                                                                <a href="https://twitter.com/intent/tweet?url={{ $broadcast->share_url }}" target="_blank" class="twitter">
-                                                                    <i class="fa fa-twitter"></i>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="https://www.facebook.com/sharer/sharer.php?u={{ $broadcast->share_url }}" target="_blank">
-                                                                    <i class="fa fa-facebook"></i>
-                                                                </a>
-                                                            </li>
-                                                            
-                                                        </ul>
-                                                    </li>
-                                                    <li class="social-share-action">
-                                                        <a href="{{ route('broadcasts.edit', [$broadcast->id]) }}">
-                                                            <img src="http://dev.hapity.local/assets/images/edit.png" alt="Edit" width="28">
-                                                        </a>
-                                                    </li>
-                                                    <li class="social-share-action">
-                                                        <a href="javascript:void();" data-broadcast_id="{{ $broadcast->id }}" class="delete-btn">
-                                                            <img src="http://dev.hapity.local/assets/images/delete.png" alt="Delete" width="28">
-                                                        </a>
-                                                        <form id="form_delete_broadcast_{{ $broadcast->id }}" enctype="multipart/form-data" method="POST" action="{{ route('broadcasts.delete') }}">
-                                                            {{ csrf_field() }}
-                                                            <input type="hidden" id="perform_action" name="perform_action" value="delete_broadcast" />
-                                                            <input type="hidden" id="broadcast_id" name="broadcast_id" value="{{ $broadcast->id }}" />                                                         
-                                                        </form>
-                                                    </li>
-                                                </ul>
+                                                <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                    <h3 class="broadcast-title">{{ $broadcast->title }}</h3>
+                                                    <p class="short-desc">{{ $broadcast->description }}</p>
+                                                </div>
+                                                <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 text-right">
+                                                    <ul class="bordcast-edit-actions">
+                                                        <li class="social-share-action">
+                                                            <a href="#" data-toggle="modal" data-target="#share-modal">
+                                                                <img src="http://dev.hapity.local/assets/images/share.png" alt="social Media" width="28">
+                                                            </a>
+                                                            <ul class="social-share-on" style="display: none;">
+                                                                <li>
+                                                                    <a href="javascript:;" data-modal-id="embed-code-popup-{{ $broadcast->id }}" class="code-icon">
+                                                                        <i class="fa fa-code"></i>
+                                                                    </a>
+                                                                </li>                                                                                                                
+                                                                <li>
+                                                                    <a href="https://twitter.com/intent/tweet?url={{ $broadcast->share_url }}" target="_blank" class="twitter">
+                                                                        <i class="fa fa-twitter"></i>
+                                                                    </a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ $broadcast->share_url }}" target="_blank">
+                                                                        <i class="fa fa-facebook"></i>
+                                                                    </a>
+                                                                </li>
+                                                                
+                                                            </ul>
+                                                        </li>
+                                                        <li class="social-share-action">
+                                                            <a href="{{ route('broadcasts.edit', [$broadcast->id]) }}">
+                                                                <img src="http://dev.hapity.local/assets/images/edit.png" alt="Edit" width="28">
+                                                            </a>
+                                                        </li>
+                                                        <li class="social-share-action">
+                                                            <a href="javascript:void();" data-broadcast_id="{{ $broadcast->id }}" class="delete-btn">
+                                                                <img src="http://dev.hapity.local/assets/images/delete.png" alt="Delete" width="28">
+                                                            </a>
+                                                            <form id="form_delete_broadcast_{{ $broadcast->id }}" enctype="multipart/form-data" method="POST" action="{{ route('broadcasts.delete') }}">
+                                                                {{ csrf_field() }}
+                                                                <input type="hidden" id="perform_action" name="perform_action" value="delete_broadcast" />
+                                                                <input type="hidden" id="broadcast_id" name="broadcast_id" value="{{ $broadcast->id }}" />                                                         
+                                                            </form>
+                                                        </li>
+                                                    </ul>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div> 
-                   </a>
-                   
-                   
-                              
+                            </div> 
+                        </a>
                     
+                        <div id="video_player_{{ $broadcast->id }}" style="display: none;" class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0; margin:0; ">
+                                    
+                                @if($broadcast->status == 'online')
+                                    <video
+                                        id="my_live_player_{{ $broadcast->id }}"
+                                        class="video-js"
+                                        controls
+                                        preload="auto"
+                                        poster="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}"
+                                        data-setup='{}'>
+                                        <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
+                                        <p class="vjs-no-js">
+                                            To view this video please enable JavaScript, and consider upgrading to a
+                                            web browser that
+                                            <a href="https://videojs.com/html5-video-support/" target="_blank">
+                                            supports HTML5 video
+                                            </a>
+                                        </p>
+                                    </video>
+                                @else 
+                                    <video
+                                        id="my_recorded_player_{{ $broadcast->id }}"
+                                        class="video-js"
+                                        controls
+                                        preload="auto"
+                                        poster="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}"
+                                        data-setup='{}'>
+                                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                        <p class="vjs-no-js">
+                                            To view this video please enable JavaScript, and consider upgrading to a
+                                            web browser that
+                                            <a href="https://videojs.com/html5-video-support/" target="_blank">
+                                            supports HTML5 video
+                                            </a>
+                                        </p>
+                                    </video>
+                                @endif
+                                    
+                            </div>
+                        </div>
+                              
+                    @endif
                 @endforeach                              
             </div>
         </div>
@@ -151,11 +187,14 @@
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     <link href="https://vjs.zencdn.net/7.6.6/video-js.css" rel="stylesheet" />
+    
+    <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
 @endpush
 
 @push('script')
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
-    <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+    <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
+    <script src="{{ asset('assets/video-js-7.7.4/videojs.contrib-hls.min.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('body').on('click', '.delete-btn', function(){
@@ -179,6 +218,7 @@
                     $(this).removeClass('on-hover').find('ul').stop().hide();
                 }
             );
+            
         });
     </script>
 @endpush

@@ -20,6 +20,16 @@ class AntMediaBroadcastsController extends Controller
         $view_data['user'] = $user;
 
         $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
+
+        foreach ($broadcasts as $key => $broadcast) {
+            if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename))) {
+                $broadcasts[$key]['file_exists'] = true;
+            } else {
+                $broadcasts[$key]['file_exists'] = false;
+            }
+
+        }
+
         $view_data['broadcasts'] = $broadcasts;
 
         return view('ant_media_broadcasts.index', $view_data);
@@ -82,14 +92,14 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->timestamp = date('Y-m-d H:i:s');
                 $broadcast->filename = $request->input('stream_name') . '.mp4';
                 $broadcast->video_name = $request->input('stream_name') . '.mp4';
-                $broadcast->stream_url = 'http://34.255.219.25:5080/WebRTCApp/play.html?name=' . $request->input('stream_name');
+                $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . $request->input('stream_name');
                 $broadcast->share_url = '';
                 $broadcast->save();
 
                 $broadcast->share_url = route('broadcasts.view', [$broadcast->id]);
                 $broadcast->save();
 
-                echo 'success';
+                echo json_encode(['statue' => 'success', 'broadcast_id' => $broadcast->id]);
 
                 break;
             case 'update_broadcast':
@@ -97,10 +107,10 @@ class AntMediaBroadcastsController extends Controller
                 $update_as = $request->input('update_as');
 
                 $broadcast = Broadcast::where('id', $broadcast_id)->where('user_id', Auth::id())->first();
-                
+
                 $broadcast_video = $update_as == 'uploaded' ? $request->input('broadcast_video_name') : $request->input('stream_name') . '.mp4';
 
-                if(!is_null($broadcast) && $broadcast->id > 0) {
+                if (!is_null($broadcast) && $broadcast->id > 0) {
                     $broadcast->user_id = Auth::id();
                     $broadcast->title = $request->input('broadcast_title');
                     $broadcast->description = $request->input('broadcast_description');
@@ -109,11 +119,17 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->timestamp = date('Y-m-d H:i:s');
                     $broadcast->filename = $broadcast_video;
                     $broadcast->video_name = $broadcast_video;
-                    $broadcast->stream_url = 'https://stg-media.hapity.com:5443/WebRTCApp/play.html?name=' . pathinfo($broadcast_video, PATHINFO_FILENAME);
-                    $broadcast->save();                    
+                    $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
+                    $broadcast->save();
+
+                    echo json_encode(['statue' => 'success', 'broadcast_id' => $broadcast->id]);
                 }
 
-                echo 'success';
+                echo json_encode(['statue' => 'failed', 'broadcast_id' => $broadcast_id]);
+
+                break;
+
+            case 'set_stream_as_offline':
 
                 break;
 
