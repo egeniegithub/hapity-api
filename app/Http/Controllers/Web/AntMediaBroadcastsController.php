@@ -115,7 +115,7 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->title = $request->input('broadcast_title');
                     $broadcast->description = $request->input('broadcast_description');
                     $broadcast->broadcast_image = $request->input('broadcast_image_name');
-                    $broadcast->status = 'online';
+                    $broadcast->status = 'offline';
                     $broadcast->timestamp = date('Y-m-d H:i:s');
                     $broadcast->filename = $broadcast_video;
                     $broadcast->video_name = $broadcast_video;
