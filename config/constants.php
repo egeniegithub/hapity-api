@@ -19,4 +19,5 @@ switch (env('APP_URL')) {
 		break;
 }
 
-define('ANT_MEDIA_SERVER_STAGING', 'http://34.255.219.25:5080/');
+define('ANT_MEDIA_SERVER_STAGING_IP', 'http://34.255.219.25:5080/');
+define('ANT_MEDIA_SERVER_STAGING_URL', 'https://stg-media.hapity.com:5443/');

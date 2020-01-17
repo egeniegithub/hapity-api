@@ -30,6 +30,7 @@
                     {{ csrf_field() }}
                     <input type="hidden" value="start_broadcast" id="perform_action" name="perform_action" />
                     <input type="hidden" value="" id="stream_name" name="stream_name" />
+                    <input type="hidden" value="" id="broadcast_id" name="broadcast_id" />
                     <input type="hidden" value="" id="broadcast_image_name" name="broadcast_image_name"  />
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -198,8 +199,11 @@
                 });
 
                 my_request.done(function(response) {
-                    if(response == 'success'){
+                    response =  typeof response JSON ?  response : JSON.parse(response);
+
+                    if(response.status == 'success'){
                         $('#form_container').hide();
+                        $('#broadcast_id').val(response.broadcast_id);
                         webRTCAdaptor.publish(name, token);    
                     }
                 });
@@ -219,6 +223,17 @@
 
             $('.broadcast-overlay').show();
             webRTCAdaptor.stop($('#stream_name').val());
+
+            var my_request;
+
+            my_request = $.ajax({
+                url: "{{ route('broadcasts.ajax') }}",
+                method: 'POST',
+                data: {
+                    'perform_action': 'set_broadcast_as_offline',
+                    '_token': '{{ csrf_token() }}',
+                }
+            });
         }
         
         function enableDesktopCapture(enable) {
