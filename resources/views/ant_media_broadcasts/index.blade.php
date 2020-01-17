@@ -170,6 +170,15 @@
                         alertify.error('Cancelled');
                     });
             });
+
+            $(".social-share-action").hover(
+                function () {
+                    $(this).addClass('on-hover').find('ul').stop().show();
+                }, 
+                function () {
+                    $(this).removeClass('on-hover').find('ul').stop().hide();
+                }
+            );
         });
     </script>
 @endpush

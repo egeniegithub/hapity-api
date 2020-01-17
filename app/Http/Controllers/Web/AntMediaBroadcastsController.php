@@ -32,9 +32,12 @@ class AntMediaBroadcastsController extends Controller
         return view('ant_media_broadcasts.create', $view_data);
     }
 
-    public function edit(Request $request)
+    public function edit(Request $request, $id)
     {
         $view_data = [];
+
+        $broadcast = Broadcast::where('user_id', Auth::id())->where('id', $id)->first();
+        $view_data['broadcast'] = $broadcast;
 
         return view('ant_media_broadcasts.edit', $view_data);
     }
@@ -44,7 +47,7 @@ class AntMediaBroadcastsController extends Controller
 
     }
 
-    public function upload(Request $request) 
+    public function upload(Request $request)
     {
         $view_data = [];
 
@@ -53,7 +56,7 @@ class AntMediaBroadcastsController extends Controller
 
     public function delete(Request $request)
     {
-        $broadcast = Broadcast::where('id', $request->input('broadcast_id'))->where('user_id', Auth::id())->first();       
+        $broadcast = Broadcast::where('id', $request->input('broadcast_id'))->where('user_id', Auth::id())->first();
 
         if (!is_null($broadcast) && $broadcast->id > 0) {
             $broadcast->delete();
@@ -62,7 +65,6 @@ class AntMediaBroadcastsController extends Controller
 
         return back()->with('message_error', 'Broadcast Could Not Be Deleted!');
 
-        
     }
 
     public function ajax_responder(Request $request)
@@ -90,6 +92,30 @@ class AntMediaBroadcastsController extends Controller
                 echo 'success';
 
                 break;
+            case 'update_broadcast':
+                $broadcast_id = $request->input('broadcast_id');
+                $update_as = $request->input('update_as');
+
+                $broadcast = Broadcast::where('id', $broadcast_id)->where('user_id', Auth::id())->first();
+                
+                $broadcast_video = $update_as == 'upload' ? $request->input('broadcast_video_name') : $request->input('stream_name') . '.mp4';
+
+                if(!is_null($broadcast) && $broadcast->id > 0) {
+                    $broadcast->user_id = Auth::id();
+                    $broadcast->title = $request->input('broadcast_title');
+                    $broadcast->description = $request->input('broadcast_description');
+                    $broadcast->broadcast_image = $request->input('broadcast_image_name');
+                    $broadcast->status = 'online';
+                    $broadcast->timestamp = date('Y-m-d H:i:s');
+                    $broadcast->filename = $broadcast_video;
+                    $broadcast->video_name = $broadcast_video;
+                    $broadcast->stream_url = 'https://stg-media.hapity.com:5443/WebRTCApp/play.html?name=' . pathinfo($broadcast_video, PATHINFO_FILENAME);
+                    $broadcast->save();                    
+                }
+
+                echo 'success';
+
+                break;
 
         }
 
@@ -101,6 +127,13 @@ class AntMediaBroadcastsController extends Controller
         $file_name = $this->handle_image_file_upload($request, Auth::id());
 
         echo $file_name;
+    }
+
+    public function upload_video(Request $request)
+    {
+        $file_info = $this->handle_video_file_upload($request);
+
+        echo $file_info['file_name'];
     }
 
     private function handle_image_file_upload($request, $user_id)
@@ -158,6 +191,42 @@ class AntMediaBroadcastsController extends Controller
         unlink($image_absolute_path);
 
         $image->save($image_absolute_path);
+    }
+
+    private function handle_video_file_upload($request)
+    {
+        $to_return = [];
+        if ($request->hasFile('broadcast_video')) {
+
+            $video_file = $request->file('broadcast_video');
+            $video_original_name = $video_file->getClientOriginalName();
+            $ext = $video_file->getClientOriginalExtension();
+
+            $temp_path = storage_path('temp');
+
+            $file_name = "stream_" . time() . $ext;
+            $antmedia_path = base_path('antmedia_store');
+
+            $output_file_name = "stream_" . time() . ".mp4";
+
+            $video_path = $video_file->move($temp_path, $file_name);
+
+            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
+
+            ffmpeg_upload_file_path($video_path->getRealPath(), $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
+
+            $stream_url = '';
+
+            $to_return = [
+                'file_original_name' => $video_original_name,
+                'file_name' => $output_file_name,
+                'file_path' => $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name,
+                'file_stream_url' => $stream_url,
+                'file_server' => 'https://stg-media.hapity.com:5443/',
+            ];
+        }
+
+        return $to_return;
     }
 
 }
