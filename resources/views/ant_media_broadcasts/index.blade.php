@@ -140,7 +140,7 @@
                                         controls
                                         preload="auto"
                                         poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
-                                        data-setup='{"fluid": true}'>
+                                        data-setup='{"fluid": false}'>
                                         <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
                                         <p class="vjs-no-js">
                                             To view this video please enable JavaScript, and consider upgrading to a
@@ -157,7 +157,7 @@
                                         controls
                                         preload="auto"
                                         poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
-                                        data-setup='{"fluid": true}'>
+                                        data-setup='{"fluid": false}'>
                                         <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
                                         <p class="vjs-no-js">
                                             To view this video please enable JavaScript, and consider upgrading to a
