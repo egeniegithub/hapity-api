@@ -99,7 +99,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->share_url = route('broadcasts.view', [$broadcast->id]);
                 $broadcast->save();
 
-                echo json_encode(['statue' => 'success', 'broadcast_id' => $broadcast->id]);
+                echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
 
                 break;
             case 'update_broadcast':
@@ -122,11 +122,11 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
                     $broadcast->save();
 
-                    echo json_encode(['statue' => 'success', 'broadcast_id' => $broadcast->id]);
+                    echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
                     exit();
                 }
 
-                echo json_encode(['statue' => 'failed', 'broadcast_id' => $broadcast_id]);
+                echo json_encode(['status' => 'failed', 'broadcast_id' => $broadcast_id]);
                 exit();
                 break;
 
