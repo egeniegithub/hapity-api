@@ -17,13 +17,13 @@ Route::get('route/for/check/php/info/version/details', function(){
  });
 
 
+ /*
  Route::get('/info', function(){
     ob_start();
-    ini_set('upload_max_filesize', '1024MB');
-    ini_set('post_max_size', '1024MB');
     phpinfo();
     return ob_get_clean();
  });
+ */
 
 Route::get('/', 'Web\HomeController@index')->name('home');
 Route::get('help', 'Web\HelpController@index')->name('help');
