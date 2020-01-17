@@ -17,6 +17,14 @@ Route::get('route/for/check/php/info/version/details', function(){
  });
 
 
+ Route::get('/info', function(){
+    ob_start();
+    ini_set('upload_max_filesize', '1024MB');
+    ini_set('post_max_size', '1024MB');
+    phpinfo();
+    return ob_get_clean();
+ });
+
 Route::get('/', 'Web\HomeController@index')->name('home');
 Route::get('help', 'Web\HelpController@index')->name('help');
 Route::get('privacy-policy', 'Web\PrivacyController@index')->name('privacy-policy');
@@ -65,6 +73,7 @@ Route::group([
     Route::get('broadcasts/upload', 'Web\AntMediaBroadcastsController@upload')->name('broadcasts.upload');
     
     Route::post('broadcasts/upload/image', 'Web\AntMediaBroadcastsController@upload_image')->name('broadcasts.upload_image');
+    Route::post('broadcasts/upload/video', 'Web\AntMediaBroadcastsController@upload_video')->name('broadcasts.upload_video');
     Route::post('broadcasts/delete', 'Web\AntMediaBroadcastsController@delete')->name('broadcasts.delete');
     Route::post('broadcasts/ajax', 'Web\AntMediaBroadcastsController@ajax_responder')->name('broadcasts.ajax');
     

@@ -21,6 +21,10 @@ yarn-error.log
 /wowza_store
 /wowza_store/*
 
+
+/antmedia_store
+/antmedia_store/*
+
 /public/images/broadcasts
 /public/images/broadcasts/*
 /public/assets/videos
@@ -28,3 +32,5 @@ yarn-error.log
 
 /storage/temp
 /storage/temp/*
+
+info.php
