@@ -123,10 +123,11 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->save();
 
                     echo json_encode(['statue' => 'success', 'broadcast_id' => $broadcast->id]);
+                    exit();
                 }
 
                 echo json_encode(['statue' => 'failed', 'broadcast_id' => $broadcast_id]);
-
+                exit();
                 break;
 
             case 'set_stream_as_offline':
