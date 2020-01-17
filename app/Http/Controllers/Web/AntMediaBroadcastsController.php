@@ -22,7 +22,7 @@ class AntMediaBroadcastsController extends Controller
         $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         foreach ($broadcasts as $key => $broadcast) {
-            if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename))) {
+            if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename)) || $broadcast->status == 'online') {
                 $broadcasts[$key]['file_exists'] = true;
             } else {
                 $broadcasts[$key]['file_exists'] = false;
