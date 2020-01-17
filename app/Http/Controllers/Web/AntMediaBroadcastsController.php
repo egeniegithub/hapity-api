@@ -98,7 +98,7 @@ class AntMediaBroadcastsController extends Controller
 
                 $broadcast = Broadcast::where('id', $broadcast_id)->where('user_id', Auth::id())->first();
                 
-                $broadcast_video = $update_as == 'upload' ? $request->input('broadcast_video_name') : $request->input('stream_name') . '.mp4';
+                $broadcast_video = $update_as == 'uploaded' ? $request->input('broadcast_video_name') : $request->input('stream_name') . '.mp4';
 
                 if(!is_null($broadcast) && $broadcast->id > 0) {
                     $broadcast->user_id = Auth::id();
