@@ -174,7 +174,9 @@
                     });
 
                     my_request.done(function(response) {
-                        if(response == 'success'){
+                        response =  typeof response JSON ?  response : JSON.parse(response);
+
+                        if(response.status == 'success'){
                             window.location = "{{ route('broadcasts.index') }}";                               
                         }
                     });
