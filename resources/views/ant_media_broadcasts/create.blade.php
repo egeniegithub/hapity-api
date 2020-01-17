@@ -232,7 +232,16 @@
                 data: {
                     'perform_action': 'set_broadcast_as_offline',
                     '_token': '{{ csrf_token() }}',
+                    'broadcast_id': $('#broadcast_id').val()
                 }
+            });
+
+            my_request.done(function(){
+                window.location = "{{ route('broadcasts.index') }}"; 
+            });
+
+            my_request.always(function(){
+
             });
         }
         
