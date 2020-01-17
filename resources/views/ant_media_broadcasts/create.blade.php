@@ -199,9 +199,9 @@
                 });
 
                 my_request.done(function(response) {
-                    response =  typeof response JSON ?  response : JSON.parse(response);
+                    res =  response.status ?  response : JSON.parse(response);
 
-                    if(response.status == 'success'){
+                    if(res.status == 'success'){
                         $('#form_container').hide();
                         $('#broadcast_id').val(response.broadcast_id);
                         webRTCAdaptor.publish(name, token);    
