@@ -141,7 +141,7 @@
                                         preload="auto"
                                         poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
                                         data-setup='{"fluid": false}'>
-                                        <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
+                                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' }}" type="application/x-mpegURL"></source>
                                         <p class="vjs-no-js">
                                             To view this video please enable JavaScript, and consider upgrading to a
                                             web browser that
@@ -193,7 +193,7 @@
 @push('script')
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
-    <script src="{{ asset('assets/video-js-7.7.4/videojs.contrib-hls.min.js') }}"></script>
+    <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
     <script>
         $(document).ready(function(){
             $('body').on('click', '.delete-btn', function(){
