@@ -134,13 +134,39 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast_id = $request->input('broadcast_id');
                 $broadcast = Broadcast::where('user_id', Auth::id())->where('id', $broadcast_id)->first();
 
-                if(!is_null($broadcast) && $broadcast->id > 0) {
+                if (!is_null($broadcast) && $broadcast->id > 0) {
                     $broadcast->status = 'offline';
                     $broadcast->save();
                 }
 
                 echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast_id]);
                 exit();
+                break;
+
+            case 'upload_broadcast':
+                $update_as = $request->input('update_as');
+
+                $broadcast_video = $update_as == 'uploaded' ? $request->input('broadcast_video_name') : $request->input('stream_name') . '.mp4';
+
+                $broadcast = new Broadcast();
+                $broadcast->user_id = Auth::id();
+                $broadcast->title = $request->input('broadcast_title');
+                $broadcast->description = $request->input('broadcast_description');
+                $broadcast->broadcast_image = $request->input('broadcast_image_name');
+                $broadcast->status = 'offline';
+                $broadcast->timestamp = date('Y-m-d H:i:s');
+                $broadcast->filename = $broadcast_video;
+                $broadcast->video_name = $broadcast_video;
+                $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
+                $broadcast->share_url = '';
+                $broadcast->save();
+
+                $broadcast->share_url = route('broadcasts.view', [$broadcast->id]);
+                $broadcast->save();
+
+                echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
+                exit();
+
                 break;
 
         }
