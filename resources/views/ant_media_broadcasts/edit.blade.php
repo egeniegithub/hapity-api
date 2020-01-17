@@ -3,7 +3,7 @@
     <div class="container">          
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                <h1 class="broadcast-heading">Broadcast for Web</h1>
+                <h1 class="broadcast-heading">Lets Create Something Awesome<br /><small>Edit Broadcast</small></h1>
             </div>
         </div>
         <div class="row">
@@ -75,7 +75,7 @@
                                 <label for="broadcast_image">Upload Image</label>
                                 <input class="filepond-input" type="file" value="" id="broadcast_image" name="broadcast_image" placeholder="Please select broadcast image" />
                                 <div id="image_upload_loader" class="text-center text-success">
-                                    <span class="label label-success"><i class="fa fa-cog fa-spin"></i> Processing Image</span>
+                                    <i class="fa fa-fw fa-cog fa-2x fa-spin"></i> <span>Processing Image</span>
                                 </div>
                             </div>
                         </div>
@@ -84,7 +84,7 @@
                                 <label for="broadcast_video">Upload Video</label>
                                 <input class="filepond-input" type="file" value="" id="broadcast_video" name="broadcast_video" placeholder="Please select broadcast video" />
                                 <div id="video_upload_loader" class="text-center text-success">
-                                    <span class="label label-success"><i class="fa fa-cog fa-spin"></i> Processing Video</span>
+                                    <i class="fa fa-fw fa-cog fa-2x fa-spin"></i> <span>Processing Video</span>
                                 </div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                 </form>
             </div>
         </div>
-               
+        <hr />
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <button type="button" onclick="" class="btn btn-lg btn-success" id="update_button">Update</button>
