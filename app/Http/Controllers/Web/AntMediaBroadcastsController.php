@@ -131,7 +131,16 @@ class AntMediaBroadcastsController extends Controller
                 break;
 
             case 'set_stream_as_offline':
+                $broadcast_id = $request->input('broadcast_id');
+                $broadcast = Broadcast::where('user_id', Auth::id())->where('id', $broadcast_id)->first();
 
+                if(!is_null($broadcast) && $broadcast->id > 0) {
+                    $broadcast->status = 'offline';
+                    $broadcast->save();
+                }
+
+                echo json_encode(['status' => 'failed', 'broadcast_id' => $broadcast_id]);
+                exit();
                 break;
 
         }
