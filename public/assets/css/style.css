@@ -3648,3 +3648,8 @@ body {
 .btn-hapity-dark:hover {
     color: #ffffff;
 }
+
+.fancybox-content
+{
+    padding: 0 !important;
+}
