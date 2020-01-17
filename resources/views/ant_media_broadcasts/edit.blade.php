@@ -19,8 +19,23 @@
                         </div>
                         <div class="row" id="recorded-stream-container">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <iframe width="720" height="480" id="recorded-video" src="{{ '//stg-media.hapity.com:5443/WebRTCApp/play.html?name=' . pathinfo($broadcast->filename,  PATHINFO_FILENAME) }}"></iframe>
+                                <div class="embed-responsive embed-responsive-16by9">                                    
+                                    <video
+                                        id="my_recorded_player_{{ $broadcast->id }}"
+                                        class="video-js"
+                                        controls
+                                        preload="auto"
+                                        poster="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}"
+                                        data-setup='{"fluid": true}'>
+                                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                        <p class="vjs-no-js">
+                                            To view this video please enable JavaScript, and consider upgrading to a
+                                            web browser that
+                                            <a href="https://videojs.com/html5-video-support/" target="_blank">
+                                            supports HTML5 video
+                                            </a>
+                                        </p>
+                                    </video>
                                 </div>  
                             </div>
                         </div>                        
@@ -109,7 +124,7 @@
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard_theme_circles.min.css') }}" rel="stylesheet">
 
-
+    <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
 @endpush
 
 @push('script')
@@ -124,6 +139,9 @@
     
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
+
+    <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
+    <script src="{{ asset('assets/video-js-7.7.4/videojs.contrib-hls.min.js') }}"></script>
 
     <script src="{{ asset('assets/webrtc/adapter-latest.js') }}"></script>
     <script src="{{ asset('assets/webrtc/webrtc_adaptor.js') }}"></script>
