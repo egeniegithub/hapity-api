@@ -24,24 +24,7 @@ class DashboardController extends Controller
         $plugin_ids = '';
         $userdata = User::with(['profile', 'plugins'])->where('id', Auth::id())->first()->toArray();
         $broadcasts = Broadcast::where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
-        if (!is_null($userdata['plugins'])) {
-            $plugin_ids = $userdata['plugins'];
-        }
-
-        $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
-
-        foreach ($broadcasts as $key => $broadcast) {
-            $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
-            $ext = $ext == 'mp4' ? '' : '.mp4';
-            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
-            if (file_exists($broadcast_stream_file_path)) {
-                $broadcast['file_exists'] = true;
-            } else {
-                $broadcast['file_exists'] = false;
-            }
-
-            $broadcasts[$key] = $broadcast;
-        }
+        
 
         return view('home', compact('userdata', 'broadcasts', 'plugin_ids'));
     }
