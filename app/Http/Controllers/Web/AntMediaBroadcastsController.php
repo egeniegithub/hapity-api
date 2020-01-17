@@ -130,7 +130,7 @@ class AntMediaBroadcastsController extends Controller
                 exit();
                 break;
 
-            case 'set_stream_as_offline':
+            case 'set_broadcast_as_offline':
                 $broadcast_id = $request->input('broadcast_id');
                 $broadcast = Broadcast::where('user_id', Auth::id())->where('id', $broadcast_id)->first();
 
@@ -139,7 +139,7 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->save();
                 }
 
-                echo json_encode(['status' => 'failed', 'broadcast_id' => $broadcast_id]);
+                echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast_id]);
                 exit();
                 break;
 
