@@ -74,7 +74,7 @@
                                             <div class="row">
                                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <div class="thumbnail">
-                                                        <img src="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}" alt="" />
+                                                        <img src="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}" alt="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -139,8 +139,8 @@
                                         class="video-js"
                                         controls
                                         preload="auto"
-                                        poster="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}"
-                                        data-setup='{}'>
+                                        poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
+                                        data-setup='{"fluid": true}'>
                                         <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4"></source>
                                         <p class="vjs-no-js">
                                             To view this video please enable JavaScript, and consider upgrading to a
@@ -156,8 +156,8 @@
                                         class="video-js"
                                         controls
                                         preload="auto"
-                                        poster="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}"
-                                        data-setup='{}'>
+                                        poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
+                                        data-setup='{"fluid": true}'>
                                         <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
                                         <p class="vjs-no-js">
                                             To view this video please enable JavaScript, and consider upgrading to a
@@ -186,7 +186,6 @@
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-    <link href="https://vjs.zencdn.net/7.6.6/video-js.css" rel="stylesheet" />
     
     <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
 @endpush
