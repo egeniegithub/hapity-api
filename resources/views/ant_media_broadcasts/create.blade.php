@@ -203,7 +203,7 @@
 
                     if(res.status == 'success'){
                         $('#form_container').hide();
-                        $('#broadcast_id').val(response.broadcast_id);
+                        $('#broadcast_id').val(res.broadcast_id);
                         webRTCAdaptor.publish(name, token);    
                     }
                 });
