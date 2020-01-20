@@ -42,7 +42,7 @@ class EmailCron extends Command
         Log::info("Cron is working fine!");
         $email = "fahim.egenie@gmail.com";
         Mail::send('emails/test_mail', ['data' => 'etesting email'], function ($message) use ($email) {
-            $message->to($email,'chris@hapity.com')->subject('Welcome');
+            $message->to($email)->subject('Welcome');
         });
 
         $this->info('email:cron Command Run successfully!');
