@@ -4,6 +4,9 @@
     .login-error{
       color: red;
     }
+    .wrapper{
+    	background-color: #383838;
+    }
   </style>
 @endpush
 @section('content')
