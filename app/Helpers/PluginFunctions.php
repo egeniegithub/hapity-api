@@ -91,42 +91,40 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-                        if ($this->check_if_url_exists($go)) {
 
-                            $result = file_get_contents($go, false, $context);
-                            $result = json_decode($result, true);
+                        $result = @file_get_contents($go, false, $context);
+                        $result = json_decode($result, true);
 
-                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
 
-                            if (!empty($result)) {
-                                $update_broadcast = Broadcast::find($bid);
-                                $flag = 0;
-                                $update_broadcast->share_url = $result['post_url'];
+                        if (!empty($result)) {
+                            $update_broadcast = Broadcast::find($bid);
+                            $flag = 0;
+                            $update_broadcast->share_url = $result['post_url'];
 
-                                $share_url = $result['post_url'];
+                            $share_url = $result['post_url'];
 
-                                $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
-                                $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
-                                $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+                            $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
+                            $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
+                            $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
 
-                                if ($wp_post_id) {
-                                    $update_broadcast->post_id = $wp_post_id;
-                                    $flag = 1;
-                                }
-                                if ($post_id_joomla) {
-                                    $update_broadcast->post_id_joomla = $post_id_joomla;
-                                    $flag = 1;
-                                }
-                                if ($drupal_post_id) {
-                                    $update_broadcast->post_id_drupal = $drupal_post_id;
-                                    $flag = 1;
-                                }
-                                if ($flag) {
-                                    $update_broadcast->save();
-                                }
+                            if ($wp_post_id) {
+                                $update_broadcast->post_id = $wp_post_id;
+                                $flag = 1;
                             }
-
+                            if ($post_id_joomla) {
+                                $update_broadcast->post_id_joomla = $post_id_joomla;
+                                $flag = 1;
+                            }
+                            if ($drupal_post_id) {
+                                $update_broadcast->post_id_drupal = $drupal_post_id;
+                                $flag = 1;
+                            }
+                            if ($flag) {
+                                $update_broadcast->save();
+                            }
                         }
+
                     } catch (Exception $ex) {
                         Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
@@ -215,41 +213,40 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-                        if ($this->check_if_url_exists($go)) {
 
-                            $result = file_get_contents($go, false, $context);
-                            $result = json_decode($result, true);
+                        $result = @file_get_contents($go, false, $context);
+                        $result = json_decode($result, true);
 
-                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
 
-                            if (!empty($result)) {
-                                $update_broadcast = Broadcast::find($broadcast_id);
-                                $flag = 0;
-                                $update_broadcast->share_url = $result['post_url'];
+                        if (!empty($result)) {
+                            $update_broadcast = Broadcast::find($broadcast_id);
+                            $flag = 0;
+                            $update_broadcast->share_url = $result['post_url'];
 
-                                $share_url = $result['post_url'];
+                            $share_url = $result['post_url'];
 
-                                $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
-                                $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
-                                $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+                            $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
+                            $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
+                            $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
 
-                                if ($wp_post_id) {
-                                    $update_broadcast->post_id = $wp_post_id;
-                                    $flag = 1;
-                                }
-                                if ($post_id_joomla) {
-                                    $update_broadcast->post_id_joomla = $post_id_joomla;
-                                    $flag = 1;
-                                }
-                                if ($drupal_post_id) {
-                                    $update_broadcast->post_id_drupal = $drupal_post_id;
-                                    $flag = 1;
-                                }
-                                if ($flag) {
-                                    $update_broadcast->save();
-                                }
+                            if ($wp_post_id) {
+                                $update_broadcast->post_id = $wp_post_id;
+                                $flag = 1;
+                            }
+                            if ($post_id_joomla) {
+                                $update_broadcast->post_id_joomla = $post_id_joomla;
+                                $flag = 1;
+                            }
+                            if ($drupal_post_id) {
+                                $update_broadcast->post_id_drupal = $drupal_post_id;
+                                $flag = 1;
+                            }
+                            if ($flag) {
+                                $update_broadcast->save();
                             }
                         }
+
                     } catch (Exception $ex) {
                         Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
@@ -344,14 +341,14 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-                        if ($this->check_if_url_exists($go)) {
-                            $result = file_get_contents($go, false, stream_context_create($opts));
-                            $result = json_decode($result, true);
 
-                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
+                        $result = @file_get_contents($go, false, stream_context_create($opts));
+                        $result = json_decode($result, true);
 
-                            return $result;
-                        }
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
+
+                        return $result;
+
                     } catch (Exception $ex) {
                         Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
@@ -380,13 +377,13 @@ class PluginFunctions
                 $this->stream_context_default();
                 if (strpos($data->url, 'localhost') === false) {
                     try {
-                        if ($this->check_if_url_exists($go)) {
-                            $result = file_get_contents($go);
 
-                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
+                        $result = @file_get_contents($go);
 
-                            return $result;
-                        }
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
+
+                        return $result;
+
                     } catch (Exception $ex) {
                         Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
@@ -404,33 +401,6 @@ class PluginFunctions
                 'verify_peer_name' => false,
             ],
         ]);
-    }
-
-    private function check_if_url_exists($url)
-    {
-        // Use curl_init() function to initialize a cURL session
-        $curl = curl_init($url);
-
-        // Use curl_setopt() to set an option for cURL transfer
-        curl_setopt($curl, CURLOPT_NOBODY, true);
-
-        // Use curl_exec() to perform cURL session
-        $result = curl_exec($curl);
-
-        if ($result !== false) {
-
-            // Use curl_getinfo() to get information
-            // regarding a specific transfer
-            $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-            if ($statusCode == 404) {
-                return false;
-            } else {
-                return true;
-            }
-        } else {
-            return false;
-        }
     }
 
 }
