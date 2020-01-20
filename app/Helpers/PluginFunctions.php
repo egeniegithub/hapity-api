@@ -2,6 +2,8 @@
 namespace App\Http\Helpers;
 
 use App\Broadcast;
+use Exception;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class PluginFunctions
@@ -87,43 +89,48 @@ class PluginFunctions
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
                 $this->stream_context_default();
-                if(strpos($data->url, 'localhost') === false){ 
-                    $result = file_get_contents($go, false, $context);
-                    $result = json_decode($result, true);
+                if (strpos($data->url, 'localhost') === false) {
 
+                    try {
+                        $result = file_get_contents($go, false, $context);
+                        $result = json_decode($result, true);
 
-                    $email = "fahim.egenie@gmail.com";
-                    
-                    Mail::send('emails/post_mail', ['data' => $result], function ($message) use ($email) {
-                        $message->to("fahim.egenie@gmail.com", $email)->subject('check post urls');
-                    });
+                        $email = "fahim.egenie@gmail.com";
 
-                    if (!empty($result)) {
-                        $update_broadcast = Broadcast::find($bid);
-                        $flag = 0;
-                        $update_broadcast->share_url = $result['post_url'];
+                        Mail::send('emails/post_mail', ['data' => $result], function ($message) use ($email) {
+                            $message->to("fahim.egenie@gmail.com", $email)->subject('check post urls');
+                        });
 
-                        $share_url = $result['post_url'];
+                        if (!empty($result)) {
+                            $update_broadcast = Broadcast::find($bid);
+                            $flag = 0;
+                            $update_broadcast->share_url = $result['post_url'];
 
-                        $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
-                        $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
-                        $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+                            $share_url = $result['post_url'];
 
-                        if ($wp_post_id) {
-                            $update_broadcast->post_id = $wp_post_id;
-                            $flag = 1;
+                            $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
+                            $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
+                            $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+
+                            if ($wp_post_id) {
+                                $update_broadcast->post_id = $wp_post_id;
+                                $flag = 1;
+                            }
+                            if ($post_id_joomla) {
+                                $update_broadcast->post_id_joomla = $post_id_joomla;
+                                $flag = 1;
+                            }
+                            if ($drupal_post_id) {
+                                $update_broadcast->post_id_drupal = $drupal_post_id;
+                                $flag = 1;
+                            }
+                            if ($flag) {
+                                $update_broadcast->save();
+                            }
                         }
-                        if ($post_id_joomla) {
-                            $update_broadcast->post_id_joomla = $post_id_joomla;
-                            $flag = 1;
-                        }
-                        if ($drupal_post_id) {
-                            $update_broadcast->post_id_drupal = $drupal_post_id;
-                            $flag = 1;
-                        }
-                        if ($flag) {
-                            $update_broadcast->save();
-                        }
+
+                    } catch (Exception $ex) {
+                        Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
                 }
 
@@ -207,36 +214,41 @@ class PluginFunctions
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
                 $this->stream_context_default();
-                if(strpos($data->url, 'localhost') === false){ 
-                    $result = file_get_contents($go, false, $context);
-                    $result = json_decode($result, true);
+                if (strpos($data->url, 'localhost') === false) {
 
-                    if (!empty($result)) {
-                        $update_broadcast = Broadcast::find($broadcast_id);
-                        $flag = 0;
-                        $update_broadcast->share_url = $result['post_url'];
+                    try {
+                        $result = file_get_contents($go, false, $context);
+                        $result = json_decode($result, true);
 
-                        $share_url = $result['post_url'];
+                        if (!empty($result)) {
+                            $update_broadcast = Broadcast::find($broadcast_id);
+                            $flag = 0;
+                            $update_broadcast->share_url = $result['post_url'];
 
-                        $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
-                        $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
-                        $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+                            $share_url = $result['post_url'];
 
-                        if ($wp_post_id) {
-                            $update_broadcast->post_id = $wp_post_id;
-                            $flag = 1;
+                            $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
+                            $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
+                            $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+
+                            if ($wp_post_id) {
+                                $update_broadcast->post_id = $wp_post_id;
+                                $flag = 1;
+                            }
+                            if ($post_id_joomla) {
+                                $update_broadcast->post_id_joomla = $post_id_joomla;
+                                $flag = 1;
+                            }
+                            if ($drupal_post_id) {
+                                $update_broadcast->post_id_drupal = $drupal_post_id;
+                                $flag = 1;
+                            }
+                            if ($flag) {
+                                $update_broadcast->save();
+                            }
                         }
-                        if ($post_id_joomla) {
-                            $update_broadcast->post_id_joomla = $post_id_joomla;
-                            $flag = 1;
-                        }
-                        if ($drupal_post_id) {
-                            $update_broadcast->post_id_drupal = $drupal_post_id;
-                            $flag = 1;
-                        }
-                        if ($flag) {
-                            $update_broadcast->save();
-                        }
+                    } catch (Exception $ex) {
+                        Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
                 }
 
@@ -326,10 +338,15 @@ class PluginFunctions
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.editBroadcastData';
                 }
                 $this->stream_context_default();
-                if(strpos($data->url, 'localhost') === false){ 
-                    $result = file_get_contents($go, false, stream_context_create($opts));
-                    $result = json_decode($result, true);
-                    return $result;
+                if (strpos($data->url, 'localhost') === false) {
+
+                    try {
+                        $result = file_get_contents($go, false, stream_context_create($opts));
+                        $result = json_decode($result, true);
+                        return $result;
+                    } catch (Exception $ex) {
+                        Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
+                    }
                 }
             }
         }
@@ -353,9 +370,13 @@ class PluginFunctions
                     $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.deleteBroadcastData&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_joomla=' . $data->post_id_joomla;
                 }
                 $this->stream_context_default();
-                if(strpos($data->url, 'localhost') === false){ 
-                    $result = file_get_contents($go);
-                    return $result;
+                if (strpos($data->url, 'localhost') === false) {
+                    try {
+                        $result = file_get_contents($go);
+                        return $result;
+                    } catch (Exception $ex) {
+                        Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
+                    }
                 }
 
             }
@@ -371,6 +392,5 @@ class PluginFunctions
             ],
         ]);
     }
-
 
 }
