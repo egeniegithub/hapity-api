@@ -4,13 +4,11 @@ namespace App\Http\Helpers;
 use App\Broadcast;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Mail;
 
 class PluginFunctions
 {
     public function make_plugin_call_upload($bid)
     {
-        $fgc_headers = [];
         $share_url = '';
         $broadcast_id = $bid;
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
@@ -93,14 +91,12 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-
-                        $fgc_headers = @get_headers($go, 1);
-                        if (!empty($fgc_headers) && isset($fgc_headers[0]) && $fgc_headers[0] == 'HTTP/1.1 200 OK') {
+                        if ($this->check_if_url_exists($go)) {
 
                             $result = file_get_contents($go, false, $context);
                             $result = json_decode($result, true);
 
-                            Log::info('Broadcast: ' . $broadcast_id  . ' Result: '.  $result);
+                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
 
                             if (!empty($result)) {
                                 $update_broadcast = Broadcast::find($bid);
@@ -144,7 +140,6 @@ class PluginFunctions
 
     public function make_plugin_call($broadcast_id, $image)
     {
-        $fgc_headers = [];
         $broadcast = array();
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
             ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
@@ -220,13 +215,12 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-                        $fgc_headers = @get_headers($go, 1);
-                        if (!empty($fgc_headers) && isset($fgc_headers[0]) && $fgc_headers[0] == 'HTTP/1.1 200 OK') {
+                        if ($this->check_if_url_exists($go)) {
 
                             $result = file_get_contents($go, false, $context);
                             $result = json_decode($result, true);
 
-                            Log::info('Broadcast: ' . $broadcast_id  . ' Result: '.  $result);
+                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
 
                             if (!empty($result)) {
                                 $update_broadcast = Broadcast::find($broadcast_id);
@@ -267,7 +261,6 @@ class PluginFunctions
 
     public function make_plugin_call_edit($broadcast_id)
     {
-        $fgc_headers = [];
         $broadcast = array();
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
             ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
@@ -351,12 +344,11 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-                        $fgc_headers = @get_headers($go, 1);
-                        if (!empty($fgc_headers) && isset($fgc_headers[0]) && $fgc_headers[0] == 'HTTP/1.1 200 OK') {
+                        if ($this->check_if_url_exists($go)) {
                             $result = file_get_contents($go, false, stream_context_create($opts));
                             $result = json_decode($result, true);
 
-                            Log::info('Broadcast: ' . $broadcast_id  . ' Result: '.  $result);
+                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
 
                             return $result;
                         }
@@ -370,7 +362,6 @@ class PluginFunctions
 
     public function make_plugin_call_delete($broadcast_id)
     {
-        $fgc_headers = [];
         $broadcast = array();
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
             ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
@@ -389,12 +380,11 @@ class PluginFunctions
                 $this->stream_context_default();
                 if (strpos($data->url, 'localhost') === false) {
                     try {
-                        $fgc_headers = @get_headers($go, 1);
-                        if (!empty($fgc_headers) && isset($fgc_headers[0]) && $fgc_headers[0] == 'HTTP/1.1 200 OK') {
+                        if ($this->check_if_url_exists($go)) {
                             $result = file_get_contents($go);
 
-                            Log::info('Broadcast: ' . $broadcast_id  . ' Result: '.  $result);
-                            
+                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . $result);
+
                             return $result;
                         }
                     } catch (Exception $ex) {
@@ -414,6 +404,33 @@ class PluginFunctions
                 'verify_peer_name' => false,
             ],
         ]);
+    }
+
+    private function check_if_url_exists($url)
+    {
+        // Use curl_init() function to initialize a cURL session
+        $curl = curl_init($url);
+
+        // Use curl_setopt() to set an option for cURL transfer
+        curl_setopt($curl, CURLOPT_NOBODY, true);
+
+        // Use curl_exec() to perform cURL session
+        $result = curl_exec($curl);
+
+        if ($result !== false) {
+
+            // Use curl_getinfo() to get information
+            // regarding a specific transfer
+            $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
+            if ($statusCode == 404) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 
 }
