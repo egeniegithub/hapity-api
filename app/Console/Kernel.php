@@ -34,8 +34,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('broadcastupdatelivestatus:cron')
                  ->everyFiveMinutes();
         
+                 /*
         $schedule->command('email:cron')
                 ->everyFiveMinutes();
+                */
     }
 
     /**
