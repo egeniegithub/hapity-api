@@ -88,6 +88,16 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            @if(Auth::user()->hasPlugin(Auth::user()->id))
+                                <div class="form-group label-cstm">
+                                    <div class="styled-input-single">
+                                        <input type="checkbox" name="post_plugin" id="embed" value="false" onclick="$(this).val(this.checked ? 'true' : 'false')" />
+                                        <label for="embed">Embed into website</label>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </form>
             </div>
