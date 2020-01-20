@@ -10,6 +10,7 @@ class PluginFunctions
 {
     public function make_plugin_call_upload($bid)
     {
+        $fgc_headers = [];
         $share_url = '';
         $broadcast_id = $bid;
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
@@ -92,43 +93,48 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-                        $result = file_get_contents($go, false, $context);
-                        $result = json_decode($result, true);
 
-                        $email = "fahim.egenie@gmail.com";
+                        $fgc_headers = @get_headers($go, 1);
+                        if (!empty($fgc_headers) && isset($fgc_headers[0]) && $fgc_headers[0] == 'HTTP/1.1 200 OK') {
 
-                        Mail::send('emails/post_mail', ['data' => $result], function ($message) use ($email) {
-                            $message->to("fahim.egenie@gmail.com", $email)->subject('check post urls');
-                        });
+                            $result = file_get_contents($go, false, $context);
+                            $result = json_decode($result, true);
 
-                        if (!empty($result)) {
-                            $update_broadcast = Broadcast::find($bid);
-                            $flag = 0;
-                            $update_broadcast->share_url = $result['post_url'];
+                            $email = "fahim.egenie@gmail.com";
 
-                            $share_url = $result['post_url'];
+                            Mail::send('emails/post_mail', ['data' => $result], function ($message) use ($email) {
+                                $message->to("fahim.egenie@gmail.com", $email)->subject('check post urls');
+                            });
 
-                            $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
-                            $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
-                            $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+                            if (!empty($result)) {
+                                $update_broadcast = Broadcast::find($bid);
+                                $flag = 0;
+                                $update_broadcast->share_url = $result['post_url'];
 
-                            if ($wp_post_id) {
-                                $update_broadcast->post_id = $wp_post_id;
-                                $flag = 1;
+                                $share_url = $result['post_url'];
+
+                                $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
+                                $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
+                                $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+
+                                if ($wp_post_id) {
+                                    $update_broadcast->post_id = $wp_post_id;
+                                    $flag = 1;
+                                }
+                                if ($post_id_joomla) {
+                                    $update_broadcast->post_id_joomla = $post_id_joomla;
+                                    $flag = 1;
+                                }
+                                if ($drupal_post_id) {
+                                    $update_broadcast->post_id_drupal = $drupal_post_id;
+                                    $flag = 1;
+                                }
+                                if ($flag) {
+                                    $update_broadcast->save();
+                                }
                             }
-                            if ($post_id_joomla) {
-                                $update_broadcast->post_id_joomla = $post_id_joomla;
-                                $flag = 1;
-                            }
-                            if ($drupal_post_id) {
-                                $update_broadcast->post_id_drupal = $drupal_post_id;
-                                $flag = 1;
-                            }
-                            if ($flag) {
-                                $update_broadcast->save();
-                            }
+
                         }
-
                     } catch (Exception $ex) {
                         Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
@@ -142,6 +148,7 @@ class PluginFunctions
 
     public function make_plugin_call($broadcast_id, $image)
     {
+        $fgc_headers = [];
         $broadcast = array();
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
             ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
@@ -217,34 +224,38 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-                        $result = file_get_contents($go, false, $context);
-                        $result = json_decode($result, true);
+                        $fgc_headers = @get_headers($go, 1);
+                        if (!empty($fgc_headers) && isset($fgc_headers[0]) && $fgc_headers[0] == 'HTTP/1.1 200 OK') {
 
-                        if (!empty($result)) {
-                            $update_broadcast = Broadcast::find($broadcast_id);
-                            $flag = 0;
-                            $update_broadcast->share_url = $result['post_url'];
+                            $result = file_get_contents($go, false, $context);
+                            $result = json_decode($result, true);
 
-                            $share_url = $result['post_url'];
+                            if (!empty($result)) {
+                                $update_broadcast = Broadcast::find($broadcast_id);
+                                $flag = 0;
+                                $update_broadcast->share_url = $result['post_url'];
 
-                            $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
-                            $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
-                            $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+                                $share_url = $result['post_url'];
 
-                            if ($wp_post_id) {
-                                $update_broadcast->post_id = $wp_post_id;
-                                $flag = 1;
-                            }
-                            if ($post_id_joomla) {
-                                $update_broadcast->post_id_joomla = $post_id_joomla;
-                                $flag = 1;
-                            }
-                            if ($drupal_post_id) {
-                                $update_broadcast->post_id_drupal = $drupal_post_id;
-                                $flag = 1;
-                            }
-                            if ($flag) {
-                                $update_broadcast->save();
+                                $wp_post_id = isset($result['post_id_wp']) ? $result['post_id_wp'] : '';
+                                $post_id_joomla = isset($result['post_id_joomla']) ? $result['post_id_joomla'] : '';
+                                $drupal_post_id = isset($result['drupal_post_id']) ? $result['drupal_post_id'] : '';
+
+                                if ($wp_post_id) {
+                                    $update_broadcast->post_id = $wp_post_id;
+                                    $flag = 1;
+                                }
+                                if ($post_id_joomla) {
+                                    $update_broadcast->post_id_joomla = $post_id_joomla;
+                                    $flag = 1;
+                                }
+                                if ($drupal_post_id) {
+                                    $update_broadcast->post_id_drupal = $drupal_post_id;
+                                    $flag = 1;
+                                }
+                                if ($flag) {
+                                    $update_broadcast->save();
+                                }
                             }
                         }
                     } catch (Exception $ex) {
@@ -258,6 +269,7 @@ class PluginFunctions
 
     public function make_plugin_call_edit($broadcast_id)
     {
+        $fgc_headers = [];
         $broadcast = array();
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
             ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
@@ -341,9 +353,12 @@ class PluginFunctions
                 if (strpos($data->url, 'localhost') === false) {
 
                     try {
-                        $result = file_get_contents($go, false, stream_context_create($opts));
-                        $result = json_decode($result, true);
-                        return $result;
+                        $fgc_headers = @get_headers($go, 1);
+                        if (!empty($fgc_headers) && isset($fgc_headers[0]) && $fgc_headers[0] == 'HTTP/1.1 200 OK') {
+                            $result = file_get_contents($go, false, stream_context_create($opts));
+                            $result = json_decode($result, true);
+                            return $result;
+                        }
                     } catch (Exception $ex) {
                         Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
@@ -354,6 +369,7 @@ class PluginFunctions
 
     public function make_plugin_call_delete($broadcast_id)
     {
+        $fgc_headers = [];
         $broadcast = array();
         $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
             ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
@@ -372,8 +388,11 @@ class PluginFunctions
                 $this->stream_context_default();
                 if (strpos($data->url, 'localhost') === false) {
                     try {
-                        $result = file_get_contents($go);
-                        return $result;
+                        $fgc_headers = @get_headers($go, 1);
+                        if (!empty($fgc_headers) && isset($fgc_headers[0]) && $fgc_headers[0] == 'HTTP/1.1 200 OK') {
+                            $result = file_get_contents($go);
+                            return $result;
+                        }
                     } catch (Exception $ex) {
                         Log::error($ex->getFile() . '] ' . $ex->getLine() . ': ' . $ex->getMessage());
                     }
