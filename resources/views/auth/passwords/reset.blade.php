@@ -14,7 +14,9 @@
         .error-test-color{
             color: red !important;
           }
-
+          .wrapper{
+            background-color: #383838;
+        }
     </style>
 @endpush
 
