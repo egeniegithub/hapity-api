@@ -81,6 +81,11 @@ class User extends Authenticatable implements JWTSubject
     public function plugins() {
         return $this->hasMany('App\PluginId', 'user_id');
     }
+    public function hasPlugin($user_id)
+    {
+        return null !== $this->plugins()->where('user_id', $user_id)->first();
+    }
+
     public function reportedUser(){
         return $this->hasMany('App\ReportUser','reported_user_id');
     }
