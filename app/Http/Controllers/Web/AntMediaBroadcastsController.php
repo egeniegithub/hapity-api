@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Broadcast;
 use App\Http\Controllers\Controller;
+use App\Http\Helpers\PluginFunctions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -99,6 +100,12 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->share_url = route('broadcasts.view', [$broadcast->id]);
                 $broadcast->save();
 
+                if ((Auth::user()->hasPlugin(Auth::user()->id) && isset($request->post_plugin) && $request->post_plugin == 'true') && (isset($broadcast->id) && !empty($broadcast->id))) {
+                    $broadcast_image = !empty($broadcast->broadcast_image) ? $broadcast->broadcast_image : '';
+                    $plugin = new PluginFunctions();
+                    $plugin->make_plugin_call($broadcast->id, $broadcast_image);
+                }
+
                 echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
 
                 break;
@@ -122,6 +129,12 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
                     $broadcast->save();
 
+                    if (Auth::user()->hasPlugin(Auth::user()->id)) {
+                        $plugin = new PluginFunctions();
+                        $plugin->make_plugin_call_edit($broadcast->id);
+                        // $result = json_encode($response, true);
+                    }
+
                     echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
                     exit();
                 }
@@ -137,6 +150,12 @@ class AntMediaBroadcastsController extends Controller
                 if (!is_null($broadcast) && $broadcast->id > 0) {
                     $broadcast->status = 'offline';
                     $broadcast->save();
+
+                    if (Auth::user()->hasPlugin(Auth::user()->id)) {
+                        $plugin = new PluginFunctions();
+                        $plugin->make_plugin_call_edit($broadcast->id);
+                        // $result = json_encode($response, true);
+                    }
                 }
 
                 echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast_id]);
@@ -156,13 +175,22 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->status = 'offline';
                 $broadcast->timestamp = date('Y-m-d H:i:s');
                 $broadcast->filename = $broadcast_video;
-                $broadcast->video_name = $broadcast_video;
+                $broadcast->video_name = !empty($broadcast_video) ? $broadcast_video : '';
                 $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
                 $broadcast->share_url = '';
                 $broadcast->save();
 
                 $broadcast->share_url = route('broadcasts.view', [$broadcast->id]);
                 $broadcast->save();
+
+                if ((Auth::user()->hasPlugin(Auth::user()->id) && isset($request->post_plugin) && $request->post_plugin == 'true') && (isset($broadcast->id) && !empty($broadcast->id))) {
+                    $plugin = new PluginFunctions();
+                    $result = $plugin->make_plugin_call_upload($broadcast->id);
+                    if (!empty($result)) {
+                        $broadcast->share_url = $result;
+                        $broadcast->save();
+                    } 
+                }
 
                 echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
                 exit();
@@ -279,6 +307,16 @@ class AntMediaBroadcastsController extends Controller
         }
 
         return $to_return;
+    }
+
+    public function view_broadcast($broadcast_id){
+
+        $broadcast = Broadcast::with(['user'])->find($broadcast_id);
+        if (!is_null($broadcast)) {
+            return view('ant_media_broadcasts.view-broadcast', compact('broadcast'));
+        } else {
+            return back();
+        }
     }
 
 }

@@ -63,4 +63,18 @@ class WidgetController extends Controller
         }
 
     }
+
+    public function ant_media_widget(Request $request){
+        
+        if (isset($request['stream'])) {
+            $user_id = isset($request['user_id']) ? $request['user_id'] : '0';
+
+            $data['b_id'] = isset($request['bid']) ? $request['bid'] : '';
+            $data['broadcast'] = Broadcast::find($data['b_id']);
+
+            return view('widget.ant_media.widget', $data);
+        } else {
+            return "<h1 style='text-align:center;'>No broadcast found</h1>";
+        }
+    }
 }
