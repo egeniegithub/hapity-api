@@ -2,6 +2,7 @@
 namespace App\Http\Helpers;
 
 use App\Broadcast;
+use Exception;
 use Illuminate\Support\Facades\Log;
 
 class PluginFunctions
@@ -397,14 +398,21 @@ class PluginFunctions
 
     private function check_if_domain_is_available($host, $port = 80, $timeout = 6)
     {
-        $fsock = fsockopen($host, $port, $errno, $errstr, $timeout);
-        if (!$fsock) {
-            Log::log('debug', 'Domain is not available!');
-            return false;
-        } else {
-            Log::log('debug', 'Domain is available!');
-            return true;
+        $host = parse_url($host, PHP_URL_HOST);
+        $port = 80;
+        $timeout = 7;
+
+        $web_up = false;
+        try {
+            $fsock = fsockopen($host, $port, $errno, $errstr, $timeout);
+            $web_up = true;
+            Log::info('[ ' . $host . ' ] Status: Up');
+        } catch (Exception $ex) {
+            $web_up = false;
+            Log::info('[ ' . $host . ' ] Status: Down');
         }
+
+        return $web_up;
     }
 
 }
