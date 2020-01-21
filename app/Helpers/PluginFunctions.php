@@ -426,6 +426,8 @@ class PluginFunctions
 
         curl_close($curlInit);
 
+        Log::log('debug', print_r($response, true));
+
         if ($response) {
             return true;
         }
