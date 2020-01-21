@@ -399,9 +399,6 @@ class PluginFunctions
     private function check_if_domain_is_available($host, $port = 80, $timeout = 6)
     {
         $host = parse_url($host, PHP_URL_HOST);
-        $port = 80;
-        $timeout = 7;
-
         $web_up = false;
         try {
             $fsock = fsockopen($host, $port, $errno, $errstr, $timeout);
