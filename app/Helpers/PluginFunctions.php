@@ -90,7 +90,7 @@ class PluginFunctions
                 $this->stream_context_default();
                 if (strpos($data->url, 'localhost') === false) {
 
-                    $domain_available = $this->check_if_domain_is_available($$data->url);
+                    $domain_available = $this->check_if_domain_is_available($data->url);
                     if ($domain_available == true) {
                         $result = @file_get_contents($go, false, $context);
                         $result = json_decode($result, true);
@@ -210,7 +210,7 @@ class PluginFunctions
                 $this->stream_context_default();
                 if (strpos($data->url, 'localhost') === false) {
 
-                    $domain_available = $this->check_if_domain_is_available($$data->url);
+                    $domain_available = $this->check_if_domain_is_available($data->url);
                     if ($domain_available == true) {
                         $result = @file_get_contents($go, false, $context);
                         $result = json_decode($result, true);
@@ -336,7 +336,7 @@ class PluginFunctions
                 $this->stream_context_default();
                 if (strpos($data->url, 'localhost') === false) {
 
-                    $domain_available = $this->check_if_domain_is_available($$data->url);
+                    $domain_available = $this->check_if_domain_is_available($data->url);
                     if ($domain_available == true) {
 
                         $result = @file_get_contents($go, false, stream_context_create($opts));
@@ -372,7 +372,7 @@ class PluginFunctions
                 $this->stream_context_default();
                 if (strpos($data->url, 'localhost') === false) {
 
-                    $domain_available = $this->check_if_domain_is_available($$data->url);
+                    $domain_available = $this->check_if_domain_is_available($data->url);
 
                     if ($domain_available == true) {
                         $result = @file_get_contents($go);
