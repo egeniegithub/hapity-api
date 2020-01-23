@@ -2,71 +2,72 @@
 namespace App\Http\Helpers;
 
 use App\Broadcast;
+use App\PluginId;
 use Exception;
 use Illuminate\Support\Facades\Log;
+use App\UserProfile;
 
 class PluginFunctions
 {
-    public function make_plugin_call_upload($bid)
+    public function make_plugin_call_upload($broadcast_id)
     {
         $share_url = '';
-        $broadcast_id = $bid;
-        $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
-            ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
-            ->rightJoin('plugin_ids as pid', 'pid.user_id', '=', 'u.id')
-            ->where('broadcasts.id', $broadcast_id)->get();
+        $broadcast = Broadcast::with(['user'])->where('id', $broadcast_id)->first();
 
-        if (sizeof($broadcast) > 0) {
-            foreach ($broadcast as $data) {
-                $title = $data->title;
-                $description = $data->description;
-                // $stream_url = str_replace("/live/", "/vod/", $data->stream_url);
-                $status = isset($data->status) ? $data->status : 'offline';
-                $stream_url = $data->filename;
+        if (!is_null($broadcast) && $broadcast->id > 0) {
+            $plugin = PluginId::where('user_id', $broadcast->user_id)->orderBy('id', 'DESC')->first();
+            $auth_key = UserProfile::where('user_id', $broadcast->user_id)->first()->auth_key;
 
-                if ($data->broadcast_image) {
-                    $image = $data->broadcast_image;
+            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key)) {
+
+                $title = $broadcast->title;
+                $description = $broadcast->description;
+                $status = isset($broadcast->status) ? $broadcast->status : 'offline';
+                $stream_url = $broadcast->filename;
+
+                if ($broadcast->broadcast_image) {
+                    $image = $broadcast->broadcast_image;
                 } else {
                     $image = public_path('images/default001.jpg');
                 }
 
-                if ($data->type == 'drupal') {
+                if ($plugin->type == 'drupal') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
-                            'broadcast_image' => $data->broadcast_image,
+                            'key' => $auth_key,
+                            'broadcast_image' => $broadcast->broadcast_image,
                             'description' => $description,
                             'action' => 'hpb_hp_new_broadcast',
                         )
                     );
-                } else if ($data->type == 'wordpress') {
+                } else if ($plugin->type == 'wordpress') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
-                            'broadcast_image' => $data->broadcast_image,
+                            'key' => $auth_key,
+                            'broadcast_image' => $broadcast->broadcast_image,
                             'description' => $description,
                         )
                     );
-                } else if ($data->type == 'joomla') {
+                } else if ($plugin->type == 'joomla') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
-                            'broadcast_image' => $data->broadcast_image,
+                            'key' => $auth_key,
+                            'broadcast_image' => $broadcast->broadcast_image,
                             'description' => $description,
                         )
                     );
@@ -80,25 +81,25 @@ class PluginFunctions
 
                 $context = stream_context_create($opts);
 
-                if ($data->type == 'wordpress') {
-                    $go = $data->url . '?action=hpb_hp_new_broadcast';
-                } else if ($data->type == 'drupal') {
-                    $go = $data->url;
-                } else if ($data->type == 'joomla') {
-                    $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
+                if ($plugin->type == 'wordpress') {
+                    $go = $plugin->url . '?action=hpb_hp_new_broadcast';
+                } else if ($plugin->type == 'drupal') {
+                    $go = $plugin->url;
+                } else if ($plugin->type == 'joomla') {
+                    $go = $plugin->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
                 $this->stream_context_default();
-                if (strpos($data->url, 'localhost') === false) {
+                if (strpos($plugin->url, 'localhost') === false) {
 
-                    $domain_available = $this->check_if_domain_is_available($data->url);
+                    $domain_available = $this->check_if_domain_is_available($plugin->url);
                     if ($domain_available == true) {
                         $result = @file_get_contents($go, false, $context);
                         $result = json_decode($result, true);
 
-                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result,true));
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result, true));
 
                         if (!empty($result)) {
-                            $update_broadcast = Broadcast::find($bid);
+                            $update_broadcast = Broadcast::find($broadcast_id);
                             $flag = 0;
                             $update_broadcast->share_url = $result['post_url'];
 
@@ -136,58 +137,58 @@ class PluginFunctions
 
     public function make_plugin_call($broadcast_id, $image)
     {
-        $broadcast = array();
-        $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
-            ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
-            ->rightJoin('plugin_ids as pid', 'pid.user_id', '=', 'u.id')
-            ->where('broadcasts.id', $broadcast_id)->get();
+        $broadcast = Broadcast::with(['user'])->where('id', $broadcast_id)->first();
 
-        if (count($broadcast) > 0) {
-            foreach ($broadcast as $data) {
-                $title = $data->title;
-                $description = $data->description;
-                $stream_url = $data->filename;
-                $status = isset($data->status) ? $data->status : 'offline';
+        if (!is_null($broadcast) && $broadcast->id > 0) {
+            $plugin = PluginId::where('user_id', $broadcast->user_id)->orderBy('id', 'DESC')->first();
+            $auth_key = UserProfile::where('user_id', $broadcast->user_id)->first()->auth_key;
+
+            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key)) {
+
+                $title = $broadcast->title;
+                $description = $broadcast->description;
+                $stream_url = $broadcast->filename;
+                $status = isset($broadcast->status) ? $broadcast->status : 'offline';
 
                 $headers = array(
                     'Content-type: application/xwww-form-urlencoded',
                 );
-                if ($data->type == 'drupal') {
-                    $postdata = http_build_query(
+                if ($plugin->type == 'drupal') {
+                    $postplugin = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
+                            'key' => $auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
                             'action' => 'hpb_hp_new_broadcast',
                         )
                     );
-                } else if ($data->type == 'wordpress') {
+                } else if ($plugin->type == 'wordpress') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
+                            'key' => $auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
                         )
                     );
-                } else if ($data->type == 'joomla') {
+                } else if ($plugin->type == 'joomla') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
+                            'key' => $auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
                         )
@@ -200,22 +201,22 @@ class PluginFunctions
                 ),
                 );
                 $context = stream_context_create($opts);
-                if ($data->type == 'wordpress') {
-                    $go = $data->url . '?action=hpb_hp_new_broadcast';
-                } else if ($data->type == 'drupal') {
-                    $go = $data->url; // . '?action=hpb_hp_new_broadcast';
-                } else if ($data->type == 'joomla') {
-                    $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
+                if ($plugin->type == 'wordpress') {
+                    $go = $plugin->url . '?action=hpb_hp_new_broadcast';
+                } else if ($plugin->type == 'drupal') {
+                    $go = $plugin->url; // . '?action=hpb_hp_new_broadcast';
+                } else if ($plugin->type == 'joomla') {
+                    $go = $plugin->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
                 $this->stream_context_default();
-                if (strpos($data->url, 'localhost') === false) {
+                if (strpos($plugin->url, 'localhost') === false) {
 
-                    $domain_available = $this->check_if_domain_is_available($data->url);
+                    $domain_available = $this->check_if_domain_is_available($plugin->url);
                     if ($domain_available == true) {
                         $result = @file_get_contents($go, false, $context);
                         $result = json_decode($result, true);
 
-                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result,true));
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result, true));
 
                         if (!empty($result)) {
                             $update_broadcast = Broadcast::find($broadcast_id);
@@ -254,65 +255,65 @@ class PluginFunctions
 
     public function make_plugin_call_edit($broadcast_id)
     {
-        $broadcast = array();
-        $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
-            ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
-            ->rightJoin('plugin_ids as pid', 'pid.user_id', '=', 'u.id')
-            ->where('broadcasts.id', $broadcast_id)->get();
+        $broadcast = Broadcast::with(['user'])->where('id', $broadcast_id)->first();
 
-        if (count($broadcast) > 0) {
-            foreach ($broadcast as $data) {
-                $title = $data['title'];
-                $description = $data->description;
-                $stream_url = $data->filename;
-                $image = $data->broadcast_image;
+        if (!is_null($broadcast) && $broadcast->id > 0) {
+            $plugin = PluginId::where('user_id', $broadcast->user_id)->orderBy('id', 'DESC')->first();
 
-                $status = isset($data->status) ? $data->status : 'offline';
+            $auth_key = UserProfile::where('user_id', $broadcast->user_id)->first()->auth_key;
+
+            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key)) {
+                $title = $broadcast->title;
+                $description = $broadcast->description;
+                $stream_url = $broadcast->filename;
+                $image = $broadcast->broadcast_image;
+
+                $status = isset($broadcast->status) ? $broadcast->status : 'offline';
 
                 $headers = array(
                     'Content-type: application/xwww-form-urlencoded',
                 );
 
-                if ($data->type == 'drupal') {
+                if ($plugin->type == 'drupal') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
+                            'key' => $auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
-                            'post_id_drupal' => $data->post_id_drupal,
+                            'post_id_drupal' => $broadcast->post_id_drupal,
                         )
                     );
-                } else if ($data->type == 'wordpress') {
+                } else if ($plugin->type == 'wordpress') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
+                            'key' => $auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
-                            'post_id_wp' => $data->post_id,
+                            'post_id_wp' => $broadcast->post_id,
                         )
                     );
-                } else if ($data->type == 'joomla') {
+                } else if ($plugin->type == 'joomla') {
                     $postdata = http_build_query(
                         array(
                             'title' => $title,
-                            'user_id' => $data->user_id,
+                            'user_id' => $plugin->user_id,
                             'stream_url' => $stream_url,
                             'bid' => $broadcast_id,
                             'status' => $status,
-                            'key' => $data->auth_key,
+                            'key' => $auth_key,
                             'broadcast_image' => $image,
                             'description' => $description,
-                            'post_id_joomla' => $data->post_id_joomla,
+                            'post_id_joomla' => $broadcast->post_id_joomla,
                         )
                     );
                 }
@@ -326,23 +327,23 @@ class PluginFunctions
 
                 $context = stream_context_create($opts);
 
-                if ($data->type == 'wordpress') {
-                    $go = $data->url . '?action=hpb_hp_edit_broadcast';
-                } else if ($data->type == 'drupal') {
-                    $go = $data->url . '?action=hpb_hp_edit_broadcast';
-                } else if ($data->type == 'joomla') {
-                    $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.editBroadcastData';
+                if ($plugin->type == 'wordpress') {
+                    $go = $plugin->url . '?action=hpb_hp_edit_broadcast';
+                } else if ($plugin->type == 'drupal') {
+                    $go = $plugin->url . '?action=hpb_hp_edit_broadcast';
+                } else if ($plugin->type == 'joomla') {
+                    $go = $plugin->url . 'index.php?option=com_hapity&task=savebroadcast.editBroadcastData';
                 }
                 $this->stream_context_default();
-                if (strpos($data->url, 'localhost') === false) {
+                if (strpos($plugin->url, 'localhost') === false) {
 
-                    $domain_available = $this->check_if_domain_is_available($data->url);
+                    $domain_available = $this->check_if_domain_is_available($plugin->url);
                     if ($domain_available == true) {
 
                         $result = @file_get_contents($go, false, stream_context_create($opts));
                         $result = json_decode($result, true);
 
-                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result,true));
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result, true));
 
                         return $result;
                     }
@@ -354,36 +355,36 @@ class PluginFunctions
 
     public function make_plugin_call_delete($broadcast_id)
     {
-        $broadcast = array();
-        $broadcast = Broadcast::leftJoin('users as u', 'u.id', '=', 'broadcasts.user_id')
-            ->leftJoin('user_profiles as up', 'up.user_id', '=', 'u.id')
-            ->rightJoin('plugin_ids as pid', 'pid.user_id', '=', 'u.id')
-            ->where('broadcasts.id', $broadcast_id)->get();
+        $broadcast = Broadcast::with(['user'])->where('id', $broadcast_id)->first();
 
-        if (!empty($broadcast) && count($broadcast) > 0) {
-            foreach ($broadcast as $data) {
-                if ($data->type == 'wordpress') {
-                    $go = $data->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_wp=' . $data->post_id;
-                } else if ($data->type == 'drupal') {
-                    $go = $data->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_drupal=' . $data->post_id_drupal;
-                } else if ($data->type == 'joomla') {
-                    $go = $data->url . 'index.php?option=com_hapity&task=savebroadcast.deleteBroadcastData&bid=' . $broadcast_id . '&key=' . $data->auth_key . '&post_id_joomla=' . $data->post_id_joomla;
-                }
-                $this->stream_context_default();
-                if (strpos($data->url, 'localhost') === false) {
+        if (!is_null($broadcast) && $broadcast->id > 0) {
+            $plugin = PluginId::where('user_id', $broadcast->user_id)->orderBy('id', 'DESC')->first();
+            $auth_key = UserProfile::where('user_id', $broadcast->user_id)->first()->auth_key;
 
-                    $domain_available = $this->check_if_domain_is_available($data->url);
+            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key)) {
 
-                    if ($domain_available == true) {
-                        $result = @file_get_contents($go);
-                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result,true));
-                        return $result;
+                    if ($plugin->type == 'wordpress') {
+                        $go = $plugin->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_wp=' . $broadcast->post_id;
+                    } else if ($plugin->type == 'drupal') {
+                        $go = $plugin->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_drupal=' . $broadcast->post_id_drupal;
+                    } else if ($plugin->type == 'joomla') {
+                        $go = $plugin->url . 'index.php?option=com_hapity&task=savebroadcast.deleteBroadcastData&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_joomla=' . $broadcast->post_id_joomla;
+                    }
+                    $this->stream_context_default();
+                    if (strpos($plugin->url, 'localhost') === false) {
+
+                        $domain_available = $this->check_if_domain_is_available($plugin->url);
+
+                        if ($domain_available == true) {
+                            $result = @file_get_contents($go);
+                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result, true));
+                            return $result;
+                        }
+
                     }
 
                 }
-
             }
-        }
     }
 
     public function stream_context_default()
@@ -403,10 +404,10 @@ class PluginFunctions
         try {
             $fsock = fsockopen($host, $port, $errno, $errstr, $timeout);
             $web_up = true;
-            Log::info('[ ' . print_r($host,true) . ' ] Status: Up');
+            Log::info('[ ' . print_r($host, true) . ' ] Status: Up');
         } catch (Exception $ex) {
             $web_up = false;
-            Log::info('[ ' . print_r($host,true) . ' ] Status: Down');
+            Log::info('[ ' . print_r($host, true) . ' ] Status: Down');
         }
 
         return $web_up;
