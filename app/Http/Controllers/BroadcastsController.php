@@ -8,6 +8,8 @@ use App\Http\Helpers\PluginFunctions;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator as FacadesValidator;
 use Image;
 use \Validator;
 
@@ -21,6 +23,8 @@ class BroadcastsController extends Controller
 
     public function upload(Request $request)
     {
+        Log::log('info', 'upload: ' . json_encode($request->all()));
+
         $rules = array(
             'user_id' => 'required',
         );
@@ -30,7 +34,7 @@ class BroadcastsController extends Controller
             'video' => 'size:524288|mimes:mp4',
         );
 
-        $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = FacadesValidator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             $messages = $validator->errors()->all();
@@ -111,6 +115,8 @@ class BroadcastsController extends Controller
 
     public function start(Request $request)
     {
+        Log::log('info', 'start: ' . json_encode($request->all()));
+
         $rules = array(
             'user_id' => 'required',
         );
@@ -185,6 +191,8 @@ class BroadcastsController extends Controller
 
     public function edit(Request $request)
     {
+        Log::log('info', 'edit: ' . json_encode($request->all()));
+
         $rules = array(
             'broadcast_id' => 'required',
         );
@@ -242,7 +250,7 @@ class BroadcastsController extends Controller
         $stream_video_info = $this->handle_video_file_upload($request);
         if (!empty($stream_video_info)) {
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
-            if (file_exists($file_path)) {
+            if (!empty($broadcast->filename) && file_exists($file_path)) {
                 unlink($file_path);
             }
 
@@ -293,6 +301,8 @@ class BroadcastsController extends Controller
     //params - token, user_id, stream_id, stream_url
     public function delete(Request $request)
     {
+        Log::log('info', 'delete: ' . json_encode($request->all()));
+
         $input = $request->all();
 
         $rules = array(
@@ -321,14 +331,14 @@ class BroadcastsController extends Controller
             Broadcast::where('user_id', $input['user_id'])->where(['id' => $input['broadcast_id']])->delete();
 
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
-            if (file_exists($file_path)) {
+            if (!empty($file_name) && file_exists($file_path)) {
                 unlink($file_path);
                 // exec('rm -f ' . $file_path);
             }
             if (!empty($streamURL['broadcast_image'])) {
                 $image_name = $streamURL['broadcast_image'];
                 $image_file_path = public_path('images' . DIRECTORY_SEPARATOR . 'broadcasts' . DIRECTORY_SEPARATOR . $input['user_id'] . DIRECTORY_SEPARATOR . $image_name);
-                if (file_exists($image_file_path)) {
+                if (!empty($streamURL['broadcast_image']) && file_exists($image_file_path)) {
                     unlink($image_file_path);
                     // exec('rm -f ' . $file_path);
                 }
@@ -351,6 +361,8 @@ class BroadcastsController extends Controller
 
     public function all_user_broadcasts(Request $request)
     {
+        Log::log('info', 'all broadcasts: ' . json_encode($request->all()));
+
         $rules = array(
             'user_id' => 'required',
         );
@@ -427,6 +439,8 @@ class BroadcastsController extends Controller
 
     public function update_timestamp(Request $request)
     {
+        Log::log('info', 'update timestamp: ' . json_encode($request->all()));
+
         $rules = array(
             'broadcast_id' => 'required',
         );
@@ -464,6 +478,8 @@ class BroadcastsController extends Controller
 
     public function stop_broadcast(Request $request)
     {
+        Log::log('info', 'stop: ' . json_encode($request->all()));
+
         $rules = array(
             'broadcast_id' => 'required',
         );
@@ -583,6 +599,8 @@ class BroadcastsController extends Controller
 
     public function download(Request $request)
     {
+        Log::log('info', 'download: ' . json_encode($request->all()));
+
         $broadcast_id = $request->get('broadcast_id');
 
         $file_name = $request->get('file_name');
