@@ -3,9 +3,9 @@ namespace App\Http\Helpers;
 
 use App\Broadcast;
 use App\PluginId;
+use App\UserProfile;
 use Exception;
 use Illuminate\Support\Facades\Log;
-use App\UserProfile;
 
 class PluginFunctions
 {
@@ -96,7 +96,7 @@ class PluginFunctions
                         $result = @file_get_contents($go, false, $context);
                         $result = json_decode($result, true);
 
-                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result, true));
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . json_encode($result));
 
                         if (!empty($result)) {
                             $update_broadcast = Broadcast::find($broadcast_id);
@@ -216,7 +216,7 @@ class PluginFunctions
                         $result = @file_get_contents($go, false, $context);
                         $result = json_decode($result, true);
 
-                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result, true));
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . json_encode($result));
 
                         if (!empty($result)) {
                             $update_broadcast = Broadcast::find($broadcast_id);
@@ -343,7 +343,7 @@ class PluginFunctions
                         $result = @file_get_contents($go, false, stream_context_create($opts));
                         $result = json_decode($result, true);
 
-                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result, true));
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . json_encode($result));
 
                         return $result;
                     }
@@ -363,28 +363,28 @@ class PluginFunctions
 
             if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key)) {
 
-                    if ($plugin->type == 'wordpress') {
-                        $go = $plugin->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_wp=' . $broadcast->post_id;
-                    } else if ($plugin->type == 'drupal') {
-                        $go = $plugin->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_drupal=' . $broadcast->post_id_drupal;
-                    } else if ($plugin->type == 'joomla') {
-                        $go = $plugin->url . 'index.php?option=com_hapity&task=savebroadcast.deleteBroadcastData&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_joomla=' . $broadcast->post_id_joomla;
-                    }
-                    $this->stream_context_default();
-                    if (strpos($plugin->url, 'localhost') === false) {
+                if ($plugin->type == 'wordpress') {
+                    $go = $plugin->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_wp=' . $broadcast->post_id;
+                } else if ($plugin->type == 'drupal') {
+                    $go = $plugin->url . '?action=hpb_hp_delete_broadcast&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_drupal=' . $broadcast->post_id_drupal;
+                } else if ($plugin->type == 'joomla') {
+                    $go = $plugin->url . 'index.php?option=com_hapity&task=savebroadcast.deleteBroadcastData&bid=' . $broadcast_id . '&key=' . $auth_key . '&post_id_joomla=' . $broadcast->post_id_joomla;
+                }
+                $this->stream_context_default();
+                if (strpos($plugin->url, 'localhost') === false) {
 
-                        $domain_available = $this->check_if_domain_is_available($plugin->url);
+                    $domain_available = $this->check_if_domain_is_available($plugin->url);
 
-                        if ($domain_available == true) {
-                            $result = @file_get_contents($go);
-                            Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . print_r($result, true));
-                            return $result;
-                        }
-
+                    if ($domain_available == true) {
+                        $result = @file_get_contents($go);
+                        Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . json_encode($result));
+                        return $result;
                     }
 
                 }
+
             }
+        }
     }
 
     public function stream_context_default()
@@ -404,10 +404,10 @@ class PluginFunctions
         try {
             $fsock = fsockopen($host, $port, $errno, $errstr, $timeout);
             $web_up = true;
-            Log::info('[ ' . print_r($host, true) . ' ] Status: Up');
+            Log::info('[ ' . json_encode($host) . ' ] Status: Up');
         } catch (Exception $ex) {
             $web_up = false;
-            Log::info('[ ' . print_r($host, true) . ' ] Status: Down');
+            Log::info('[ ' . json_encode($host) . ' ] Status: Down');
         }
 
         return $web_up;
