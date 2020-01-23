@@ -10,6 +10,12 @@
 | contains the "web" middleware group. Now create something great!
 |
  */
+Route::get('route/for/check/php/info/version/details', function(){
+    ob_start();
+    phpinfo();
+    return ob_get_clean();
+ });
+
 
 Route::get('/', 'Web\HomeController@index')->name('home');
 Route::get('help', 'Web\HelpController@index')->name('help');
