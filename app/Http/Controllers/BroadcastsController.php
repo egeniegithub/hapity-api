@@ -34,7 +34,7 @@ class BroadcastsController extends Controller
             'video' => 'size:524288|mimes:mp4',
         );
 
-        $validator = FacadesValidator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
 
         if ($validator->fails()) {
             $messages = $validator->errors()->all();
