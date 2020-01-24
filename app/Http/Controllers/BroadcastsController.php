@@ -24,6 +24,7 @@ class BroadcastsController extends Controller
     public function upload(Request $request)
     {
         Log::log('info', 'upload: ' . json_encode($request->all()));
+        Log::log('info', 'upload files:' . json_encode($_FILES));
 
         $rules = array(
             'user_id' => 'required',
@@ -192,6 +193,7 @@ class BroadcastsController extends Controller
     public function edit(Request $request)
     {
         Log::log('info', 'edit: ' . json_encode($request->all()));
+        Log::log('info', 'edit files: ' . json_encode($_FILES));
 
         $rules = array(
             'broadcast_id' => 'required',
