@@ -82,6 +82,11 @@ Route::group([
 
 });
 
+// redirect new forget password route
+Route::get('home/forget_password',function(){
+    return redirect()->route('password.request');
+});
+
 Route::get('widget', 'Web\WidgetController@index')->name('widget.index');
 
 Route::get('/test', 'Web\HomeController@test')->name('test');
