@@ -9,9 +9,8 @@ use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator as FacadesValidator;
+use Illuminate\Support\Facades\Validator;
 use Image;
-use \Validator;
 
 class BroadcastsController extends Controller
 {
