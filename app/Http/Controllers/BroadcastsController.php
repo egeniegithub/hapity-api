@@ -291,12 +291,12 @@ class BroadcastsController extends Controller
         }
         $response['response'] = 'editbroadcast';
 
-        if (boolval($request->input('post_plugin'))) {
+        // if (boolval($request->input('post_plugin'))) {
             //TODO debug this
             $plugin = new PluginFunctions();
             $share_url = $plugin->make_plugin_call_edit($broadcast_id);
-        }
-
+        // }
+    
         return response()->json(['response' => $response]);
     }
 
