@@ -250,18 +250,19 @@ class BroadcastsController extends Controller
         $broadcast->save();
 
         $stream_video_info = $this->handle_video_file_upload($request);
+        Log::log('info', 'video file info: ' . json_encode($stream_video_info));
+
         if (!empty($stream_video_info)) {
             $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
             if (!empty($broadcast->filename) && file_exists($file_path)) {
                 unlink($file_path);
             }
 
-            if ($request->has('video')) {
-                $broadcast->stream_url = $stream_video_info['file_stream_url'];
-                $broadcast->filename = $stream_video_info['file_name'];
-                $broadcast->video_name = $stream_video_info['file_original_name'];
-                $broadcast->save();
-            }
+            $broadcast->stream_url = $stream_video_info['file_stream_url'];
+            $broadcast->filename = $stream_video_info['file_name'];
+            $broadcast->video_name = $stream_video_info['file_name'];
+            $broadcast->save();
+
         }
 
         $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $broadcast->user_id);
