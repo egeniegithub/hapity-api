@@ -66,3 +66,23 @@ if(!function_exists('post_url_for_admin_broadcast')){
         return $share_url;
     }
 }
+
+
+if (!function_exists('handle_heic_extension_image')) {
+    function handle_heic_extension_image($target_path, $file_name)
+    {
+
+        $im = new \Imagick();
+        $im->setFormat('jpg');
+        $im->readImageFile($target_path . $file_name);
+
+        $new_file_name = md5(time()) . '.' .'jpg';
+
+        $im->writeImage($target_path . $new_file_name);
+        $im->destroy();
+
+        return $new_file_name;
+
+    }
+}
+
