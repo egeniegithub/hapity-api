@@ -292,9 +292,9 @@ class BroadcastsController extends Controller
         $response['response'] = 'editbroadcast';
 
         // if (boolval($request->input('post_plugin'))) {
-            //TODO debug this
-            $plugin = new PluginFunctions();
-            $share_url = $plugin->make_plugin_call_edit($broadcast_id);
+        //TODO debug this
+        $plugin = new PluginFunctions();
+        $share_url = $plugin->make_plugin_call_edit($broadcast_id);
         // }
 
         return response()->json(['response' => $response]);
@@ -638,7 +638,7 @@ class BroadcastsController extends Controller
             $file->move($path, $thumbnail_image);
 
             if (strtolower($ext) == 'heic') {
-               $thumbnail_image =  handle_heic_extension_image($path, $thumbnail_image);
+                $thumbnail_image = handle_heic_extension_image($path, $thumbnail_image);
             }
 
             $this->fix_image_orientation($path . $thumbnail_image);

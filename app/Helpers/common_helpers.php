@@ -19,54 +19,53 @@ if (!function_exists('ffmpeg_upload_file_path')) {
             Log::channel('ffmpeg_logs')->info('ffprobe Result:  ' . $shell_exec);
 
 //            if (intval($shell_exec) == 90) {
-                $commands = '';
-                $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
+            $commands = '';
+            $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
 
-                $shell_exec = shell_exec($commands);
-                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
-                Log::channel('ffmpeg_logs')->info($commands);
-                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
+            $shell_exec = shell_exec($commands);
+            Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
+            Log::channel('ffmpeg_logs')->info($commands);
+            Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
 //            } else {
-//                $commands = '';
-//                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
-//
-//                $shell_exec = shell_exec($commands);
-//                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
-//                Log::channel('ffmpeg_logs')->info($commands);
-//                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
-//
-//            }
+            //                $commands = '';
+            //                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
+            //
+            //                $shell_exec = shell_exec($commands);
+            //                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
+            //                Log::channel('ffmpeg_logs')->info($commands);
+            //                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
+            //
+            //            }
         }
     }
 }
 
-
-if(!function_exists('post_url_for_admin_broadcast')){
-    function post_url_for_admin_broadcast($user_id,$broadcast_id,$share_url){
+if (!function_exists('post_url_for_admin_broadcast')) {
+    function post_url_for_admin_broadcast($user_id, $broadcast_id, $share_url)
+    {
         $share_url = '';
-        $post_share_url = PluginId::where('user_id',$user_id)->orderBy('id','DESC')->first();
-        if(!empty($post_share_url)){
+        $post_share_url = PluginId::where('user_id', $user_id)->orderBy('id', 'DESC')->first();
+        if (!empty($post_share_url)) {
             $url = parse_url($post_share_url->url);
-            $post_url = $url['scheme'].'://'.$url['host'];
+            $post_url = $url['scheme'] . '://' . $url['host'];
             $post_type = $post_share_url->type;
-            if(!empty($post_url) && !empty($post_type)){
-                if($post_type == 'wordpress'){
-                    $share_url = $post_url.'/?p='.$broadcast_id;
-                }elseif($post_type == 'drupal'){
-                    $share_url = $post_url.'/node'.'/'.$broadcast_id;
-                }elseif($post_type == 'joomla'){
-                    $share_url = $post_url.'/?post='.$broadcast_id;
+            if (!empty($post_url) && !empty($post_type)) {
+                if ($post_type == 'wordpress') {
+                    $share_url = $post_url . '/?p=' . $broadcast_id;
+                } elseif ($post_type == 'drupal') {
+                    $share_url = $post_url . '/node' . '/' . $broadcast_id;
+                } elseif ($post_type == 'joomla') {
+                    $share_url = $post_url . '/?post=' . $broadcast_id;
                 }
-            }else{
+            } else {
                 $share_url = !empty($share_url) ? $share_url : route('broadcast.view', $broadcast_id);
             }
-        }else{
+        } else {
             $share_url = !empty($share_url) ? $share_url : route('broadcast.view', $broadcast_id);
         }
         return $share_url;
     }
 }
-
 
 if (!function_exists('handle_heic_extension_image')) {
     function handle_heic_extension_image($target_path, $file_name)
@@ -76,7 +75,7 @@ if (!function_exists('handle_heic_extension_image')) {
         $im->setFormat('jpg');
         $im->readImageFile($target_path . $file_name);
 
-        $new_file_name = md5(time()) . '.' .'jpg';
+        $new_file_name = md5(time()) . '.' . 'jpg';
 
         $im->writeImage($target_path . $new_file_name);
         $im->destroy();
@@ -85,4 +84,3 @@ if (!function_exists('handle_heic_extension_image')) {
 
     }
 }
-
