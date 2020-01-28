@@ -133,8 +133,7 @@ class BroadcastsController extends Controller
             return response()->json($response);
         }
 
-        $server = $this->getRandIp();
-        $stream_url = $this->make_streaming_server_url($server, $request->input('stream_url'), true);
+        $stream_url = $this->make_streaming_server_url($request->input('stream_url'), true);
 
         $user = User::find($request->input('user_id'));
 
@@ -161,7 +160,6 @@ class BroadcastsController extends Controller
             $broadcast->save();
         }
 
-        //$broadcast->share_url = route('view_broadcast', $broadcast->id);
         $broadcast->save();
 
         $response = [];
@@ -175,7 +173,7 @@ class BroadcastsController extends Controller
         } else {
             $response['image'] = asset('images/default-image-mobile.png');
         }
-        $response['server'] = $server;
+
         $response['response'] = 'startbroadcast';
 
         if (boolval($request->input('post_plugin'))) {
@@ -252,7 +250,7 @@ class BroadcastsController extends Controller
         Log::log('info', 'video file info: ' . json_encode($stream_video_info));
 
         if (!empty($stream_video_info)) {
-            // $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
+
             $file_path = base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename);
             if (!empty($broadcast->filename) && file_exists($file_path)) {
                 unlink($file_path);
@@ -292,11 +290,8 @@ class BroadcastsController extends Controller
         }
         $response['response'] = 'editbroadcast';
 
-        // if (boolval($request->input('post_plugin'))) {
-            //TODO debug this
             $plugin = new PluginFunctions();
             $share_url = $plugin->make_plugin_call_edit($broadcast_id);
-        // }
     
         return response()->json(['response' => $response]);
     }
@@ -333,7 +328,6 @@ class BroadcastsController extends Controller
 
             Broadcast::where('user_id', $input['user_id'])->where(['id' => $input['broadcast_id']])->delete();
 
-            // $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
              $file_path = base_path("antmedia_store" . DIRECTORY_SEPARATOR . $file_name);
 
             if (!empty($file_name) && file_exists($file_path)) {
@@ -388,20 +382,7 @@ class BroadcastsController extends Controller
 
         $broadcasts = [];
 
-        $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
-        $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
-
         foreach ($allUserBroadcast as $key => $broadcast) {
-
-            $file_info = !empty($broadcast->filename) ? pathinfo($broadcast->filename) : [];
-
-            $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
-
-            $file_name = $broadcast->filename;
-            if ($ext == 'stream' || $ext == 'stream_160p' || $ext == 'stream_360p') {
-                $file_name = $broadcast->filename . '.mp4';
-                $ext = 'mp4';
-            }
 
             $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
 
@@ -531,18 +512,8 @@ class BroadcastsController extends Controller
 
     }
 
-    private function getRandIp()
-    {
-        if (env('APP_ENV') == 'local') {
-            return '72.255.38.246';
-        } else {
-            $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
-            $index = rand(0, 1);
-            return $ip[0];
-        }
-    }
 
-    private function make_streaming_server_url($server, $file_name, $live = false)
+    private function make_streaming_server_url($file_name, $live = false)
     {
 
         if ($live == true) {
