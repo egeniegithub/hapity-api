@@ -252,7 +252,8 @@ class BroadcastsController extends Controller
         Log::log('info', 'video file info: ' . json_encode($stream_video_info));
 
         if (!empty($stream_video_info)) {
-            $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
+            // $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
+            $file_path = base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename);
             if (!empty($broadcast->filename) && file_exists($file_path)) {
                 unlink($file_path);
             }
@@ -332,7 +333,9 @@ class BroadcastsController extends Controller
 
             Broadcast::where('user_id', $input['user_id'])->where(['id' => $input['broadcast_id']])->delete();
 
-            $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
+            // $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
+             $file_path = base_path("antmedia_store" . DIRECTORY_SEPARATOR . $file_name);
+
             if (!empty($file_name) && file_exists($file_path)) {
                 unlink($file_path);
                 // exec('rm -f ' . $file_path);
@@ -400,9 +403,10 @@ class BroadcastsController extends Controller
                 $ext = 'mp4';
             }
 
-            $stream_url = !empty($broadcast->filename) ? 'http://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $file_name . '/playlist.m3u8' : '';
+            $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
+
             if ($broadcast->status == 'online') {
-                $stream_url = !empty($broadcast->filename) ? 'https://media.hapity.com/' . $live_app . '/' . $broadcast->filename . '/playlist.m3u8' : '';
+                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
             }
 
             $broadcastObj = [];
@@ -424,7 +428,8 @@ class BroadcastsController extends Controller
             $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
             $ext = $ext == 'mp4' ? '' : '.mp4';
             $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
-            if (file_exists($broadcast_stream_file_path) || (!empty($broadcast->broadcast_image) && empty($broadcast->stream_url)) || $broadcast->status == 'online') {
+
+            if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename)) || $broadcast->status == 'online') {
                 $broadcasts[] = $broadcastObj;
             }
 
@@ -540,21 +545,10 @@ class BroadcastsController extends Controller
     private function make_streaming_server_url($server, $file_name, $live = false)
     {
 
-        //Making Stream URL
-        $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
-        $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
-
-        $protocol = $live ? 'rtmp:' : 'http:';
-
-        $file_info = pathinfo($file_name);
-        $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
-
-        $ext = $ext == 'stream' ? 'mp4' : $ext;
-
         if ($live == true) {
-            $stream_url = $protocol . "//media.hapity.com:1935/" . $live_app . "/" . $file_name . '/playlist.m3u8';
+            $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
         } else {
-            $stream_url = $protocol . "//media.hapity.com:1935/" . $vod_app . "/" . $ext . ':' . $file_name . '/playlist.m3u8';
+            $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.mp4' : '';
         }
 
         return $stream_url;
@@ -572,29 +566,28 @@ class BroadcastsController extends Controller
 
             $temp_path = storage_path('temp');
 
-            $file_name = md5(time()) . ".stream." . $ext;
-            $wowza_path = base_path('wowza_store');
+            $file_name = "stream_" . time() . $ext;
+            $antmedia_path = base_path('antmedia_store');
 
-            $output_file_name = md5(time()) . ".stream.mp4";
+            $output_file_name = "stream_" . time() . ".mp4";
 
             $video_path = $video_file->move($temp_path, $file_name);
 
-            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
+            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
 
-            ffmpeg_upload_file_path($video_path->getRealPath(), $wowza_path . DIRECTORY_SEPARATOR . $output_file_name);
+            ffmpeg_upload_file_path($video_path->getRealPath(), $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
 
-            $server = $this->getRandIp();
-
-            $stream_url = $this->make_streaming_server_url($server, $file_name, false);
+            $stream_url = '';
 
             $to_return = [
                 'file_original_name' => $video_original_name,
                 'file_name' => $output_file_name,
-                'file_path' => $wowza_path . DIRECTORY_SEPARATOR . $output_file_name,
+                'file_path' => $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name,
                 'file_stream_url' => $stream_url,
-                'file_server' => $server,
+                'file_server' => 'https://stg-media.hapity.com:5443/',
             ];
         }
+
 
         return $to_return;
     }
@@ -613,7 +606,8 @@ class BroadcastsController extends Controller
             $file_name = $broadcast->filename;
         }
 
-        $path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $file_name);
+        $path = base_path("antmedia_store" . DIRECTORY_SEPARATOR . $file_name);
+
 
         if (is_file($path) && file_exists($path)) {
             return response()->download($path, $file_name . '.mp4');
