@@ -38,9 +38,8 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Auth::routes();
 
 Route::get('main/view_broadcast/{id}', 'Web\BroadcastsController@handle_old_view_broadcast')->name('redirect.old.view.broadcast');
-Route::get('view-broadcast/{id}', 'Web\BroadcastsController@view_broadcast')->name('broadcast.view');
-
-Route::get('ant-media-view-broadcast/{id}', 'Web\AntMediaBroadcastsController@view_broadcast')->name('ant.media.broadcast.view');
+// Route::get('view-broadcast/{id}', 'Web\BroadcastsController@view_broadcast')->name('broadcast.view');
+Route::get('view-broadcast/{id}', 'Web\AntMediaBroadcastsController@view_broadcast')->name('broadcast.view');
 
 Route::get('broadcast/views/update-count/{id}', 'Web\BroadcastsController@update_view_count')->name('broadcast.update.view.count');
 
@@ -112,8 +111,8 @@ Route::get('home/forget_password',function(){
     return redirect()->route('password.request');
 });
 
-Route::get('widget', 'Web\WidgetController@index')->name('widget.index');
+// Route::get('widget', 'Web\WidgetController@index')->name('widget.index');
 
-Route::get('ant/media/widget', 'Web\WidgetController@ant_media_widget')->name('ant.media.widget');
+Route::get('widget', 'Web\WidgetController@ant_media_widget')->name('widget.index');
 
 Route::get('/test', 'Web\HomeController@test')->name('test');
