@@ -85,7 +85,7 @@
                                                     <ul class="bordcast-edit-actions">
                                                         <li class="social-share-action">
                                                             <a href="#" data-toggle="modal" data-target="#share-modal">
-                                                                <img src="http://dev.hapity.local/assets/images/share.png" alt="social Media" width="28">
+                                                                <img src="{{ asset('assets') }}/images/share.png" alt="social Media" width="28">
                                                             </a>
                                                             <ul class="social-share-on" style="display: none;">
                                                                 <li>
@@ -108,12 +108,12 @@
                                                         </li>
                                                         <li class="social-share-action">
                                                             <a href="{{ route('broadcasts.edit', [$broadcast->id]) }}">
-                                                                <img src="http://dev.hapity.local/assets/images/edit.png" alt="Edit" width="28">
+                                                                <img src="{{ asset('assets') }}/images/edit.png" alt="Edit" width="28">
                                                             </a>
                                                         </li>
                                                         <li class="social-share-action">
                                                             <a href="javascript:void();" data-broadcast_id="{{ $broadcast->id }}" class="delete-btn">
-                                                                <img src="http://dev.hapity.local/assets/images/delete.png" alt="Delete" width="28">
+                                                                <img src="{{ asset('assets') }}/images/delete.png" alt="Delete" width="28">
                                                             </a>
                                                             <form id="form_delete_broadcast_{{ $broadcast->id }}" enctype="multipart/form-data" method="POST" action="{{ route('broadcasts.delete') }}">
                                                                 {{ csrf_field() }}
@@ -122,6 +122,22 @@
                                                             </form>
                                                         </li>
                                                     </ul>
+
+                                                    <div id="embed-code-popup-{{ $broadcast->id }}" class="modal-box_popup">
+                                                        <header> <a href="javascript:;" class="js-modal-close close">×</a>
+                                                            <h3 class="text-left">Copy & Paste below code in your website</h3>
+                                                        </header>
+                                                        <div class="modal-body">
+                                                            <div class="embedcode-modal-innser">
+                                                                <textarea readonly="">
+                                                                    <iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                                                src="{{ route('widget.index') }}?stream={{ $broadcast->video_name }}&title={{ $broadcast->title }}&status={{ $broadcast->status }}&bid={{ $broadcast->id }}&broadcast_image={{ $broadcast->broadcast_image }}&user_id={{ $broadcast->user_id }}">
+                                                                    </iframe>
+                                                                </textarea>                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                        
                                                 </div>
                                             </div>
                                         </div>
@@ -219,6 +235,12 @@
             );
             
         });
+
+        function closeModel(id){
+            var my_player = 'w-broadcast-'+id;
+            console.log(my_player);
+        }
+
     </script>
 @endpush
 
