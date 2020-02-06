@@ -93,7 +93,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->timestamp = date('Y-m-d H:i:s');
                 $broadcast->filename = $request->input('stream_name') . '.mp4';
                 $broadcast->video_name = $request->input('stream_name') . '.mp4';
-                $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APPEE .'/streams/' . $request->input('stream_name');
+                $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . $request->input('stream_name');
                 $broadcast->share_url = '';
                 $broadcast->save();
 
@@ -126,7 +126,7 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->timestamp = date('Y-m-d H:i:s');
                     $broadcast->filename = $broadcast_video;
                     $broadcast->video_name = $broadcast_video;
-                    $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APPEE .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
+                    $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
                     $broadcast->save();
 
                     if (Auth::user()->hasPlugin(Auth::user()->id)) {
@@ -176,7 +176,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->timestamp = date('Y-m-d H:i:s');
                 $broadcast->filename = $broadcast_video;
                 $broadcast->video_name = !empty($broadcast_video) ? $broadcast_video : '';
-                $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APPEE .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
+                $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
                 $broadcast->share_url = '';
                 $broadcast->save();
 

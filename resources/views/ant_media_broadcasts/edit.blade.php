@@ -27,7 +27,7 @@
                                         preload="auto"
                                         poster="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}"
                                         data-setup='{"fluid": true}'>
-                                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APPEE .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
                                         <p class="vjs-no-js">
                                             To view this video please enable JavaScript, and consider upgrading to a
                                             web browser that
@@ -416,11 +416,11 @@
 
         var host = 'stg-media.hapity.com';
         var port = '5443';
-        var appName = '{{ WEBRTC_APPEE }}/';
+        var appName = '{{ WEBRTC_APP }}/';
     
         //var appName = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
         //var path =  location.hostname + ":" + location.port + appName + "websocket";
-        var path =  `${host}:${port}/{{ WEBRTC_APPEE }}/websocket`;
+        var path =  `${host}:${port}/{{ WEBRTC_APP }}/websocket`;
         var websocketURL =  "ws://" + path;
         
         if (location.protocol.startsWith("https")) {
