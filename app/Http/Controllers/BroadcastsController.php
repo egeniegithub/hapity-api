@@ -384,10 +384,10 @@ class BroadcastsController extends Controller
 
         foreach ($allUserBroadcast as $key => $broadcast) {
 
-            $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
+            $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APPEE .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
 
             if ($broadcast->status == 'online') {
-                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
+                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APPEE .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
             }
 
             $broadcastObj = [];
@@ -517,9 +517,9 @@ class BroadcastsController extends Controller
     {
 
         if ($live == true) {
-            $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
+            $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APPEE .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
         } else {
-            $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . 'WebRTCApp/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.mp4' : '';
+            $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APPEE .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.mp4' : '';
         }
 
         return $stream_url;
