@@ -186,9 +186,9 @@
 
                             <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast['created_at']));?> </span></p>
                             <hr />
-                            <pre>
+                            {{-- <pre>
                                 @php echo json_encode($broadcast, JSON_PRETTY_PRINT) @endphp
-                            </pre>
+                            </pre> --}}
                         </div>
 
                         <div class="report-bc-action-div">
