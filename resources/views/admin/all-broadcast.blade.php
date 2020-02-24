@@ -286,7 +286,7 @@
                                         "title":"{{ $b_title }}",
                                         "description":"{{ $b_description }}",
                                         //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
-                                        "sourceURL":"{{ $broadcast->dynamic_stream_url }}",
+                                        "sourceURL":"{{ $broadcast->dynamic_stream_url_web }}",
                                         "autoPlay":false,
                                         "volume":"75",
                                         "mute":false,

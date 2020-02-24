@@ -169,7 +169,7 @@
                                                     "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
                                                     "title":"{{ $b_title }}",
                                                     "description":"{{ str_replace("<br/>"," ",$b_description) }}",
-                                                    "sourceURL":"{{ $broadcast->dynamic_stream_url }}",
+                                                    "sourceURL":"{{ $broadcast->dynamic_stream_url_web }}",
                                                     "autoPlay":false,
                                                     "volume":"75",
                                                     "mute":false,

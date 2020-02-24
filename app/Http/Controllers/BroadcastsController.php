@@ -400,7 +400,7 @@ class BroadcastsController extends Controller
             $broadcastObj['title'] = $broadcst->title;
             $broadcastObj['description'] = $broadcst->description;
             $broadcastObj['is_sensitive'] = $broadcst->is_sensitive;
-            $broadcastObj['stream_url'] = $broadcst->dynamic_stream_url;
+            $broadcastObj['stream_url'] = $broadcst->dynamic_stream_url_mobile;
             $broadcastObj['status'] = $broadcst->status;
             $broadcastObj['broadcast_image'] = !empty($broadcst->broadcast_image) ? asset('images/broadcasts/' . $broadcst->user_id . '/' . $broadcst->broadcast_image) : asset('images/default-image-mobile.png');
             $broadcastObj['share_url'] = !empty($broadcst->share_url) ? $broadcst->share_url : route('broadcast.view', $broadcst->id);
