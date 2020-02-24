@@ -71,14 +71,33 @@ if (!function_exists('check_file_exist')) {
     function check_file_exist($broadcast, $wowza_path)
     {
         $ext = pathinfo($broadcast->filename, PATHINFO_EXTENSION);
-        $ext = $ext == 'mp4' ? $ext : 'mp4';
+
+        $file_ext = 'mp4';
+        switch ($ext) {
+            case 'stream':
+                $file_ext = 'stream.mp4';
+                break;
+            case 'stream_160p':
+                $file_ext = 'stream_160p.mp4';
+                break;
+            case 'stream_360p':
+                $file_ext = 'stream_360p.mp4';
+                break;
+            case 'stream_720p':
+                $file_ext = 'stream_720p.mp4';
+                break;
+            case 'mp4':
+            default:
+                $file_ext = 'mp4';
+                break;
+        }
 
         $filename = pathinfo($broadcast->filename, PATHINFO_FILENAME);
 
-        $filename_normal = $filename . '.' . $ext;
-        $filename_160p = $filename . '_160p.' . $ext;
-        $filename_360p = $filename . '_360p.' . $ext;
-        $filename_720p = $filename . '_720p.' . $ext;
+        $filename_normal = $file_ext == 'mp4' ? $filename . '.' . $ext : $filename . '.' . $file_ext;
+        $filename_160p = $file_ext == 'mp4' ? $filename . '_160p.' . $ext : $filename . '.' . $file_ext;
+        $filename_360p = $file_ext == 'mp4' ? $filename . '_360p.' . $ext : $filename . '.' . $file_ext;
+        $filename_720p = $file_ext == 'mp4' ? $filename . '_720p.' . $ext : $filename . '.' . $file_ext;
 
         $filepath_normal = $wowza_path . $filename_normal;
         $filepath_160p = $wowza_path . $filename_160p;
