@@ -89,7 +89,7 @@ class AdminBroadcastController extends Controller
 
             $stream_url = urlencode('https://media.hapity.com/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
             if ($broadcast->status == 'online') {
-                $stream_url = urlencode('rtsp://52.18.33.132:1935/' . $live_app . '/' . $filename . '/playlist.m3u8');
+                $stream_url = urlencode('//52.18.33.132:1935/' . $live_app . '/' . $filename . '/playlist.m3u8');
             }
 
             $broadcast['dynamic_stream_url'] = $stream_url;
