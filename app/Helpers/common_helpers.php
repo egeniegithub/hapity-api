@@ -117,7 +117,7 @@ if(!function_exists('check_file_exist')){
             $broadcast['file_exists'] = $file_exists_160p || $file_exists_360p || $file_exists_720p || $file_exists_normal || $broadcast->status == 'online' ? true : false;
 
             $stream_url = urlencode('https://media.hapity.com/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
-            $stream_url_mobile = urlencode('http://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
+            $stream_url_mobile = urlencode('https://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
 
             if ($broadcast->status == 'online') {
                 $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' . $filename . '/playlist.m3u8');
