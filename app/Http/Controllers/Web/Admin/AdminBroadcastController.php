@@ -87,7 +87,7 @@ class AdminBroadcastController extends Controller
 
             $broadcast['file_exists'] = $file_exists_160p || $file_exists_360p || $file_exists_720p || $file_exists_normal ? true : false;
 
-            $stream_url = urlencode('https://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
+            $stream_url = urlencode('https://media.hapity.com/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
             if ($broadcast->status == 'online') {
                 $file = pathinfo($broadcast['filename'], PATHINFO_FILENAME);
                 $stream_url = urlencode('rtmp://52.18.33.132:1935/' . $live_app . '/' . $filename . '/playlist.m3u8');
