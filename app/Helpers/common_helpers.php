@@ -19,116 +19,115 @@ if (!function_exists('ffmpeg_upload_file_path')) {
             Log::channel('ffmpeg_logs')->info('ffprobe Result:  ' . $shell_exec);
 
 //            if (intval($shell_exec) == 90) {
-                $commands = '';
-                $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
+            $commands = '';
+            $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
 
-                $shell_exec = shell_exec($commands);
-                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
-                Log::channel('ffmpeg_logs')->info($commands);
-                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
+            $shell_exec = shell_exec($commands);
+            Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
+            Log::channel('ffmpeg_logs')->info($commands);
+            Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
 //            } else {
-//                $commands = '';
-//                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
-//
-//                $shell_exec = shell_exec($commands);
-//                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
-//                Log::channel('ffmpeg_logs')->info($commands);
-//                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
-//
-//            }
+            //                $commands = '';
+            //                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
+            //
+            //                $shell_exec = shell_exec($commands);
+            //                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
+            //                Log::channel('ffmpeg_logs')->info($commands);
+            //                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
+            //
+            //            }
         }
     }
 }
 
-
-if(!function_exists('post_url_for_admin_broadcast')){
-    function post_url_for_admin_broadcast($user_id,$broadcast_id,$share_url){
+if (!function_exists('post_url_for_admin_broadcast')) {
+    function post_url_for_admin_broadcast($user_id, $broadcast_id, $share_url)
+    {
         $share_url = '';
-        $post_share_url = PluginId::where('user_id',$user_id)->orderBy('id','DESC')->first();
-        if(!empty($post_share_url)){
+        $post_share_url = PluginId::where('user_id', $user_id)->orderBy('id', 'DESC')->first();
+        if (!empty($post_share_url)) {
             $url = parse_url($post_share_url->url);
-            $post_url = $url['scheme'].'://'.$url['host'];
+            $post_url = $url['scheme'] . '://' . $url['host'];
             $post_type = $post_share_url->type;
-            if(!empty($post_url) && !empty($post_type)){
-                if($post_type == 'wordpress'){
-                    $share_url = $post_url.'/?p='.$broadcast_id;
-                }elseif($post_type == 'drupal'){
-                    $share_url = $post_url.'/node'.'/'.$broadcast_id;
-                }elseif($post_type == 'joomla'){
-                    $share_url = $post_url.'/?post='.$broadcast_id;
+            if (!empty($post_url) && !empty($post_type)) {
+                if ($post_type == 'wordpress') {
+                    $share_url = $post_url . '/?p=' . $broadcast_id;
+                } elseif ($post_type == 'drupal') {
+                    $share_url = $post_url . '/node' . '/' . $broadcast_id;
+                } elseif ($post_type == 'joomla') {
+                    $share_url = $post_url . '/?post=' . $broadcast_id;
                 }
-            }else{
+            } else {
                 $share_url = !empty($share_url) ? $share_url : route('broadcast.view', $broadcast_id);
             }
-        }else{
+        } else {
             $share_url = !empty($share_url) ? $share_url : route('broadcast.view', $broadcast_id);
         }
         return $share_url;
     }
 }
 
-if(!function_exists('check_file_exist')){
-    function check_file_exist($broadcast,$wowza_path){
+if (!function_exists('check_file_exist')) {
+    function check_file_exist($broadcast, $wowza_path)
+    {
         $ext = pathinfo($broadcast->filename, PATHINFO_EXTENSION);
-            $ext = $ext == 'mp4' ? $ext : 'mp4';
+        $ext = $ext == 'mp4' ? $ext : 'mp4';
 
-            $filename = pathinfo($broadcast->filename, PATHINFO_FILENAME);
+        $filename = pathinfo($broadcast->filename, PATHINFO_FILENAME);
 
-            $filename_normal = $filename . '.' . $ext;
-            $filename_160p = $filename . '_160p.' . $ext;
-            $filename_360p = $filename . '_360p.' . $ext;
-            $filename_720p = $filename . '_720p.' . $ext;
+        $filename_normal = $filename . '.' . $ext;
+        $filename_160p = $filename . '_160p.' . $ext;
+        $filename_360p = $filename . '_360p.' . $ext;
+        $filename_720p = $filename . '_720p.' . $ext;
 
-            $filepath_normal = $wowza_path . $filename_normal;
-            $filepath_160p = $wowza_path . $filename_160p;
-            $filepath_360p = $wowza_path . $filename_360p;
-            $filepath_720p = $wowza_path . $filename_720p;
+        $filepath_normal = $wowza_path . $filename_normal;
+        $filepath_160p = $wowza_path . $filename_160p;
+        $filepath_360p = $wowza_path . $filename_360p;
+        $filepath_720p = $wowza_path . $filename_720p;
 
-            $file_exists_normal = file_exists($filepath_normal) ? true : false;
-            $file_exists_160p = file_exists($filepath_160p) ? true : false;
-            $file_exists_360p = file_exists($filepath_360p) ? true : false;
-            $file_exists_720p = file_exists($filepath_720p) ? true : false;
+        $file_exists_normal = file_exists($filepath_normal) ? true : false;
+        $file_exists_160p = file_exists($filepath_160p) ? true : false;
+        $file_exists_360p = file_exists($filepath_360p) ? true : false;
+        $file_exists_720p = file_exists($filepath_720p) ? true : false;
 
-            $broadcast['file_normal'] = $filename_normal;
-            $broadcast['file_normal_exists'] = $file_exists_normal;
+        $broadcast['file_normal'] = $filename_normal;
+        $broadcast['file_normal_exists'] = $file_exists_normal;
 
-            $broadcast['file_160p'] = $filename_160p;
-            $broadcast['file_160p_exists'] = $file_exists_160p;
+        $broadcast['file_160p'] = $filename_160p;
+        $broadcast['file_160p_exists'] = $file_exists_160p;
 
-            $broadcast['file_360p'] = $filename_360p;
-            $broadcast['file_360p_exists'] = $file_exists_360p;
+        $broadcast['file_360p'] = $filename_360p;
+        $broadcast['file_360p_exists'] = $file_exists_360p;
 
-            $broadcast['file_720p'] = $filename_720p;
-            $broadcast['file_720p_exists'] = $file_exists_720p;
+        $broadcast['file_720p'] = $filename_720p;
+        $broadcast['file_720p_exists'] = $file_exists_720p;
 
-            $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
-            $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+        $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+        $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-            if ($file_exists_720p == true) {
-                $stream_file = $filename_720p;
-            } else if ($file_exists_360p == true) {
-                $stream_file = $filename_360p;
-            } else if ($file_exists_160p == true) {
-                $stream_file = $filename_160p;
-            } else {
-                $stream_file = $filename_normal;
-            }
+        if ($file_exists_720p == true) {
+            $stream_file = $filename_720p;
+        } else if ($file_exists_360p == true) {
+            $stream_file = $filename_360p;
+        } else if ($file_exists_160p == true) {
+            $stream_file = $filename_160p;
+        } else {
+            $stream_file = $filename_normal;
+        }
 
-            $broadcast['file_exists'] = $file_exists_160p || $file_exists_360p || $file_exists_720p || $file_exists_normal || $broadcast->status == 'online' ? true : false;
+        $broadcast['file_exists'] = $file_exists_160p || $file_exists_360p || $file_exists_720p || $file_exists_normal || $broadcast->status == 'online' ? true : false;
 
-            $stream_url = urlencode('https://media.hapity.com/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
-            $stream_url_mobile = urlencode('http://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
+        $stream_url = urlencode('https://media.hapity.com/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
+        $stream_url_mobile = 'http://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8';
 
-            if ($broadcast->status == 'online') {
-                $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' . $filename . '/playlist.m3u8');
-                $stream_url_mobile = urlencode('rtmp://52.18.33.132:1935/' . $live_app . '/' . $filename . '/playlist.m3u8');
-            }
+        if ($broadcast->status == 'online') {
+            $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' . $filename . '/playlist.m3u8');
+            $stream_url_mobile = 'https://media.hapity.com/' . $live_app . '/' . $filename . '/playlist.m3u8';
+        }
 
-            $broadcast['dynamic_stream_url_web'] = $stream_url;
-            $broadcast['dynamic_stream_url_mobile'] = $stream_url_mobile;
+        $broadcast['dynamic_stream_url_web'] = $stream_url;
+        $broadcast['dynamic_stream_url_mobile'] = $stream_url_mobile;
 
-
-            return $broadcast;
+        return $broadcast;
     }
 }
-
