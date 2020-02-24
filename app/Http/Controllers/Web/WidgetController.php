@@ -57,8 +57,8 @@ class WidgetController extends Controller
             //     $file = pathinfo($request['stream'], PATHINFO_FILENAME);
             //     $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' . $file . '/playlist.m3u8');
             // }
-
-            $data['stream_url'] = $broadcast->dynamic_stream_url;
+                
+            $data['stream_url'] = $broadcast->dynamic_stream_url_web;
             // dd($data);
             return view('widget.widget', $data);
         } else {
