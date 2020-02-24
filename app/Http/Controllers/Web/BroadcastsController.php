@@ -369,7 +369,10 @@ class BroadcastsController extends Controller
     {
         $filename = '';
         $broadcast = Broadcast::with(['user'])->find($broadcast_id);
-
+        $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
+        $broadcast = check_file_exist($broadcast,$wowza_path);
+      
+        // dd($broadcast);
         if (!is_null($broadcast)) {
             if (isset($broadcast->broadcast_image) && ($broadcast->broadcast_image != '')) {
                 $broadcast['broadcast_image'] = asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image);
