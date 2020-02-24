@@ -94,7 +94,7 @@ class BroadcastsController extends Controller
                 $broadcast->stream_url = $stream_url;
                 $broadcast->created_at = $date;
                 $broadcast->is_sensitive = $is_sensitive;
-                $broadcast->status = 'offline';
+                $broadcast->status = 'online';
                 $broadcast->filename = $filename . ".mp4";
                 $broadcast->video_name = '';
                 $broadcast->broadcast_image = '';
@@ -369,7 +369,7 @@ class BroadcastsController extends Controller
     {
         $filename = '';
         $broadcast = Broadcast::with(['user'])->find($broadcast_id);
-        
+
         if (!is_null($broadcast)) {
             if (isset($broadcast->broadcast_image) && ($broadcast->broadcast_image != '')) {
                 $broadcast['broadcast_image'] = asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image);
@@ -426,7 +426,7 @@ class BroadcastsController extends Controller
         if (is_file($file_image_path)) {
             unlink($file_image_path);
         }
-        
+
         $response['status'] = "success";
         $response['response'] = "deletebroadcast";
         $response['message'] = "deleted successfully";
@@ -496,7 +496,7 @@ class BroadcastsController extends Controller
     public function handle_old_view_broadcast($broadcast_id){
         $url = 'https://www.hapity.com/main/view_broadcast/'.$broadcast_id;
         $broadcast = Broadcast::where('share_url',$url)->first();
-    
+
         if (isset($broadcast->id) && $broadcast->id > 0) {
             return redirect()->route('broadcast.view',$broadcast->id);
         } else {
