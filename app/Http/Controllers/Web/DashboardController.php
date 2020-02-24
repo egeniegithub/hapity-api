@@ -31,16 +31,9 @@ class DashboardController extends Controller
         $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
 
         foreach ($broadcasts as $key => $broadcast) {
-            $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
-            $ext = $ext == 'mp4' ? '' : '.mp4';
-            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
-            if (file_exists($broadcast_stream_file_path)) {
-                $broadcast['file_exists'] = true;
-            } else {
-                $broadcast['file_exists'] = false;
-            }
-
-            $broadcasts[$key] = $broadcast;
+            $broadcst = check_file_exist($broadcast,$wowza_path);
+            $broadcasts[$key] = $broadcst;
+            
         }
 
         return view('home', compact('userdata', 'broadcasts', 'plugin_ids'));

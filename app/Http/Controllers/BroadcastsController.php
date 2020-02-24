@@ -387,49 +387,30 @@ class BroadcastsController extends Controller
 
         $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
         $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+        $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
 
         foreach ($allUserBroadcast as $key => $broadcast) {
-
-            $file_info = !empty($broadcast->filename) ? pathinfo($broadcast->filename) : [];
-
-            $ext = !empty($file_info) ? $file_info['extension'] : 'mp4';
-
-            $file_name = $broadcast->filename;
-            if ($ext == 'stream' || $ext == 'stream_160p' || $ext == 'stream_360p') {
-                $file_name = $broadcast->filename . '.mp4';
-                $ext = 'mp4';
-            }
-
-            $stream_url = !empty($broadcast->filename) ? 'http://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $file_name . '/playlist.m3u8' : '';
-            if ($broadcast->status == 'online') {
-                $stream_url = !empty($broadcast->filename) ? 'https://media.hapity.com/' . $live_app . '/' . $broadcast->filename . '/playlist.m3u8' : '';
-            }
+            
+            $broadcst = check_file_exist($broadcast,$wowza_path);
 
             $broadcastObj = [];
-            $broadcastObj['id'] = $broadcast->id;
-            $broadcastObj['geo_location'] = $broadcast->geo_location;
-            $broadcastObj['filename'] = $broadcast->filename;
-            $broadcastObj['title'] = $broadcast->title;
-            $broadcastObj['description'] = $broadcast->description;
-            $broadcastObj['is_sensitive'] = $broadcast->is_sensitive;
-            $broadcastObj['stream_url'] = $stream_url;
-            $broadcastObj['status'] = $broadcast->status;
-            $broadcastObj['broadcast_image'] = !empty($broadcast->broadcast_image) ? asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default-image-mobile.png');
-            $broadcastObj['share_url'] = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
+            $broadcastObj['id'] = $broadcst->id;
+            $broadcastObj['geo_location'] = $broadcst->geo_location;
+            $broadcastObj['filename'] = $broadcst->filename;
+            $broadcastObj['title'] = $broadcst->title;
+            $broadcastObj['description'] = $broadcst->description;
+            $broadcastObj['is_sensitive'] = $broadcst->is_sensitive;
+            $broadcastObj['stream_url'] = $broadcst->dynamic_stream_url;
+            $broadcastObj['status'] = $broadcst->status;
+            $broadcastObj['broadcast_image'] = !empty($broadcst->broadcast_image) ? asset('images/broadcasts/' . $broadcst->user_id . '/' . $broadcst->broadcast_image) : asset('images/default-image-mobile.png');
+            $broadcastObj['share_url'] = !empty($broadcst->share_url) ? $broadcst->share_url : route('broadcast.view', $broadcst->id);
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
             $broadcastObj['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictuers/' . $user['profile']['profile_picture']) : '';
-
-            $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
-            $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
-            $ext = $ext == 'mp4' ? '' : '.mp4';
-            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
-            if (file_exists($broadcast_stream_file_path) || (!empty($broadcast->broadcast_image) && empty($broadcast->stream_url)) || $broadcast->status == 'online') {
-                $broadcasts[] = $broadcastObj;
-            }
-
+            $broadcasts[] = $broadcastObj;
+        
         }
-
+ 
         $response = [];
         $response['status'] = 'success';
         $response['user_id'] = $request->input('user_id');
