@@ -40,14 +40,58 @@ class AdminBroadcastController extends Controller
         $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
 
         foreach ($broadcasts as $key => $broadcast) {
-            $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
-            $ext = $ext == 'mp4' ? '' : '.mp4';
-            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
-            if (file_exists($broadcast_stream_file_path)) {
-                $broadcast['file_exists'] = true;
+            $ext = pathinfo($broadcast->filename, PATHINFO_EXTENSION);
+            $ext = $ext == 'mp4' ? $ext : 'mp4';
+
+            $filename = pathinfo($broadcast->filename, PATHINFO_FILENAME);
+
+            $filename_normal = $filename . '.' . $ext;
+            $filename_160p = $filename . '_160p.' . $ext;
+            $filename_360p = $filename . '_360p.' . $ext;
+            $filename_720p = $filename . '_720p.' . $ext;
+
+            $filepath_normal = $wowza_path . $filename_normal;
+            $filepath_160p = $wowza_path . $filename_160p;
+            $filepath_360p = $wowza_path . $filename_360p;
+            $filepath_720p = $wowza_path . $filename_720p;
+
+            $file_exists_normal = file_exists($filepath_normal) ? true : false;
+            $file_exists_160p = file_exists($filepath_160p) ? true : false;
+            $file_exists_360p = file_exists($filepath_360p) ? true : false;
+            $file_exists_720p = file_exists($filepath_720p) ? true : false;
+
+            $broadcast['file_normal'] = $filename_normal;
+            $broadcast['file_normal_exists'] = $file_exists_normal;
+
+            $broadcast['file_160p'] = $filename_160p;
+            $broadcast['file_160p_exists'] = $file_exists_160p;
+
+            $broadcast['file_360p'] = $filename_360p;
+            $broadcast['file_360p_exists'] = $file_exists_360p;
+
+            $broadcast['file_720p'] = $filename_720p;
+            $broadcast['file_720p_exists'] = $file_exists_720p;
+
+            $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+            $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+
+            if ($file_exists_720p == true) {
+                $stream_file = $filename_720p;
+            } else if ($file_exists_360p == true) {
+                $stream_file = $filename_360p;
+            } else if ($file_exists_160p == true) {
+                $stream_file = $filename_160p;
             } else {
-                $broadcast['file_exists'] = false;
+                $stream_file = $filename_normal;
             }
+
+            $stream_url = urlencode('https://52.18.33.132:1935/' . $vod_app . '/' . $ext . ':' . $stream_file . '/playlist.m3u8');
+            if ($broadcast->status == 'online') {
+                $file = pathinfo($broadcast['filename'], PATHINFO_FILENAME);
+                $stream_url = urlencode('rtmp://52.18.33.132:1935/' . $live_app . '/' . $filename . '/playlist.m3u8');
+            }
+
+            $broadcast['dynamic_stream_url'] = $stream_url;
 
             $broadcasts[$key] = $broadcast;
         }
