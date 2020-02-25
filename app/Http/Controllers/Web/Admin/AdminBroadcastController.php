@@ -19,8 +19,13 @@ class AdminBroadcastController extends Controller
     }
     public function index(Request $request)
     {
-        $data = User::rightJoin('broadcasts', 'broadcasts.user_id', '=', 'users.id')->select('broadcasts.*', 'users.username');
-
+        $data = Broadcast::with(['user'=>function($q){
+            $q->select('id','username');
+        },
+        'metaInfo' => function($q){
+            $q->select('meta_infos.*');
+        }]);
+        
         if (isset($request['search']) || isset($request['datetimes'])) {
             if (isset($request['search']) && $request['search'] != '') {
                 $data = $data->where('title', 'like', "%" . $request['search'] . "%");
@@ -35,8 +40,8 @@ class AdminBroadcastController extends Controller
             }
         }
 
-        $broadcasts = $data->orderBy('broadcasts.id', 'DESC')->paginate('20');
-
+        $broadcasts = $data->paginate(20);
+       
         $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
 
         foreach ($broadcasts as $key => $broadcast) {
