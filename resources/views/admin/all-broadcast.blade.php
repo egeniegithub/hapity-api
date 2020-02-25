@@ -9,7 +9,7 @@
             margin-left: -20px;
         }
         .del-all-bc-single{
-            margin-top: 0px;
+            margin-top: 10px;
         }
     </style>
 @endpush
@@ -209,6 +209,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @if(isset($broadcast->metaInfo['meta_info']) && !empty($broadcast->metaInfo['meta_info']))
                             <div class="col-xs-12 text-center view-metadata">
                                 <div style="width: 50px; height: 50px; display:inline-block;">
                                 <button type="button" class="btn btn-primary btn-metainfo" title="Meta Data" data-toggle="modal" data-target="#product_view_{{ $broadcast->id }}">
@@ -217,6 +218,7 @@
                                     </button>
                                 </div>
                             </div>
+                            @endif
                             <div class="row">
                                 <div class="col-xs-12">
                                     
@@ -232,7 +234,7 @@
 
                         </div>
                     </div>
-
+                    @if(isset($broadcast->metaInfo['meta_info']) && !empty($broadcast->metaInfo['meta_info']))
                     <div class="modal fade product_view" id="product_view_{{ $broadcast->id }}">
                         <div class="modal-dialog">
                             <div class="modal-content">
@@ -266,6 +268,7 @@
                             </div>
                         </div>
                     </div>
+                    @endif
                    
                         <div class="modal fade" id="broadcastModel-<?php echo ($broadcast->id); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
                         <div class="modal-dialog" role="document">
