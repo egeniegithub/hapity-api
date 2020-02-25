@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\MetaInfo;
 use App\PluginId;
 use App\User;
 use App\UserProfile;
@@ -64,6 +65,15 @@ class AuthController extends Controller
             $user = User::with('profile')->find(Auth::id());
 
             if ($token = JWTAuth::fromUser($user)) {
+
+                $metainfo = new MetaInfo();
+                $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
+                $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+                $metainfo->broadcast_id =  null;
+                $metainfo->user_id =  $user->id;
+                $metainfo->time_stamp = time();
+                $metainfo->save();
+                
                 $userProfile = $user->toArray();
                 $user_info = array();
                 $user_info['user_id'] = $userProfile['id'];
@@ -148,6 +158,14 @@ class AuthController extends Controller
                 $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile->profile_picture);
             }
 
+            $metainfo = new MetaInfo();
+            $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
+            $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+            $metainfo->broadcast_id =  null;
+            $metainfo->user_id =  $user->id;
+            $metainfo->time_stamp = time();
+            $metainfo->save();
+            
             $user_info['email'] = $user->email;
             $user_info['username'] = $user->username;
             $user_info['auth_key'] = $profile->auth_key;
