@@ -105,6 +105,6 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function metaInfo(){
-        return $this->belongsToMany(MetaInfo::class,'user_id');
+        return $this->hasMany(MetaInfo::class,'user_id');
     }
 }
