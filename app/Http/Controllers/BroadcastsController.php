@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Broadcast;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\PluginFunctions;
+use App\MetaInfo;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
@@ -82,6 +83,14 @@ class BroadcastsController extends Controller
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
         $broadcast->save();
 
+        $metainfo = new MetaInfo();
+        $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
+        $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+        $metainfo->broadcast_id =  $broadcast->id;
+        $metainfo->user_id =  $request->input('user_id');
+        $metainfo->time_stamp = time();
+        $metainfo->save();
+
         $response = [];
         $response['status'] = 'success';
         $response['broadcast_id'] = $broadcast->id;
@@ -147,14 +156,19 @@ class BroadcastsController extends Controller
         $broadcast->share_url = '';
         $broadcast->video_name = $request->input('stream_url');
         $broadcast->filename = $request->input('stream_url') . '.mp4';
-        $broadcast->status = 'online';
-
-        $broadcast->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
-        
+        $broadcast->status = 'online';        
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
         $broadcast->save();
+
+        $metainfo = new MetaInfo();
+        $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
+        $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+        $metainfo->broadcast_id =  $broadcast->id;
+        $metainfo->user_id =  $request->input('user_id');
+        $metainfo->time_stamp = time();
+        $metainfo->save();
 
         $stream_image_name = $this->handle_image_file_upload($request, $broadcast->id, $request->input('user_id'));
 
