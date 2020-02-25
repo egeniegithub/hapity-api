@@ -148,6 +148,9 @@ class BroadcastsController extends Controller
         $broadcast->video_name = $request->input('stream_url');
         $broadcast->filename = $request->input('stream_url') . '.mp4';
         $broadcast->status = 'online';
+
+        $broadcast->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
+        
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
