@@ -82,14 +82,16 @@ class BroadcastsController extends Controller
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
         $broadcast->save();
-
-        $metainfo = new MetaInfo();
-        $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
-        $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
-        $metainfo->broadcast_id =  $broadcast->id;
-        $metainfo->user_id =  $request->input('user_id');
-        $metainfo->time_stamp = time();
-        $metainfo->save();
+        if(isset($request->meta_info) && !is_null($request->input('meta_info'))){
+            $metainfo = new MetaInfo();
+            $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
+            $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+            $metainfo->broadcast_id =  $broadcast->id;
+            $metainfo->user_id =  $request->input('user_id');
+            $metainfo->time_stamp = time();
+            $metainfo->save();
+        }
+        
         
         $response = [];
         $response['status'] = 'success';
@@ -172,16 +174,16 @@ class BroadcastsController extends Controller
 
         //$broadcast->share_url = route('view_broadcast', $broadcast->id);
         $broadcast->save();
-
-        $metainfo = new MetaInfo();
-        $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
-        $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
-        $metainfo->broadcast_id =  $broadcast->id;
-        $metainfo->user_id =  $request->input('user_id');
-        $metainfo->time_stamp = time();
-        $metainfo->save();
+        if(isset($request->meta_info) && !is_null($request->input('meta_info'))){
+            $metainfo = new MetaInfo();
+            $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
+            $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+            $metainfo->broadcast_id =  $broadcast->id;
+            $metainfo->user_id =  $request->input('user_id');
+            $metainfo->time_stamp = time();
+            $metainfo->save();
+        }
         
-
         $response = [];
         $response['status'] = 'success';
         $response['broadcast_id'] = $broadcast->id;
