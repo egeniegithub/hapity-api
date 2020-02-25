@@ -1,7 +1,17 @@
-
+{{-- @php dd($broadcasts); @endphp --}}
 @extends('admin.master-layout')
 @push('admin-css')
-
+    <style>
+        .view-metadata{
+            margin-top: 20px; 
+        }
+        .btn-metainfo{
+            margin-left: -20px;
+        }
+        .del-all-bc-single{
+            margin-top: 0px;
+        }
+    </style>
 @endpush
 @section('content')
 
@@ -49,53 +59,53 @@
                 @if(isset($broadcasts) && !empty($broadcasts))
                 @foreach ($broadcasts as $broadcast)
                     @php
-
+                    
                     $image_classes = '';
                     $b_image = !empty($broadcast->broadcast_image) ? $broadcast->broadcast_image : public_path('images/default001.jpg');
 
-                    $b_id = $broadcast['id'];
+                    $b_id = $broadcast->id;
 
-                    if($broadcast['title']){
-                        $b_title = $broadcast['title'];
+                    if($broadcast->title){
+                        $b_title = $broadcast->title;
                     } else {
                         $b_title = "Untitled";
                     }
-                    $file_info = pathinfo($broadcast['filename']);
+                    $file_info = pathinfo($broadcast->filename);
 
                     $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
 
-                    $share_url = !empty($broadcast['share_url']) ? $broadcast['share_url'] : route('broadcast.view', $broadcast['id']);
-                    $b_description = $broadcast['description'];
+                    $share_url = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
+                    $b_description = $broadcast->description;
 
                     $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                     $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-                    $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast['filename'] . '/playlist.m3u8') ;
+                    $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
                     if($broadcast->status == 'online') {
-                        $file = pathinfo($broadcast['filename'], PATHINFO_FILENAME );
+                        $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );
                         $stream_url = urlencode('rtmp://' . $ip .  ':1935/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
                     }
 
                     // $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast['stream_url'] . '/playlist.m3u8') ;
                     // $stream_url = $broadcast['stream_url'];
 
-                    $video_file_name = $broadcast['filename'];
+                    $video_file_name = $broadcast->filename;
                     if(!$b_image){
                         $b_image = public_path('images/default001.jpg');
                     }
                     if($video_file_name){
                         $image_classes = 'has_video';
                     }
-                    $status = $broadcast['status'];
+                    $status = $broadcast->status;
                     // dd($b_image);
                     @endphp
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="listing-reported-broadcost">
                         @if($broadcast->file_exists)
-                        <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast['title']); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast['id']); ?>">
+                        <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast->title); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast->id); ?>">
                             <div class="reporting-bc-image">
                                 @php
-                                        $thumbnail_image = $broadcast['broadcast_image'];
+                                        $thumbnail_image = $broadcast->broadcast_image;
                                         $allowedExtensions = ['png', 'jpg', 'jpeg'];
 
                                     // check if the data is empty
@@ -114,7 +124,7 @@
                                         @if(in_array($format, $allowedExtensions))
                                             <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
                                         @else
-                                            <img src="{{ asset('images/broadcasts/' . $broadcast['user_id'] . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
+                                            <img src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
                                         @endif
 
                                     @else
@@ -130,7 +140,7 @@
                         <a href="javascript:streamFileDoesNotExist();" class="pop-report-bc-link">
                             <div class="reporting-bc-image">
                                 @php
-                                        $thumbnail_image = $broadcast['broadcast_image'];
+                                        $thumbnail_image = $broadcast->broadcast_image;
                                         $allowedExtensions = ['png', 'jpg', 'jpeg'];
 
                                     // check if the data is empty
@@ -149,7 +159,7 @@
                                         @if(in_array($format, $allowedExtensions))
                                             <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
                                         @else
-                                            <img src="{{ asset('images/broadcasts/' . $broadcast['user_id'] . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
+                                            <img src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
                                         @endif
 
                                     @else
@@ -164,9 +174,9 @@
                         @endif
 
                         <div class="reported-bc-detail">
-                            <p><span class="title btitle">{{ ucwords($broadcast['title']) }}</span></p>
-                            <p><span class="postby">Posted By : </span> <span class="report-result-display"> {{ $broadcast['username'] }} </span></p>
-                            <p><span class="reportby">Status :</span> <span class="report-result-display"> {{ $broadcast['status'] }} </span></p>
+                            <p><span class="title btitle">{{ ucwords($broadcast->title) }}</span></p>
+                            <p><span class="postby">Posted By : </span> <span class="report-result-display"> {{ $broadcast->user['username'] }} </span></p>
+                            <p><span class="reportby">Status :</span> <span class="report-result-display"> {{ $broadcast->status }} </span></p>
                             <p>
                                 <span class="reportdate">Source :</span>
                                 <span class="report-result-display">
@@ -179,12 +189,12 @@
                             </p>
 
                             @if(isset($_GET['dev']))
-                                <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="<?php echo $broadcast['stream_url'];?>">{{ $broadcast['stream_url'] }}</a> </span></p>
+                                <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="{{ $broadcast->stream_url }}">{{ $broadcast->stream_url }}</a> </span></p>
                             @endif
 
                             <p>  <span class="reportdate">Views :</span> <span class="report-result-display"> {{ !is_null($broadcast->view_count) ? $broadcast->view_count : 0 }} </span></p>
 
-                            <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast['created_at']));?> </span></p>
+                            <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast->created_at));?> </span></p>
                             <hr />
                             {{-- <pre>
                                 @php echo json_encode($broadcast, JSON_PRETTY_PRINT) @endphp
@@ -199,12 +209,22 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xs-12 text-center view-metadata">
+                                <div style="width: 50px; height: 50px; display:inline-block;">
+                                <button type="button" class="btn btn-primary btn-metainfo" title="Meta Data" data-toggle="modal" data-target="#product_view_{{ $broadcast->id }}">
+                                        Meta Info
+                                        {{-- <i class="fa fa-tags "></i> --}}
+                                    </button>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-xs-12">
-                                    <form method="post" action="{{ route('admin.deletebroadcast') }}" id="form-{{ $broadcast['id'] }}">
+                                    
+                                    <form method="post" action="{{ route('admin.deletebroadcast') }}" id="form-{{ $broadcast->id }}">
                                         @csrf
-                                        <input type="hidden" name="broadcast_id" value="{{ $broadcast['id'] }}">
-                                        <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast['id'] }})">
+                                        <input type="hidden" name="broadcast_id" value="{{ $broadcast->id }}">
+                                        
+                                        <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast->id }})">
                                     </form>
                                 </div>
                             </div>
@@ -212,47 +232,82 @@
 
                         </div>
                     </div>
-                    <div class="modal fade" id="broadcastModel-<?php echo ($broadcast['id']); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
+
+                    <div class="modal fade product_view" id="product_view_{{ $broadcast->id }}">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <a href="#" data-dismiss="modal" class="class pull-right"><i class="fa fa-close fa-lg"></i></a>
+                                    <h3 class="modal-title">Meta Data</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row">
+                                        <div class="col-md-12 product_img">
+                                            <table id="mytable" class="table table-bordred table-striped">
+                                                <tr>
+                                                    <th>Meta Info</th>
+                                                    <th>{{ $broadcast->metaInfo['meta_info'] }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Endpoint URl</th>
+                                                    <th>{{ $broadcast->metaInfo['endpoint_url'] }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Created At</th>
+                                                    <th>
+                                                        {{ (new Carbon\Carbon($broadcast->metaInfo['created_at']))->diffForHumans() }}
+                                                    </th>
+                                                </tr>
+                                            </table>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                        <div class="modal fade" id="broadcastModel-<?php echo ($broadcast->id); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close close-video" id="model-cross" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="{{ $broadcast['id'] }}" onClick="closeModel(this.id)">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel"><?php echo ucwords($broadcast['title']); ?></h4>
+                                    <button type="button" class="close close-video" id="model-cross" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="{{ $broadcast->id }}" onClick="closeModel(this.id)">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">{{ ucwords($broadcast->title) }}</h4>
                                 </div>
                                 <div class="modal-body">
-                                    <div id="broadcast-<?php echo $broadcast['id'];?>" class="player"></div>
+                                    <div id="broadcast-{{ $broadcast->id }}" class="player"></div>
 
                                     @php
                                     $image_classes = '';
                                     $b_image = '';
                                     // $broadcast->broadcast_image;
-                                    $b_id = isset($broadcast['id']) ? $broadcast['id'] : '';
+                                    $b_id = isset($broadcast->id) ? $broadcast->id : '';
 
-                                    if($broadcast['title']){
-                                        $b_title = $broadcast['title'];
+                                    if($broadcast->title){
+                                        $b_title = $broadcast->title;
                                     } else {
                                         $b_title = "Untitled";
                                     }
 
-                                    $file_info = pathinfo($broadcast['filename']);
+                                    $file_info = pathinfo($broadcast->filename);
 
                                     $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
 
-                                    $share_url = $broadcast['share_url'];
-                                    $b_description = $broadcast['description'];
+                                    $share_url = $broadcast->share_url;
+                                    $b_description = $broadcast->description;
 
                                     $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
                                     $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
 
-                                    $file_name = $broadcast['filename'];
+                                    $file_name = $broadcast->filename;
                                     if ($file_ext == 'stream' || $file_ext == 'stream_160p' || $file_ext == 'stream_360p') {
-                                        $file_name = $broadcast['filename'] . '.mp4';
+                                        $file_name = $broadcast->filename . '.mp4';
                                         $file_ext = 'mp4';
                                     }
 
                                     $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $file_name . '/playlist.m3u8') ;
-                                    if($broadcast['status'] == 'online') {
-                                        $file = pathinfo($broadcast['filename'], PATHINFO_FILENAME );
+                                    if($broadcast->status == 'online') {
+                                        $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );
                                         $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
                                     }
                                     //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
@@ -262,9 +317,9 @@
 
                                     //echo $stream_url;
 
-                                    $status = $broadcast['status'];
+                                    $status = $broadcast->status;
 
-                                    $video_file_name = $broadcast['filename'];
+                                    $video_file_name = $broadcast->filename;
 
                                     if(!$b_image){
                                         $b_image = 'default001.jpg';
@@ -308,6 +363,7 @@
                         </div>
                     </div>
                 </div>
+           
                 @endforeach
                 @endif
                 <!--Reported Broadcost listing End-->
