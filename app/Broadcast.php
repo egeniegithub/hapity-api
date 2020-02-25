@@ -38,4 +38,8 @@ class Broadcast extends Model
         return $this->belongsTo('App\User', 'user_id')->with('reportedUser');
     }
 
+    public function metaInfo(){
+        return $this->belongsToMany(MetaInfo::class,'broadcast_id');
+    }
+
 }
