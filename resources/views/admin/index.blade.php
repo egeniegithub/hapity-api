@@ -66,7 +66,7 @@
                     <div class="section-heading">
                         <p class="world-wide-text"> Live Broadcasts World Wide</p>
                     </div>
-                    <div class="map-section">
+                    <div class="map-section col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <img src="{{asset('/assets/admin')}}/images/map.png" class="img-responsive" />
                     </div>
                 </div>
