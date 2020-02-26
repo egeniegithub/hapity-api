@@ -49,7 +49,7 @@ class AdminBroadcastController extends Controller
             $broadcasts[$key] = $broadcst;
             
         }
-
+        // dd($broadcasts);
         return view('admin.all-broadcast', compact('broadcasts'));
     }
     public function deleteBroadcast(Request $request)

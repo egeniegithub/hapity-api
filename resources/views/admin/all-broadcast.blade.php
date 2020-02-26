@@ -1,4 +1,6 @@
-{{-- @php dd($broadcasts); @endphp --}}
+@php
+    use Illuminate\Support\Carbon;
+@endphp
 @extends('admin.master-layout')
 @push('admin-css')
     <style>
@@ -59,35 +61,14 @@
                 @if(isset($broadcasts) && !empty($broadcasts))
                 @foreach ($broadcasts as $broadcast)
                     @php
-                    
+                   // dd($broadcast);
                     $image_classes = '';
                     $b_image = !empty($broadcast->broadcast_image) ? $broadcast->broadcast_image : public_path('images/default001.jpg');
-
                     $b_id = $broadcast->id;
-
-                    if($broadcast->title){
-                        $b_title = $broadcast->title;
-                    } else {
-                        $b_title = "Untitled";
-                    }
-                    $file_info = pathinfo($broadcast->filename);
-
-                    $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
+                    $b_title = !is_null($broadcast->title) && !empty($broadcast->title) ? $broadcast->title : 'Untitled';
 
                     $share_url = !empty($broadcast->share_url) ? $broadcast->share_url : route('broadcast.view', $broadcast->id);
-                    $b_description = $broadcast->description;
-
-                    $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
-                    $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
-
-                    $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast->filename . '/playlist.m3u8') ;
-                    if($broadcast->status == 'online') {
-                        $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );
-                        $stream_url = urlencode('rtmp://' . $ip .  ':1935/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
-                    }
-
-                    // $stream_url = urlencode('https://' . $ip .  ':1935/' . $vod_app .  '/' . $file_ext . ':' .  $broadcast['stream_url'] . '/playlist.m3u8') ;
-                    // $stream_url = $broadcast['stream_url'];
+                    $b_description = !is_null($broadcast->description) ? $broadcast->description : '';
 
                     $video_file_name = $broadcast->filename;
                     if(!$b_image){
@@ -105,7 +86,7 @@
                         <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast->title); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast->id); ?>">
                             <div class="reporting-bc-image">
                                 @php
-                                        $thumbnail_image = $broadcast->broadcast_image;
+                                        $thumbnail_image = !is_null($broadcast->broadcast_image) ? $broadcast->broadcast_image : '';
                                         $allowedExtensions = ['png', 'jpg', 'jpeg'];
 
                                     // check if the data is empty
@@ -140,7 +121,8 @@
                         <a href="javascript:streamFileDoesNotExist();" class="pop-report-bc-link">
                             <div class="reporting-bc-image">
                                 @php
-                                        $thumbnail_image = $broadcast->broadcast_image;
+
+                                        $thumbnail_image = !is_null($broadcast->broadcast_image) ? $broadcast->broadcast_image : '';
                                         $allowedExtensions = ['png', 'jpg', 'jpeg'];
 
                                     // check if the data is empty
@@ -174,7 +156,7 @@
                         @endif
 
                         <div class="reported-bc-detail">
-                            <p><span class="title btitle">{{ ucwords($broadcast->title) }}</span></p>
+                            <p><span class="title btitle">{{ ucwords($b_title) }}</span></p>
                             <p><span class="postby">Posted By : </span> <span class="report-result-display"> {{ $broadcast->user['username'] }} </span></p>
                             <p><span class="reportby">Status :</span> <span class="report-result-display"> {{ $broadcast->status }} </span></p>
                             <p>
@@ -189,7 +171,7 @@
                             </p>
 
                             @if(isset($_GET['dev']))
-                                <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="{{ $broadcast->stream_url }}">{{ $broadcast->stream_url }}</a> </span></p>
+                                <p>  <span class="reportdate">Stream :</span> <span class="report-result-display"> <a href="{{ $broadcast->dynamic_stream_url_web }}"> {{ $broadcast->dynamic_stream_url_web }} </a> </span></p>
                             @endif
 
                             <p>  <span class="reportdate">Views :</span> <span class="report-result-display"> {{ !is_null($broadcast->view_count) ? $broadcast->view_count : 0 }} </span></p>
@@ -230,8 +212,6 @@
                                     </form>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                     @if(isset($broadcast->metaInfo['meta_info']) && !empty($broadcast->metaInfo['meta_info']))
@@ -248,7 +228,7 @@
                                             <table id="mytable" class="table table-bordred table-striped">
                                                 <tr>
                                                     <th>Meta Info</th>
-                                                    <th>{{ $broadcast->metaInfo['meta_info'] }}</th>
+                                                    <th>{{ json_decode($broadcast->metaInfo['meta_info']) }}</th>
                                                 </tr>
                                                 <tr>
                                                     <th>Endpoint URl</th>
@@ -257,7 +237,7 @@
                                                 <tr>
                                                     <th>Created At</th>
                                                     <th>
-                                                        {{ (new Carbon\Carbon($broadcast->metaInfo['created_at']))->diffForHumans() }}
+                                                        {{ (new Carbon($broadcast->metaInfo['created_at']))->diffForHumans() }}
                                                     </th>
                                                 </tr>
                                             </table>
@@ -275,58 +255,17 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <button type="button" class="close close-video" id="model-cross" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="{{ $broadcast->id }}" onClick="closeModel(this.id)">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">{{ ucwords($broadcast->title) }}</h4>
+                                    <h4 class="modal-title" id="myModalLabel">{{ ucwords($b_title) }}</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div id="broadcast-{{ $broadcast->id }}" class="player"></div>
 
                                     @php
                                     $image_classes = '';
-                                    $b_image = '';
-                                    // $broadcast->broadcast_image;
-                                    $b_id = isset($broadcast->id) ? $broadcast->id : '';
-
-                                    if($broadcast->title){
-                                        $b_title = $broadcast->title;
-                                    } else {
-                                        $b_title = "Untitled";
-                                    }
-
-                                    $file_info = pathinfo($broadcast->filename);
-
-                                    $file_ext = isset($file_info['extension']) ? $file_info['extension'] : 'mp4';
-
-                                    $share_url = $broadcast->share_url;
-                                    $b_description = $broadcast->description;
-
-                                    $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
-                                    $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
-
-                                    $file_name = $broadcast->filename;
-                                    if ($file_ext == 'stream' || $file_ext == 'stream_160p' || $file_ext == 'stream_360p') {
-                                        $file_name = $broadcast->filename . '.mp4';
-                                        $file_ext = 'mp4';
-                                    }
-
-                                    $stream_url = urlencode('https://media.hapity.com/' . $vod_app .  '/_definst_/' . $file_ext . ':' .  $file_name . '/playlist.m3u8') ;
-                                    if($broadcast->status == 'online') {
-                                        $file = pathinfo($broadcast->filename, PATHINFO_FILENAME );
-                                        $stream_url = urlencode('https://media.hapity.com/' . $live_app . '/' .  $file . '/playlist.m3u8') ;
-                                    }
-                                    //http://[wowza-ip-address]:1935/vod/mp4:sample.mp4/playlist.m3u8
-                                    //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream.mp4%2Fplaylist.m3u8
-                                    //rtmp%3A%2F%2F192.168.20.251%3A1935%2Flive%2F132041201998908.stream%2Fplaylist.m3u8
-                                    //https://media.hapity.com/stage_vod/_definst_/mp4:8e192b3711cfd29cafe41297d9fa725b.stream.mp4/playlist.m3u8
-
-                                    //echo $stream_url;
-
+                                 
                                     $status = $broadcast->status;
 
-                                    $video_file_name = $broadcast->filename;
-
-                                    if(!$b_image){
-                                        $b_image = 'default001.jpg';
-                                    }
+                                    $video_file_name = !is_null($broadcast->filename) ? $broadcast->filename : '';
 
                                     if($video_file_name){
                                         $image_classes = 'has_video';
