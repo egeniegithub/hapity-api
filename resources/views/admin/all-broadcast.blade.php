@@ -226,10 +226,60 @@
                                     <div class="row">
                                         <div class="col-md-12 product_img">
                                             <table id="mytable" class="table table-bordred table-striped">
+                                                @php 
+                                                    $meta_data = json_decode($broadcast->metaInfo['meta_info']);
+                                                    $isConnectionExpensive = $meta_data->connectionDetail->isConnectionExpensive == 'false' ? 0 : 1;
+
+                                                @endphp
+
                                                 <tr>
-                                                    <th>Meta Info</th>
-                                                    <th>{{ json_decode($broadcast->metaInfo['meta_info']) }}</th>
+                                                    <th colspan="2" class="text-center">Meta Info Detail</th>
                                                 </tr>
+                                                <tr>
+                                                    <th>Brand</th>
+                                                    <th>  {{ $meta_data->brand }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>System Name</th>
+                                                    <th> {{ $meta_data->systemName }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>deviceName</th>
+                                                    <th> {{ $meta_data->deviceName }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>systemVersion</th>
+                                                    <th> {{ $meta_data->systemVersion }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>deviceType</th>
+                                                    <th> {{ $meta_data->deviceType }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>apiLevel</th>
+                                                    <th> {{ $meta_data->apiLevel }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>timeZone</th>
+                                                    <th> {{ $meta_data->timeZone }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>connectionType</th>
+                                                    <th> {{ $meta_data->connectionType }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>isConnected</th>
+                                                    <th> {{ $meta_data->isConnected }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>connectionDetail</th>
+                                                    <th> {{ $isConnectionExpensive }} </th>
+                                                </tr>
+                                                <tr>
+                                                    <th>internetSpeed</th>
+                                                    <th> {{ $meta_data->internetSpeed }} </th>
+                                                </tr>
+                                    
                                                 <tr>
                                                     <th>Endpoint URl</th>
                                                     <th>{{ $broadcast->metaInfo['endpoint_url'] }}</th>
