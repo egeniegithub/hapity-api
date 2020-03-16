@@ -40,10 +40,10 @@ class EmailCron extends Command
     public function handle()
     {
         Log::info("Cron is working fine!");
-        $email = "fahim.egenie@gmail.com";
-        Mail::send('emails/test_mail', ['data' => 'etesting email'], function ($message) use ($email) {
-            $message->to($email)->subject('Welcome');
-        });
+        // $email = "fahim.egenie@gmail.com";
+        // Mail::send('emails/test_mail', ['data' => 'etesting email'], function ($message) use ($email) {
+        //     $message->to($email)->subject('Welcome');
+        // });
 
         $this->info('email:cron Command Run successfully!');
     }
