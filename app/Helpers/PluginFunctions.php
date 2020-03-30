@@ -18,7 +18,7 @@ class PluginFunctions
             $plugin = PluginId::where('user_id', $broadcast->user_id)->orderBy('id', 'DESC')->first();
             $auth_key = UserProfile::where('user_id', $broadcast->user_id)->first()->auth_key;
 
-            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key)) {
+            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key) && !empty($plugin->url)) {
 
                 $title = $broadcast->title;
                 $description = $broadcast->description;
@@ -72,12 +72,29 @@ class PluginFunctions
                         )
                     );
                 }
-                $opts = array('http' => array(
-                    'method' => 'POST',
-                    'header' => 'Content-type: application/x-www-form-urlencoded',
-                    'content' => $postdata,
-                ),
-                );
+
+                $url = parse_url($plugin->url);
+                if($url['scheme'] == 'https'){
+                   $opts = array('https' => array(
+                        'method' => 'POST',
+                        'header' => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $postdata,
+                    ),
+                        'ssl'  => array ( // here comes the actual SSL part...
+                        'verify_peer'       => false,
+                        'verify_peer_name'  => false,
+                        'allow_self_signed' => true,
+                        'verify_depth'      => 0
+                )
+               );
+                }else{
+                    $opts = array('http' => array(
+                        'method' => 'POST',
+                        'header' => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $postdata,
+                    ));
+                }
+    
 
                 $context = stream_context_create($opts);
 
@@ -143,7 +160,7 @@ class PluginFunctions
             $plugin = PluginId::where('user_id', $broadcast->user_id)->orderBy('id', 'DESC')->first();
             $auth_key = UserProfile::where('user_id', $broadcast->user_id)->first()->auth_key;
 
-            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key)) {
+            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key) && !empty($plugin->url)) {
 
                 $title = $broadcast->title;
                 $description = $broadcast->description;
@@ -194,12 +211,41 @@ class PluginFunctions
                         )
                     );
                 }
-                $opts = array('http' => array(
-                    'method' => 'POST',
-                    'header' => 'Content-type: application/x-www-form-urlencoded',
-                    'content' => $postdata,
-                ),
-                );
+
+                $url = parse_url($plugin->url);
+                if($url['scheme'] == 'https'){
+                   $opts = array('https' => array(
+                        'method' => 'POST',
+                        'header' => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $postdata,
+                    ),
+                        'ssl'  => array ( // here comes the actual SSL part...
+                        'verify_peer'       => false,
+                        'verify_peer_name'  => false,
+                        'allow_self_signed' => true,
+                        'verify_depth'      => 0
+                )
+               );
+                }else{
+                    $opts = array('http' => array(
+                        'method' => 'POST',
+                        'header' => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $postdata,
+                    ));
+                }
+
+                // $opts = array('http' => array(
+                //     'method' => 'POST',
+                //     'header' => 'Content-type: application/x-www-form-urlencoded',
+                //     'content' => $postdata,
+                // ),
+                // 'ssl'  => array ( // here comes the actual SSL part...
+                //     'verify_peer'       => false,
+                //     'verify_peer_name'  => false,
+                //     'allow_self_signed' => true,
+                //     'verify_depth'      => 0
+                // )
+                // );
                 $context = stream_context_create($opts);
                 if ($plugin->type == 'wordpress') {
                     $go = $plugin->url . '?action=hpb_hp_new_broadcast';
@@ -262,7 +308,7 @@ class PluginFunctions
 
             $auth_key = UserProfile::where('user_id', $broadcast->user_id)->first()->auth_key;
 
-            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key)) {
+            if (!is_null($plugin) && $plugin->id > 0 && !empty($auth_key) && !empty($plugin->url)) {
                 $title = $broadcast->title;
                 $description = $broadcast->description;
                 $stream_url = $broadcast->filename;
@@ -318,12 +364,28 @@ class PluginFunctions
                     );
                 }
 
-                $opts = array('http' => array(
-                    'method' => 'POST',
-                    'header' => 'Content-type: application/x-www-form-urlencoded',
-                    'content' => $postdata,
-                ),
-                );
+                $url = parse_url($plugin->url);
+                if($url['scheme'] == 'https'){
+                   $opts = array('https' => array(
+                        'method' => 'POST',
+                        'header' => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $postdata,
+                    ),
+                        'ssl'  => array ( // here comes the actual SSL part...
+                        'verify_peer'       => false,
+                        'verify_peer_name'  => false,
+                        'allow_self_signed' => true,
+                        'verify_depth'      => 0
+                )
+               );
+                }else{
+                    $opts = array('http' => array(
+                        'method' => 'POST',
+                        'header' => 'Content-type: application/x-www-form-urlencoded',
+                        'content' => $postdata,
+                    ));
+                }
+
 
                 $context = stream_context_create($opts);
 
