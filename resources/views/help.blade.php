@@ -117,6 +117,9 @@
       <div class="row">
         <div class="col-md-12">
           <div class="main-heading text-center">
+            <h4><strong>Please Note</strong> Hapity is not suitable for CCTV or Adult Services. Our fair use policy permits us to cut off and not store over long livestreams.</h4>
+            <h4>Flash is only used if live streaming from a PC. Flash is not necessary to view videos or to live stream from a mobile. An update in May 2020 will permit broadcasting from a PC without Flash.</h4>
+
             <h1 class="page_title text-center pur-col font-bold">How to integrate into your website</h1>
           </div>
         </div>
