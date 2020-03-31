@@ -74,27 +74,26 @@ class PluginFunctions
                 }
 
                 $url = parse_url($plugin->url);
-                if($url['scheme'] == 'https'){
-                   $opts = array('https' => array(
+                if ($url['scheme'] == 'https') {
+                    $opts = array('https' => array(
                         'method' => 'POST',
                         'header' => 'Content-type: application/x-www-form-urlencoded',
                         'content' => $postdata,
                     ),
-                        'ssl'  => array ( // here comes the actual SSL part...
-                        'verify_peer'       => false,
-                        'verify_peer_name'  => false,
-                        'allow_self_signed' => true,
-                        'verify_depth'      => 0
-                )
-               );
-                }else{
+                        'ssl' => array( // here comes the actual SSL part...
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true,
+                            'verify_depth' => 0,
+                        ),
+                    );
+                } else {
                     $opts = array('http' => array(
                         'method' => 'POST',
                         'header' => 'Content-type: application/x-www-form-urlencoded',
                         'content' => $postdata,
                     ));
                 }
-    
 
                 $context = stream_context_create($opts);
 
@@ -213,20 +212,20 @@ class PluginFunctions
                 }
 
                 $url = parse_url($plugin->url);
-                if($url['scheme'] == 'https'){
-                   $opts = array('https' => array(
+                if ($url['scheme'] == 'https') {
+                    $opts = array('https' => array(
                         'method' => 'POST',
                         'header' => 'Content-type: application/x-www-form-urlencoded',
                         'content' => $postdata,
                     ),
-                        'ssl'  => array ( // here comes the actual SSL part...
-                        'verify_peer'       => false,
-                        'verify_peer_name'  => false,
-                        'allow_self_signed' => true,
-                        'verify_depth'      => 0
-                )
-               );
-                }else{
+                        'ssl' => array( // here comes the actual SSL part...
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true,
+                            'verify_depth' => 0,
+                        ),
+                    );
+                } else {
                     $opts = array('http' => array(
                         'method' => 'POST',
                         'header' => 'Content-type: application/x-www-form-urlencoded',
@@ -365,27 +364,26 @@ class PluginFunctions
                 }
 
                 $url = parse_url($plugin->url);
-                if($url['scheme'] == 'https'){
-                   $opts = array('https' => array(
+                if ($url['scheme'] == 'https') {
+                    $opts = array('https' => array(
                         'method' => 'POST',
                         'header' => 'Content-type: application/x-www-form-urlencoded',
                         'content' => $postdata,
                     ),
-                        'ssl'  => array ( // here comes the actual SSL part...
-                        'verify_peer'       => false,
-                        'verify_peer_name'  => false,
-                        'allow_self_signed' => true,
-                        'verify_depth'      => 0
-                )
-               );
-                }else{
+                        'ssl' => array( // here comes the actual SSL part...
+                            'verify_peer' => false,
+                            'verify_peer_name' => false,
+                            'allow_self_signed' => true,
+                            'verify_depth' => 0,
+                        ),
+                    );
+                } else {
                     $opts = array('http' => array(
                         'method' => 'POST',
                         'header' => 'Content-type: application/x-www-form-urlencoded',
                         'content' => $postdata,
                     ));
                 }
-
 
                 $context = stream_context_create($opts);
 
