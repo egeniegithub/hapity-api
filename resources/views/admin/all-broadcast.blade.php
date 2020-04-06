@@ -228,6 +228,7 @@
                                             <table id="mytable" class="table table-bordred table-striped">
                                                 @php 
                                                     $meta_data = json_decode($broadcast->metaInfo['meta_info']);
+                                                    if(is_object($meta_data)){
                                                     $isConnectionExpensive = $meta_data->connectionDetail->isConnectionExpensive == 'false' ? 0 : 1;
 
                                                 @endphp
@@ -290,6 +291,17 @@
                                                         {{ (new Carbon($broadcast->metaInfo['created_at']))->diffForHumans() }}
                                                     </th>
                                                 </tr>
+                                                @php 
+                                                    }else{
+                                                @endphp
+                                                <tr>
+                                                    <td>
+                                                       No Meta info
+                                                    </td>
+                                                </tr>
+                                                @php
+                                                    }
+                                                @endphp
                                             </table>
                                         </div>
                                        
