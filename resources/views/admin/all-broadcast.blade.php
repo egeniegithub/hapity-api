@@ -232,7 +232,7 @@
                                                         $meta_data = json_decode($meta_data);
                                                     }
                                                     if(is_object($meta_data)){
-                                                    $isConnectionExpensive = $meta_data->connectionDetail->isConnectionExpensive == 'false' ? 0 : 1;
+                                                    $isConnectionExpensive = isset($meta_data->connectionDetail->isConnectionExpensive) && $meta_data->connectionDetail->isConnectionExpensive == 'false' ? 0 : 1;
 
                                                 @endphp
 
@@ -241,39 +241,39 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Brand</th>
-                                                    <th>  {{ $meta_data->brand }} </th>
+                                                    <th>  {{ isset($meta_data->brand) ? $meta_data->brand : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>System Name</th>
-                                                    <th> {{ $meta_data->systemName }} </th>
+                                                    <th> {{ isset($meta_data->systemName) ? $meta_data->systemName : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>deviceName</th>
-                                                    <th> {{ $meta_data->deviceName }} </th>
+                                                    <th> {{ isset($meta_data->deviceName) ? $meta_data->deviceName : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>systemVersion</th>
-                                                    <th> {{ $meta_data->systemVersion }} </th>
+                                                    <th> {{ isset($meta_data->systemVersion) ? $meta_data->systemVersion : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>deviceType</th>
-                                                    <th> {{ $meta_data->deviceType }} </th>
+                                                    <th> {{ isset($meta_data->deviceType) ? $meta_data->deviceType : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>apiLevel</th>
-                                                    <th> {{ $meta_data->apiLevel }} </th>
+                                                    <th> {{ isset($meta_data->apiLevel) ? $meta_data->apiLevel : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>timeZone</th>
-                                                    <th> {{ $meta_data->timeZone }} </th>
+                                                    <th> {{ isset($meta_data->timeZone) ? $meta_data->timeZone : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>connectionType</th>
-                                                    <th> {{ $meta_data->connectionType }} </th>
+                                                    <th> {{ isset($meta_data->connectionType) ? $meta_data->connectionType : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>isConnected</th>
-                                                    <th> {{ $meta_data->isConnected }} </th>
+                                                    <th> {{ isset($meta_data->isConnected) ? $meta_data->isConnected : '' }} </th>
                                                 </tr>
                                                 <tr>
                                                     <th>connectionDetail</th>
@@ -281,17 +281,17 @@
                                                 </tr>
                                                 <tr>
                                                     <th>internetSpeed</th>
-                                                    <th> {{ $meta_data->internetSpeed }} </th>
+                                                    <th> {{ isset($meta_data->internetSpeed) ? $meta_data->internetSpeed : ''}} </th>
                                                 </tr>
                                     
                                                 <tr>
                                                     <th>Endpoint URl</th>
-                                                    <th>{{ $broadcast->metaInfo['endpoint_url'] }}</th>
+                                                    <th>{{ isset($broadcast->metaInfo['endpoint_url']) ? $broadcast->metaInfo['endpoint_url'] : '' }}</th>
                                                 </tr>
                                                 <tr>
                                                     <th>Created At</th>
                                                     <th>
-                                                        {{ (new Carbon($broadcast->metaInfo['created_at']))->diffForHumans() }}
+                                                        {{ isset($broadcast->metaInfo['created_at']) ? (new Carbon($broadcast->metaInfo['created_at']))->diffForHumans() : '' }}
                                                     </th>
                                                 </tr>
                                                 @php 
