@@ -24,7 +24,8 @@ class AdminBroadcastController extends Controller
         },
         'metaInfo' => function($q){
             $q->select('meta_infos.*');
-        }]);
+        }])
+        ->orderBy('created_at','desc');
         
         if (isset($request['search']) || isset($request['datetimes'])) {
             if (isset($request['search']) && $request['search'] != '') {
