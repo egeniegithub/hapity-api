@@ -228,6 +228,9 @@
                                             <table id="mytable" class="table table-bordred table-striped">
                                                 @php 
                                                     $meta_data = json_decode($broadcast->metaInfo['meta_info']);
+                                                    if(!is_object($meta_data)){
+                                                        $meta_data = json_decode($meta_data);
+                                                    }
                                                     if(is_object($meta_data)){
                                                     $isConnectionExpensive = $meta_data->connectionDetail->isConnectionExpensive == 'false' ? 0 : 1;
 
