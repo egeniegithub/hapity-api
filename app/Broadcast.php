@@ -39,7 +39,7 @@ class Broadcast extends Model
     }
 
     public function metaInfo(){
-        return $this->hasOne(MetaInfo::class,'broadcast_id');
+        return $this->hasOne("App\MetaInfo",'broadcast_id');
     }
 
 }
