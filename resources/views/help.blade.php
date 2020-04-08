@@ -337,7 +337,7 @@
 
 
         <!-- Broadcasting from your PC - Starts Here  -->
-        <div class="col-md-4 video-lg">
+        <!-- <div class="col-md-4 video-lg">
           <div class="video-heading text-center">
             <h4>Broadcasting from your PC</h4>
           </div>
@@ -365,13 +365,13 @@
               <p><h4><span>Transcript</span></h4></p>
             </a>
           </div>
-        </div>
+        </div> -->
         <!-- Broadcasting from your PC - Ends Here  -->
 
 
 
         <!-- Guide for enabling flash - Starts Here  -->
-        <div class="col-md-4 video-lg">
+        <!-- <div class="col-md-4 video-lg">
           <div class="video-heading text-center">
             <h4>Guide for enabling flash</h4>
           </div>
@@ -398,7 +398,7 @@
               <p><h4><span>Transcript</span></h4></p>
             </a>
           </div>
-        </div>
+        </div> -->
         <!-- Guide for enabling flash - Starts Here  -->
       </div>
     </div>
