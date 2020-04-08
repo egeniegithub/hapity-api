@@ -17,7 +17,8 @@
 <div class="profile-page new_design webcast-page-wrapper">
     <div class="live-streaming">
         <div class="stream-conatiner" id="stream-conatiner-wrp">
-            <h3 class="braodcast-web-heading">Broadcast for web</h3>
+            <h3>Temporarily Hapity is only live streaming from Mobiles and not PCs. <br><br>This is due to Flash becoming obsolete. <br><br>An update in late May 2020 will again permit broadcasting from a PC without Flash</h3>
+            <!-- <h3 class="braodcast-web-heading">Broadcast for web</h3>
             <div class="flash-error webcast-page-flash-error col-xs-12 col-sm-12 col-md-12" style="display: none;">Flash player is not supported by your browser, you need flash installed to see Broadcast Videos</div>
             <div class="streamimg-logo"><img src="{{asset('assets')}}/images/broadcast-icon-new.png" width="100"></div>
             <div class="live-broadcast-form">
@@ -97,7 +98,7 @@
                                 <param name="flashVars" 
                                 value="controls=true&live=true&url=rtmp://52.18.33.132:1935/live/{{ $time. '.stream' }}&publish={{ $time. '.stream' }}&record=false&recording=false&cameraQuality=100&videoCodec=H264Avc&codec=pcma" />
                             </object>-->                        
-                        </div>
+                    <!--    </div>
                     </div>
                     <div class="live-broadcats-strip margin-bottom">
                         <div class="stream-status">
@@ -105,7 +106,7 @@
                             <div class="text">You are live now!</div>
                         </div>
                         <!-- <div class="video-lenght">0:01:22</div> -->
-                    </div>
+                    <!--</div>
                     <ul class="share-with-icons-live" style="display: none;">
                         <li class="twitter-icon"><a href="#" target="_blank" class="twitter"><i class="fa fa-twitter"></i></a></li>
                         <li class="facebook-icon"><a href="" target="_blank" ><i class="fa fa-facebook"></i></a></li>
@@ -113,7 +114,7 @@
                     <br />
                     <input id="stop-streaming" class="stop-streaming" type="button" name="" value="STOP BROADCAST" >
                 </form>
-            </div>
+            </div> -->
         </div>
     </div>
 </div>
