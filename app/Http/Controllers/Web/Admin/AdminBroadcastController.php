@@ -19,8 +19,14 @@ class AdminBroadcastController extends Controller
     }
     public function index(Request $request)
     {
-        $data = User::rightJoin('broadcasts', 'broadcasts.user_id', '=', 'users.id')->select('broadcasts.*', 'users.username');
-
+        $data = Broadcast::with(['user'=>function($q){
+            $q->select('id','username');
+        },
+        'metaInfo' => function($q){
+            $q->select('meta_infos.*');
+        }])
+        ->orderBy('created_at','desc');
+        
         if (isset($request['search']) || isset($request['datetimes'])) {
             if (isset($request['search']) && $request['search'] != '') {
                 $data = $data->where('title', 'like', "%" . $request['search'] . "%");
@@ -35,23 +41,16 @@ class AdminBroadcastController extends Controller
             }
         }
 
-        $broadcasts = $data->orderBy('broadcasts.id', 'DESC')->paginate('20');
-
-        $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
-
+        $broadcasts = $data->paginate(20);
+       
         foreach ($broadcasts as $key => $broadcast) {
-            $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
-            $ext = $ext == 'mp4' ? '' : '.mp4';
-            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
-            if (file_exists($broadcast_stream_file_path)) {
-                $broadcast['file_exists'] = true;
+            if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename)) || $broadcast->status == 'online') {
+                $broadcasts[$key]['file_exists'] = true;
             } else {
-                $broadcast['file_exists'] = false;
+                $broadcasts[$key]['file_exists'] = false;
             }
-
-            $broadcasts[$key] = $broadcast;
         }
-
+        // dd($broadcasts);
         return view('admin.all-broadcast', compact('broadcasts'));
     }
     public function deleteBroadcast(Request $request)

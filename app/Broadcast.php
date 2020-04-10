@@ -38,4 +38,7 @@ class Broadcast extends Model
         return $this->belongsTo('App\User', 'user_id')->with('reportedUser');
     }
 
+    public function metaInfo(){
+        return $this->hasOne("App\MetaInfo",'broadcast_id');
+    }
 }
