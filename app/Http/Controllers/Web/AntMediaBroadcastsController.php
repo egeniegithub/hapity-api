@@ -97,7 +97,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->share_url = '';
                 $broadcast->save();
 
-                $broadcast->share_url = route('broadcasts.view', [$broadcast->id]);
+                $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
                 $broadcast->save();
 
                 if ((Auth::user()->hasPlugin(Auth::user()->id) && isset($request->post_plugin) && $request->post_plugin == 'true') && (isset($broadcast->id) && !empty($broadcast->id))) {
@@ -180,7 +180,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->share_url = '';
                 $broadcast->save();
 
-                $broadcast->share_url = route('broadcasts.view', [$broadcast->id]);
+                $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
                 $broadcast->save();
 
                 if ((Auth::user()->hasPlugin(Auth::user()->id) && isset($request->post_plugin) && $request->post_plugin == 'true') && (isset($broadcast->id) && !empty($broadcast->id))) {
