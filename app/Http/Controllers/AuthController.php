@@ -420,7 +420,7 @@ class AuthController extends Controller
         $auth_key = $request['auth_key'];
         $type = $request['type'];
         $url = $request['url'];
-        if(isset($auth_key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal') && isset($url)){
+        if(isset($auth_key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal'||$type=='custom') && isset($url)){
             
             $userProfile = UserProfile::where('auth_key',$auth_key)->first();
             if(!empty($userProfile) && $userProfile->id > 0){
