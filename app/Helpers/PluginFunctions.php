@@ -98,8 +98,10 @@ class PluginFunctions
                         if (json_last_error() !== JSON_ERROR_NONE) {
                             $matches = array();
                             $t = preg_match('/\{(.*?)\}/s', $result_str, $matches);
-                            $result_str = $matches[0];
-                            $result = json_decode($result_str, true);
+                            if(isset($matches[0])){
+                                $result_str = $matches[0];
+                                $result = json_decode($result_str, true);
+                            }
                         }
                         Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . json_encode($result));
 
