@@ -424,7 +424,7 @@ class AuthController extends Controller
             
             $userProfile = UserProfile::where('auth_key',$auth_key)->first();
             if(!empty($userProfile) && $userProfile->id > 0){
-                    $plugin_ids = PluginId::where('user_id',$userProfile->user_id)->where('type',$type)->first();
+                    $plugin_ids = PluginId::where('user_id',$userProfile->user_id)->first();
                     if(empty($plugin_ids)){
                         $data = array(
                             'user_id'   =>  $userProfile->user_id,
