@@ -407,12 +407,29 @@ class BroadcastsController extends Controller
         $broadcasts = [];
 
         foreach ($allUserBroadcast as $key => $broadcast) {
+            if(strpos($broadcast->video_name, ".stream") !== false){
+                $ext = pathinfo($broadcast->filename, PATHINFO_EXTENSION);
+                $filename = pathinfo($broadcast->filename, PATHINFO_FILENAME);
+                $stream_file = $filename . '.mp4';
+        
+                $stream_url = urlencode('https://media.hapity.com/vod/' . $ext . ':' . $stream_file . '/playlist.m3u8');
+                $stream_url_mobile = 'http://52.18.33.132:1935/vod/' . $ext . ':' . $stream_file . '/playlist.m3u8';
 
-            $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
+                if ($broadcast->status == 'online') {
+                    $stream_url = urlencode('https://media.hapity.com/live/' . $filename . '/playlist.m3u8');
+                    $stream_url_mobile = 'https://media.hapity.com/live/' . $filename . '/playlist.m3u8';
+                }
 
-            if ($broadcast->status == 'online') {
-                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
+                $broadcast['dynamic_stream_url_web'] = $stream_url;
+                $broadcast['dynamic_stream_url_mobile'] = $stream_url_mobile;
+            }else{
+                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
+
+                if ($broadcast->status == 'online') {
+                    $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
+                }
             }
+            
 
             $broadcastObj = [];
             $broadcastObj['id'] = $broadcast->id;
