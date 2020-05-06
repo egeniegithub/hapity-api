@@ -65,7 +65,6 @@ class BroadcastsController extends Controller
         $broadcast->save();
 
         $stream_video_info = $this->handle_video_file_upload($request);
-
         if (!empty($stream_video_info)) {
             $broadcast->stream_url = $stream_video_info['file_stream_url'];
             $broadcast->filename = $stream_video_info['file_name'];
@@ -535,10 +534,13 @@ class BroadcastsController extends Controller
 
 
     private function make_streaming_server_url($file_name, $live = false)
-    {
-
+    {        
         if ($live == true) {
-            $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
+            if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
+                $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
+            }else{
+                $stream_url = "rtmp://media.hapity.com:1935/live/" . $file_name . '/playlist.m3u8';
+            }
         } else {
             $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.mp4' : '';
         }
@@ -560,6 +562,7 @@ class BroadcastsController extends Controller
 
             $file_name = "stream_" . time() . $ext;
             $antmedia_path = base_path('antmedia_store');
+            
 
             $output_file_name = "stream_" . time() . ".mp4";
 
