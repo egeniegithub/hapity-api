@@ -65,7 +65,6 @@ class BroadcastsController extends Controller
         $broadcast->save();
 
         $stream_video_info = $this->handle_video_file_upload($request);
-
         if (!empty($stream_video_info)) {
             $broadcast->stream_url = $stream_video_info['file_stream_url'];
             $broadcast->filename = $stream_video_info['file_name'];
@@ -559,7 +558,16 @@ class BroadcastsController extends Controller
             $temp_path = storage_path('temp');
 
             $file_name = "stream_" . time() . $ext;
-            $antmedia_path = base_path('antmedia_store');
+            if(!empty($request->input('is_antmedia')) && $request->input('is_antmedia') == 'yes'){
+                $antmedia_path = base_path('antmedia_store');
+                $stream_url = '';
+                $server = 'https://stg-media.hapity.com:5443/';
+            }else{
+                $server = $this->getRandIp();
+                $stream_url = $this->make_streaming_server_url($server, $file_name, false);
+                $antmedia_path = base_path('wowza_store');
+            }
+            
 
             $output_file_name = "stream_" . time() . ".mp4";
 
@@ -569,14 +577,14 @@ class BroadcastsController extends Controller
 
             ffmpeg_upload_file_path($video_path->getRealPath(), $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
 
-            $stream_url = '';
+            
 
             $to_return = [
                 'file_original_name' => $video_original_name,
                 'file_name' => $output_file_name,
                 'file_path' => $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name,
                 'file_stream_url' => $stream_url,
-                'file_server' => 'https://stg-media.hapity.com:5443/',
+                'file_server' => $server,
             ];
         }
 
@@ -667,6 +675,16 @@ class BroadcastsController extends Controller
     {
         if (file_exists($file_path)) {
             unlink($file_path);
+        }
+    }
+    private function getRandIp()
+    {
+        if (env('APP_ENV') == 'local') {
+            return '72.255.38.246';
+        } else {
+            $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+            $index = rand(0, 1);
+            return $ip[0];
         }
     }
 }
