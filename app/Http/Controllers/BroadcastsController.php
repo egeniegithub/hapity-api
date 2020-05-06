@@ -539,7 +539,7 @@ class BroadcastsController extends Controller
             if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
                 $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
             }else{
-                $stream_url = "rtmp://media.hapity.com:1935/stage_live/" . $file_name . '/playlist.m3u8';
+                $stream_url = "rtmp://media.hapity.com:1935/live/" . $file_name . '/playlist.m3u8';
             }
         } else {
             $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.mp4' : '';
@@ -670,16 +670,6 @@ class BroadcastsController extends Controller
     {
         if (file_exists($file_path)) {
             unlink($file_path);
-        }
-    }
-    private function getRandIp()
-    {
-        if (env('APP_ENV') == 'local') {
-            return '72.255.38.246';
-        } else {
-            $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
-            $index = rand(0, 1);
-            return $ip[0];
         }
     }
 }
