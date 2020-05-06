@@ -448,6 +448,8 @@ class BroadcastsController extends Controller
 
             if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename)) || $broadcast->status == 'online') {
                 $broadcasts[] = $broadcastObj;
+            }else if(file_exists(base_path("wowza_store" . DIRECTORY_SEPARATOR . $broadcast->filename))){
+                $broadcasts[] = $broadcastObj;
             }
 
         }
