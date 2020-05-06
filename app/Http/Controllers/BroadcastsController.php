@@ -193,7 +193,11 @@ class BroadcastsController extends Controller
         } else {
             $response['image'] = asset('images/default-image-mobile.png');
         }
-
+        if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
+            $response['server'] = "";
+        }else{
+            $response['server'] = $$this->getRandIp();
+        }
         $response['response'] = 'startbroadcast';
 
         if (boolval($request->input('post_plugin'))) {
@@ -670,6 +674,16 @@ class BroadcastsController extends Controller
     {
         if (file_exists($file_path)) {
             unlink($file_path);
+        }
+    }
+    private function getRandIp()
+    {
+        if (env('APP_ENV') == 'local') {
+            return '72.255.38.246';
+        } else {
+            $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
+            $index = rand(0, 1);
+            return $ip[0];
         }
     }
 }
