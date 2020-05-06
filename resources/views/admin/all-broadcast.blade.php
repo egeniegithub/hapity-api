@@ -82,7 +82,7 @@
                     @endphp
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="listing-reported-broadcost">
-                        @if($broadcast->file_exists)
+                        @if(!empty($broadcast->broadcast_image))
                         <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast->title); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast->id); ?>">
                             <div class="reporting-bc-image">
                                 @php
