@@ -196,7 +196,7 @@ class BroadcastsController extends Controller
         if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
             $response['server'] = "";
         }else{
-            $response['server'] = $$this->getRandIp();
+            $response['server'] = $this->getRandIp();
         }
         $response['response'] = 'startbroadcast';
 
