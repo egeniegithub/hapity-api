@@ -567,7 +567,8 @@ class BroadcastsController extends Controller
             if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
                 $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
             }else{
-                $stream_url = "rtmp://media.hapity.com:1935/live/" . $file_name . '/playlist.m3u8';
+                $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+                $stream_url = "rtmp://media.hapity.com:1935/".$live_app."/" . $file_name . '/playlist.m3u8';
             }
         } else {
             $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.mp4' : '';
