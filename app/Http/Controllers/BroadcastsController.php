@@ -427,11 +427,12 @@ class BroadcastsController extends Controller
                 $ext = pathinfo($broadcast->filename, PATHINFO_EXTENSION);
                 $filename = pathinfo($broadcast->filename, PATHINFO_FILENAME);
                 $stream_file = $filename . '.mp4';
-        
-                $stream_url = 'http://52.18.33.132:1935/vod/' . $ext . ':' . $stream_file . '/playlist.m3u8';
+                $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
+                $stream_url = 'http://52.18.33.132:1935/'.$vod_app.'/' . $ext . ':' . $stream_file . '/playlist.m3u8';
 
                 if ($broadcast->status == 'online') {
-                    $stream_url = 'https://media.hapity.com/live/' . $filename . '/playlist.m3u8';
+                    $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
+                    $stream_url = 'https://media.hapity.com/'.$live_app.'/' . $filename . '/playlist.m3u8';
                 }
             }
             
