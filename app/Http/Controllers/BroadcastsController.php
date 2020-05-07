@@ -59,6 +59,11 @@ class BroadcastsController extends Controller
         $broadcast->share_url = '';
         $broadcast->video_name = '';
         $broadcast->status = 'offline';
+        if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
+            $broadcast->is_antmedia = 1; 
+        }else{
+            $broadcast->is_antmedia = 0; 
+        }              
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
@@ -158,6 +163,11 @@ class BroadcastsController extends Controller
         $broadcast->video_name = $request->input('stream_url');
         $broadcast->filename = $request->input('stream_url') . '.mp4';
         $broadcast->status = 'online';
+        if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
+            $broadcast->is_antmedia = 1; 
+        }else{
+            $broadcast->is_antmedia = 0; 
+        }
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
@@ -407,7 +417,13 @@ class BroadcastsController extends Controller
         $broadcasts = [];
 
         foreach ($allUserBroadcast as $key => $broadcast) {
-            if(strpos($broadcast->video_name, ".stream") !== false){
+            if($broadcast->is_antmedia){
+                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
+
+                if ($broadcast->status == 'online') {
+                    $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
+                }
+            }else{
                 $ext = pathinfo($broadcast->filename, PATHINFO_EXTENSION);
                 $filename = pathinfo($broadcast->filename, PATHINFO_FILENAME);
                 $stream_file = $filename . '.mp4';
@@ -416,12 +432,6 @@ class BroadcastsController extends Controller
 
                 if ($broadcast->status == 'online') {
                     $stream_url = 'https://media.hapity.com/live/' . $filename . '/playlist.m3u8';
-                }
-            }else{
-                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
-
-                if ($broadcast->status == 'online') {
-                    $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
                 }
             }
             

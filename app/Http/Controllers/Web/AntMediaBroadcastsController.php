@@ -95,6 +95,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->video_name = $request->input('stream_name') . '.mp4';
                 $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . $request->input('stream_name');
                 $broadcast->share_url = '';
+                $broadcast->is_antmedia = 1;
                 $broadcast->save();
 
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
@@ -127,6 +128,7 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->filename = $broadcast_video;
                     $broadcast->video_name = $broadcast_video;
                     $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
+                    $broadcast->is_antmedia = 1;
                     $broadcast->save();
 
                     if (Auth::user()->hasPlugin(Auth::user()->id)) {
@@ -178,6 +180,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->video_name = !empty($broadcast_video) ? $broadcast_video : '';
                 $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
                 $broadcast->share_url = '';
+                $broadcast->is_antmedia = 1;
                 $broadcast->save();
 
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
@@ -313,7 +316,12 @@ class AntMediaBroadcastsController extends Controller
 
         $broadcast = Broadcast::with(['user'])->find($broadcast_id);
         if (!is_null($broadcast)) {
-            return view('ant_media_broadcasts.view-broadcast', compact('broadcast'));
+            if($broadcast->is_antmedia){
+                return view('ant_media_broadcasts.view-broadcast', compact('broadcast'));
+            }else{
+                return view('view-broadcast', compact('broadcast'));
+            }
+            
         } else {
             return back();
         }
