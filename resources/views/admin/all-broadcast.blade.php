@@ -338,28 +338,67 @@
 
                                 @endphp
                                 @if($video_file_name)
-                                <div class="video-container video-conteiner-init">
-                                    <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
-                                </div>
-                                <script>
-                                    WowzaPlayer.create('w-broadcast-{{ $b_id }}',
-                                    {
-                                        "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
-                                        "title":"{{ $b_title }}",
-                                        "description":"{{ $b_description }}",
-                                        //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
-                                        "sourceURL":"{{ $broadcast->dynamic_stream_url_web }}",
-                                        "autoPlay":false,
-                                        "volume":"75",
-                                        "mute":false,
-                                        "loop":false,
-                                        "audioOnly":false,
-                                        "uiShowQuickRewind":true,
-                                        "uiQuickRewindSeconds":"30"
-                                        }
-                                    );
+                                    @if($broadcast->is_antmedia)
+                                        @if($broadcast->status == 'online')
+                                            <video
+                                                id="my_live_player_{{ $broadcast->id }}"
+                                                class="video-js"
+                                                controls
+                                                preload="auto"
+                                                poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
+                                                data-setup='{"fluid": false}'>
+                                                <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' }}" type="application/x-mpegURL"></source>
+                                                <p class="vjs-no-js">
+                                                    To view this video please enable JavaScript, and consider upgrading to a
+                                                    web browser that
+                                                    <a href="https://videojs.com/html5-video-support/" target="_blank">
+                                                    supports HTML5 video
+                                                    </a>
+                                                </p>
+                                            </video>
+                                        @else 
+                                            <video
+                                                id="my_recorded_player_{{ $broadcast->id }}"
+                                                class="video-js"
+                                                controls
+                                                preload="auto"
+                                                poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
+                                                data-setup='{"fluid": false}'>
+                                                <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP . '/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                                <p class="vjs-no-js">
+                                                    To view this video please enable JavaScript, and consider upgrading to a
+                                                    web browser that
+                                                    <a href="https://videojs.com/html5-video-support/" target="_blank">
+                                                    supports HTML5 video
+                                                    </a>
+                                                </p>
+                                            </video>
+                                        @endif
+                                
+                                    @else
+                                    <div class="video-container video-conteiner-init">
+                                        <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
+                                    </div>
+                                    <script>
+                                        WowzaPlayer.create('w-broadcast-{{ $b_id }}',
+                                        {
+                                            "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
+                                            "title":"{{ $b_title }}",
+                                            "description":"{{ $b_description }}",
+                                            //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
+                                            "sourceURL":"{{ $broadcast->dynamic_stream_url_web }}",
+                                            "autoPlay":false,
+                                            "volume":"75",
+                                            "mute":false,
+                                            "loop":false,
+                                            "audioOnly":false,
+                                            "uiShowQuickRewind":true,
+                                            "uiQuickRewindSeconds":"30"
+                                            }
+                                        );
 
-                                </script>
+                                    </script>
+                                    @endif
                                 @endif
 
                                 </div>
