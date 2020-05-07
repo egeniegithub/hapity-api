@@ -82,7 +82,7 @@
                     @endphp
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="listing-reported-broadcost">
-                        @if(!empty($broadcast->broadcast_image))
+                        @if(!empty($broadcast->filename))
                         <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast->title); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast->id); ?>">
                             <div class="reporting-bc-image">
                                 @php
@@ -341,6 +341,7 @@
                                     @if($broadcast->is_antmedia)
                                         @if($broadcast->status == 'online')
                                             <video
+                                                style="max-width:100%"
                                                 id="my_live_player_{{ $broadcast->id }}"
                                                 class="video-js"
                                                 controls
@@ -358,6 +359,7 @@
                                             </video>
                                         @else 
                                             <video
+                                                style="max-width:100%"
                                                 id="my_recorded_player_{{ $broadcast->id }}"
                                                 class="video-js"
                                                 controls
