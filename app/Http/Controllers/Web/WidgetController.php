@@ -70,9 +70,12 @@ class WidgetController extends Controller
             $user_id = isset($request['user_id']) ? $request['user_id'] : '0';
 
             $data['b_id'] = isset($request['bid']) ? $request['bid'] : '';
-            $data['broadcast'] = Broadcast::find($data['b_id']);
-
-            return view('widget.ant_media.widget', $data);
+            $data['broadcast'] = $broadcast = Broadcast::find($data['b_id']);
+            if($broadcast->is_antmedia){
+                return view('widget.ant_media.widget', $data);
+            }else{
+                return view('widget.widget', $data);
+            }
         } else {
             return "<h1 style='text-align:center;'>No broadcast found</h1>";
         }
