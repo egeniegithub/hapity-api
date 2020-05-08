@@ -43,7 +43,7 @@
                 <div class="row">                  
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="thumbnail">
-                            <img src="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}" alt="" />
+                            <img src="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}" alt="" />
                         </div>
                     </div>
                 </div> 
