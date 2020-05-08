@@ -186,14 +186,14 @@
                                 @endif
                             @else
                                 <div class="video-container video-conteiner-init">
-                                    <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
+                                    <div id="w-broadcast-{{ $broadcast->id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
                                 </div>
                                 <script>
-                                    WowzaPlayer.create('w-broadcast-{{ $b_id }}',
+                                    WowzaPlayer.create('w-broadcast-{{ $broadcast->id }}',
                                     {
                                         "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
-                                        "title":"{{ $b_title }}",
-                                        "description":"{{ $b_description }}",
+                                        "title":"{{ $broadcast->title }}",
+                                        "description":"{{ $broadcast->description }}",
                                         //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
                                         "sourceURL":"{{ $broadcast->dynamic_stream_url_web }}",
                                         "autoPlay":false,
