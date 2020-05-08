@@ -341,7 +341,7 @@
                                     @if($broadcast->is_antmedia)
                                         @if($broadcast->status == 'online')
                                             <video
-                                                style="max-width:100%"
+                                                style="max-width:100%;margin: auto;"
                                                 id="my_live_player_{{ $broadcast->id }}"
                                                 class="video-js"
                                                 controls
@@ -359,7 +359,7 @@
                                             </video>
                                         @else 
                                             <video
-                                                style="max-width:100%"
+                                                style="max-width:100%;margin: auto;"
                                                 id="my_recorded_player_{{ $broadcast->id }}"
                                                 class="video-js"
                                                 controls

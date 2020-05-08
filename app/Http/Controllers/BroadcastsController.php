@@ -59,11 +59,7 @@ class BroadcastsController extends Controller
         $broadcast->share_url = '';
         $broadcast->video_name = '';
         $broadcast->status = 'offline';
-        if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
-            $broadcast->is_antmedia = 1; 
-        }else{
-            $broadcast->is_antmedia = 0; 
-        }              
+        $broadcast->is_antmedia = 1;             
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
