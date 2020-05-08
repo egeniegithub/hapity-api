@@ -16,7 +16,7 @@
     </style>
 @endpush
 @section('content')
-
+<link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
 <script type="text/javascript" src="https://player.wowza.com/player/latest/wowzaplayer.min.js"></script>
 
 @php
@@ -430,9 +430,6 @@
         </div>
         <!--Right Content Area End-->
 @endsection
-@push('css')
-    <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
-@endpush
 @push('admin-script')
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
