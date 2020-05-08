@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @section('content')   
+<script type="text/javascript" src="https://player.wowza.com/player/latest/wowzaplayer.min.js"></script>
 
     <div class="container">    
         <br />       
@@ -230,12 +231,18 @@
 @endpush
 
 @push('script')
-    <script type="text/javascript" src="https://player.wowza.com/player/latest/wowzaplayer.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
     <script>
         $(document).ready(function(){
+            function closeModel(id){
+                var my_player = WowzaPlayer.get('w-broadcast-'+id);
+                if(my_player !== null){
+                    my_player.finish();
+                }
+                console.log(my_player);
+            }
             $('body').on('click', '.delete-btn', function(){
                 var broadcast_id = $(this).attr('data-broadcast_id');
                 alertify.confirm(
