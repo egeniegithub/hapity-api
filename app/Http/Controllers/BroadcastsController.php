@@ -130,7 +130,7 @@ class BroadcastsController extends Controller
 
     public function start(Request $request)
     {
-        Log::log('info', 'start: ' . json_encode($request->all()));
+        Log::log('info', 'start: ' . json_encode($request->except('image')));
 
         $rules = array(
             'user_id' => 'required',
@@ -147,8 +147,11 @@ class BroadcastsController extends Controller
             );
             return response()->json($response);
         }
-
-        $stream_url = $this->make_streaming_server_url($request->input('stream_url'), true);
+        $is_antmedia = 0;
+        if($request->input('is_antmedia') == 'yes'){
+            $is_antmedia = 1; 
+        }
+        $stream_url = $this->make_streaming_server_url($request->input('stream_url'), true, $is_antmedia);
 
         $user = User::find($request->input('user_id'));
 
@@ -163,11 +166,7 @@ class BroadcastsController extends Controller
         $broadcast->video_name = $request->input('stream_url');
         $broadcast->filename = $request->input('stream_url') . '.mp4';
         $broadcast->status = 'online';
-        if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
-            $broadcast->is_antmedia = 1; 
-        }else{
-            $broadcast->is_antmedia = 0; 
-        }
+        $broadcast->is_antmedia = $is_antmedia;
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
@@ -203,7 +202,7 @@ class BroadcastsController extends Controller
         } else {
             $response['image'] = asset('images/default-image-mobile.png');
         }
-        if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
+        if($is_antmedia){
             $response['server'] = "";
         }else{
             $response['server'] = $this->getRandIp();
@@ -562,10 +561,10 @@ class BroadcastsController extends Controller
     }
 
 
-    private function make_streaming_server_url($file_name, $live = false)
+    private function make_streaming_server_url($file_name, $live = false,$is_antmedia)
     {        
         if ($live == true) {
-            if(isset($_POST['is_antmedia']) && $_POST['is_antmedia'] == 'yes'){
+            if($is_antmedia){
                 $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
             }else{
                 $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
