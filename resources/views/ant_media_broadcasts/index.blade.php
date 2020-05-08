@@ -230,6 +230,7 @@
 @endpush
 
 @push('script')
+    <script type="text/javascript" src="https://player.wowza.com/player/latest/wowzaplayer.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
