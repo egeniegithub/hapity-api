@@ -430,8 +430,16 @@
         </div>
         <!--Right Content Area End-->
 @endsection
-
+@push('css')
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
+    
+    <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
+@endpush
 @push('admin-script')
+<script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
+    <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
+    <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
+                                        
     <script type="text/javascript">
         function closeModel(id){
             var my_player = WowzaPlayer.get('w-broadcast-'+id);
