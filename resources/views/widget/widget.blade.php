@@ -13,18 +13,18 @@
 <body>
 
 
-    <h1><?php echo strtoupper($b_title);?></h1>
+    <h1><?php echo strtoupper($broadcast->title);?></h1>
     
-    <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0" ></div>
+    <div id="w-broadcast-{{ $broadcast->id }}" style="width:100%; height:0; padding:0 0 56.25% 0" ></div>
 
       <script>
-        WowzaPlayer.create('w-broadcast-{{ $b_id }}',
+        WowzaPlayer.create('w-broadcast-{{ $broadcast->id }}',
         {
             "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
-            "title":"{{ $b_title }}",
-            "description":"{{ $b_description }}",
-            "sourceURL":"{{ $stream_url }}",
-            "posterFrameURL":"{{ $broadcast_image }}",
+            "title":"{{ $broadcast->title }}",
+            "description":"{{ $broadcast->description }}",
+            "sourceURL":"{{ $broadcast->stream_url }}",
+            "posterFrameURL":"{{ $broadcast->broadcast_image }}",
             "uiPosterFrameFillMode":"fit",
             "autoPlay":false,
             "volume":"75",
@@ -35,12 +35,12 @@
             "uiQuickRewindSeconds":"30"
             }
         );
-        var my_player = WowzaPlayer.get('w-broadcast-{{ $b_id }}'); 
+        var my_player = WowzaPlayer.get('w-broadcast-{{ $broadcast->id }}'); 
         playListener = function ( playEvent ) {
-            var broadcast_id = '{{ $b_id }}';
+            var broadcast_id = '{{ $broadcast->id }}';
             var my_request;
             my_request = $.ajax({
-                url: "{{ route('broadcast.update.view.count', $b_id) }}",
+                url: "{{ route('broadcast.update.view.count', $broadcast->id) }}",
                 type: 'GET'
             });
             my_request.done(function(response){

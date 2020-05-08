@@ -28,6 +28,8 @@ class AntMediaBroadcastsController extends Controller
                 $broadcasts[$key]['file_exists'] = true;
             }else{
                 if(file_exists($wowza_path)){
+                    $broadcst = check_file_exist($broadcast,$wowza_path);
+                    $broadcasts[$key] = $broadcst;
                     $broadcasts[$key]['file_exists'] = true;
                 }
             }
