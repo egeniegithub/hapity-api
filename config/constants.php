@@ -18,7 +18,7 @@ switch (env('APP_URL')) {
 		# code...
 		break;
 }
-define('ANTMEDIA_HOST', 'antmedia.hapity.com');
+define('ANTMEDIA_HOST', 'stg-media.hapity.com');
 define('ANT_MEDIA_SERVER_STAGING_IP', 'http://34.255.219.25:5080/');
 define('ANT_MEDIA_SERVER_STAGING_URL', 'https://'.ANTMEDIA_HOST.':5443/');
 
