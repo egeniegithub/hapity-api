@@ -420,7 +420,7 @@
     
         //var appName = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
         //var path =  location.hostname + ":" + location.port + appName + "websocket";
-        var path =  `${host}:${port}/{{ WEBRTC_APP }}/websocket`;
+        var path =  `{{env('ANTMEDIA_URL')}}{{ WEBRTC_APP }}/websocket`;
         var websocketURL =  "ws://" + path;
         
         if (location.protocol.startsWith("https")) {

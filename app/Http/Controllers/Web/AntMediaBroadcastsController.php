@@ -309,7 +309,7 @@ class AntMediaBroadcastsController extends Controller
                 'file_name' => $output_file_name,
                 'file_path' => $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name,
                 'file_stream_url' => $stream_url,
-                'file_server' => 'https://stg-media.hapity.com:5443/',
+                'file_server' => env('ANTMEDIA_URL'),
             ];
         }
 
