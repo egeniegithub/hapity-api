@@ -295,7 +295,7 @@
             audio : true
         };
 
-        var host = 'antmedia.hapity.com';
+        var host = "{{ ANTMEDIA_HOST }}";
         var port = '5443';
         var appName = "{{ WEBRTC_APP }}/";
     
