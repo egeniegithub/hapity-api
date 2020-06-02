@@ -18,7 +18,8 @@ switch (env('APP_URL')) {
 		# code...
 		break;
 }
-if(env('APP_ENV') == 'live')
+
+if(env('APP_ENV') == 'production')
 	define('ANTMEDIA_HOST', 'antmedia.hapity.com');
 else
 	define('ANTMEDIA_HOST', 'stg-media.hapity.com');
