@@ -604,7 +604,7 @@ class BroadcastsController extends Controller
                 'file_name' => $output_file_name,
                 'file_path' => $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name,
                 'file_stream_url' => $stream_url,
-                'file_server' => env('ANTMEDIA_URL'),
+                'file_server' => 'https://antmedia.hapity.com:5443/',
             ];
         }
 
