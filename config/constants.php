@@ -20,6 +20,6 @@ switch (env('APP_URL')) {
 }
 
 define('ANT_MEDIA_SERVER_STAGING_IP', 'http://34.255.219.25:5080/');
-define('ANT_MEDIA_SERVER_STAGING_URL', env('ANTMEDIA_URL'));
+define('ANT_MEDIA_SERVER_STAGING_URL', 'https://antmedia.hapity.com:5443/');
 
 define('WEBRTC_APP', 'WebRTCAppEE');
