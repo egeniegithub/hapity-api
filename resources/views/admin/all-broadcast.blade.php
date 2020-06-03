@@ -16,6 +16,7 @@
     </style>
 @endpush
 @section('content')
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
 <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
 <script type="text/javascript" src="https://player.wowza.com/player/latest/wowzaplayer.min.js"></script>
 
@@ -83,8 +84,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="listing-reported-broadcost">
                         @if(!empty($broadcast->filename))
-                        <a href="javascript:;" class="pop-report-bc-link" id="<?php echo ucwords($broadcast->title); ?>" data-toggle="modal" data-target="#broadcastModel-<?php echo ($broadcast->id); ?>">
-                            <div class="reporting-bc-image">
+                            <a class="reporting-bc-image" data-fancybox data-src="#video_player_{{ $broadcast->id }}" href="javascript:;">
                                 @php
                                         $thumbnail_image = !is_null($broadcast->broadcast_image) ? $broadcast->broadcast_image : '';
                                         $allowedExtensions = ['png', 'jpg', 'jpeg'];
@@ -115,8 +115,7 @@
                                                 <i class="fa fa-play"></i>
                                             </span>
                                 <div class="overlay"></div>
-                            </div>
-                        </a>
+                            </a>
                         @else
                         <a href="javascript:streamFileDoesNotExist();" class="pop-report-bc-link">
                             <div class="reporting-bc-image">
@@ -315,16 +314,8 @@
                     </div>
                     @endif
                    
-                        <div class="modal fade" id="broadcastModel-<?php echo ($broadcast->id); ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" data-backdrop="static" data-keyboard="false">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <button type="button" class="close close-video" id="model-cross" data-dismiss="modal" aria-label="Close"><span aria-hidden="true" id="{{ $broadcast->id }}" onClick="closeModel(this.id)">&times;</span></button>
-                                    <h4 class="modal-title" id="myModalLabel">{{ ucwords($b_title) }}</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div id="broadcast-{{ $broadcast->id }}" class="player"></div>
-
+                    <div id="video_player_{{ $broadcast->id }}" style="display: none;" class="row">
+                                
                                     @php
                                     $image_classes = '';
                                  
@@ -341,7 +332,7 @@
                                     @if($broadcast->is_antmedia)
                                         @if($broadcast->status == 'online')
                                             <video
-                                                style="max-width:100%;margin: auto;"
+                                                style="max-width:720px;max-height:720px;margin: auto;"
                                                 id="my_live_player_{{ $broadcast->id }}"
                                                 class="video-js"
                                                 controls
@@ -359,7 +350,7 @@
                                             </video>
                                         @else 
                                             <video
-                                                style="max-width:100%;margin: auto;"
+                                                style="max-width:720px;max-height:720px;margin: auto;"
                                                 id="my_recorded_player_{{ $broadcast->id }}"
                                                 class="video-js"
                                                 controls
@@ -402,13 +393,7 @@
                                     </script>
                                     @endif
                                 @endif
-
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-default close-video close-btn" id="{{ $b_id }}" onClick="closeModel(this.id)" data-dismiss="modal" >Close</button>
-                                </div>
-                            </div>
-                        </div>
+                            
                     </div>
                 </div>
            
@@ -430,7 +415,9 @@
         </div>
         <!--Right Content Area End-->
 @endsection
+
 @push('admin-script')
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>    
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
                                         
@@ -442,6 +429,9 @@
             }
             console.log(my_player);
         }
+        $('#myModal').on('hidden.bs.modal', function () {
+        // do something…
+        });
 
         function streamFileDoesNotExist() {
             alertify.error('Stream File Does Not Exist!');
