@@ -220,9 +220,16 @@ class PluginFunctions
 
                     $domain_available = $this->check_if_domain_is_available($plugin->url);
                     if ($domain_available == true) {
-                        $result = @file_get_contents($go, false, $context);
-                        $result = json_decode($result, true);
-
+                        $result_str = @file_get_contents($go, false, $context);
+                        $result = json_decode($result_str, true);
+                        if (json_last_error() !== JSON_ERROR_NONE) {
+                            $matches = array();
+                            $t = preg_match('/\{(.*?)\}/s', $result_str, $matches);
+                            if(isset($matches[0])){
+                                $result_str = $matches[0];
+                                $result = json_decode($result_str, true);
+                            }
+                        }
                         Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . json_encode($result));
 
                         if (!empty($result)) {
@@ -347,8 +354,16 @@ class PluginFunctions
                     $domain_available = $this->check_if_domain_is_available($plugin->url);
                     if ($domain_available == true) {
 
-                        $result = @file_get_contents($go, false, stream_context_create($opts));
-                        $result = json_decode($result, true);
+                        $result_str = @file_get_contents($go, false, $context);
+                        $result = json_decode($result_str, true);
+                        if (json_last_error() !== JSON_ERROR_NONE) {
+                            $matches = array();
+                            $t = preg_match('/\{(.*?)\}/s', $result_str, $matches);
+                            if(isset($matches[0])){
+                                $result_str = $matches[0];
+                                $result = json_decode($result_str, true);
+                            }
+                        }
 
                         Log::info('Broadcast: ' . $broadcast_id . ' Result: ' . json_encode($result));
 
