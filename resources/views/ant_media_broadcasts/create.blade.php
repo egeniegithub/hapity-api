@@ -395,5 +395,9 @@
                 
             }
         });
+        window.addEventListener('beforeunload', (event) => {
+                stopPublishing();
+                event.returnValue = `Are you sure you want to leave?`;
+        });
     </script>
 @endpush

@@ -114,7 +114,7 @@
         $(document).ready(function(){   
             $('#image_upload_loader').hide();
             $('#video_upload_loader').hide();
-
+            $("#update_button").attr("disabled", true);
             $('body').on('click', '#update_button', function(){
                 if($('#broadcast_form').valid()) {                    
 
@@ -205,6 +205,7 @@
                         withCredentials: false,  
                         onload: (response) => {
                             $('#video_upload_loader').hide();
+                            $("#update_button").removeAttr("disabled");
                             $('#broadcast_video_name').val(response);
                         },
                         onerror: (response) => {
