@@ -97,7 +97,7 @@
                                 @if($broadcast->status == 'online')
                                     <video
                                         id="my_live_player_{{ $broadcast->id }}"
-                                        class="video-js"
+                                        class="video-js vjs-big-play-centered"
                                         controls
                                         preload="auto"
                                         poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
@@ -115,7 +115,7 @@
                                     <video
                                         style="max-width:720px;max-height:720px;"
                                         id="my_recorded_player_{{ $broadcast->id }}"
-                                        class="video-js"
+                                        class="video-js vjs-big-play-centered"
                                         controls
                                         preload="auto"
                                         poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
