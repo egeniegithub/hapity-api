@@ -28,6 +28,10 @@
             width: 100% !important;
             min-height: 500px !important;
         }
+        .video-js .vjs-tech{
+            position:relative;
+        }
+
     </style>
 </head>
 <body>
@@ -35,8 +39,9 @@
     <div style="width:100%;max-width:100%;">
         @if($broadcast->status == 'online')
                 <video
+                    style="width:100%;height:100%;max-width:100%;max-height:100%;"
                     id="my_live_player_{{ $broadcast->id }}"
-                    class="video-js"
+                    class="video-js vjs-big-play-centered"
                     controls
                     preload="auto"
                     poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
@@ -52,8 +57,9 @@
                 </video>
             @else 
                 <video
+                    style="width:100%;height:100%;max-width:100%;max-height:100%;"
                     id="my_recorded_player_{{ $broadcast->id }}"
-                    class="video-js"
+                    class="video-js vjs-big-play-centered"
                     controls
                     preload="auto"
                     poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"

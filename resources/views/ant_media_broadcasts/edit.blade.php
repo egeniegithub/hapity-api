@@ -22,7 +22,7 @@
                                 <div class="embed-responsive embed-responsive-16by9">                                    
                                     <video
                                         id="my_recorded_player_{{ $broadcast->id }}"
-                                        class="video-js"
+                                        class="video-js vjs-big-play-centered"
                                         controls
                                         preload="auto"
                                         poster="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}"
