@@ -202,7 +202,7 @@
                 $('.broadcast-overlay').hide();
 
                 var form_data = $('#broadcast_form').serialize();
-
+                form_data += "&meta_info=" + navigator.userAgent;
                 var my_request;
                 my_request = $.ajax({
                     url: "{{ route('broadcasts.ajax') }}",
@@ -395,9 +395,9 @@
                 
             }
         });
-        window.addEventListener('beforeunload', (event) => {
-                stopPublishing();
-                event.returnValue = `Are you sure you want to leave?`;
-        });
+        window.onunload = function() {
+            stopPublishing();
+            alert('Your broadcast is stoppped.');
+        }
     </script>
 @endpush
