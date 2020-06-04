@@ -370,7 +370,7 @@
                                 
                                     @else
                                     <div class="video-container video-conteiner-init">
-                                        <div id="w-broadcast-{{ $b_id }}" style="width:100%; height:0; padding:0 0 56.25% 0"></div>
+                                        <div id="w-broadcast-{{ $b_id }}" style="width:500px;"></div>
                                     </div>
                                     <script>
                                         WowzaPlayer.create('w-broadcast-{{ $b_id }}',
