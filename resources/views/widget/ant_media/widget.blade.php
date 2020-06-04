@@ -6,28 +6,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <style>
-        h1 {
-            text-align: center;
-            font-family: arial;
-        }
-        .thumbnail{
-            text-align: center;
-        }
-        #my_live_player_57{
-            width: 100%;
-        }
-        .my_live_player_57-dimensions{
-            width: 100% !important;
-            min-height: 500px !important;
-        }
-        #video_player_57{
-            width: 100%;
-        }
-
-        .my_recorded_player_57-dimensions{
-            width: 100% !important;
-            min-height: 500px !important;
-        }
         .video-js .vjs-tech{
             position:relative;
         }
@@ -39,7 +17,7 @@
     <div style="width:100%;max-width:100%;">
         @if($broadcast->status == 'online')
                 <video
-                    style="width:100%;height:100%;max-width:100%;max-height:100%;"
+                    style="width:100%;height:100%;max-width:100%;max-height:590px;"
                     id="my_live_player_{{ $broadcast->id }}"
                     class="video-js vjs-big-play-centered"
                     controls
@@ -57,7 +35,7 @@
                 </video>
             @else 
                 <video
-                    style="width:100%;height:100%;max-width:100%;max-height:100%;"
+                    style="width:100%;height:100%;max-width:100%;max-height:590px;"
                     id="my_recorded_player_{{ $broadcast->id }}"
                     class="video-js vjs-big-play-centered"
                     controls
