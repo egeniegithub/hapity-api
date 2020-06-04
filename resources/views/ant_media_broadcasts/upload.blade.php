@@ -119,7 +119,7 @@
                 if($('#broadcast_form').valid()) {                    
 
                     var form_data = $('#broadcast_form').serialize();
-
+                    form_data += "&meta_info=" + navigator.userAgent;
                     var my_request;
                     my_request = $.ajax({
                         url: "{{ route('broadcasts.ajax') }}",

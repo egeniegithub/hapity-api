@@ -106,7 +106,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
                 $broadcast->save();
                 $metainfo = new MetaInfo();
-                $metainfo->meta_info = '{"brand":"'.$_SERVER['HTTP_USER_AGENT'].'","deviceType":"Browser"}';
+                $metainfo->meta_info = '{"brand":"'.$request->input('meta_info').'","deviceType":"Browser"}';
                 $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
                 $metainfo->broadcast_id =  $broadcast->id;
                 $metainfo->user_id =  Auth::id();
@@ -197,7 +197,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
                 $broadcast->save();
                 $metainfo = new MetaInfo();
-                $metainfo->meta_info = '{"brand":"'.$_SERVER['HTTP_USER_AGENT'].'","deviceType":"Browser"}';
+                $metainfo->meta_info = '{"brand":"'.$request->input('meta_info').'","deviceType":"Browser"}';
                 $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
                 $metainfo->broadcast_id =  $broadcast->id;
                 $metainfo->user_id =  Auth::id();
