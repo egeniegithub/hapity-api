@@ -236,7 +236,7 @@
 
               <div class="col-md-6 no-padding">
                 <div class="download-plugin text-center">
-                  <a href="https://extensions.joomla.org/extensions/extension/communication/video-conference/hapity/">
+                  <a href="{{asset('uploads')}}/hapity_joomla.zip">
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-plugin.png" alt="logo"></li>
                       <li><h4>Download Plugin</h4></li>
