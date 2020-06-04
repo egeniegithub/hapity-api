@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Broadcast;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\PluginFunctions;
+use App\MetaInfo;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -104,7 +105,13 @@ class AntMediaBroadcastsController extends Controller
 
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
                 $broadcast->save();
-
+                $metainfo = new MetaInfo();
+                $metainfo->meta_info = '{"brand":"'.$_SERVER['HTTP_USER_AGENT'].'","deviceType":"Browser"}';
+                $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+                $metainfo->broadcast_id =  $broadcast->id;
+                $metainfo->user_id =  Auth::id();
+                $metainfo->time_stamp = time();
+                $metainfo->save();
                 if ((Auth::user()->hasPlugin(Auth::user()->id) && isset($request->post_plugin) && $request->post_plugin == 'true') && (isset($broadcast->id) && !empty($broadcast->id))) {
                     $broadcast_image = !empty($broadcast->broadcast_image) ? $broadcast->broadcast_image : '';
                     $plugin = new PluginFunctions();
@@ -189,7 +196,13 @@ class AntMediaBroadcastsController extends Controller
 
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
                 $broadcast->save();
-
+                $metainfo = new MetaInfo();
+                $metainfo->meta_info = '{"brand":"'.$_SERVER['HTTP_USER_AGENT'].'","deviceType":"Browser"}';
+                $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+                $metainfo->broadcast_id =  $broadcast->id;
+                $metainfo->user_id =  Auth::id();
+                $metainfo->time_stamp = time();
+                $metainfo->save();
                 if ((Auth::user()->hasPlugin(Auth::user()->id) && isset($request->post_plugin) && $request->post_plugin == 'true') && (isset($broadcast->id) && !empty($broadcast->id))) {
                     $plugin = new PluginFunctions();
                     $result = $plugin->make_plugin_call_upload($broadcast->id);
