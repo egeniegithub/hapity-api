@@ -26,33 +26,12 @@
 
 @endpush
 @push('css')
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
     <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <style>
-        .section-main{
-            padding-left: 0px !important;
-            padding-right: 0px !important;
-            padding-bottom: 0px !important;
-        }
-        #my_live_player_57{
-            width: 100%;
-        }
-        .my_live_player_57-dimensions{
-            width: 100% !important;
-            min-height: 500px !important;
-        }
-        #video_player_57{
-            width: 100%;
-        }
-
-        .my_recorded_player_57-dimensions{
-            width: 100% !important;
-            min-height: 500px !important;
-        }
-        .section-main{
-            padding: 0px;
+        .video-js .vjs-tech{
+            position:relative;
         }
     </style>
 @endpush
@@ -81,21 +60,11 @@
 
             <div class="my-bordcast-single bordcast-active">
                  @if($broadcast)
-                        <a data-fancybox data-src="#video_player_{{ $broadcast->id }}" href="javascript:;">                
-                            <div class="row">                  
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="thumbnail">
-                                        <img src="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}" alt="" />
-                                    </div>
-                                </div>
-                            </div> 
-                        </a>
-                    
-                        <div id="video_player_{{ $broadcast->id }}" style="display: none;" class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0; margin:0; ">
+                           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0; margin:0; ">
                                     
                                 @if($broadcast->status == 'online')
                                     <video
+                                        style="width:100%;height:100%;max-width:100%;max-height:100%;"
                                         id="my_live_player_{{ $broadcast->id }}"
                                         class="video-js vjs-big-play-centered"
                                         controls
@@ -113,7 +82,7 @@
                                     </video>
                                 @else 
                                     <video
-                                        style="max-width:720px;max-height:720px;"
+                                        style="width:100%;height:100%;max-width:100%;max-height:100%;"
                                         id="my_recorded_player_{{ $broadcast->id }}"
                                         class="video-js vjs-big-play-centered"
                                         controls
@@ -132,8 +101,6 @@
                                 @endif
                                     
                             </div>
-                        </div>
-                              
                     @endif
                   
                     
@@ -199,7 +166,6 @@
 @endsection
 
 @push('script')
-    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
 @endpush
