@@ -45,7 +45,13 @@ class AdminBroadcastController extends Controller
         foreach ($broadcasts as $key => $broadcast) {
             $wowza_path = base_path("wowza_store" . DIRECTORY_SEPARATOR . $broadcast->filename);        
             if($broadcast->is_antmedia){
-                $broadcasts[$key]['file_exists'] = true;
+                $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+                if(file_exists($video_path)) {
+                    $broadcasts[$key]['file_exists'] = true;
+                }else{
+                    $broadcasts[$key]['file_exists'] = false;
+                } 
+                    
             }else{
                 if(file_exists($wowza_path)){
                     $broadcst = check_file_exist($broadcast,$wowza_path);
