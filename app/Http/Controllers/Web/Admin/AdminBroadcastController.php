@@ -19,29 +19,34 @@ class AdminBroadcastController extends Controller
     }
     public function index(Request $request)
     {
-        $data = Broadcast::with(['user'=>function($q){
+        $inputData = $request->all();
+        $data = Broadcast::with(['user'=>function($q) use($inputData){
             $q->select('id','username');
+            if (isset($inputData['username']) && $inputData['username'] != '') {
+                $q->where('username', 'like', "%" . trim($inputData['username']) . "%");
+            }
         },
         'metaInfo' => function($q){
             $q->select('meta_infos.*');
-        }])
-        ->orderBy('created_at','desc');
-        
-        if (isset($request['search']) || isset($request['datetimes'])) {
-            if (isset($request['search']) && $request['search'] != '') {
-                $data = $data->where('title', 'like', "%" . $request['search'] . "%");
+        }]);
+        if (isset($inputData['search']) || isset($inputData['datetimes'])) {
+            if (isset($inputData['search']) && $inputData['search'] != '') {
+                $data = $data->where(function($query) use ($inputData){
+                    $query->where('title', 'like', "%" . trim($inputData['search']) . "%");
+                    $query->orWhere('share_url', 'like', "%" . trim($inputData['search']) . "%");
+                });
             }
-            if (isset($request['datetimes']) && $request['datetimes'] != '') {
-                $datetimes = explode('-', $request['datetimes']);
+            if (isset($inputData['datetimes']) && $inputData['datetimes'] != '') {
+                $datetimes = explode('-', $inputData['datetimes']);
                 $datetimes[0] = str_replace('/', '-', $datetimes[0]);
                 $from = $datetimes[0];
                 $datetimes[1] = str_replace('/', '-', $datetimes[1]);
                 $to = $datetimes[1];
-                $data = $data->whereBetween('broadcasts.created_at', [$from, $to]);
+                $data = $data->whereBetween('created_at', [$from, $to]);
             }
         }
-
-        $broadcasts = $data->paginate(20);
+        
+        $broadcasts = $data->orderBy('created_at','desc')->paginate(20);
         foreach ($broadcasts as $key => $broadcast) {
             $wowza_path = base_path("wowza_store" . DIRECTORY_SEPARATOR . $broadcast->filename);        
             if($broadcast->is_antmedia){
