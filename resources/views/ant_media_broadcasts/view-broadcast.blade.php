@@ -30,13 +30,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <style>
-        .video-js{
-            position: absolute;
-        }
         .video-js .vjs-tech{
-            position: absolute;
-            min-width: 100%;
-            min-height: 100%;
+            position: relative;
         }
     </style>
 @endpush
