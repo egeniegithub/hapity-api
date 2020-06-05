@@ -334,6 +334,14 @@ class AntMediaBroadcastsController extends Controller
         $broadcast = Broadcast::with(['user'])->find($broadcast_id);
         if (!is_null($broadcast)) {
             if($broadcast->is_antmedia){
+                if($broadcast->status == "online"){
+                    $vide_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+                    $headers = @get_headers($vide_url);   
+                    if($headers && strpos( $headers[0], '200')) { 
+                        $broadcast->status = "offline";
+                        $broadcast->save();
+                    } 
+                }
                 return view('ant_media_broadcasts.view-broadcast', compact('broadcast'));
             }else{
                 return view('view-broadcast', compact('broadcast'));
