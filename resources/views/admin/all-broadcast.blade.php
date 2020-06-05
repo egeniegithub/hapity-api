@@ -33,8 +33,9 @@
                         <p>All Broadcasts</p>
                         <div class="all-bc-search">
                         <form action="{{route('admin.broadcast')}}">
-                                <input name="search" type="text" placeholder="Search broadcast..."/>
-                                <input type="text" name="datetimes" />
+                                <input name="username" type="text" placeholder="Search Username" value="{{ isset($_GET['username']) ? $_GET['username'] : '' }}"/>
+                                <input name="search" type="text" placeholder="Search broadcast..." value="{{ isset($_GET['search']) ? $_GET['search'] : '' }}"/>
+                                <input type="text" name="datetimes" value="{{ isset($_GET['datetimes']) ? $_GET['datetimes'] : '' }}"/>
                                 <button type="submit"><i class="fa fa-search"></i></button>
                             </form>
                         </div>
