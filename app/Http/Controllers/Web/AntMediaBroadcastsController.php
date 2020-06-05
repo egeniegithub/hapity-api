@@ -26,6 +26,13 @@ class AntMediaBroadcastsController extends Controller
         foreach ($broadcasts as $key => $broadcast) {
             $wowza_path = base_path("wowza_store" . DIRECTORY_SEPARATOR . $broadcast->filename);        
             if($broadcast->is_antmedia){
+                if($broadcast->status == "online"){
+                    $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+                    if(file_exists($video_path)) {
+                        $broadcast->status = "offline";
+                        $broadcast->save();
+                    }
+                }
                 $broadcasts[$key]['file_exists'] = true;
             }else{
                 if(file_exists($wowza_path)){
