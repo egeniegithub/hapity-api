@@ -30,8 +30,13 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
     <style>
+        .video-js{
+            position: absolute;
+        }
         .video-js .vjs-tech{
-            position:relative;
+            position: absolute;
+            min-width: 100%;
+            min-height: 100%;
         }
     </style>
 @endpush
@@ -64,7 +69,7 @@
                                     
                                 @if($broadcast->status == 'online')
                                     <video
-                                        style="width:100%;height:100%;max-width:100%;max-height:100%;"
+                                        style="width:100%;max-width:100%;max-height:100%;"
                                         id="my_live_player_{{ $broadcast->id }}"
                                         class="video-js vjs-big-play-centered"
                                         controls
@@ -82,7 +87,7 @@
                                     </video>
                                 @else 
                                     <video
-                                        style="width:100%;height:100%;max-width:100%;max-height:100%;"
+                                        style="width:100%;max-width:100%;max-height:100%;"
                                         id="my_recorded_player_{{ $broadcast->id }}"
                                         class="video-js vjs-big-play-centered"
                                         controls
