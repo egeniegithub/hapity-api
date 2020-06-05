@@ -7,7 +7,7 @@
 
     <style>
         .video-js{
-            position: absolute;
+            margin: auto;
         }
         .video-js .vjs-tech{
             position: relative;
@@ -20,7 +20,7 @@
     <div style="width:100%;max-width:100%;">
         @if($broadcast->status == 'online')
                 <video
-                    style="width:100%;max-width:100%;max-height:100%"
+                    style="max-width:100%;max-height:100%"
                     id="my_live_player_{{ $broadcast->id }}"
                     class="video-js vjs-big-play-centered"
                     controls
@@ -38,7 +38,7 @@
                 </video>
             @else 
                 <video
-                    style="width:100%;max-width:100%;max-height:100%;"
+                    style="max-width:100%;max-height:100%;"
                     id="my_recorded_player_{{ $broadcast->id }}"
                     class="video-js vjs-big-play-centered"
                     controls
