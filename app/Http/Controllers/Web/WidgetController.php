@@ -73,12 +73,11 @@ class WidgetController extends Controller
             $data['broadcast'] = $broadcast = Broadcast::find($data['b_id']);
             if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
-                    $vide_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-                    $headers = @get_headers($vide_url);   
-                    if($headers && strpos( $headers[0], '200')) { 
+                    $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+                    if(file_exists($video_path)) {
                         $broadcast->status = "offline";
                         $broadcast->save();
-                    } 
+                    }
                 }
                 return view('widget.ant_media.widget', $data);
             }else{
