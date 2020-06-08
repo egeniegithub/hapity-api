@@ -63,6 +63,8 @@ $(document).ready(function(){
 <?php else: ?>
     $(function() {
         $('input[name="datetimes"]').daterangepicker({
+            startDate: moment().subtract(1, 'months').format('YYYY/MM/DD'),
+            endDate: moment().format('YYYY/MM/DD'),
             locale: {
                 format: 'YYYY/MM/DD'
             }

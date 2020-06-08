@@ -26,6 +26,7 @@ class AdminBroadcastController extends Controller
                 $q->where('username', 'like', "%" . trim($inputData['username']) . "%");
             }
         },
+        'user.plugins',
         'metaInfo' => function($q){
             $q->select('meta_infos.*');
         }]);

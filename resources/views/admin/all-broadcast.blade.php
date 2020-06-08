@@ -157,7 +157,7 @@
 
                         <div class="reported-bc-detail">
                             <p><span class="title btitle">{{ ucwords($b_title) }}</span></p>
-                            <p><span class="postby">Posted By : </span> <span class="report-result-display"> {{ $broadcast->user['username'] }} </span></p>
+                            <p><span class="postby">Posted By : </span> <span class="report-result-display"> <a href="{{url('admin/broadcast')}}?username={{ $broadcast->user['username'] }}">{{ $broadcast->user['username'] }}</a> </span></p>
                             <p><span class="reportby">Status :</span> <span class="report-result-display"> {{ $broadcast->status }} </span></p>
                             <p>
                                 <span class="reportdate">Source :</span>
@@ -287,6 +287,16 @@
                                                 <tr>
                                                     <th>Endpoint URl</th>
                                                     <th>{{ isset($broadcast->metaInfo['endpoint_url']) ? $broadcast->metaInfo['endpoint_url'] : '' }}</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Plugins Connected</th>
+                                                    <th>
+                                                    @if(isset($broadcast->user->plugins))
+                                                    @foreach($broadcast->user->plugins as $plugin)
+                                                    {{  $plugin->type." : ".$plugin->url }}<br>
+                                                    @endforeach
+                                                    @endif
+                                                    </th>
                                                 </tr>
                                                 <tr>
                                                     <th>Created At</th>

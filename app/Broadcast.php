@@ -41,4 +41,8 @@ class Broadcast extends Model
     public function metaInfo(){
         return $this->hasOne("App\MetaInfo",'broadcast_id');
     }
+
+    public function plugin_ids(){
+        return $this->hasOne("App\PluginId",'broadcast_id');
+    }
 }
