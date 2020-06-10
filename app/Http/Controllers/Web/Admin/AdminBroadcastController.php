@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\ReportBroadcast;
 use App\User;
 use Exception;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -20,16 +21,19 @@ class AdminBroadcastController extends Controller
     public function index(Request $request)
     {
         $inputData = $request->all();
-        $data = Broadcast::with(['user'=>function($q) use($inputData){
+        $data = Broadcast::with(['user'=>function($q) {
             $q->select('id','username');
-            if (isset($inputData['username']) && $inputData['username'] != '') {
-                $q->where('username', 'like', "%" . trim($inputData['username']) . "%");
-            }
+            
         },
         'user.plugins',
         'metaInfo' => function($q){
             $q->select('meta_infos.*');
         }]);
+        if (isset($inputData['username']) && $inputData['username'] != '') {
+            $data = $data->whereHas('user', function (Builder $query) use($inputData) {
+                $query->where('username', 'like', "%" . trim($inputData['username']) . "%");
+            });
+        }  
         if (isset($inputData['search']) || isset($inputData['datetimes'])) {
             if (isset($inputData['search']) && $inputData['search'] != '') {
                 $data = $data->where(function($query) use ($inputData){
