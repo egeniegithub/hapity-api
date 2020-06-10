@@ -41,7 +41,7 @@
                             </div>
 
                         <div class="reported-bc-detail">
-                            <p> <span class="title">{{ ucwords($user['username']) }}</span></p>
+                            <p> <span class="title"><a href="{{url('admin/broadcast')}}?username={{ $user['username'] }}">{{ ucwords($user['username']) }}</a></span></p>
                             <p>  <span class="reportby">Broadcasts :</span> <span class="report-result-display"> {{ !empty($user['broadcasts']) ? count($user['broadcasts']) : 0 }}</span></p>
                             <p>  <span class="reportby">Email :</span> <a href="mailto:{{ $user['email'] }}" class="report-result-display"> {{ $user['email'] }}</a></p>
                             <p>  <span class="reportdate">Registered :</span> <span class="report-result-display"> {{ date("d M Y", strtotime($user['created_at'])) }}</span></p>
