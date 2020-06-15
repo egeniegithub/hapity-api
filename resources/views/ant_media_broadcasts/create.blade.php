@@ -245,9 +245,6 @@
     
         function stopPublishing() {
 
-            if(error == 'NotAllowedError'){
-                    navigator.mediaDevices.getUserMedia({video: true})
-                }
             $('.broadcast-overlay').show();
             webRTCAdaptor.stop($('#stream_name').val());
 
