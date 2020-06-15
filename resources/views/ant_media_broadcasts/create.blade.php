@@ -193,11 +193,11 @@
     
         function startPublishing() {
             if(current_camera_status == 'NotAllowedError'){
-                alert('Permissions have not been granted to use your camera and microphone, Please grant permissions to start the stream');
+                alert('Permissions have not been granted to use your camera and microphone, Please refresh the page and grant permissions to start the stream');
                 return 0;
             }
             if(current_camera_status == 'AbortError'){
-                alert('Your antivirus is blocking the access of camera and microphone, Please allow camera and microphone access from your antivirus');
+                alert('Your antivirus is blocking the access of camera and microphone, Please allow camera and microphone access from your antivirus and refresh the page');
                 return 0;
             }
             var ts = Math.round((new Date()).getTime() / 1000);
