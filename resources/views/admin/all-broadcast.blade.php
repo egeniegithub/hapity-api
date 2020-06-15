@@ -176,6 +176,7 @@
 
                             <p>  <span class="reportdate">Views :</span> <span class="report-result-display"> {{ !is_null($broadcast->view_count) ? $broadcast->view_count : 0 }} </span></p>
 
+                            <p>  <span class="reportdate">Timestamp :</span> <span class="report-result-display"> <?php echo date("Y-d-m H:i:s", strtotime($broadcast->timestamp));?> </span></p>
                             <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast->created_at));?> </span></p>
                             <hr />
                             {{-- <pre>
