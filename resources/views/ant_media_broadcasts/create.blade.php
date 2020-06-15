@@ -163,7 +163,7 @@
 
 
         var token = "null";
-    
+        var current_camera_status = '';
         var start_publish_button = document.getElementById("start_publish_button");
         var stop_publish_button = document.getElementById("stop_publish_button");
         
@@ -192,6 +192,14 @@
                 
     
         function startPublishing() {
+            if(current_camera_status == 'NotAllowedError'){
+                alert('Permissions have not been granted to use your camera and microphone, Please grant permissions to start the stream');
+                return 0;
+            }
+            if(current_camera_status == 'AbortError'){
+                alert('Your antivirus is blocking the access of camera and microphone, Please allow camera and microphone access from your antivirus');
+                return 0;
+            }
             var ts = Math.round((new Date()).getTime() / 1000);
             var name = 'stream_' + ts;
             $('#stream_name').val(name);
@@ -233,6 +241,9 @@
     
         function stopPublishing() {
 
+            if(error == 'NotAllowedError'){
+                    navigator.mediaDevices.getUserMedia({video: true})
+                }
             $('.broadcast-overlay').show();
             webRTCAdaptor.stop($('#stream_name').val());
 
@@ -366,7 +377,7 @@
             callbackError : function(error, message) {
                 //some of the possible errors, NotFoundError, SecurityError,PermissionDeniedError
                 
-                
+                current_camera_status = error;
                 console.log("error callback: " +  JSON.stringify(error));
                 var errorMessage = JSON.stringify(error);
                 if (typeof message != "undefined") {
