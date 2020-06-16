@@ -204,6 +204,14 @@
                 alert('Some other application/browser is using your camera. Please close that application and refresh the page to start the stream');
                 return 0;
             }
+            if (current_camera_status == "NotFoundError") {
+                alert('Camera or Mic are not found or not allowed in your device');
+                return 0;
+            }
+            if(current_camera_status == "OverconstrainedError" || current_camera_status == "ConstraintNotSatisfiedError") {
+                alert('There is no device found that fits your video and audio constraints. You may change video and audio constraints');
+                return 0;
+            }
             var ts = Math.round((new Date()).getTime() / 1000);
             var name = 'stream_' + ts;
             $('#stream_name').val(name);
@@ -377,7 +385,7 @@
             },
             callbackError : function(error, message) {
                 //some of the possible errors, NotFoundError, SecurityError,PermissionDeniedError
-                
+                current_camera_status = error;
                 var errorMessage = JSON.stringify(error);
                 if (typeof message != "undefined") {
                     errorMessage = message;
@@ -400,7 +408,6 @@
                 }else if(error.indexOf("WebSocketNotConnected ") != -1){
                     errorMessage = "WebSocketNotConnected";
                 }
-                current_camera_status = errorMessage;
                 my_request = $.ajax({
                     url: "{{ route('broadcasts.ajax') }}",
                     method: 'POST',
@@ -408,7 +415,7 @@
                         'perform_action': 'set_error_log',
                         '_token': '{{ csrf_token() }}',
                         'broadcast_id': $('#broadcast_id').val(),
-                        'error_log': current_camera_status,
+                        'error_log': errorMessage,
                     }
                 });
                 //alertify.error(errorMessage);
