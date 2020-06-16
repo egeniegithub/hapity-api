@@ -108,6 +108,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . $request->input('stream_name');
                 $broadcast->share_url = '';
                 $broadcast->is_antmedia = 1;
+                $broadcast->error_log = $request->input('error_log');
                 $broadcast->save();
 
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
@@ -181,6 +182,19 @@ class AntMediaBroadcastsController extends Controller
                 echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast_id]);
                 exit();
                 break;
+            case 'set_error_log':
+                $broadcast_id = $request->input('broadcast_id');
+                $broadcast = Broadcast::where('user_id', Auth::id())->where('id', $broadcast_id)->first();
+
+                if (!is_null($broadcast) && $broadcast->id > 0) {
+                    $broadcast->error_log = $request->input('error_log');
+                    $broadcast->save();
+                }
+
+                echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast_id]);
+                exit();
+                break;
+    
 
             case 'upload_broadcast':
                 $update_as = $request->input('update_as');

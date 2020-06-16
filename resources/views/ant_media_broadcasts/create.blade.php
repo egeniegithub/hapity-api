@@ -214,7 +214,7 @@
                 $('.broadcast-overlay').hide();
 
                 var form_data = $('#broadcast_form').serialize();
-                form_data += "&meta_info=" + checkbrowser();
+                form_data += "&meta_info=" + checkbrowser()+"&error_log="+JSON.stringify(current_camera_status);
                 var my_request;
                 my_request = $.ajax({
                     url: "{{ route('broadcasts.ajax') }}",
@@ -378,8 +378,6 @@
             callbackError : function(error, message) {
                 //some of the possible errors, NotFoundError, SecurityError,PermissionDeniedError
                 
-                current_camera_status = error;
-                console.log("error callback: " +  JSON.stringify(error));
                 var errorMessage = JSON.stringify(error);
                 if (typeof message != "undefined") {
                     errorMessage = message;
@@ -399,9 +397,20 @@
                 }
                 else if (error.indexOf("TypeError") != -1) {
                     errorMessage = "Video/Audio is required";
+                }else if(error.indexOf("WebSocketNotConnected ") != -1){
+                    errorMessage = "WebSocketNotConnected";
                 }
-                
-            
+                current_camera_status = errorMessage;
+                my_request = $.ajax({
+                    url: "{{ route('broadcasts.ajax') }}",
+                    method: 'POST',
+                    data: {
+                        'perform_action': 'set_error_log',
+                        '_token': '{{ csrf_token() }}',
+                        'broadcast_id': $('#broadcast_id').val(),
+                        'error_log': current_camera_status,
+                    }
+                });
                 //alertify.error(errorMessage);
                 console.log(error, message);
                 
@@ -450,9 +459,5 @@
                 return browserName+" "+browserVersion;
 
             }
-        window.onunload = function() {
-            stopPublishing();
-            alert('Your broadcast is stoppped.');
-        }
     </script>
 @endpush
