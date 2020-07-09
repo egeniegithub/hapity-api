@@ -71,7 +71,7 @@ class WidgetController extends Controller
 
             $data['b_id'] = isset($request['bid']) ? $request['bid'] : '';
             $data['broadcast'] = $broadcast = Broadcast::find($data['b_id']);
-            if($broadcast->is_antmedia){
+            //if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
                     $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
                     if(file_exists($video_path)) {
@@ -80,9 +80,9 @@ class WidgetController extends Controller
                     }
                 }
                 return view('widget.ant_media.widget', $data);
-            }else{
-                return view('widget.widget', $data);
-            }
+            // }else{
+            //     return view('widget.widget', $data);
+            // }
         } else {
             return "<h1 style='text-align:center;'>No broadcast found</h1>";
         }
