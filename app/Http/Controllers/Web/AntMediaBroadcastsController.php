@@ -24,7 +24,7 @@ class AntMediaBroadcastsController extends Controller
         $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         foreach ($broadcasts as $key => $broadcast) {
-            $wowza_path = base_path("antmedia_store/wowza/live" . DIRECTORY_SEPARATOR . $broadcast->filename);        
+            $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);        
             if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
                     $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';

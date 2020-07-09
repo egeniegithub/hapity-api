@@ -53,7 +53,7 @@ class AdminBroadcastController extends Controller
         
         $broadcasts = $data->orderBy('created_at','desc')->paginate(20);
         foreach ($broadcasts as $key => $broadcast) {
-            $wowza_path = base_path("antmedia_store/wowza/live" . DIRECTORY_SEPARATOR . $broadcast->filename);        
+            $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);        
             if($broadcast->is_antmedia){
                 $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
                 if(file_exists($video_path)) {
