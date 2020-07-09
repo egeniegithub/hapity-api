@@ -151,7 +151,6 @@
                     
                         <div id="video_player_{{ $broadcast->id }}" style="display: none;" class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0; margin:0; ">
-                            @if($broadcast->is_antmedia)        
                                 @if($broadcast->status == 'online')
                                     <video
                                         id="my_live_player_{{ $broadcast->id }}"
@@ -188,30 +187,7 @@
                                         </p>
                                     </video>
                                 @endif
-                            @else
-                                <div class="video-container video-conteiner-init">
-                                    <div id="w-broadcast-{{ $broadcast->id }}" style="width:700px; height:0; padding:0 0 56.25% 0"></div>
-                                </div>
-                                <script>
-                                    WowzaPlayer.create('w-broadcast-{{ $broadcast->id }}',
-                                    {
-                                        "license":"PLAY1-fMRyM-nmUXu-Y79my-QYx9R-VFRjJ",
-                                        "title":"{{ $broadcast->title }}",
-                                        "description":"{{ $broadcast->description }}",
-                                        //"sourceURL":"rtmp%3A%2F%2F52.18.33.132%3A1935%2Fvod%2F9303fbcdfa4490cc6d095988a63b44df.stream",
-                                        "sourceURL":"{{ $broadcast->dynamic_stream_url_web }}",
-                                        "autoPlay":false,
-                                        "volume":"75",
-                                        "mute":false,
-                                        "loop":false,
-                                        "audioOnly":false,
-                                        "uiShowQuickRewind":true,
-                                        "uiQuickRewindSeconds":"30"
-                                        }
-                                    );
-
-                                </script>
-                                @endif        
+                                    
                             </div>
                         </div>
                               

@@ -24,7 +24,7 @@ class AntMediaBroadcastsController extends Controller
         $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         foreach ($broadcasts as $key => $broadcast) {
-            $wowza_path = base_path("wowza_store" . DIRECTORY_SEPARATOR . $broadcast->filename);        
+            $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);        
             if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
                     $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
@@ -36,8 +36,8 @@ class AntMediaBroadcastsController extends Controller
                 $broadcasts[$key]['file_exists'] = true;
             }else{
                 if(file_exists($wowza_path)){
-                    $broadcst = check_file_exist($broadcast,$wowza_path);
-                    $broadcasts[$key] = $broadcst;
+                    //$broadcst = check_file_exist($broadcast,$wowza_path);
+                    $broadcasts[$key] = $broadcast;
                     $broadcasts[$key]['file_exists'] = true;
                 }
             }
@@ -354,7 +354,7 @@ class AntMediaBroadcastsController extends Controller
 
         $broadcast = Broadcast::with(['user'])->find($broadcast_id);
         if (!is_null($broadcast)) {
-            if($broadcast->is_antmedia){
+            //if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
                     $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
                     if(file_exists($video_path)) {
@@ -363,9 +363,9 @@ class AntMediaBroadcastsController extends Controller
                     }
                 }
                 return view('ant_media_broadcasts.view-broadcast', compact('broadcast'));
-            }else{
-                return view('view-broadcast', compact('broadcast'));
-            }
+            // }else{
+            //     return view('view-broadcast', compact('broadcast'));
+            // }
             
         } else {
             return back();
