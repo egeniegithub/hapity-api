@@ -397,7 +397,7 @@
 
                     <div class="report-bc-pagination">
                         <nav>
-                            {{$broadcasts->links()}}
+                            {{$broadcasts->appends(request()->query())->links()}}
                         </nav>
                     </div>
                 </div>
