@@ -65,6 +65,7 @@ class AdminBroadcastController extends Controller
             }else{
                 if(file_exists($wowza_path)){
                     //$broadcst = check_file_exist($broadcast,$wowza_path);
+                    $broadcasts[$key]['file_exists'] = true;
                     $broadcasts[$key] = $broadcast;
                 }
             }
