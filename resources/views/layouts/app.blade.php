@@ -36,7 +36,7 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/tooltipster.css')}}" >
 
-    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css')}}" >
+    <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css')}}?v=1" >
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css')}}" >
 
     <link rel="stylesheet" href="{{ asset('assets/css/alertify/alertify.min.css')}}">
