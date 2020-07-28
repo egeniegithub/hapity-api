@@ -23,7 +23,7 @@
         function callbackThen(response){
             // read HTTP status
             console.log(response.status);
-            
+
             // read Promise object
             response.json().then(function(data){
                 console.log(data);
@@ -31,9 +31,9 @@
         }
         function callbackCatch(error){
             console.error('Error:', error)
-        }   
-    </script>    
-    
+        }
+    </script>
+
 
     {!! ReCaptcha::htmlScriptTagJsApi(['lang' => 'en']) !!}
     {{-- <script src="https://www.google.com/recaptcha/api.js?render={{env('GOOGLE_RECAPTCHA_KEY')}}" async defer></script> --}}
@@ -48,7 +48,7 @@
       <div class="row">
         <div class="col-sm-12">
           @if (Session::has('flash_message'))
-         
+
               <div class="alert alert-success">{{ Session::get('flash_message') }}</div>
           @endif
           @if(Session::has('flash_message_delete'))
@@ -65,35 +65,35 @@
             <div class="col-xs-6">
               <label for="name">Name</label>
               <input class="form-control" id="name" name="name" type="text" required  value="{{ old('name') }}" />
-              @if($errors->has('name')) 
-                  {{ $errors->first('name') }} 
+              @if($errors->has('name'))
+                  {{ $errors->first('name') }}
               @endif
             </div>
             <div class="col-xs-6">
               <label for="Email">Email</label>
               <input class="form-control" id="Email" name="email" type="email" required value="{{ old('email') }}" />
-              @if($errors->has('email')) 
-                  {{ $errors->first('email') }} 
+              @if($errors->has('email'))
+                  {{ $errors->first('email') }}
               @endif
             </div>
             <div class="col-xs-12">
               <label for="Message">Message</label>
               <textarea class="form-control" id="Message" name="message" required>{{{ Input::old('message') }}}</textarea>
-              @if($errors->has('message')) 
-                  {{ $errors->first('message') }} 
+              @if($errors->has('message'))
+                  {{ $errors->first('message') }}
               @endif
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
               <label for="g-recaptcha">Captcha</label>
                 {!! htmlFormSnippet() !!}
-              @if($errors->has('g-recaptcha-response')) 
+              @if($errors->has('g-recaptcha-response'))
                 <strong class="text-danger">You must confirm you are not a robot</strong>
                 {{-- {{ $errors->first('g-recaptcha-response') }}  --}}
               @endif
               <p>&nbsp;</p>
             </div>
             <div class="col-xs-12 col-sm-6 col-md-6">
-            	<input type="submit" value="SubmitContactQuery" id="SubmitContactQuery">
+            	<input type="submit" value="Submit" id="SubmitContactQuery">
 
             </div>
           </div>
@@ -111,7 +111,7 @@
 
 @push('script')
 
-{{-- 
+{{--
   <script>
       grecaptcha.ready(function() {
           grecaptcha.execute("{{env('GOOGLE_RECAPTCHA_KEY')}}", {action: "{{route('about')}}"}).then(function(token) {

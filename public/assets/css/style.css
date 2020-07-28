@@ -1433,7 +1433,7 @@ form.account_form {
     font-size: 18px;
 }
 
-/* 
+/*
 -------------------------------------
 Tooltip Style
 -------------------------------------
@@ -3652,4 +3652,36 @@ body {
 .fancybox-content
 {
     padding: 0 !important;
+}
+#primary-footer-social{
+    margin-top:10px;
+}
+#primary-footer-social a, .generic-social a {
+    background-color: transparent;
+    border: 2px #fff solid;
+    border-radius: 50%;
+    color: #fff;
+    display: block;
+    font-size: 1.09375rem;
+    height: 35px;
+    line-height: 33px;
+    overflow: hidden;
+    position: relative;
+    text-align: center;
+    width: 35px;
+
+}
+#primary-footer-social li{
+    float:left;
+    margin-right: 10px;
+}
+.primary-header-social{
+    border: 2px #fff solid;
+    border-radius: 50%;
+    height: 30px;
+    margin-top: 9px;
+    width: 30px;
+    padding: 4px 10px !important;
+    margin-right: 15px;
+    font-size: 10px;
 }
