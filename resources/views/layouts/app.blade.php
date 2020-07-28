@@ -6,11 +6,11 @@
 
     <!-- CSRF Token -->
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-	
+
     @stack('sharing_post_card')
-    
+
     @if(isset($broadcast) && !empty($broadcast))
-    
+
         {{-- <meta property="og:title" content="{{ $broadcast[0]['title'] }}"/> --}}
         <meta property="og:type" content="website" />
         {{-- <meta property="og:image" content="{{ $broadcast[0]['broadcast_image'] }}" /> --}}
@@ -26,7 +26,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-   
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
@@ -35,27 +35,27 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/tooltipster.css')}}" >
-	
+
     <link rel="stylesheet" type="text/css" href="{{ asset('assets/css/style.css')}}" >
 	<link rel="stylesheet" type="text/css" href="{{ asset('assets/css/responsive.css')}}" >
-	    
+
     <link rel="stylesheet" href="{{ asset('assets/css/alertify/alertify.min.css')}}">
     <link rel="stylesheet" href="{{ asset('assets/css/alertify/themes/default.min.css')}}">
-	
+
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 
-    @stack('css')	
+    @stack('css')
 
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-    
+
     <script type="text/javascript" src="{{asset('assets/js/fb.js')}}"></script>
-    
+
 </head>
 <body>
     <div id="app" class="wrapper">
 		<header class="header-wrapper">
 			<div class="container">
-				<div class="header-nav">          
+				<div class="header-nav">
 					<nav class="navbar navbar-default bg-color">
 						<div class="container-fluid">
 							<!-- Brand and toggle get grouped for better mobile display -->
@@ -81,7 +81,7 @@
 		<main class="main-content">
 			@yield('content')
 		</main>
-	
+
 		<footer class="footer-wrapper">
 			<div class="container">
 				<div class="row">
@@ -121,13 +121,21 @@
 										<li><a href="https://wordpress.org/plugins/wp-hapity/" target="_blank">Plugins for Wordpress</a></li>
 										<li><a href="https://www.drupal.org/project/hapity" target="_blank">Plugins for Drupal</a></li>
 										<li><a href="https://extensions.joomla.org/extensions/extension/communication/video-conference/hapity/" target="_blank">Plugins for Joomla</a></li>
-									</ul>
+                                    </ul>
+                                    <ul id="primary-footer-social" data-selector-name="socialmedia">
+                                        <li>
+                                            <a target="_blank" class="btn-facebook" href="https://www.facebook.com/GoHapity/"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                        </li>
+                                        <li>
+                                            <a target="_blank" class="btn-twitter" href="https://twitter.com/gohapity"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                        </li>
+                                    </ul>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>			
+			</div>
 			<div class="container">
 				<div class="row">
 					<div class="col-md-5">
@@ -141,17 +149,17 @@
     </div>
 
 
-	
+
     <script src="{{ asset('assets/js/alertify.js')}}"></script>
     <script src="{{ asset('assets/js/functions.js')}}"></script>
 
     <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
-    
+
     <script src="{{ asset('assets/js/cropbox.js')}}"></script>
     <script src="{{ asset('assets/js/alertify.min.js')}}"></script>
 	<script src="{{ asset('assets/js/jquery.loader.js')}}"></script>
 	<script src="{{ asset('assets/jquery-filepond-1.0.0/filepond.jquery.js')}}"></script>
-	
+
 
     <script src="{{ asset('assets/js/app.js')}}"></script>
 
