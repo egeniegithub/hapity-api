@@ -206,7 +206,10 @@ class PluginFunctions
                 }
                 $opts = array('http' => array(
                     'method' => 'POST',
-                    'header' => 'Content-type: application/x-www-form-urlencoded',
+                    'header' => array(
+                        'Content-type: application/x-www-form-urlencoded',
+                        "'user-agent: ". $_SERVER['HTTP_USER_AGENT']."'"
+                    ),
                     'content' => $postdata,
                 ),
                 );
@@ -337,7 +340,10 @@ class PluginFunctions
 
                 $opts = array('http' => array(
                     'method' => 'POST',
-                    'header' => 'Content-type: application/x-www-form-urlencoded',
+                    'header' => array(
+                        'Content-type: application/x-www-form-urlencoded',
+                        "'user-agent: ". $_SERVER['HTTP_USER_AGENT']."'"
+                    ),
                     'content' => $postdata,
                 ),
                 );
