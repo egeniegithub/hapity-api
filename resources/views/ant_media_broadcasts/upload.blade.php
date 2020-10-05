@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container">          
+    <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <h1 class="broadcast-heading">Lets Create Something Awesome<br /><small>Upload Broadcast</small></h1>
             </div>
         </div>
-        
-       
-                
+
+
+
         <div class="row" id="form_container">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
                 <form id="broadcast_form" enctype="multipart/form-data" method="POST">
@@ -69,11 +69,11 @@
         <hr />
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                <button type="button" onclick="" class="btn btn-lg btn-success" id="update_button">Publish</button>                
+                <button type="button" onclick="" class="btn btn-lg btn-success" id="update_button">Publish</button>
             </div>
         </div>
-        
-       
+
+
         <br />
         <br />
         <br />
@@ -85,7 +85,7 @@
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
-    
+
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard_theme_circles.min.css') }}" rel="stylesheet">
 
@@ -101,7 +101,7 @@
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
 
@@ -112,10 +112,10 @@
     <script src="{{ asset('assets/webrtc/webrtc_adaptor.js') }}"></script>
     <script>
         $(document).ready(function(){
-            function checkbrowser() { 
+            function checkbrowser() {
                 var navUserAgent = navigator.userAgent;
                 var browserName  = navigator.appName;
-                var browserVersion  = ''+parseFloat(navigator.appVersion); 
+                var browserVersion  = ''+parseFloat(navigator.appVersion);
                 var majorVersion = parseInt(navigator.appVersion,10);
                 var tempNameOffset,tempVersionOffset,tempVersion;
 
@@ -123,7 +123,7 @@
                 if ((tempVersionOffset=navUserAgent.indexOf("Opera"))!=-1) {
                 browserName = "Opera";
                 browserVersion = navUserAgent.substring(tempVersionOffset+6);
-                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1) 
+                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1)
                 browserVersion = navUserAgent.substring(tempVersionOffset+8);
                 } else if ((tempVersionOffset=navUserAgent.indexOf("MSIE"))!=-1) {
                 browserName = "Microsoft Internet Explorer";
@@ -134,7 +134,7 @@
                 } else if ((tempVersionOffset=navUserAgent.indexOf("Safari"))!=-1) {
                 browserName = "Safari";
                 browserVersion = navUserAgent.substring(tempVersionOffset+7);
-                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1) 
+                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1)
                 browserVersion = navUserAgent.substring(tempVersionOffset+8);
                 } else if ((tempVersionOffset=navUserAgent.indexOf("Firefox"))!=-1) {
                 browserName = "Firefox";
@@ -159,11 +159,11 @@
             $('#video_upload_loader').hide();
             $("#update_button").attr("disabled", true);
             $('body').on('click', '#update_button', function(){
-                if($('#broadcast_form').valid()) {                    
+                if($('#broadcast_form').valid()) {
 
                     var form_data = $('#broadcast_form').serialize();
                     form_data += "&meta_info=" + checkbrowser();
-                    
+
                     var my_request;
                     my_request = $.ajax({
                         url: "{{ route('broadcasts.ajax') }}",
@@ -173,9 +173,9 @@
 
                     my_request.done(function(response) {
                         res =  response.status ?  response : JSON.parse(response);
-
+console.log(res);
                         if(res.status == 'success'){
-                            window.location = "{{ route('broadcasts.index') }}";                               
+                            //window.location = "{{ route('broadcasts.index') }}";
                         }
                     });
 
@@ -186,7 +186,7 @@
                     my_request.always(function(){
 
                     });
-                
+
                 }
             });
 
@@ -198,7 +198,7 @@
             FilePond.registerPlugin(FilePondPluginFileValidateSize);
             FilePond.registerPlugin(FilePondPluginFileValidateType);
 
-         
+
 
             const image_uploader = FilePond.create(document.querySelector('#broadcast_image'), {
                 allowFileSizeValidation: true,
@@ -207,14 +207,14 @@
                 allowImageExifOrientation: true,
                 allowImageCrop: true,
                 server: {
-                    
+
                     process: {
                         url: "{{ route('broadcasts.upload_image') }}",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         method: 'POST',
-                        withCredentials: false,  
+                        withCredentials: false,
                         onload: (response) => {
                             $('#image_upload_loader').hide();
                             $('#broadcast_image_name').val(response);
@@ -228,7 +228,7 @@
                             return formData;
                         }
                     }
-                    
+
                 }
             });
 
@@ -239,14 +239,14 @@
                 allowImageExifOrientation: true,
                 allowImageCrop: true,
                 server: {
-                    
+
                     process: {
                         url: "{{ route('broadcasts.upload_video') }}",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         method: 'POST',
-                        withCredentials: false,  
+                        withCredentials: false,
                         onload: (response) => {
                             $('#video_upload_loader').hide();
                             $("#update_button").removeAttr("disabled");
@@ -261,11 +261,11 @@
                             return formData;
                         }
                     }
-                    
+
                 }
             });
 
-        });     
-        
+        });
+
     </script>
 @endpush
