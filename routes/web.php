@@ -73,12 +73,14 @@ Route::group([
     Route::get('broadcasts/edit/{id}', 'Web\AntMediaBroadcastsController@edit')->name('broadcasts.edit');
     Route::get('broadcasts/view/{id}', 'Web\AntMediaBroadcastsController@view')->name('broadcasts.view');
     Route::get('broadcasts/upload', 'Web\AntMediaBroadcastsController@upload')->name('broadcasts.upload');
-    
+
     Route::post('broadcasts/upload/image', 'Web\AntMediaBroadcastsController@upload_image')->name('broadcasts.upload_image');
     Route::post('broadcasts/upload/video', 'Web\AntMediaBroadcastsController@upload_video')->name('broadcasts.upload_video');
     Route::post('broadcasts/delete', 'Web\AntMediaBroadcastsController@delete')->name('broadcasts.delete');
     Route::post('broadcasts/ajax', 'Web\AntMediaBroadcastsController@ajax_responder')->name('broadcasts.ajax');
-    
+
+    Route::get('broadcasts/create_obs_key', 'Web\AntMediaBroadcastsController@createOBSKey')->name('broadcasts.create_obs_key');
+    Route::get('broadcasts/list_obs_keys', 'Web\AntMediaBroadcastsController@listOBSKeys')->name('broadcasts.list_obs_keys');
 
 });
 

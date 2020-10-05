@@ -65,7 +65,7 @@ class WidgetController extends Controller
     }
 
     public function ant_media_widget(Request $request){
-        
+
         if (isset($request['stream'])) {
             $user_id = isset($request['user_id']) ? $request['user_id'] : '0';
 

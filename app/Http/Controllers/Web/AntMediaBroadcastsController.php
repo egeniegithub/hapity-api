@@ -24,7 +24,7 @@ class AntMediaBroadcastsController extends Controller
         $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         foreach ($broadcasts as $key => $broadcast) {
-            $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);        
+            $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);
             if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
                     $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
@@ -108,6 +108,8 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . $request->input('stream_name');
                 $broadcast->share_url = '';
                 $broadcast->is_antmedia = 1;
+                if(!empty($request->input('broadcast_type')))
+                    $broadcast->broadcast_type = $request->input('broadcast_type');
                 $broadcast->error_log = $request->input('error_log');
                 $broadcast->save();
 
@@ -148,6 +150,8 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->video_name = $broadcast_video;
                     $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
                     $broadcast->is_antmedia = 1;
+                    if(!empty($request->input('broadcast_type')))
+                        $broadcast->broadcast_type = $request->input('broadcast_type');
                     $broadcast->save();
 
                     if (Auth::user()->hasPlugin(Auth::user()->id)) {
@@ -194,7 +198,7 @@ class AntMediaBroadcastsController extends Controller
                 echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast_id]);
                 exit();
                 break;
-    
+
 
             case 'upload_broadcast':
                 $update_as = $request->input('update_as');
@@ -230,7 +234,7 @@ class AntMediaBroadcastsController extends Controller
                     if (!empty($result)) {
                         $broadcast->share_url = $result;
                         $broadcast->save();
-                    } 
+                    }
                 }
 
                 echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
@@ -366,10 +370,28 @@ class AntMediaBroadcastsController extends Controller
             // }else{
             //     return view('view-broadcast', compact('broadcast'));
             // }
-            
+
         } else {
             return back();
         }
+    }
+
+    public function createOBSKey(Request $request)
+    {
+        $view_data = [];
+
+        return view('ant_media_broadcasts.create_obs_broadcast', $view_data);
+    }
+    public function listOBSKeys(Request $request)
+    {
+        $broadcasts = Broadcast::with(['user'])
+            ->where('user_id', Auth::user()->id)
+            ->where('broadcast_type', "OBS")
+            ->where('status', "online")
+            ->orderBy('id', 'DESC')
+            ->paginate(20);
+
+        return view('ant_media_broadcasts.list_obs_keys', ['broadcasts' => $broadcasts]);
     }
 
 }
