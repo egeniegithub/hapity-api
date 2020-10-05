@@ -91,7 +91,7 @@ class PluginFunctions
                     $go = $plugin->url . 'index.php?option=com_hapity&task=savebroadcast.getBroadcastData';
                 }
                 $this->stream_context_default();
-                if (strpos($plugin->url, 'localhost') === false || true) {
+                if (strpos($plugin->url, 'localhost') === false) {
 
                     $domain_available = $this->check_if_domain_is_available($plugin->url);
                     if ($domain_available == true) {
