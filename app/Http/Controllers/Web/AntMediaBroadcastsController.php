@@ -27,8 +27,9 @@ class AntMediaBroadcastsController extends Controller
             $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);
             if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
-                    $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-                    if(file_exists($video_path)) {
+                    $video_path = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+                    $headers = get_headers($video_path);
+                    if(strpos($headers[0], '200')) {
                         $broadcast->status = "offline";
                         $broadcast->save();
                     }
@@ -360,8 +361,9 @@ class AntMediaBroadcastsController extends Controller
         if (!is_null($broadcast)) {
             //if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
-                    $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-                    if(file_exists($video_path)) {
+                    $video_path = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+                    $headers = get_headers($video_path);
+                    if(strpos($headers[0], '200')) {
                         $broadcast->status = "offline";
                         $broadcast->save();
                     }
