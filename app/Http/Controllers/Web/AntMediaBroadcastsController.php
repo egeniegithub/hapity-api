@@ -109,15 +109,20 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . $request->input('stream_name');
                 $broadcast->share_url = '';
                 $broadcast->is_antmedia = 1;
-                if(!empty($request->input('broadcast_type')))
+                $broadcast_type = "Browser";
+                if(!empty($request->input('broadcast_type'))){
                     $broadcast->broadcast_type = $request->input('broadcast_type');
+                    if($request->input('broadcast_type') == "OBS")
+                        $broadcast_type = "OBS";
+                }
+
                 $broadcast->error_log = $request->input('error_log');
                 $broadcast->save();
 
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
                 $broadcast->save();
                 $metainfo = new MetaInfo();
-                $metainfo->meta_info = '{"brand":"'.$request->input('meta_info').'","deviceType":"Browser"}';
+                $metainfo->meta_info = '{"brand":"'.$request->input('meta_info').'","deviceType":"'.$broadcast_type.'"}';
                 $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
                 $metainfo->broadcast_id =  $broadcast->id;
                 $metainfo->user_id =  Auth::id();
