@@ -3,7 +3,6 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
 
 class AlterBroadcastAddBType extends Migration
 {
@@ -14,7 +13,7 @@ class AlterBroadcastAddBType extends Migration
      */
     public function up()
     {
-        DB::query("ALTER TABLE `broadcasts` ADD `broadcast_type` ENUM('Hapity','OBS') NOT NULL DEFAULT 'Hapity' AFTER `is_antmedia`;");
+        \DB::statement("ALTER TABLE `broadcasts` ADD `broadcast_type` ENUM('Hapity','OBS') NOT NULL DEFAULT 'Hapity' AFTER `is_antmedia`;");
     }
 
     /**
