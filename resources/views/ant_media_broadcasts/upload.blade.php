@@ -185,10 +185,20 @@
 
                     my_request.done(function(response) {
                         res =  response.status ?  response : JSON.parse(response);
+                            
                         $('#upload-in-process').hide();
                         $("#update_button").attr("disabled", false);
                         if(res.status == 'success'){
-                            window.location = "{{ route('broadcasts.index') }}";
+                            alertify.set('notifier','delay', 10);
+                            if(res.yt_msg != undefined && res.yt_msg.length > 0){
+                                if(res.yt_status == "success")
+                                    alertify.success(res.yt_msg);
+                                else    
+                                    alertify.warning(res.yt_msg);
+                                setTimeout(() => {  window.location = "{{ route('broadcasts.index') }}"; }, 8000);
+                            }else{ 
+                                window.location = "{{ route('broadcasts.index') }}";
+                            }
                         }
                     });
 

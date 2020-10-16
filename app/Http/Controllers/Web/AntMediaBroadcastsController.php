@@ -261,10 +261,11 @@ class AntMediaBroadcastsController extends Controller
                         $broadcast->save();
                     }
                 }
+                $yt_msg = [];
                 if($request->input('stream_to_youtube') == "yes"){
-                    $this->uploadVideoOnYoutube($broadcast);
+                    $yt_msg = $this->uploadVideoOnYoutube($broadcast);
                 }
-                echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
+                echo json_encode(array_merge(['status' => 'success', 'broadcast_id' => $broadcast->id],$yt_msg));
                 exit();
 
                 break;
@@ -531,10 +532,10 @@ class AntMediaBroadcastsController extends Controller
                 $client = new Client();
                 $stream_key = str_replace(".mp4","",$broadcast->video_name);
                 $resp = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_key."/endpoint?rtmpUrl=".$rtmp_endpoint);
-                echo "Stream is live now on youtube as well";
+                echo json_encode(["status" => "success", "msg" => "Stream is live now on youtube as well"]);
             }else if(!empty($youtube_stream_log)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
-                echo "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error->message;
+                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error->message ]);
             }
             $broadcast->save();
         }
@@ -552,6 +553,7 @@ class AntMediaBroadcastsController extends Controller
         $client->setAccessToken($token_info);
         if($client->getAccessToken()){
             $youtube_stream_log =  "";
+            $youtube_response_msg =  ["yt_status" => "success", "yt_msg" => "Video upload to your youtube channel as well"];
                 
             try {
 
@@ -588,26 +590,36 @@ class AntMediaBroadcastsController extends Controller
                 
             } catch (\Google_Service_Exception $e) {
                 $youtube_stream_log = $e->getMessage();
+                $youtube_error_code = $e->getCode();
 
             } catch (\Google_Exception $e) {
                 $youtube_stream_log = $e->getMessage();
+                $youtube_error_code = $e->getCode();
             } catch(\Exception $e){
                 $youtube_stream_log = $e->getMessage();
+                $youtube_error_code = $e->getCode();
             }
-
             $first_time = true;
-            if($youtube_stream_log && json_decode($youtube_stream_log)->error->code == 401 && $first_time){
+            if($youtube_stream_log && $youtube_error_code == 401 && $first_time){
                 $token_info = $client->refreshToken(json_decode($token_info)->refresh_token);
                 Auth::user()->profile->youtube_auth_info = json_encode($token_info);
                 Auth::user()->profile->save();
                 $first_time = false;
                 return $this->uploadVideoOnYoutube($broadcast);
+            }else if($youtube_stream_log && $youtube_error_code == 400){ 
+                Auth::user()->profile->youtube_auth_info = NULL;
+                Auth::user()->profile->save();
             }
             
             if(!empty($youtube_stream_log)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
+                $error_log = json_decode($youtube_stream_log);
+                if(isset($error_log->error->message)){
+                    $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because : ". strip_tags($error_log->error->message)];
+                }
             }
             $broadcast->save();
+            return $youtube_response_msg;
         }
     }
 }
