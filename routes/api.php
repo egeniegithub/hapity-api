@@ -29,19 +29,21 @@ Route::group([
     Route::post('me', 'AuthController@me')->name('api.me');
 
     Route::get('validate_key/',['middleware'=>'cors','uses'=>'AuthController@validate_key'])->name('validate_key');
-    
+
     Route::post('broadcasts/upload', 'BroadcastsController@upload')->name('api.broadcast.upload');
-    Route::post('broadcasts/start', 'BroadcastsController@start')->name('api.broadcast.start');    
+    Route::post('broadcasts/start', 'BroadcastsController@start')->name('api.broadcast.start');
     Route::post('broadcasts/edit', 'BroadcastsController@edit')->name('api.broadcast.edit');
-    
+
     Route::post('broadcasts/delete', 'BroadcastsController@delete')->name('api.broadcast.delete');
     Route::post('broadcasts/update/timestamp', 'BroadcastsController@update_timestamp')->name('api.broadcast.timestamp');
     Route::post('broadcasts/stop', 'BroadcastsController@stop_broadcast')->name('api.broadcast.stop');
 
     Route::post('broadcasts/all', 'BroadcastsController@all_user_broadcasts')->name('api.broadcast.all');
-    
+
     Route::get('broadcasts/download', 'BroadcastsController@download')->name('api.broadcast.download');
 
     // is user plugin get
-    Route::get('plugins/is_user_plugin','PluginsController@is_user_plugin')->name('is_user_plugin');    
+    Route::get('plugins/is_user_plugin','PluginsController@is_user_plugin')->name('is_user_plugin');
+
+    Route::post('add_rtmp_endpoint','BroadcastsController@addRTMPEndpoint')->name('add_rtmp_endpoint');
 });

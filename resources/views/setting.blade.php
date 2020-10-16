@@ -1,4 +1,4 @@
-@php 
+@php
 
 @endphp
 
@@ -17,7 +17,7 @@
         }
         form.account_form {
             padding: 30px 0 5px 10px;
-             width: 100%; 
+             width: 100%;
         }
         .text-error{
             color: red;
@@ -35,7 +35,7 @@
 
         <div class="container">
             <div class="section-main">
-          
+
             <div class="account_setting">
 
                 <div class="account-seetings-new">
@@ -43,7 +43,7 @@
                         <div class="col-sm-12">
                             @if ($message = Session::get('success'))
                                 <div class="alert alert-success alert-block text-center">
-                                    <button type="button" class="close" data-dismiss="alert">×</button> 
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
                                         <strong>{{ $message }}</strong>
                                 </div>
                             @endif
@@ -59,11 +59,11 @@
                             <div class="account-settigs-content">
                                 <div class="form-group text-center">
                                     <figure>
-                                        @php 
+                                        @php
                                         $thumbnail_image = auth::user()->profile->profile_picture;
                                         $allowedExtensions = ['png', 'jpg', 'jpeg'];
 
-                                    // check if the data is empty 
+                                    // check if the data is empty
                                     @endphp
                                     @if(!empty($thumbnail_image) && $thumbnail_image != null)
                                     @php
@@ -71,17 +71,17 @@
                                         $explode = explode(',', $thumbnail_image);
                                         // check if type is allowed
                                         $format = str_replace(
-                                            ['data:image/', ';', 'base64'], 
-                                            ['', '', '',], 
+                                            ['data:image/', ';', 'base64'],
+                                            ['', '', '',],
                                             $explode[0]
-                                        );  
+                                        );
                                     @endphp
                                         @if(in_array($format, $allowedExtensions))
                                             <img src="{{ $thumbnail_image }}" alt="" />
                                         @else
                                             <img src="{{ asset('images/profile_pictures' . '/'  .$thumbnail_image) }}" alt="" />
                                         @endif
-                                        
+
                                     @else
                                         <img src='{{asset('assets/images/null.png')}}' class='profile_picture'>
                                     @endif
@@ -94,12 +94,12 @@
                                                         <div class="thumbBox"></div>
                                                         <div class="spinner" style="display: none">Loading...</div>
                                                     </div>
-                                                    <div class="clearfix"></div> 
+                                                    <div class="clearfix"></div>
                                                     <input type="button" id="btnZoomIn" value="+" style="float: left " class='controls'>
                                                         <input type="button" id="btnZoomOut" value="-" style="float: left" class='controls'>
-                                                    <div class="clearfix"></div> 
+                                                    <div class="clearfix"></div>
                                                     <div class="action action-width">
-                                                        <?php /*<input type="file" id="file" style="float:left; width: 250px" accept="image/gif, image/jpeg, image/png "> */ ?> 
+                                                        <?php /*<input type="file" id="file" style="float:left; width: 250px" accept="image/gif, image/jpeg, image/png "> */ ?>
                                                         <div style="position:relative;">
                                                         <a class='btn-purple' href='javascript:;'>
                                                             Change profile picture
@@ -151,6 +151,9 @@
                                     </div>
                                 </div><!-- form group -->
                                 <div class="form-group text-center field-data">
+                                    <b>{!! $youtube_connect !!}</b>
+                                </div><!-- form group -->
+                                <div class="form-group text-center field-data">
                                     <input type="submit" class="save-btn" value="Save" id='account-save' >
                                 </div><!-- form group -->
                             </div>
@@ -162,7 +165,7 @@
                                     <h1>Change your password</h1>
                                     <span>Change your account Login Credentials</span>
                                 </div>
-                                
+
                                 <form class="account_form " method="post" action="{{ route('reset.password') }}">
                                     @csrf
                                     <figure class="text-center lock-image " >
@@ -177,7 +180,7 @@
                                                 </div>
                                             @else
                                                 <div class="alert @if(Session::has('flash_message_delete')) alert-danger @endif ">
-                                                    @if(Session::has('flash_message_delete')) {{ Session::get('flash_message_delete') }} @endif 
+                                                    @if(Session::has('flash_message_delete')) {{ Session::get('flash_message_delete') }} @endif
                                                 </div>
                                             @endif
                                         </div>
@@ -222,8 +225,8 @@
                         </div> --}}
                     </div>
                 </div>
-         
-                
+
+
             </div>
         </div>
         </div>
@@ -241,13 +244,13 @@
          $("#is_sensitive").val('1');
         }else{
          $("#is_sensitive").val('0');
-        }    
+        }
     });
 
 $('#account-save').click(function(e){
         e.preventDefault();
         $.loader({className:"blue", content:"<i class='fa fa-refresh fa-spin fa-3x fa-fw margin-bottom loadingclass'></i>"});
-        
+
        email = $('#email').val().trim();
        username = $('#username').val().trim();
        user_id = $('#user_id').val().trim();
@@ -263,19 +266,19 @@ $('#account-save').click(function(e){
            profile_picture = cropper.getDataURL();
        else if(picture_change=='false')
            profile_picture = $('#profile_picture').val();
-       
+
        if(username==''){
            $.loader('close');
-            alertify.log('Please enter username.');            
+            alertify.log('Please enter username.');
         }
        else if(email==''){
            $.loader('close');
-            alertify.log('Please enter email address.');            
+            alertify.log('Please enter email address.');
         }
        else if(!validateEmail(email)){
            $.loader('close');
             alertify.alert('Invalid email address, please enter correct email.');
-            error = 'true';            
+            error = 'true';
        }
        else{
         $.ajax({
@@ -299,7 +302,7 @@ $('#account-save').click(function(e){
                                 user_id:user_id
                             },
                             success: function(msg){
-                                
+
                                 if(msg=='true'){
                                     $.loader('close');
                                    // alertify.alert('Email already exist, please choose different email.');

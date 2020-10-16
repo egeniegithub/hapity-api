@@ -62,6 +62,16 @@
                                 </div>
                             @endif
                         </div>
+                        @if(Auth::user()->profile->youtube_auth_info != NULL)
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group label-cstm">
+                                    <div class="styled-input-single">
+                                        <input type="checkbox" name="stream_to_youtube" id="stream_to_youtube" value="yes"/>
+                                        <label for="stream_to_youtube">Stream to youtube</label>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </form>
             </div>
@@ -69,7 +79,7 @@
         <hr />
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                <button type="button" onclick="" class="btn btn-lg btn-success" id="update_button">Publish</button>
+                <button type="button" onclick="" class="btn btn-lg btn-success" id="update_button">Publish <i id="upload-in-process" style="display:none" class="fa fa-fw fa-cog fa-spin"></i></button>
             </div>
         </div>
 
@@ -160,7 +170,9 @@
             $("#update_button").attr("disabled", true);
             $('body').on('click', '#update_button', function(){
                 if($('#broadcast_form').valid()) {
-
+                    
+                    $('#upload-in-process').show();
+                    $("#update_button").attr("disabled", true);
                     var form_data = $('#broadcast_form').serialize();
                     form_data += "&meta_info=" + checkbrowser();
 
@@ -173,13 +185,16 @@
 
                     my_request.done(function(response) {
                         res =  response.status ?  response : JSON.parse(response);
-console.log(res);
+                        $('#upload-in-process').hide();
+                        $("#update_button").attr("disabled", false);
                         if(res.status == 'success'){
-                            //window.location = "{{ route('broadcasts.index') }}";
+                            window.location = "{{ route('broadcasts.index') }}";
                         }
                     });
 
                     my_request.error(function(){
+                        $('#upload-in-process').hide();
+                        $("#update_button").attr("disabled", false);
                         alertify.error('Something went wrong!');
                     });
 

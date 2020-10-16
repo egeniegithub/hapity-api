@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\PluginFunctions;
 use App\MetaInfo;
 use App\User;
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
@@ -113,6 +115,24 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->broadcast_type = $request->input('broadcast_type');
                     if($request->input('broadcast_type') == "OBS")
                         $broadcast_type = "OBS";
+
+                    if($request->input('stream_to_youtube') == "yes"){
+                        $client = new Client();
+                        $url = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/create";
+                        $client = new Client([
+                            'headers' => [ 'Content-Type' => 'application/json' ]
+                        ]);
+                        $stdClass = new \stdClass();
+                        $stdClass->name = $request->input('broadcast_title');
+                        $stdClass->streamId = $request->input('stream_name');
+                        $response = $client->post($url,
+                            [
+                                'body' => json_encode($stdClass),
+                                'headers' => [
+                                    'Content-Type' => 'application/json',
+                                ]
+                            ]);
+                    }
                 }
 
                 $broadcast->error_log = $request->input('error_log');
@@ -241,12 +261,18 @@ class AntMediaBroadcastsController extends Controller
                         $broadcast->save();
                     }
                 }
-
+                if($request->input('stream_to_youtube') == "yes"){
+                    $this->uploadVideoOnYoutube($broadcast);
+                }
                 echo json_encode(['status' => 'success', 'broadcast_id' => $broadcast->id]);
                 exit();
 
                 break;
+            case 'publish_on_youtube':
+                $broadcast = Broadcast::find($request->input('broadcast_id'));
+                $this->createBroadcastOnYoutube($broadcast);
 
+                break;
         }
 
     }
@@ -399,4 +425,189 @@ class AntMediaBroadcastsController extends Controller
         return view('ant_media_broadcasts.list_obs_keys', ['broadcasts' => $broadcasts]);
     }
 
+    private function createBroadcastOnYoutube($broadcast){
+        $client = new \Google_Client();
+        $client->setClientId(env('OAUTH2_CLIENT_ID'));
+        $client->setClientSecret(env('OAUTH2_CLIENT_SECRET'));
+        $client->setScopes([
+            'https://www.googleapis.com/auth/youtube',
+            'https://www.googleapis.com/auth/youtube.upload'
+            ]);
+        $token_info = (Auth::user()->profile->youtube_auth_info);
+        $client->setAccessToken($token_info);
+        if($client->getAccessToken()){
+            $youtube_stream_info =  "";
+            $youtube_stream_log =  "";
+                
+            try {
+
+                $youtube = new \Google_Service_YouTube($client);
+
+                // Define the $liveStream object, which will be uploaded as the request body.
+                $liveStream = new \Google_Service_YouTube_LiveStream();
+
+                // Add 'cdn' object to the $liveStream object.
+                $cdnSettings = new \Google_Service_YouTube_CdnSettings();
+                $cdnSettings->setFrameRate('60fps');
+                $cdnSettings->setIngestionType('rtmp');
+                $cdnSettings->setResolution('1080p');
+                $liveStream->setCdn($cdnSettings);
+
+                // Add 'contentDetails' object to the $liveStream object.
+                $liveStreamContentDetails = new \Google_Service_YouTube_LiveStreamContentDetails();
+                $liveStreamContentDetails->setIsReusable(true);
+                $liveStream->setContentDetails($liveStreamContentDetails);
+
+                // Add 'snippet' object to the $liveStream object.
+                $liveStreamSnippet = new \Google_Service_YouTube_LiveStreamSnippet();
+                $liveStreamSnippet->setTitle($broadcast->title);
+                $liveStream->setSnippet($liveStreamSnippet);
+
+                $streamsResponse = $youtube->liveStreams->insert('snippet,cdn,contentDetails,status', $liveStream);
+
+                $broadcastSnippet = new \Google_Service_YouTube_LiveBroadcastSnippet();
+                $broadcastSnippet->setTitle($broadcast->title);
+                $broadcastSnippet->setDescription($broadcast->description);
+
+                $date = date('Y-m-d');
+                $time = date('H:i:s');
+                $datetime = $date."T".$time."Z";
+
+                $broadcastSnippet->setScheduledStartTime($datetime);
+                //$broadcastSnippet->setScheduledEndTime('2020-10-13T13:00:00.000Z');
+
+                // Create an object for the liveBroadcast resource's status, and set the
+                // broadcast's status to "private".
+                $status = new \Google_Service_YouTube_LiveBroadcastStatus();
+                $status->setLifeCycleStatus('live');
+                $status->setPrivacyStatus('public');
+
+                //content details
+                $broadcastContentDetails = new \Google_Service_YouTube_LiveBroadcastContentDetails();
+                $broadcastContentDetails->setBoundStreamId($streamsResponse['id']);
+                $broadcastContentDetails->setEnableAutoStart(true);
+                $broadcastContentDetails->setEnableAutoStop(true);
+
+                // Create the API request that inserts the liveBroadcast resource.
+                $broadcastInsert = new \Google_Service_YouTube_LiveBroadcast();
+                $broadcastInsert->setSnippet($broadcastSnippet);
+                $broadcastInsert->setStatus($status);
+                $broadcastInsert->setContentDetails($broadcastContentDetails);
+                $broadcastInsert->setKind('youtube#liveBroadcast');
+
+                // Execute the request and return an object that contains information
+                // about the new broadcast.
+                $broadcastsResponse = $youtube->liveBroadcasts->insert('snippet,status,contentDetails',
+                    $broadcastInsert, array());
+
+// Bind the broadcast to the live stream.
+                $bindBroadcastResponse = $youtube->liveBroadcasts->bind(
+                    $broadcastsResponse['id'],'id,contentDetails',
+                    array(
+                        'streamId' => $streamsResponse['id'],
+                    ));
+                $youtube_stream_info = ['stream_url' => $streamsResponse['cdn']['ingestionInfo']['ingestionAddress']."/".$streamsResponse['cdn']['ingestionInfo']['streamName'], 'liveStream' =>  $streamsResponse, 'liveBroadcast' => $broadcastsResponse, 'bindBroadcast' => $bindBroadcastResponse];
+
+            } catch (\Google_Service_Exception $e) {
+                $youtube_stream_log = $e->getMessage();
+
+            } catch (\Google_Exception $e) {
+                $youtube_stream_log = $e->getMessage();
+            } catch(\Exception $e){
+                $youtube_stream_log = $e->getMessage();
+            }
+            $first_time = true;
+            if($youtube_stream_log && json_decode($youtube_stream_log)->error->code == 401 && $first_time){
+                $token_info = $client->refreshToken(json_decode($token_info)->refresh_token);
+                Auth::user()->profile->youtube_auth_info = json_encode($token_info);
+                Auth::user()->profile->save();
+                $first_time = false;
+                return $this->createBroadcastOnYoutube($broadcast);
+            }
+            
+            if(isset($youtube_stream_info['stream_url'])){
+                $rtmp_endpoint = $youtube_stream_info['stream_url'];
+                $broadcast->youtube_stream_info = json_encode($youtube_stream_info);
+                $client = new Client();
+                $stream_key = str_replace(".mp4","",$broadcast->video_name);
+                $resp = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_key."/endpoint?rtmpUrl=".$rtmp_endpoint);
+                echo "Stream is live now on youtube as well";
+            }else if(!empty($youtube_stream_log)){
+                $broadcast->youtube_stream_log = $youtube_stream_log;
+                echo "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error->message;
+            }
+            $broadcast->save();
+        }
+    }
+
+    private function uploadVideoOnYoutube($broadcast){
+        $client = new \Google_Client();
+        $client->setClientId(env('OAUTH2_CLIENT_ID'));
+        $client->setClientSecret(env('OAUTH2_CLIENT_SECRET'));
+        $client->setScopes([
+            'https://www.googleapis.com/auth/youtube',
+            'https://www.googleapis.com/auth/youtube.upload'
+            ]);
+        $token_info = (Auth::user()->profile->youtube_auth_info);
+        $client->setAccessToken($token_info);
+        if($client->getAccessToken()){
+            $youtube_stream_log =  "";
+                
+            try {
+
+                // Define service object for making API requests.
+                $service = new \Google_Service_YouTube($client);
+
+                // Define the $video object, which will be uploaded as the request body.
+                $video = new \Google_Service_YouTube_Video();
+
+                // Add 'snippet' object to the $video object.
+                $videoSnippet = new \Google_Service_YouTube_VideoSnippet();
+                $videoSnippet->setTitle($broadcast->title);
+                $videoSnippet->setDescription($broadcast->description);
+                $video->setSnippet($videoSnippet);
+
+                // Add 'status' object to the $video object.
+                $videoStatus = new \Google_Service_YouTube_VideoStatus();
+                $videoStatus->setPrivacyStatus('public');
+                $video->setStatus($videoStatus);
+
+                // TODO: For this request to work, you must replace "YOUR_FILE"
+                //       with a pointer to the actual file you are uploading.
+                //       The maximum file size for this operation is 137438953472.
+                $response = $service->videos->insert(
+                    'snippet,status',
+                    $video,
+                    array(
+                        'data' => file_get_contents(base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4'),
+                        'mimeType' => 'application/octet-stream',
+                        'uploadType' => 'multipart'
+                    )
+                );
+                $broadcast->youtube_stream_info = json_encode($response);
+                
+            } catch (\Google_Service_Exception $e) {
+                $youtube_stream_log = $e->getMessage();
+
+            } catch (\Google_Exception $e) {
+                $youtube_stream_log = $e->getMessage();
+            } catch(\Exception $e){
+                $youtube_stream_log = $e->getMessage();
+            }
+
+            $first_time = true;
+            if($youtube_stream_log && json_decode($youtube_stream_log)->error->code == 401 && $first_time){
+                $token_info = $client->refreshToken(json_decode($token_info)->refresh_token);
+                Auth::user()->profile->youtube_auth_info = json_encode($token_info);
+                Auth::user()->profile->save();
+                $first_time = false;
+                return $this->uploadVideoOnYoutube($broadcast);
+            }
+            
+            if(!empty($youtube_stream_log)){
+                $broadcast->youtube_stream_log = $youtube_stream_log;
+            }
+            $broadcast->save();
+        }
+    }
 }

@@ -48,6 +48,18 @@
                             @endif
                         </div>
                     </div>
+                    @if(Auth::user()->profile->youtube_auth_info != NULL)
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group label-cstm">
+                                <div class="styled-input-single">
+                                    <input type="checkbox" name="stream_to_youtube" id="stream_to_youtube" value="yes"/>
+                                    <label for="stream_to_youtube">Stream to youtube</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </form>
             </div>
         </div>
@@ -177,6 +189,20 @@
                 my_request.done(function(response) {
                     res =  response.status ?  response : JSON.parse(response);
 
+                    if($('#stream_to_youtube:checked').length > 0){
+                        my_req =  $.ajax({
+                            url: "{{ route('broadcasts.ajax') }}",
+                            method: 'POST',
+                            data: {
+                                'perform_action': 'publish_on_youtube',
+                                '_token': '{{ csrf_token() }}',
+                                'broadcast_id': res.broadcast_id,
+                            }
+                        });
+                        my_req.done(function(response) {
+                            alertify.success(response);
+                        });
+                    }
                     if(res.status == 'success'){
                         window.location = '{{ url("broadcasts/list_obs_keys") }}';
                     }

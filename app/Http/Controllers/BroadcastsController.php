@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Helpers\PluginFunctions;
 use App\MetaInfo;
 use App\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
@@ -59,7 +60,7 @@ class BroadcastsController extends Controller
         $broadcast->share_url = '';
         $broadcast->video_name = '';
         $broadcast->status = 'offline';
-        $broadcast->is_antmedia = 1;             
+        $broadcast->is_antmedia = 1;
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
@@ -145,7 +146,7 @@ class BroadcastsController extends Controller
         }
         $is_antmedia = 0;
         if($request->input('is_antmedia') == 'yes'){
-            $is_antmedia = 1; 
+            $is_antmedia = 1;
         }
         $stream_url = $this->make_streaming_server_url($request->input('stream_url'), true, $is_antmedia);
 
@@ -186,7 +187,7 @@ class BroadcastsController extends Controller
             $metainfo->time_stamp = time();
             $metainfo->save();
         }
-        
+
         $response = [];
         $response['status'] = 'success';
         $response['broadcast_id'] = $broadcast->id;
@@ -321,7 +322,7 @@ class BroadcastsController extends Controller
 
             $plugin = new PluginFunctions();
             $share_url = $plugin->make_plugin_call_edit($broadcast_id);
-    
+
         return response()->json(['response' => $response]);
     }
 
@@ -432,7 +433,7 @@ class BroadcastsController extends Controller
                 //     $stream_url = 'https://media.hapity.com/'.$live_app.'/' . $filename . '/playlist.m3u8';
                 // }
             }
-            
+
 
             $broadcastObj = [];
             $broadcastObj['id'] = $broadcast->id;
@@ -560,7 +561,7 @@ class BroadcastsController extends Controller
 
 
     private function make_streaming_server_url($file_name, $live = false,$is_antmedia)
-    {        
+    {
         if ($live == true) {
             if($is_antmedia){
                 $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
@@ -590,7 +591,7 @@ class BroadcastsController extends Controller
 
             $file_name = "stream_" . time() . $ext;
             $antmedia_path = base_path('antmedia_store');
-            
+
 
             $output_file_name = "stream_" . time() . ".mp4";
 
@@ -708,6 +709,30 @@ class BroadcastsController extends Controller
             $ip = array(0 => '52.18.33.132', 1 => '52.17.132.36');
             $index = rand(0, 1);
             return $ip[0];
+        }
+    }
+
+    public function addRTMPEndpoint(Request $request){
+
+        $stream_id = $request->input('stream_id');
+        $rtmp_endpoint = $request->input('rtmp_endpoint');
+        if(!empty($stream_id) && !empty($rtmp_endpoint)){
+            $client = new Client();
+            $res = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_id."/endpoint?rtmpUrl=".$rtmp_endpoint);
+            if($res->getStatusCode() == 200){
+                $response['status'] = 'success';
+                $response['message'] = 'RTMP stream added successfully';
+                return response($response, 200);
+            }else{
+                $response['status'] = 'error';
+                $response['message'] = $res->getBody();
+                return response($response, 422);
+            }
+
+        }else{
+            $response['status'] = 'error';
+            $response['message'] = 'Stream_id or rtmp_endpoint parameter is missing';
+            return response($response, 422);
         }
     }
 }

@@ -82,6 +82,8 @@ Route::group([
     Route::get('broadcasts/create_obs_key', 'Web\AntMediaBroadcastsController@createOBSKey')->name('broadcasts.create_obs_key');
     Route::get('broadcasts/list_obs_keys', 'Web\AntMediaBroadcastsController@listOBSKeys')->name('broadcasts.list_obs_keys');
 
+    Route::get('get_youtube_auth_token', 'Web\SettingController@getYouTubeAuthToken')->name('get_youtube_auth_token');
+
 });
 
 ////  admin routes
