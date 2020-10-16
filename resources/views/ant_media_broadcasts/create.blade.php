@@ -1,29 +1,29 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container">          
+    <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <h1 class="broadcast-heading">Lets Create Something Awesome<br /><small>A New Broadcast</small></h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2 text-center">    
-                <div class="panel panel-default panel-success" style="border-color: #97be0d;">                    
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2 text-center">
+                <div class="panel panel-default panel-success" style="border-color: #97be0d;">
                     <div class="panel-body">
                         <div class="broadcast-overlay"><span>Click Start Publishing</span></div>
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                                 <div class="embed-responsive embed-responsive-16by9">
                                     <video id="localVideo" autoplay="autoplay" muted="muted" controls="controls" playsinline=""></video>
-                                </div>  
+                                </div>
                             </div>
-                        </div>                        
-                    </div>                      
-                </div>                 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-       
-                
+
+
         <div class="row" id="form_container">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
                 <form id="broadcast_form" enctype="multipart/form-data" method="POST">
@@ -65,6 +65,18 @@
                             @endif
                         </div>
                     </div>
+                    @if(Auth::user()->profile->youtube_auth_info != NULL)
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group label-cstm">
+                                <div class="styled-input-single">
+                                    <input type="checkbox" name="stream_to_youtube" id="stream_to_youtube" value="yes"/>
+                                    <label for="stream_to_youtube">Stream to youtube</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endif
                 </form>
             </div>
         </div>
@@ -80,8 +92,8 @@
                 <span class="label label-success" id="broadcastingInfo" style="font-size: 14px; display: none;">Publishing</span>
             </div>
         </div>
-            
-       
+
+
         <br />
         <br />
         <br />
@@ -93,7 +105,7 @@
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
-    
+
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard_theme_circles.min.css') }}" rel="stylesheet">
 
@@ -109,7 +121,7 @@
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
 
@@ -131,24 +143,24 @@
                 allowImageExifOrientation: true,
                 allowImageCrop: true,
                 server: {
-                    
+
                     process: {
                         url: "{{ route('broadcasts.upload_image') }}",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         method: 'POST',
-                        withCredentials: false,  
+                        withCredentials: false,
                         onload: (response) => {
                             $('#broadcast_image_name').val(response);
                         },
                         onerror: (response) => response.data,
                         ondata: (formData) => {
-                            
+
                             return formData;
                         }
                     }
-                    
+
                 }
             });
 
@@ -156,41 +168,41 @@
             const pond = FilePond.create(inputElement);
 
         });
-        
-        
-     
-        
+
+
+
+
 
 
         var token = "null";
         var current_camera_status = '';
         var start_publish_button = document.getElementById("start_publish_button");
         var stop_publish_button = document.getElementById("stop_publish_button");
-        
+
         var screen_share_checkbox = document.getElementById("screen_share_checkbox");
         var install_extension_link = document.getElementById("install_chrome_extension_link");
-    
+
         var streamNameBox = document.getElementById("stream_name");
-        
+
         var streamId;
-        
+
         function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),
                 sURLVariables = sPageURL.split('&'),
                 sParameterName,
                 i;
-    
+
             for (i = 0; i < sURLVariables.length; i++) {
                 sParameterName = sURLVariables[i].split('=');
-    
+
                 if (sParameterName[0] === sParam) {
                     return sParameterName[1] === undefined ? true : sParameterName[1];
                 }
             }
         };
-        
-                
-    
+
+
+
         function startPublishing() {
             if(current_camera_status == 'NotAllowedError'){
                 alert('Permissions have not been granted to use your camera and microphone, Please refresh the page and grant permissions to start the stream');
@@ -236,7 +248,22 @@
                     if(res.status == 'success'){
                         $('#form_container').hide();
                         $('#broadcast_id').val(res.broadcast_id);
-                        webRTCAdaptor.publish(name, token);    
+                        webRTCAdaptor.publish(name, token);
+                        if($('#stream_to_youtube:checked').length > 0){
+                           my_req =  $.ajax({
+                                url: "{{ route('broadcasts.ajax') }}",
+                                method: 'POST',
+                                data: {
+                                    'perform_action': 'publish_on_youtube',
+                                    '_token': '{{ csrf_token() }}',
+                                    'broadcast_id': res.broadcast_id,
+                                }
+                            });
+                            my_req.done(function(response) {
+                                alertify.success(response);
+                            });
+                        }
+
                     }
                 });
 
@@ -247,10 +274,10 @@
                 my_request.always(function(){
 
                 });
-                
+
             }
         }
-    
+
         function stopPublishing() {
 
             $('.broadcast-overlay').show();
@@ -269,14 +296,14 @@
             });
 
             my_request.done(function(){
-                window.location = "{{ route('broadcasts.index') }}"; 
+                window.location = "{{ route('broadcasts.index') }}";
             });
 
             my_request.always(function(){
 
             });
         }
-        
+
         function enableDesktopCapture(enable) {
             if (enable == true) {
                 webRTCAdaptor.switchDesktopCapture($('#stream_name').val());
@@ -285,9 +312,9 @@
                 webRTCAdaptor.switchVideoCapture($('#stream_name').val());
             }
         }
-        
+
         function startAnimation() {
-    
+
             $("#broadcastingInfo").fadeIn(800, function () {
               $("#broadcastingInfo").fadeOut(800, function () {
                 var state = webRTCAdaptor.signallingState($('#stream_name').val());
@@ -299,17 +326,17 @@
                 }
               });
             });
-    
+
           }
-    
+
         var pc_config = null;
-    
+
         var sdpConstraints = {
             OfferToReceiveAudio : false,
             OfferToReceiveVideo : false
-    
+
         };
-        
+
         var mediaConstraints = {
             video : true,
             audio : true
@@ -318,17 +345,17 @@
         var host = "{{ ANTMEDIA_HOST }}";
         var port = '5443';
         var appName = "{{ WEBRTC_APP }}/";
-    
+
         //var appName = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
         //var path =  location.hostname + ":" + location.port + appName + "websocket";
         var path =  `${host}:${port}/{{ WEBRTC_APP }}/websocket`;
-        var websocketURL =  "ws://" + path;
-        
+        var websocketURL =  "wss://" + path;
+
         if (location.protocol.startsWith("https")) {
             websocketURL = "wss://" + path;
         }
-        
-        
+
+
         var webRTCAdaptor = new WebRTCAdaptor({
             websocket_url : websocketURL,
             mediaConstraints : mediaConstraints,
@@ -380,7 +407,7 @@
                     //currentOutgoingBitrate - kbits/sec
                     console.log("Average outgoing bitrate " + obj.averageOutgoingBitrate + " kbits/sec"
                             + " Current outgoing bitrate: " + obj.currentOutgoingBitrate + " kbits/sec");
-                     
+
                 }
             },
             callbackError : function(error, message) {
@@ -420,13 +447,13 @@
                 });
                 //alertify.error(errorMessage);
                 console.log(error, message);
-                
+
             }
         });
-        function checkbrowser() { 
+        function checkbrowser() {
                 var navUserAgent = navigator.userAgent;
                 var browserName  = navigator.appName;
-                var browserVersion  = ''+parseFloat(navigator.appVersion); 
+                var browserVersion  = ''+parseFloat(navigator.appVersion);
                 var majorVersion = parseInt(navigator.appVersion,10);
                 var tempNameOffset,tempVersionOffset,tempVersion;
 
@@ -434,7 +461,7 @@
                 if ((tempVersionOffset=navUserAgent.indexOf("Opera"))!=-1) {
                 browserName = "Opera";
                 browserVersion = navUserAgent.substring(tempVersionOffset+6);
-                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1) 
+                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1)
                 browserVersion = navUserAgent.substring(tempVersionOffset+8);
                 } else if ((tempVersionOffset=navUserAgent.indexOf("MSIE"))!=-1) {
                 browserName = "Microsoft Internet Explorer";
@@ -445,7 +472,7 @@
                 } else if ((tempVersionOffset=navUserAgent.indexOf("Safari"))!=-1) {
                 browserName = "Safari";
                 browserVersion = navUserAgent.substring(tempVersionOffset+7);
-                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1) 
+                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1)
                 browserVersion = navUserAgent.substring(tempVersionOffset+8);
                 } else if ((tempVersionOffset=navUserAgent.indexOf("Firefox"))!=-1) {
                 browserName = "Firefox";

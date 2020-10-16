@@ -21,10 +21,16 @@ class SettingController extends Controller
 
     public function settings()
     {
+        if(isset($_GET['revoke'])){
+            Auth::user()->profile->youtube_auth_info = NULL;
+            Auth::user()->profile->save();
+            return redirect()->to('settings');
+        }
         $userinfo = User::with('profile')->where('id', Auth::id())->first()->toArray();
-        return view('setting', compact('userinfo'));
+        $youtube_connect = $this->getYouTubeAuthToken();
+        return view('setting', compact('userinfo','youtube_connect'));
     }
-    
+
     public function save_settings(Request $request)
     {
         $user_id = $request->user_id;
@@ -37,12 +43,12 @@ class SettingController extends Controller
         if(count(collect($user)) > 0){
             $user = User::find(Auth::id());
             $user->username = $request->username;
-            $user->email = $request->email;        
+            $user->email = $request->email;
             $user->save();
             $profile->full_name = $request->username;
             $profile->email = $request->email;
         }
-        
+
         $profile->is_sensitive = $request->is_sensitive;
         $profile->save();
         return 'true';
@@ -133,6 +139,47 @@ class SettingController extends Controller
 
     public function resetpassword(){
         return view('resetpassword');
+    }
+
+    public function getYouTubeAuthToken(){
+        $client = new \Google_Client();
+        $client->setClientId(env('OAUTH2_CLIENT_ID'));
+        $client->setClientSecret(env('OAUTH2_CLIENT_SECRET'));
+        $client->setScopes([
+            'https://www.googleapis.com/auth/youtube',
+            'https://www.googleapis.com/auth/youtube.upload'
+            ]);
+        $client->setAccessType('offline');
+
+        $redirect = filter_var(url('get_youtube_auth_token'),
+    FILTER_SANITIZE_URL);
+        $client->setRedirectUri($redirect);
+
+        if (isset($_GET['code'])) {
+
+            $client->authenticate($_GET['code']);
+            $token_res = $client->getAccessToken();
+            if(isset($token_res['access_token'])){
+                Auth::user()->profile->youtube_auth_info = json_encode($client->getAccessToken());
+                Auth::user()->profile->save();
+                return redirect()->to('settings');
+            }
+        }
+         // Check to ensure that the access token was successfully acquired.
+          if (Auth::user()->profile->youtube_auth_info == NULL) {
+            // If the user hasn't authorized the app, initiate the OAuth flow
+            $state = mt_rand();
+            $client->setState($state);
+            $_SESSION['state'] = $state;
+
+            $authUrl = $client->createAuthUrl();
+            return '<a href="'.$authUrl.'">Connect your Youtube account with Hapity</a>';
+          }else{
+            //   $auth_info = json_decode(Auth::user()->profile->youtube_auth_info);
+            //   $access_token = $auth_info->access_token;
+              return 'Your Youtube account is connected to Hapity<br> <a href="'.url("settings?revoke=true").'"> Revoke Access</a>';
+          }
+
     }
 
 }
