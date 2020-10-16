@@ -260,7 +260,11 @@
                                 }
                             });
                             my_req.done(function(response) {
-                                alertify.success(response);
+                                res2 =  response.status ?  response : JSON.parse(response);
+                                if(res2.status == "success")
+                                    alertify.success(res2.msg);
+                                else    
+                                    alertify.warning(res2.msg);
                             });
                         }
 

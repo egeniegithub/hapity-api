@@ -188,23 +188,31 @@
 
                 my_request.done(function(response) {
                     res =  response.status ?  response : JSON.parse(response);
-
-                    if($('#stream_to_youtube:checked').length > 0){
-                        my_req =  $.ajax({
-                            url: "{{ route('broadcasts.ajax') }}",
-                            method: 'POST',
-                            data: {
-                                'perform_action': 'publish_on_youtube',
-                                '_token': '{{ csrf_token() }}',
-                                'broadcast_id': res.broadcast_id,
-                            }
-                        });
-                        my_req.done(function(response) {
-                            alertify.success(response);
-                        });
-                    }
+                    
                     if(res.status == 'success'){
-                        window.location = '{{ url("broadcasts/list_obs_keys") }}';
+                        if($('#stream_to_youtube:checked').length > 0){
+                            my_req =  $.ajax({
+                                url: "{{ route('broadcasts.ajax') }}",
+                                method: 'POST',
+                                data: {
+                                    'perform_action': 'publish_on_youtube',
+                                    '_token': '{{ csrf_token() }}',
+                                    'broadcast_id': res.broadcast_id,
+                                }
+                            });
+                            my_req.done(function(response) {
+                                res2 =  response.status ?  response : JSON.parse(response);
+                                if(res2.status == "success")
+                                    alertify.success(res2.msg);
+                                else    
+                                    alertify.warning(res2.msg);
+                            });
+                            setTimeout(() => {  window.location = '{{ url("broadcasts/list_obs_keys") }}' }, 8000);
+                    
+                        }else{
+                            window.location = '{{ url("broadcasts/list_obs_keys") }}';
+                        }
+                        
                     }
                 });
 
