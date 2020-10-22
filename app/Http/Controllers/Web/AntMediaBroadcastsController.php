@@ -439,7 +439,7 @@ class AntMediaBroadcastsController extends Controller
         if($client->getAccessToken()){
             $youtube_stream_info =  "";
             $youtube_stream_log =  "";
-                
+
             try {
 
                 $youtube = new \Google_Service_YouTube($client);
@@ -511,21 +511,25 @@ class AntMediaBroadcastsController extends Controller
 
             } catch (\Google_Service_Exception $e) {
                 $youtube_stream_log = $e->getMessage();
-
+                $youtube_error_code = $e->getCode();
             } catch (\Google_Exception $e) {
                 $youtube_stream_log = $e->getMessage();
+                $youtube_error_code = $e->getCode();
             } catch(\Exception $e){
                 $youtube_stream_log = $e->getMessage();
+                $youtube_error_code = $e->getCode();
             }
             $first_time = true;
-            if($youtube_stream_log && json_decode($youtube_stream_log)->error->code == 401 && $first_time){
+            if($youtube_stream_log && $youtube_error_code == 401 && $first_time){
                 $token_info = $client->refreshToken(json_decode($token_info)->refresh_token);
                 Auth::user()->profile->youtube_auth_info = json_encode($token_info);
                 Auth::user()->profile->save();
                 $first_time = false;
                 return $this->createBroadcastOnYoutube($broadcast);
+            }else if($youtube_stream_log && $youtube_error_code == 400){
+                Auth::user()->profile->youtube_auth_info = NULL;
+                Auth::user()->profile->save();
             }
-            
             if(isset($youtube_stream_info['stream_url'])){
                 $rtmp_endpoint = $youtube_stream_info['stream_url'];
                 $broadcast->youtube_stream_info = json_encode($youtube_stream_info);
@@ -541,7 +545,7 @@ class AntMediaBroadcastsController extends Controller
         }
     }
 
-    private function uploadVideoOnYoutube($broadcast){
+    public function uploadVideoOnYoutube($broadcast, $access_token = null, $refresh_token = null){
         $client = new \Google_Client();
         $client->setClientId(env('OAUTH2_CLIENT_ID'));
         $client->setClientSecret(env('OAUTH2_CLIENT_SECRET'));
@@ -549,12 +553,14 @@ class AntMediaBroadcastsController extends Controller
             'https://www.googleapis.com/auth/youtube',
             'https://www.googleapis.com/auth/youtube.upload'
             ]);
-        $token_info = (Auth::user()->profile->youtube_auth_info);
+        if($access_token)
+            $token_info = $access_token;
+        else
+            $token_info = (Auth::user()->profile->youtube_auth_info);
         $client->setAccessToken($token_info);
         if($client->getAccessToken()){
             $youtube_stream_log =  "";
-            $youtube_response_msg =  ["yt_status" => "success", "yt_msg" => "Video upload to your youtube channel as well"];
-                
+            $youtube_response_msg =  ["yt_status" => "success", "yt_msg" => "Video uploaded to your youtube channel as well"];
             try {
 
                 // Define service object for making API requests.
@@ -587,7 +593,7 @@ class AntMediaBroadcastsController extends Controller
                     )
                 );
                 $broadcast->youtube_stream_info = json_encode($response);
-                
+
             } catch (\Google_Service_Exception $e) {
                 $youtube_stream_log = $e->getMessage();
                 $youtube_error_code = $e->getCode();
@@ -601,21 +607,32 @@ class AntMediaBroadcastsController extends Controller
             }
             $first_time = true;
             if($youtube_stream_log && $youtube_error_code == 401 && $first_time){
-                $token_info = $client->refreshToken(json_decode($token_info)->refresh_token);
-                Auth::user()->profile->youtube_auth_info = json_encode($token_info);
-                Auth::user()->profile->save();
+                if($refresh_token)
+                    $token_info = $client->refreshToken($refresh_token);
+                else
+                    $token_info = $client->refreshToken(json_decode($token_info)->refresh_token);
+                if(!empty($token_info['access_token']) && !empty($token_info['refresh_token'])){
+                    Auth::user()->profile->youtube_auth_info = json_encode($token_info);
+                    Auth::user()->profile->save();
+                    return $this->uploadVideoOnYoutube($broadcast);
+                }if($refresh_token == NULL){
+                    Auth::user()->profile->youtube_auth_info = NULL;
+                    Auth::user()->profile->save();
+                }
                 $first_time = false;
-                return $this->uploadVideoOnYoutube($broadcast);
-            }else if($youtube_stream_log && $youtube_error_code == 400){ 
+
+            }else if($youtube_stream_log && $youtube_error_code == 400){
                 Auth::user()->profile->youtube_auth_info = NULL;
                 Auth::user()->profile->save();
             }
-            
+
             if(!empty($youtube_stream_log)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
                 $error_log = json_decode($youtube_stream_log);
                 if(isset($error_log->error->message)){
                     $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because : ". strip_tags($error_log->error->message)];
+                }else{
+                    $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because : ".$youtube_stream_log];
                 }
             }
             $broadcast->save();
