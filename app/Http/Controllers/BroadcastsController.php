@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Broadcast;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Web\AntMediaBroadcastsController;
 use App\Http\Helpers\PluginFunctions;
 use App\MetaInfo;
 use App\User;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Image;
+use App\UserProfile;
 
 class BroadcastsController extends Controller
 {
@@ -121,7 +123,10 @@ class BroadcastsController extends Controller
             $broadcast->save();
 
         }
-
+        if($request->input('stream_to_youtube') == "yes" && !empty($request->input('access_token')) && !empty($request->input('refresh_token'))){
+            $bc = new AntMediaBroadcastsController();
+            $response = array_merge($bc->uploadVideoOnYoutube($broadcast,$request->input('access_token'),$request->input('refresh_token')),$response);
+        }
         return response()->json(['response' => $response]);
     }
 
