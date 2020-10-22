@@ -1,10 +1,10 @@
 @extends('layouts.app')
-@section('content')   
+@section('content')
 <script type="text/javascript" src="https://player.wowza.com/player/latest/wowzaplayer.min.js"></script>
 
-    <div class="container">    
-        <br />       
-        
+    <div class="container">
+        <br />
+
         <div class="row">
             <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
                 <div class="profile-section-disable">
@@ -26,11 +26,11 @@
                             </h2>
                         </div>
                     </div>
-               
+
                 </div>
             </div>
-            <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">     
-                @if(Session::has('message_success')) 
+            <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
+                @if(Session::has('message_success'))
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="alert alert-success alert-dismissible" role="alert">
@@ -38,9 +38,9 @@
                                 <strong>Success!</strong> {{ Session::get('message_success')}}
                             </div>
                         </div>
-                    </div>                
+                    </div>
                 @endif
-                @if(Session::has('message_error')) 
+                @if(Session::has('message_error'))
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="alert alert-danger alert-dismissible" role="alert">
@@ -48,7 +48,7 @@
                                 <strong>Error!</strong> {{ Session::get('message_error')}}
                             </div>
                         </div>
-                    </div>                
+                    </div>
                 @endif
 
                 <div class="row">
@@ -65,10 +65,10 @@
                 </div>
 
                 <hr />
-                @foreach($broadcasts as $broadcast_key => $broadcast)    
+                @foreach($broadcasts as $broadcast_key => $broadcast)
                     @if($broadcast['file_exists'])
-                        <a data-fancybox data-src="#video_player_{{ $broadcast->id }}" href="javascript:;">                
-                            <div class="row">                  
+                        <a data-fancybox data-src="#video_player_{{ $broadcast->id }}" href="javascript:;">
+                            <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="panel panel-success panel-broadcast">
                                         <div class="panel-body">
@@ -95,7 +95,7 @@
                                                                     <a href="javascript:;" data-modal-id="embed-code-popup-{{ $broadcast->id }}" class="code-icon">
                                                                         <i class="fa fa-code"></i>
                                                                     </a>
-                                                                </li>                                                                                                                
+                                                                </li>
                                                                 <li>
                                                                     <a href="https://twitter.com/intent/tweet?url={{ $broadcast->share_url }}" target="_blank" class="twitter">
                                                                         <i class="fa fa-twitter"></i>
@@ -106,7 +106,7 @@
                                                                         <i class="fa fa-facebook"></i>
                                                                     </a>
                                                                 </li>
-                                                                
+
                                                             </ul>
                                                         </li>
                                                         <li class="social-share-action">
@@ -121,7 +121,7 @@
                                                             <form id="form_delete_broadcast_{{ $broadcast->id }}" enctype="multipart/form-data" method="POST" action="{{ route('broadcasts.delete') }}">
                                                                 {{ csrf_field() }}
                                                                 <input type="hidden" id="perform_action" name="perform_action" value="delete_broadcast" />
-                                                                <input type="hidden" id="broadcast_id" name="broadcast_id" value="{{ $broadcast->id }}" />                                                         
+                                                                <input type="hidden" name="broadcast_id" value="{{ $broadcast->id }}" />
                                                             </form>
                                                         </li>
                                                     </ul>
@@ -133,22 +133,22 @@
                                                         <div class="modal-body">
                                                             <div class="embedcode-modal-innser">
                                                                 <textarea readonly="">
-                                                                    <iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                                                    <iframe height="600" width="100%" scrolling="no" frameborder="0"
                                                                 src="{{ route('widget.index') }}?stream={{ $broadcast->video_name }}&title={{ $broadcast->title }}&status={{ $broadcast->status }}&bid={{ $broadcast->id }}&broadcast_image={{ $broadcast->broadcast_image }}&user_id={{ $broadcast->user_id }}">
                                                                     </iframe>
-                                                                </textarea>                        
+                                                                </textarea>
                                                             </div>
                                                         </div>
                                                     </div>
-                                        
+
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div> 
+                            </div>
                         </a>
-                    
+
                         <div id="video_player_{{ $broadcast->id }}" style="display: none;" class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0; margin:0; ">
                                 @if($broadcast->status == 'online')
@@ -168,7 +168,7 @@
                                             </a>
                                         </p>
                                     </video>
-                                @else 
+                                @else
                                     <video
                                         style="max-width:720px;max-height:720px;"
                                         id="my_recorded_player_{{ $broadcast->id }}"
@@ -191,25 +191,25 @@
                                         </p>
                                     </video>
                                 @endif
-                                    
+
                             </div>
                         </div>
-                              
+
                     @endif
-                @endforeach                              
+                @endforeach
             </div>
         </div>
-       
+
         <br />
         <br />
         <br />
     </div>
-    
+
 @endsection
 
 @push('css')
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
-    
+
     <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
 @endpush
 
@@ -229,11 +229,11 @@
             $('body').on('click', '.delete-btn', function(){
                 var broadcast_id = $(this).attr('data-broadcast_id');
                 alertify.confirm(
-                    'Are you sure?', 
-                    'Are you sure you want to delete this broadcast?', 
+                    'Are you sure?',
+                    'Are you sure you want to delete this broadcast?',
                     function(){
                         $('#form_delete_broadcast_' + broadcast_id).submit();
-                    }, 
+                    },
                     function(){
                         alertify.error('Cancelled');
                     });
@@ -242,12 +242,12 @@
             $(".social-share-action").hover(
                 function () {
                     $(this).addClass('on-hover').find('ul').stop().show();
-                }, 
+                },
                 function () {
                     $(this).removeClass('on-hover').find('ul').stop().hide();
                 }
             );
-            
+
         });
 
         function closeModel(id){
