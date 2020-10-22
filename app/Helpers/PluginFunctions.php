@@ -95,9 +95,7 @@ class PluginFunctions
 
                     $domain_available = $this->check_if_domain_is_available($plugin->url);
                     if ($domain_available == true) {
-                        $result_str = file_get_contents($go, false, $context);
-                        print_r($result_str);exit;
-
+                        $result_str = @file_get_contents($go, false, $context);
 
                         $result = json_decode($result_str, true);
                         if (json_last_error() !== JSON_ERROR_NONE) {
