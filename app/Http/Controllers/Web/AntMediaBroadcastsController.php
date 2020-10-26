@@ -439,7 +439,7 @@ class AntMediaBroadcastsController extends Controller
         if($client->getAccessToken()){
             $youtube_stream_info =  "";
             $youtube_stream_log =  "";
-
+            $youtube_error_code = 200;
             try {
 
                 $youtube = new \Google_Service_YouTube($client);
@@ -522,14 +522,17 @@ class AntMediaBroadcastsController extends Controller
             $first_time = true;
             if($youtube_stream_log && $youtube_error_code == 401 && $first_time){
                 $token_info = $client->refreshToken(json_decode($token_info)->refresh_token);
-                Auth::user()->profile->youtube_auth_info = json_encode($token_info);
-                Auth::user()->profile->save();
-                $first_time = false;
-                return $this->createBroadcastOnYoutube($broadcast);
-            }else if($youtube_stream_log && $youtube_error_code == 400){
-                Auth::user()->profile->youtube_auth_info = NULL;
-                Auth::user()->profile->save();
+                if(!empty($token_info['access_token']) && !empty($token_info['refresh_token'])){
+                    Auth::user()->profile->youtube_auth_info = json_encode($token_info);
+                    Auth::user()->profile->save();
+                    $first_time = false;
+                    return $this->createBroadcastOnYoutube($broadcast);
+                }
             }
+            // else if($youtube_stream_log && $youtube_error_code == 400){
+            //     Auth::user()->profile->youtube_auth_info = NULL;
+            //     Auth::user()->profile->save();
+            // }
             if(isset($youtube_stream_info['stream_url'])){
                 $rtmp_endpoint = $youtube_stream_info['stream_url'];
                 $broadcast->youtube_stream_info = json_encode($youtube_stream_info);
@@ -537,6 +540,10 @@ class AntMediaBroadcastsController extends Controller
                 $stream_key = str_replace(".mp4","",$broadcast->video_name);
                 $resp = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_key."/endpoint?rtmpUrl=".$rtmp_endpoint);
                 echo json_encode(["status" => "success", "msg" => "Stream is live now on youtube as well"]);
+            }else if($youtube_error_code == 401){
+                echo json_encode(["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because your youtube access has been revoked. Please connect youtube account in setting and try again"]);
+                Auth::user()->profile->youtube_auth_info = NULL;
+                Auth::user()->profile->save();
             }else if(!empty($youtube_stream_log)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
                 echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error->message ]);
@@ -560,7 +567,8 @@ class AntMediaBroadcastsController extends Controller
         $client->setAccessToken($token_info);
         if($client->getAccessToken()){
             $youtube_stream_log =  "";
-            $youtube_response_msg =  ["yt_status" => "success", "yt_msg" => "Video uploaded to your youtube channel as well"];
+            $youtube_error_code = 200;
+            $youtube_response_msg =  ["yt_status" => "success", "yt_msg" => "Video could not be uploaded to your youtube channel, try again"];
             try {
 
                 // Define service object for making API requests.
@@ -593,7 +601,7 @@ class AntMediaBroadcastsController extends Controller
                     )
                 );
                 $broadcast->youtube_stream_info = json_encode($response);
-
+                $youtube_response_msg =  ["yt_status" => "success", "yt_msg" => "Video uploaded to your youtube channel as well"];
             } catch (\Google_Service_Exception $e) {
                 $youtube_stream_log = $e->getMessage();
                 $youtube_error_code = $e->getCode();
@@ -609,7 +617,7 @@ class AntMediaBroadcastsController extends Controller
             if($youtube_stream_log && $youtube_error_code == 401 && $first_time){
                 if($refresh_token)
                     $token_info = $client->refreshToken($refresh_token);
-                else
+                else if(!empty(json_decode($token_info)->refresh_token))
                     $token_info = $client->refreshToken(json_decode($token_info)->refresh_token);
                 if(!empty($token_info['access_token']) && !empty($token_info['refresh_token'])){
                     Auth::user()->profile->youtube_auth_info = json_encode($token_info);
@@ -621,12 +629,13 @@ class AntMediaBroadcastsController extends Controller
                 }
                 $first_time = false;
 
-            }else if($youtube_stream_log && $youtube_error_code == 400){
-                Auth::user()->profile->youtube_auth_info = NULL;
-                Auth::user()->profile->save();
             }
 
-            if(!empty($youtube_stream_log)){
+            if($youtube_error_code == 401){
+                $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because your youtube access has been revoked. Please connect youtube account in setting and try again"];
+                Auth::user()->profile->youtube_auth_info = NULL;
+                Auth::user()->profile->save();
+            }else if(!empty($youtube_stream_log)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
                 $error_log = json_decode($youtube_stream_log);
                 if(isset($error_log->error->message)){

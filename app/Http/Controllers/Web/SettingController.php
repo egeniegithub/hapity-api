@@ -150,7 +150,7 @@ class SettingController extends Controller
             'https://www.googleapis.com/auth/youtube.upload'
             ]);
         $client->setAccessType('offline');
-
+        $client->setPrompt("consent");
         $redirect = filter_var(url('get_youtube_auth_token'),
     FILTER_SANITIZE_URL);
         $client->setRedirectUri($redirect);
@@ -166,7 +166,9 @@ class SettingController extends Controller
             }
         }
          // Check to ensure that the access token was successfully acquired.
-          if (Auth::user()->profile->youtube_auth_info == NULL) {
+         if(!empty(Auth::user()->profile->youtube_auth_info) && !empty(json_decode(Auth::user()->profile->youtube_auth_info)->refresh_token)){
+            return 'Your Youtube account is connected to Hapity<br> <a href="'.url("settings?revoke=true").'"> Revoke Access</a>';
+          }else{
             // If the user hasn't authorized the app, initiate the OAuth flow
             $state = mt_rand();
             $client->setState($state);
@@ -174,10 +176,6 @@ class SettingController extends Controller
 
             $authUrl = $client->createAuthUrl();
             return '<a href="'.$authUrl.'">Connect your Youtube account with Hapity</a>';
-          }else{
-            //   $auth_info = json_decode(Auth::user()->profile->youtube_auth_info);
-            //   $access_token = $auth_info->access_token;
-              return 'Your Youtube account is connected to Hapity<br> <a href="'.url("settings?revoke=true").'"> Revoke Access</a>';
           }
 
     }
