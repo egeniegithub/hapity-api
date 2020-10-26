@@ -547,6 +547,11 @@ class AntMediaBroadcastsController extends Controller
             }else if(!empty(json_decode($youtube_stream_log)->error->message)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
                 echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error->message ]);
+            }else if(!empty(json_decode($youtube_stream_log)->error_description)){
+                Auth::user()->profile->youtube_auth_info = NULL;
+                Auth::user()->profile->save();
+                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error_description ]);
+
             }else if(!empty($youtube_stream_log)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
                 echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".$youtube_stream_log ]);
