@@ -544,9 +544,12 @@ class AntMediaBroadcastsController extends Controller
                 echo json_encode(["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because your youtube access has been revoked. Please connect youtube account in setting and try again"]);
                 Auth::user()->profile->youtube_auth_info = NULL;
                 Auth::user()->profile->save();
-            }else if(!empty($youtube_stream_log)){
+            }else if(!empty(json_decode($youtube_stream_log)->error->message)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
                 echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error->message ]);
+            }else if(!empty($youtube_stream_log)){
+                $broadcast->youtube_stream_log = $youtube_stream_log;
+                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".$youtube_stream_log ]);
             }
             $broadcast->save();
         }
