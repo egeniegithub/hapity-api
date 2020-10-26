@@ -48,7 +48,7 @@
                             @endif
                         </div>
                     </div>
-                    @if(Auth::user()->profile->youtube_auth_info != NULL)
+                    @if(!empty(Auth::user()->profile->youtube_auth_info) && !empty(json_decode(Auth::user()->profile->youtube_auth_info)->refresh_token))
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group label-cstm">
@@ -188,7 +188,7 @@
 
                 my_request.done(function(response) {
                     res =  response.status ?  response : JSON.parse(response);
-                    
+
                     if(res.status == 'success'){
                         if($('#stream_to_youtube:checked').length > 0){
                             my_req =  $.ajax({
@@ -204,15 +204,15 @@
                                 res2 =  response.status ?  response : JSON.parse(response);
                                 if(res2.status == "success")
                                     alertify.success(res2.msg);
-                                else    
+                                else
                                     alertify.warning(res2.msg);
                             });
                             setTimeout(() => {  window.location = '{{ url("broadcasts/list_obs_keys") }}' }, 8000);
-                    
+
                         }else{
                             window.location = '{{ url("broadcasts/list_obs_keys") }}';
                         }
-                        
+
                     }
                 });
 

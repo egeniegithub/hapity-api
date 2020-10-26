@@ -62,7 +62,7 @@
                                 </div>
                             @endif
                         </div>
-                        @if(Auth::user()->profile->youtube_auth_info != NULL)
+                        @if(!empty(Auth::user()->profile->youtube_auth_info) && !empty(json_decode(Auth::user()->profile->youtube_auth_info)->refresh_token))
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="form-group label-cstm">
                                     <div class="styled-input-single">
@@ -170,7 +170,7 @@
             $("#update_button").attr("disabled", true);
             $('body').on('click', '#update_button', function(){
                 if($('#broadcast_form').valid()) {
-                    
+
                     $('#upload-in-process').show();
                     $("#update_button").attr("disabled", true);
                     var form_data = $('#broadcast_form').serialize();
@@ -185,7 +185,7 @@
 
                     my_request.done(function(response) {
                         res =  response.status ?  response : JSON.parse(response);
-                            
+
                         $('#upload-in-process').hide();
                         $("#update_button").attr("disabled", false);
                         if(res.status == 'success'){
@@ -193,10 +193,10 @@
                             if(res.yt_msg != undefined && res.yt_msg.length > 0){
                                 if(res.yt_status == "success")
                                     alertify.success(res.yt_msg);
-                                else    
+                                else
                                     alertify.warning(res.yt_msg);
                                 setTimeout(() => {  window.location = "{{ route('broadcasts.index') }}"; }, 8000);
-                            }else{ 
+                            }else{
                                 window.location = "{{ route('broadcasts.index') }}";
                             }
                         }
