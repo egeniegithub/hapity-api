@@ -27,7 +27,7 @@ class AuthController extends Controller
     public function __construct()
     {
         auth()->setDefaultDriver('api');
-        $this->middleware('auth:api', ['except' => ['login', 'register','validate_key']]);
+        $this->middleware('auth:api', ['except' => ['login', 'register', 'validate_key']]);
     }
 
     /**
@@ -65,12 +65,12 @@ class AuthController extends Controller
             $user = User::with('profile')->find(Auth::id());
 
             if ($token = JWTAuth::fromUser($user)) {
-                if(isset($request->meta_info) && !is_null($request->input('meta_info'))){
+                if (isset($request->meta_info) && !is_null($request->input('meta_info'))) {
                     $metainfo = new MetaInfo();
                     $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
-                    $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
-                    $metainfo->broadcast_id =  null;
-                    $metainfo->user_id =  $user->id;
+                    $metainfo->endpoint_url = !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+                    $metainfo->broadcast_id = null;
+                    $metainfo->user_id = $user->id;
                     $metainfo->time_stamp = time();
                     $metainfo->save();
                 }
@@ -158,12 +158,12 @@ class AuthController extends Controller
             if (!empty($profile->profile_picture)) {
                 $user_info['profile_picture'] = asset("images/profile_pictures/" . $profile->profile_picture);
             }
-            if(isset($request->meta_info) && !is_null($request->input('meta_info'))){
+            if (isset($request->meta_info) && !is_null($request->input('meta_info'))) {
                 $metainfo = new MetaInfo();
                 $metainfo->meta_info = isset($request->meta_info) && !is_null($request->input('meta_info')) ? json_encode($request->input('meta_info')) : '';
-                $metainfo->endpoint_url =  !is_null($request->fullUrl()) ? $request->fullUrl() : '';
-                $metainfo->broadcast_id =  null;
-                $metainfo->user_id =  $user->id;
+                $metainfo->endpoint_url = !is_null($request->fullUrl()) ? $request->fullUrl() : '';
+                $metainfo->broadcast_id = null;
+                $metainfo->user_id = $user->id;
                 $metainfo->time_stamp = time();
                 $metainfo->save();
             }
@@ -179,7 +179,7 @@ class AuthController extends Controller
                 'email' => $user->email,
             );
             Mail::send('emails/welcome', ['data' => $data], function ($message) use ($email) {
-                $message->to($email,'chris@hapity.com')->subject('Welcome');
+                $message->to($email, 'chris@hapity.com')->subject('Welcome');
             });
 
             $returnData['status'] = 'success';
@@ -337,7 +337,7 @@ class AuthController extends Controller
             $file = $request->file($field_name);
             $ext = $file->getClientOriginalExtension();
             $thumbnail_image = md5(time()) . '.' . $ext;
-            $path = public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR );
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR);
 
             if (!is_dir($path)) {
                 mkdir($path);
@@ -350,7 +350,7 @@ class AuthController extends Controller
 
         if ($request->has($field_name) && !empty($request->input($field_name)) && !is_null($request->input($field_name))) {
             $thumbnail_image = md5(time()) . '.jpg';
-            $path = public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR );
+            $path = public_path('images' . DIRECTORY_SEPARATOR . 'profile_pictures' . DIRECTORY_SEPARATOR);
 
             if (!is_dir($path)) {
                 mkdir($path);
@@ -406,48 +406,92 @@ class AuthController extends Controller
         ]);
     }
 
-    public function validate_key(Request $request){
-        if((!isset($request['auth_key']) && !isset($request['type']) && !isset($request['url'])) && (empty($request['auth_key']) && empty($request['type']) && empty($request['url']))){
+    public function validate_key(Request $request)
+    {
+        if ((!isset($request['auth_key']) && !isset($request['type']) && !isset($request['url'])) && (empty($request['auth_key']) && empty($request['type']) && empty($request['url']))) {
             $response = array(
                 'status' => 'failure',
                 'message' => "auth_key , type and url field requires ",
             );
             return response()->json($response);
         }
-       
+
         $auth_key = $request['auth_key'];
         $type = $request['type'];
         $url = $request['url'];
-        if(isset($auth_key) && isset($type) && ($type=='wordpress'||$type=='joomla'||$type=='drupal'||$type=='custom') && isset($url)){
-            
-            $userProfile = UserProfile::where('auth_key',$auth_key)->first();
-            if(!empty($userProfile) && $userProfile->id > 0){
-                    $plugin_ids = PluginId::where('user_id',$userProfile->user_id)->first();
-                    if(empty($plugin_ids)){
-                        $data = array(
-                            'user_id'   =>  $userProfile->user_id,
-                            'type'   =>  $type,
-                            'url'   =>  $url,
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now()
-                        );
-                        PluginId::insert($data);
-                        $var = 1;
-                    }else{
-                        $data = array(
-                            'type'   =>  $type,
-                            'url'   =>  $url,
-                            'updated_at' => Carbon::now()
-                        );
-                        PluginId::where('id',$plugin_ids->id)->update($data);
-                        $var = 1;
-                    }
-            }else{
+        if (isset($auth_key) && isset($type) && ($type == 'wordpress' || $type == 'joomla' || $type == 'drupal' || $type == 'custom') && isset($url)) {
+
+            $userProfile = UserProfile::where('auth_key', $auth_key)->first();
+            if (!empty($userProfile) && $userProfile->id > 0) {
+                $plugin_ids = PluginId::where('user_id', $userProfile->user_id)->first();
+                if (empty($plugin_ids)) {
+                    $data = array(
+                        'user_id' => $userProfile->user_id,
+                        'type' => $type,
+                        'url' => $url,
+                        'created_at' => Carbon::now(),
+                        'updated_at' => Carbon::now(),
+                    );
+                    PluginId::insert($data);
+                    $var = 1;
+                } else {
+                    $data = array(
+                        'type' => $type,
+                        'url' => $url,
+                        'updated_at' => Carbon::now(),
+                    );
+                    PluginId::where('id', $plugin_ids->id)->update($data);
+                    $var = 1;
+                }
+            } else {
                 $var = 0;
             }
-             return response()->json(['status' => 'success', 'message'=>$var], 200);
-        }else{
-            return response()->json(['status' => 'failure', 'message'=>'invalid parameters'], 200);
+            return response()->json(['status' => 'success', 'message' => $var], 200);
+        } else {
+            return response()->json(['status' => 'failure', 'message' => 'invalid parameters'], 200);
         }
+    }
+
+    public function fetchGoogleAccessToken(Request $request)
+    {
+        $user_id = $request->input('userId');
+
+        $user_id = !is_null($user_id) && !empty($user_id) && is_numeric($user_id) ? $user_id : Auth::id();
+
+        $user_profile = UserProfile::where('user_id', $user_id)->first()->toArray();
+
+        if (isset($user_profile['youtube_auth_info']) && !empty($user_profile['youtube_auth_info']) && !is_null($user_profile['youtube_auth_info'])) {
+            $access_token = json_decode($user_profile['youtube_auth_info']);
+            return response()->json(['status' => 'success', 'message' => 'access token found', 'accessToken' => $access_token], 200);
+        } else {
+            return response()->json(['status' => 'success', 'message' => 'access token not found', 'accessToken' => null], 200);
+        }
+    }
+
+    public function saveGoogleAccessToken(Request $request)
+    {
+        $user_id = $request->input('userId');
+        $access_token = $request->input('accessToken');
+
+        $user_id = !is_null($user_id) && !empty($user_id) && is_numeric($user_id) ? $user_id : Auth::id();
+        $access_token = !is_null($access_token) && !empty($access_token) ? json_decode($access_token) : null;
+
+        $user_profile = UserProfile::where('user_id', $user_id)->first();
+
+        if (isset($user_profile->user_id) &&
+            !empty($user_profile->user_id) &&
+            !is_null($user_profile->user_id) &&
+            isset($access_token) &&
+            !empty($access_token) &&
+            !is_null($access_token)
+        ) {
+            $user_profile->youtube_auth_info = json_encode($access_token);
+            $user_profile->save();
+
+            return response()->json(['status' => 'success', 'message' => 'access token saved', 'accessToken' => $access_token], 200);
+        } else {
+            return response()->json(['status' => 'success', 'message' => 'invalid request', 'accessToken' => null], 200);
+        }
+
     }
 }
