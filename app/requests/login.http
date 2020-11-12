@@ -1,7 +1,7 @@
-POST http://dev.api.hapity.local/api/login
+POST https://staging.hapity.com/api/login
 Content-Type: application/json
 
 {
-    "login": "test",
+    "login": "test2",
     "password": "123456789"
 }

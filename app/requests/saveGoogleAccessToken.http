@@ -1,8 +1,7 @@
-POST http://dev.api.hapity.local/api/save-google-access-token
+POST https://staging.hapity.com/api/save-google-access-token
 Content-Type: application/json
-Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9kZXYuYXBpLmhhcGl0eS5sb2NhbFwvYXBpXC9sb2dpbiIsImlhdCI6MTYwNTAxNzg0MiwibmJmIjoxNjA1MDE3ODQyLCJqdGkiOiJWUEhJTUYwMTBMRzNPbmNGIiwic3ViIjo1LCJwcnYiOiI4N2UwYWYxZWY5ZmQxNTgxMmZkZWM5NzE1M2ExNGUwYjA0NzU0NmFhIn0.Qb2oe2dMbnZeMQ-nlVvDPq2wJIP4DM6XMBmiwxkX26M"
+Authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczpcL1wvc3RhZ2luZy5oYXBpdHkuY29tXC9hcGlcL2xvZ2luIiwiaWF0IjoxNjA1MDIyMjQxLCJuYmYiOjE2MDUwMjIyNDEsImp0aSI6IndYcGVGYXR1aWd2QW5QVUciLCJzdWIiOjIxNDQsInBydiI6Ijg3ZTBhZjFlZjlmZDE1ODEyZmRlYzk3MTUzYTE0ZTBiMDQ3NTQ2YWEifQ.3QSl4apfag8tGYZflFki29S5n9q1kjDTQhreTYH_VcE"
 
 {
-    "userId": 5,
     "accessToken": "{\"access_token\":\"ya29.a0AfH6SMCchBXd0u-AYYYQkCQksJIYmQbxjA-PXBcy39lbbyTaYGqap0EavTt5VburyKWSMyxSwHYISUnth1YPi5wF9ruBmyPY7Aud860ZRZtaK3QTcl6D5whMMARq5FhGOra71lNCSM6fOD7IwYOVxi3VoYsK2auKeZU\",\"expires_in\":3599,\"refresh_token\":\"1\/\/03ULHY0-E6MQ3CgYIARAAGAMSNwF-L9IrIOtksjrPHe3rln0NynSHF9FnJo5BJfBvm-Fcln0BvkEJ5Fm1j2eTrHp4V4Da2fD3NZk\",\"scope\":\"https:\/\/www.googleapis.com\/auth\/youtube.upload https:\/\/www.googleapis.com\/auth\/youtube\",\"token_type\":\"Bearer\",\"created\":1603709820}"
 }
