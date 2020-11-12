@@ -49,5 +49,6 @@ Route::group([
 
     Route::post('fetch-google-access-token', 'AuthController@fetchGoogleAccessToken')->name('api.fetch.google.access.token');
     Route::post('save-google-access-token', 'AuthController@saveGoogleAccessToken')->name('api.save.google.access.token');
+    Route::post('revoke-google-access-token', 'AuthController@revokeGoogleAccessToken')->name('api.revoke.google.access.token');
 
 });

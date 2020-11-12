@@ -492,6 +492,23 @@ class AuthController extends Controller
         } else {
             return response()->json(['status' => 'success', 'message' => 'invalid request', 'accessToken' => null], 200);
         }
-
     }
+
+    public function revokeGoogleAccessToken(Request $request)
+    {
+        $user_id = $request->input('userId');
+        $user_id = !is_null($user_id) && !empty($user_id) && is_numeric($user_id) ? $user_id : Auth::id();
+
+        $user_profile = UserProfile::where('user_id', $user_id)->first();
+
+        if (!is_null($user_profile)) {
+            $user_profile->youtube_auth_info = null;
+            $user_profile->save();
+
+            return response()->json(['status' => 'success', 'message' => 'access token revoked', 'accessToken' => null], 200);
+        } else {
+            return response()->json(['status' => 'success', 'message' => 'invalid request'], 200);
+        }
+    }
+
 }
