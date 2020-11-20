@@ -122,6 +122,7 @@ class SocialLoginController extends Controller
 
             if(!$local_user){
                 $local_user = new User();
+                $local_user->name = $request->input('name');
                 $local_user->email = $request->input('email');
                 $local_user->username = $request->input('username');
                 $local_user->password = bcrypt('h@p!ty_soc!@l_signup');
@@ -130,6 +131,7 @@ class SocialLoginController extends Controller
 
                 $new_user_profile = new UserProfile();
                 $new_user_profile->user_id = $local_user->id;
+                $local_user->name = $request->input('name');
                 $new_user_profile->email = $local_user->email;
                 $new_user_profile->auth_key = md5($local_user->username);
                 $new_user_profile->save();
@@ -164,6 +166,7 @@ class SocialLoginController extends Controller
         $response['user_info']['user_id'] = $user['id'];
         $response['user_info']['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictures/' . $user['profile']['profile_picture']) : '';
         $response['user_info']['email'] = $user['email'];
+        $response['user_info']['name'] = $user['name'];
         $response['user_info']['username'] = $user['username'];
         $response['user_info']['login_type'] = $platform;
         $response['user_info']['social_id'] = $social_id;
