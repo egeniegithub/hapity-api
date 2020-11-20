@@ -22,6 +22,7 @@ Route::group([
     Route::post('logout', 'AuthController@logout')->name('api.logout');
 
     Route::post('{platform}/login', 'SocialLoginController@social_login')->name('social.login');
+    Route::post('apple_login', 'SocialLoginController@apple_login')->name('apple.login');
 
     Route::post('refresh', 'AuthController@refresh')->name('api.jwt.refresh');
     Route::post('get_profile_info', 'AuthController@getUserProfile')->name('api.getuserprofile');

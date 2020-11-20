@@ -17,7 +17,7 @@ class SocialLoginController extends Controller
     public function __construct()
     {
         auth()->setDefaultDriver('api');
-        $this->middleware('auth:api', ['except' => ['social_login']]);
+        $this->middleware('auth:api', ['except' => ['social_login','apple_login']]);
     }
 
     public function social_login(Request $request, $platform)
@@ -111,6 +111,43 @@ class SocialLoginController extends Controller
             $response = $this->generate_response($local_user->id, $platform, $token, $request->input('social_id'));
         }
 
+        return response()->json($response);
+    }
+    public function apple_login(Request $request)
+    {
+        $user_existing_social = UserSocial::where('social_id', $request->input('social_id'))->first();
+
+        if(!$user_existing_social && !empty($request->input('email')) && !empty($request->input('username'))){
+            $local_user = User::with(['profile', 'social'])->where('email', $request->email)->get()->first();
+
+            if(!$local_user){
+                $local_user = new User();
+                $local_user->email = $request->input('email');
+                $local_user->username = $request->input('username');
+                $local_user->password = bcrypt('h@p!ty_soc!@l_signup');
+                $local_user->save();
+                $local_user->roles()->attach(HAPITY_USER_ROLE_ID);
+
+                $new_user_profile = new UserProfile();
+                $new_user_profile->user_id = $local_user->id;
+                $new_user_profile->email = $local_user->email;
+                $new_user_profile->auth_key = md5($local_user->username);
+                $new_user_profile->save();
+            }
+            $user_existing_social = new UserSocial();
+            $user_existing_social->user_id = $local_user->id;
+            $user_existing_social->social_id = $request->input('social_id');
+            $user_existing_social->email = $local_user->email;
+            $user_existing_social->platform = 'Apple';
+            $user_existing_social->save();
+        }else if(!$user_existing_social && empty($request->input('email')) && empty($request->input('username'))){
+            $to_return = [];
+            $to_return['status'] = 'error';
+            $to_return['message'] = 'User does not exist and did not received email and username to create one';
+            return response()->json($to_return);
+        }
+        $token = auth()->fromUser($user_existing_social->user);
+        $response = $this->generate_response($user_existing_social->user_id, 'Apple', $token, $request->input('social_id'));
         return response()->json($response);
     }
 
