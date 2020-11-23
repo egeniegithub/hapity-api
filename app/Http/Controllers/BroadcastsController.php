@@ -153,7 +153,7 @@ class BroadcastsController extends Controller
         if($request->input('is_antmedia') == 'yes'){
             $is_antmedia = 1;
         }
-        $stream_url = $this->make_streaming_server_url($request->input('stream_url'), true, $is_antmedia);
+        $stream_url = !empty($request->input('stream_url')) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($request->input('stream_url'), PATHINFO_FILENAME) : '';
 
         $user = User::find($request->input('user_id'));
 
@@ -165,9 +165,10 @@ class BroadcastsController extends Controller
         $broadcast->is_sensitive = !is_null($request->input('is_sensitive')) ? $request->input('is_sensitive') : '';
         $broadcast->stream_url = $stream_url;
         $broadcast->share_url = '';
-        $broadcast->video_name = $request->input('stream_url');
-        $broadcast->filename = $request->input('stream_url') . '.mp4';
+        $broadcast->video_name = $request->input('stream_url').'_720p';
+        $broadcast->filename = $request->input('stream_url') . '_720p.mp4';
         $broadcast->status = 'online';
+        $broadcast->resolution = '720p';
         $broadcast->is_antmedia = $is_antmedia;
         $broadcast->save();
 
@@ -419,11 +420,14 @@ class BroadcastsController extends Controller
 
         foreach ($allUserBroadcast as $key => $broadcast) {
             if($broadcast->is_antmedia){
-                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
 
                 if ($broadcast->status == 'online') {
                     $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
-                }
+                }else if($broadcast->resolution)
+                    $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
+                else
+                    $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
+
             }else{
                 $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
 
@@ -561,25 +565,6 @@ class BroadcastsController extends Controller
             $response['message'] = 'Broadcast Not Found';
 
         }
-
-    }
-
-
-    private function make_streaming_server_url($file_name, $live = false,$is_antmedia)
-    {
-        if ($live == true) {
-            if($is_antmedia){
-                $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.m3u8' : '';
-            }else{
-                $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($file_name, PATHINFO_FILENAME) . '.mp4' : '';
-                // $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
-                // $stream_url = "rtmp://media.hapity.com:1935/".$live_app."/" . $file_name . '/playlist.m3u8';
-            }
-        } else {
-            $stream_url = !empty($file_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($file_name, PATHINFO_FILENAME) . '.mp4' : '';
-        }
-
-        return $stream_url;
 
     }
 

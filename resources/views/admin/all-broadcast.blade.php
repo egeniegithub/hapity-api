@@ -5,7 +5,7 @@
 @push('admin-css')
     <style>
         .view-metadata{
-            margin-top: 20px; 
+            margin-top: 20px;
         }
         .btn-metainfo{
             margin-left: -20px;
@@ -204,11 +204,11 @@
                             @endif
                             <div class="row">
                                 <div class="col-xs-12">
-                                    
+
                                     <form method="post" action="{{ route('admin.deletebroadcast') }}" id="form-{{ $broadcast->id }}">
                                         @csrf
                                         <input type="hidden" name="broadcast_id" value="{{ $broadcast->id }}">
-                                        
+
                                         <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast->id }})">
                                     </form>
                                 </div>
@@ -227,7 +227,7 @@
                                     <div class="row">
                                         <div class="col-md-12 product_img">
                                             <table id="mytable" class="table table-bordred table-striped">
-                                                @php 
+                                                @php
                                                     $meta_data = json_decode($broadcast->metaInfo['meta_info']);
                                                     if(is_string($meta_data)){
                                                         $meta_data = json_decode($meta_data);
@@ -284,7 +284,7 @@
                                                     <th>internetSpeed</th>
                                                     <th> {{ isset($meta_data->internetSpeed) ? $meta_data->internetSpeed : ''}} </th>
                                                 </tr>
-                                    
+
                                                 <tr>
                                                     <th>Endpoint URl</th>
                                                     <th>{{ isset($broadcast->metaInfo['endpoint_url']) ? $broadcast->metaInfo['endpoint_url'] : '' }}</th>
@@ -305,7 +305,7 @@
                                                         {{ isset($broadcast->metaInfo['created_at']) ? (new Carbon($broadcast->metaInfo['created_at']))->diffForHumans() : '' }}
                                                     </th>
                                                 </tr>
-                                                @php 
+                                                @php
                                                     }else{
                                                 @endphp
                                                 <tr>
@@ -318,19 +318,19 @@
                                                 @endphp
                                             </table>
                                         </div>
-                                       
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     @endif
-                   
+
                     <div id="video_player_{{ $broadcast->id }}" style="display: none;" class="row">
-                                
+
                                     @php
                                     $image_classes = '';
-                                 
+
                                     $status = $broadcast->status;
 
                                     $video_file_name = !is_null($broadcast->filename) ? $broadcast->filename : '';
@@ -359,7 +359,7 @@
                                                     </a>
                                                 </p>
                                             </video>
-                                        @else 
+                                        @else
                                             <video
                                                 style="max-width:720px;max-height:720px;margin: auto;"
                                                 id="my_recorded_player_{{ $broadcast->id }}"
@@ -369,7 +369,11 @@
                                                 poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
                                                 data-setup='{"fluid": false}'>
                                                 @if($broadcast->is_antmedia)
-                                                    <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                                    @if($broadcast->resolution)
+                                                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                                    @else
+                                                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                                    @endif
                                                 @else
                                                     <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
                                                 @endif
@@ -382,12 +386,12 @@
                                                 </p>
                                             </video>
                                         @endif
-                                
+
                                 @endif
-                            
+
                     </div>
                 </div>
-           
+
                 @endforeach
                 @endif
                 <!--Reported Broadcost listing End-->
@@ -408,10 +412,10 @@
 @endsection
 
 @push('admin-script')
-    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>    
+    <script src="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.js"></script>
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
-                                        
+
     <script type="text/javascript">
         function closeModel(id){
             var my_player = WowzaPlayer.get('w-broadcast-'+id);

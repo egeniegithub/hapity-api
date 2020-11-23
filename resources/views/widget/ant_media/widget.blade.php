@@ -11,7 +11,7 @@
             height: 100%;
             position: static;
         }
-        
+
     </style>
 </head>
 <body>
@@ -35,7 +35,7 @@
                         </a>
                     </p>
                 </video>
-            @else 
+            @else
                 <video
                     style="max-width:100%;max-height:100%;"
                     id="my_recorded_player_{{ $broadcast->id }}"
@@ -45,7 +45,11 @@
                     poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
                     data-setup='{"fill": true}'>
                     @if($broadcast->is_antmedia)
-                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                        @if($broadcast->resolution)
+                            <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                        @else
+                            <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                        @endif
                     @else
                         <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
                     @endif
@@ -61,9 +65,9 @@
     </div>
 </div>
 
-    
 
-    
+
+
     <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>

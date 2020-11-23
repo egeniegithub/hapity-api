@@ -20,7 +20,7 @@
     <meta property="article:modified_time" content="{{ date("d M Y, h:a:s ", strtotime($broadcast->created_at)) }}" />
 
     <!--  Non-Essential, But Recommended -->
-    <meta property="og:site_name" content="Hapity.com">    
+    <meta property="og:site_name" content="Hapity.com">
     <!--  Non-Essential, But Required for Analytics -->
     <meta property="fb:app_id" content="1412967295699368" />
 
@@ -54,14 +54,14 @@
 <div class="section-main detail-broadcast" style="">
     <div class="container">
         <div class="flash-error col-xs-12 col-sm-12 col-md-12" style="display: none;">Flash player is not supported by your browser, you need flash installed to see Broadcast Videos</div>
-        
+
         <div class="col-xs-12 col-sm-3 col-md-3"></div>
         <div class="col-xs-12 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2">
 
             <div class="my-bordcast-single bordcast-active">
                  @if($broadcast)
                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="padding: 0; margin:0; ">
-                                    
+
                                 @if($broadcast->status == 'online')
                                     <video
                                         style="width:100%;max-width:100%;max-height:100%;"
@@ -80,7 +80,7 @@
                                             </a>
                                         </p>
                                     </video>
-                                @else 
+                                @else
                                     <video
                                         style="width:100%;max-width:100%;max-height:100%;"
                                         id="my_recorded_player_{{ $broadcast->id }}"
@@ -90,7 +90,11 @@
                                         poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
                                         data-setup='{"fluid": false}'>
                                         @if($broadcast->is_antmedia)
-                                            <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                            @if($broadcast->resolution)
+                                                <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                            @else
+                                                <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                            @endif
                                         @else
                                             <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
                                         @endif
@@ -103,12 +107,12 @@
                                         </p>
                                     </video>
                                 @endif
-                                    
+
                             </div>
                     @endif
-                  
-                    
-               
+
+
+
                 <?php if($broadcast['status'] == "online") : ?>
                     <span class="broadcast-live"></span>
                 <?php else : ?>
@@ -137,11 +141,11 @@
                             <i class="fa fa-twitter"></i>
                         </a>
                     </li>
-                    <li class="facebook-icon"> 
+                    <li class="facebook-icon">
                         <a  href="https://www.facebook.com/sharer/sharer.php?u={{ $broadcast->share_url }}" target="_blank">
                             <i class="fa fa-facebook"></i>
                         </a>
-                    </li>                           
+                    </li>
                 </ul>
                 <div id="embed-code-popup-<?php echo $broadcast['id'];?>" class="modal-box_popup">
                     <header> <a href="javascript:;" class="js-modal-close close">×</a>
@@ -150,15 +154,15 @@
                     <div class="modal-body">
                         <div class="embedcode-modal-innser">
                             <textarea readonly="">
-                                <iframe height="600" width="100%" scrolling="no" frameborder="0" 
+                                <iframe height="600" width="100%" scrolling="no" frameborder="0"
                                 src="{{ route('widget.index') }}?stream={{ $broadcast['filename'] }}&title={{ urlencode($broadcast['title']) }}&status={{ $broadcast['status'] }}&bid={{ $broadcast['id'] }}&broadcast_image={{ $broadcast['broadcast_image'] }}">
                                 </iframe>
-                            </textarea>                        
+                            </textarea>
                         </div>
                     </div>
                 </div>
                 <div class="social-like-btn">
-                    
+
 
             </div>
         </div>
