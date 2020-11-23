@@ -538,7 +538,7 @@ class AntMediaBroadcastsController extends Controller
                 $rtmp_endpoint = $youtube_stream_info['stream_url'];
                 $broadcast->youtube_stream_info = json_encode($youtube_stream_info);
                 $client = new Client();
-                $stream_key = str_replace(".mp4","",$broadcast->video_name);
+                $stream_key = str_replace("_720p.mp4","",$broadcast->video_name);
                 $resp = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_key."/endpoint?rtmpUrl=".$rtmp_endpoint);
                 echo json_encode(["status" => "success", "msg" => "Stream is live now on youtube as well"]);
             }else if($youtube_error_code == 401){
