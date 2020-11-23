@@ -105,11 +105,12 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->broadcast_image = $request->input('broadcast_image_name');
                 $broadcast->status = 'online';
                 $broadcast->timestamp = date('Y-m-d H:i:s');
-                $broadcast->filename = $request->input('stream_name') . '.mp4';
-                $broadcast->video_name = $request->input('stream_name') . '.mp4';
+                $broadcast->filename = $request->input('stream_name') . '_720p.mp4';
+                $broadcast->video_name = $request->input('stream_name') . '_720p.mp4';
                 $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . $request->input('stream_name');
                 $broadcast->share_url = '';
                 $broadcast->is_antmedia = 1;
+                $broadcast->resolution = '720p';
                 $broadcast_type = "Browser";
                 if(!empty($request->input('broadcast_type'))){
                     $broadcast->broadcast_type = $request->input('broadcast_type');
