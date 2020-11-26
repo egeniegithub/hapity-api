@@ -110,7 +110,7 @@
                                         @endif
 
                                     @else
-                                        <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
+                                        <img src="{{ getBroadcastThumbnail($broadcast->filename) }}" alt="{{ $b_title }}" />
                                     @endif
                                             <span class="play-report-icon">
                                                 <i class="fa fa-play"></i>
@@ -145,7 +145,7 @@
                                         @endif
 
                                     @else
-                                        <img src="{{ asset('images/default001.jpg') }}" alt="{{ $b_title }}" />
+                                        <img src="{{ getBroadcastThumbnail($broadcast->filename) }}" alt="{{ $b_title }}" />
                                     @endif
                                             <span class="play-report-icon">
                                                 <i class="fa fa-play"></i>
@@ -348,7 +348,7 @@
                                                 class="video-js vjs-big-play-centered"
                                                 controls
                                                 preload="auto"
-                                                poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
+                                                poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast->filename) }}"
                                                 data-setup='{"fluid": false}'>
                                                 <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' }}" type="application/x-mpegURL"></source>
                                                 <p class="vjs-no-js">
@@ -366,7 +366,7 @@
                                                 class="video-js vjs-big-play-centered"
                                                 controls
                                                 preload="auto"
-                                                poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : asset('images/default001.jpg') }}"
+                                                poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast->filename) }}"
                                                 data-setup='{"fluid": false}'>
                                                 @if($broadcast->is_antmedia)
                                                     @if($broadcast->resolution)

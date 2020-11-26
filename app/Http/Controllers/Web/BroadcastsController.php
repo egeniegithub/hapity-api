@@ -376,7 +376,7 @@ class BroadcastsController extends Controller
             if (isset($broadcast->broadcast_image) && ($broadcast->broadcast_image != '')) {
                 $broadcast['broadcast_image'] = asset('images/broadcasts/' . $broadcast->user_id . '/' . $broadcast->broadcast_image);
             } else {
-                $broadcast['broadcast_image'] = asset('images/default001.jpg');
+                $broadcast['broadcast_image'] = getBroadcastThumbnail($broadcast->filename);
             }
             return view('view-broadcast', compact('broadcast'));
         } else {

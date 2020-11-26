@@ -150,3 +150,12 @@ if (!function_exists('check_file_exist')) {
         return $broadcast;
     }
 }
+function getBroadcastThumbnail($broadcast_key){
+    $broadcast_key = str_replace("_720p.mp4","",$broadcast_key);
+    $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP."/previews/".$broadcast_key.".png";
+    if(file_exists(base_path("antmedia_store" . "/previews/" . $broadcast_key.".png"))){
+        return $thumbnail_url;
+    }else{
+        return asset('images/default001.jpg');
+    }
+}
