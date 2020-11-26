@@ -32,7 +32,7 @@ class WidgetController extends Controller
             if ($user_id > 0 && isset($request['broadcast_image']) && $request['broadcast_image'] != '') {
                 $data['broadcast_image'] = asset('images/broadcasts/' . $user_id . '/' . $broadcast->broadcast_image);
             } else {
-                $data['broadcast_image'] = asset('images/default001.jpg');
+                $data['broadcast_image'] = getBroadcastThumbnail($broadcast->filename);
             }
 
             $file_info = pathinfo($request['stream']);
