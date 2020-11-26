@@ -159,10 +159,9 @@ function getBroadcastThumbnail($broadcast){
     }else{
         $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP."/previews/".$broadcast_key.".png";
     }
-    return $thumbnail_url;
-    // if(file_exists(base_path("antmedia_store" . "/previews/" . $broadcast_key.".png"))){
-    //     return $thumbnail_url;
-    // }else{
-    //     return asset('images/default001.jpg');
-    // }
+    if(file_exists(base_path("antmedia_store" . "/previews/" . $broadcast_key.".png"))){
+        return $thumbnail_url;
+    }else{
+        return asset('images/default001.jpg');
+    }
 }
