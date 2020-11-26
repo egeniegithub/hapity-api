@@ -3244,7 +3244,8 @@ body {
     display: block;
     height: auto;
     max-width: 100%;
-    width: 100%;
+    width: auto;
+    max-height: 200px;
 }
 .item.active img {
     transition: transform 5000ms linear 0s;
