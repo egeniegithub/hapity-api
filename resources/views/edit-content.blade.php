@@ -101,7 +101,7 @@
                                             <img id="upload-image" src="{{ asset('images/broadcasts/' . Auth::id() . '/'  .$thumbnail_image) }}" />
                                         @endif
                                     @else
-                                        <img id="upload-image" src="{{ getBroadcastThumbnail($broadcast_data['filename']) }}" />
+                                        <img id="upload-image" src="{{ getBroadcastThumbnail($broadcast_data) }}" />
                                     @endif
 
                                   </div>

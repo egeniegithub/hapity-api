@@ -150,12 +150,19 @@ if (!function_exists('check_file_exist')) {
         return $broadcast;
     }
 }
-function getBroadcastThumbnail($broadcast_key){
+function getBroadcastThumbnail($broadcast){
+    $broadcast_key = $broadcast->filename;
     $broadcast_key = str_replace("_720p.mp4","",$broadcast_key);
-    $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP."/previews/".$broadcast_key.".png";
-    if(file_exists(base_path("antmedia_store" . "/previews/" . $broadcast_key.".png"))){
-        return $thumbnail_url;
+    $broadcast_key = str_replace(".mp4","",$broadcast_key);
+    if($broadcast->resolution){
+        $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP."/previews/".$broadcast_key.".png";
     }else{
-        return asset('images/default001.jpg');
+        $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP."/previews/".$broadcast_key.".png";
     }
+    return $thumbnail_url;
+    // if(file_exists(base_path("antmedia_store" . "/previews/" . $broadcast_key.".png"))){
+    //     return $thumbnail_url;
+    // }else{
+    //     return asset('images/default001.jpg');
+    // }
 }

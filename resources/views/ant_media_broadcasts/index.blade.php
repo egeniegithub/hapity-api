@@ -75,7 +75,7 @@
                                             <div class="row">
                                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <div class="thumbnail">
-                                                        <img src="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast->filename) }}" alt="" />
+                                                        <img src="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast) }}" alt="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
@@ -157,7 +157,7 @@
                                         class="video-js vjs-big-play-centered"
                                         controls
                                         preload="auto"
-                                        poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast->filename) }}"
+                                        poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast) }}"
                                         data-setup='{"fluid": false}'>
                                         <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' }}" type="application/x-mpegURL"></source>
                                         <p class="vjs-no-js">
@@ -175,7 +175,7 @@
                                         class="video-js vjs-big-play-centered"
                                         controls
                                         preload="auto"
-                                        poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast->filename) }}"
+                                        poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast) }}"
                                         data-setup='{"fluid": false}'>
                                         @if($broadcast->is_antmedia)
                                             @if($broadcast->resolution)
