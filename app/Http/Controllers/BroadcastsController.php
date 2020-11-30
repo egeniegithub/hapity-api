@@ -165,10 +165,18 @@ class BroadcastsController extends Controller
         $broadcast->is_sensitive = !is_null($request->input('is_sensitive')) ? $request->input('is_sensitive') : '';
         $broadcast->stream_url = $stream_url;
         $broadcast->share_url = '';
-        $broadcast->video_name = $request->input('stream_url').'_720p';
-        $broadcast->filename = $request->input('stream_url') . '_720p.mp4';
+
+        if($request->input('is_live_app')){
+            $broadcast->video_name = $request->input('stream_url').'_720p';
+            $broadcast->filename = $request->input('stream_url') . '_720p.mp4';
+            $broadcast->resolution = '720p';
+        }else{
+            $broadcast->video_name = $request->input('stream_url');
+            $broadcast->filename = $request->input('stream_url') . '.mp4';
+        }
+
+
         $broadcast->status = 'online';
-        $broadcast->resolution = '720p';
         $broadcast->is_antmedia = $is_antmedia;
         $broadcast->save();
 
