@@ -153,7 +153,6 @@ class BroadcastsController extends Controller
         if($request->input('is_antmedia') == 'yes'){
             $is_antmedia = 1;
         }
-        $stream_url = !empty($request->input('stream_url')) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($request->input('stream_url'), PATHINFO_FILENAME) : '';
 
         $user = User::find($request->input('user_id'));
 
@@ -163,19 +162,19 @@ class BroadcastsController extends Controller
         $broadcast->geo_location = !is_null($request->input('geo_location')) ? $request->input('geo_location') : '';
         $broadcast->description = !is_null($request->input('description')) ? $request->input('description') : '';
         $broadcast->is_sensitive = !is_null($request->input('is_sensitive')) ? $request->input('is_sensitive') : '';
-        $broadcast->stream_url = $stream_url;
         $broadcast->share_url = '';
 
         if($request->input('is_live_app')){
+            $stream_url = !empty($request->input('stream_url')) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($request->input('stream_url'), PATHINFO_FILENAME) : '';
             $broadcast->video_name = $request->input('stream_url').'_720p';
             $broadcast->filename = $request->input('stream_url') . '_720p.mp4';
             $broadcast->resolution = '720p';
         }else{
+            $stream_url = !empty($request->input('stream_url')) ? ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($request->input('stream_url'), PATHINFO_FILENAME) : '';
             $broadcast->video_name = $request->input('stream_url');
             $broadcast->filename = $request->input('stream_url') . '.mp4';
         }
-
-
+        $broadcast->stream_url = $stream_url;
         $broadcast->status = 'online';
         $broadcast->is_antmedia = $is_antmedia;
         $broadcast->save();
