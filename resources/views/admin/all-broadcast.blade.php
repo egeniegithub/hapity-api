@@ -110,7 +110,7 @@
                                         @endif
 
                                     @else
-                                        <img src="{{ getBroadcastThumbnail($broadcast) }}" alt="{{ $b_title }}" />
+                                        <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ getBroadcastThumbnail($broadcast) }}" alt="{{ $b_title }}" />
                                     @endif
                                             <span class="play-report-icon">
                                                 <i class="fa fa-play"></i>
