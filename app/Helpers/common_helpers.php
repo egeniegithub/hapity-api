@@ -159,7 +159,7 @@ function getBroadcastThumbnail($broadcast){
     }else{
         $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP."/previews/".$broadcast_key.".png";
     }
-    $headers = @get_headers($thumbnail_url);
+    //$headers = @get_headers($thumbnail_url);
 
     // Use condition to check the existence of URL
     // if($headers && strpos( $headers[0], '200')) {
