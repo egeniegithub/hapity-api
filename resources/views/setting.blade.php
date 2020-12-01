@@ -151,7 +151,7 @@
                                     </div>
                                 </div><!-- form group -->
                                 <div class="form-group text-center field-data">
-                                    <b>{!! $youtube_connect !!}</b>
+                                    {{-- <b>{!! $youtube_connect !!}</b> --}}
                                 </div><!-- form group -->
                                 <div class="form-group text-center field-data">
                                     <input type="submit" class="save-btn" value="Save" id='account-save' >
