@@ -92,7 +92,7 @@
                                     @foreach($broadcasts as $broadcast_key => $broadcast)
                                     <tr>
                                         <td>{{ $broadcast->title }}</td>
-                                        <td>{{ str_replace(".mp4","",$broadcast->video_name) }}</td>
+                                        <td>{{ str_replace(".mp4","",str_replace("_720p.mp4","",$broadcast->video_name)) }}</td>
                                         <td>
                                             <a href="javascript:void();" data-broadcast_id="{{ $broadcast->id }}" class="delete-btn">
                                                 <img src="{{ asset('assets') }}/images/delete.png" alt="Delete" width="28">
