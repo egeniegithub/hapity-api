@@ -75,7 +75,7 @@
                                             <div class="row">
                                                 <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                                                     <div class="thumbnail">
-                                                        <img src="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast) }}" alt="" />
+                                                        <img onerror="this.onerror=null;this.src='images/default001.jpg';" src="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast) }}" alt="" />
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">

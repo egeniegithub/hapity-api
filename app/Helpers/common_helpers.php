@@ -159,6 +159,10 @@ function getBroadcastThumbnail($broadcast){
     }else{
         $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP."/previews/".$broadcast_key.".png";
     }
+<<<<<<< HEAD
+=======
+    return $thumbnail_url;
+>>>>>>> 297295c38b8859e4e1fb6d4595b96b4310e4de16
     //$headers = @get_headers($thumbnail_url);
 
     // Use condition to check the existence of URL
@@ -167,9 +171,9 @@ function getBroadcastThumbnail($broadcast){
     // } else{
     //     return asset('images/default001.jpg');
     // }
-    if(file_exists(base_path("antmedia_store" . "/previews/" . $broadcast_key.".png"))){
-        return $thumbnail_url;
-    }else{
-        return asset('images/default001.jpg');
-    }
+    // if(file_exists(base_path("antmedia_store" . "/previews/" . $broadcast_key.".png"))){
+    //     return $thumbnail_url;
+    // }else{
+    //     return asset('images/default001.jpg');
+    // }
 }
