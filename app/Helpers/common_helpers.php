@@ -159,10 +159,7 @@ function getBroadcastThumbnail($broadcast){
     }else{
         $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP."/previews/".$broadcast_key.".png";
     }
-<<<<<<< HEAD
-=======
     return $thumbnail_url;
->>>>>>> 297295c38b8859e4e1fb6d4595b96b4310e4de16
     //$headers = @get_headers($thumbnail_url);
 
     // Use condition to check the existence of URL
