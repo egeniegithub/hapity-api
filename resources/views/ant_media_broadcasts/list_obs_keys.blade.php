@@ -75,7 +75,7 @@
                 </div>
                 <h3>Settings to enter in OBS</h3>
                 <strong>Service : Custom</strong><br>
-                <strong>Server : rtmp://antmedia.hapity.com/WebRTCAppEE</strong><br>
+                <strong>Server : rtmp://antmedia.hapity.com/LiveApp</strong><br>
                 <strong>Stream Key : Choose from below stream keys</strong><br>
 
                 <hr />
