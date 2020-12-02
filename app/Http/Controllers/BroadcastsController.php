@@ -714,15 +714,26 @@ class BroadcastsController extends Controller
         $stream_id = $request->input('stream_id');
         $rtmp_endpoint = $request->input('rtmp_endpoint');
         if(!empty($stream_id) && !empty($rtmp_endpoint)){
-            $client = new Client();
-            $res = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_id."/endpoint?rtmpUrl=".$rtmp_endpoint);
-            if($res->getStatusCode() == 200){
+            // $client = new Client();
+            // $res = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_id."/endpoint?rtmpUrl=".$rtmp_endpoint);
+            $opts = array('http' => array(
+                'method' => 'POST',
+                'header' => array(
+                    'Content-type: application/json',
+                ),
+                'content' => '',
+            ),
+            );
+            $context = stream_context_create($opts);
+            $go = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_id."/endpoint?rtmpUrl=".$rtmp_endpoint;
+            $result_str = @file_get_contents($go, false, $context);
+            if($result_str){
                 $response['status'] = 'success';
                 $response['message'] = 'RTMP stream added successfully';
                 return response($response, 200);
             }else{
                 $response['status'] = 'error';
-                $response['message'] = $res->getBody();
+                $response['message'] = $result_str;
                 return response($response, 422);
             }
 

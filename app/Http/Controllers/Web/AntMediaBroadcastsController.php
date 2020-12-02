@@ -118,21 +118,32 @@ class AntMediaBroadcastsController extends Controller
                         $broadcast_type = "OBS";
 
                     if($request->input('stream_to_youtube') == "yes"){
-                        $client = new Client();
-                        $url = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/create";
-                        $client = new Client([
-                            'headers' => [ 'Content-Type' => 'application/json' ]
-                        ]);
+                        // $client = new Client();
+                        // $url = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/create";
+                        // $client = new Client([
+                        //     'headers' => [ 'Content-Type' => 'application/json' ]
+                        // ]);
                         $stdClass = new \stdClass();
                         $stdClass->name = $request->input('broadcast_title');
                         $stdClass->streamId = $request->input('stream_name');
-                        $response = $client->post($url,
-                            [
-                                'body' => json_encode($stdClass),
-                                'headers' => [
-                                    'Content-Type' => 'application/json',
-                                ]
-                            ]);
+                        // $response = $client->post($url,
+                        //     [
+                        //         'body' => json_encode($stdClass),
+                        //         'headers' => [
+                        //             'Content-Type' => 'application/json',
+                        //         ]
+                        //     ]);
+                        $opts = array('http' => array(
+                            'method' => 'POST',
+                            'header' => array(
+                                'Content-type: application/json',
+                            ),
+                            'content' => json_encode($stdClass),
+                        ),
+                        );
+                        $context = stream_context_create($opts);
+                        $go = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/create";
+                        $result_str = @file_get_contents($go, false, $context);
                     }
                 }
 
@@ -547,7 +558,6 @@ class AntMediaBroadcastsController extends Controller
                     'content' => '',
                 ),
                 );
-
                 $context = stream_context_create($opts);
                 $go = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_key."/endpoint?rtmpUrl=".$rtmp_endpoint;
                 $result_str = @file_get_contents($go, false, $context);
