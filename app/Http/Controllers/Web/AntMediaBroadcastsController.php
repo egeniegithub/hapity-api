@@ -537,9 +537,20 @@ class AntMediaBroadcastsController extends Controller
             if(isset($youtube_stream_info['stream_url'])){
                 $rtmp_endpoint = $youtube_stream_info['stream_url'];
                 $broadcast->youtube_stream_info = json_encode($youtube_stream_info);
-                $client = new Client();
+                //$client = new Client();
                 $stream_key = str_replace("_720p.mp4","",$broadcast->video_name);
-                $resp = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_key."/endpoint?rtmpUrl=".$rtmp_endpoint);
+                $opts = array('http' => array(
+                    'method' => 'POST',
+                    'header' => array(
+                        'Content-type: application/json',
+                    ),
+                    'content' => '',
+                ),
+                );
+
+                $context = stream_context_create($opts);
+                $go = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_key."/endpoint?rtmpUrl=".$rtmp_endpoint;
+                $result_str = @file_get_contents($go, false, $context);
                 echo json_encode(["status" => "success", "msg" => "Stream is live now on youtube as well"]);
             }else if($youtube_error_code == 401){
                 echo json_encode(["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because your youtube access has been revoked. Please connect youtube account in setting and try again"]);
