@@ -106,7 +106,7 @@
                                         @if(in_array($format, $allowedExtensions))
                                             <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
                                         @else
-                                            <img onerror="this.onerror=null;this.src='images/default001.jpg';" src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
+                                            <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
                                         @endif
 
                                     @else
