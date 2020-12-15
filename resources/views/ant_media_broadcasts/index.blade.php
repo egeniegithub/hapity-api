@@ -80,6 +80,7 @@
                                                 </div>
                                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                                     <h3 class="broadcast-title">{{ $broadcast->title }}</h3>
+                                                    <span title="views" style="color: #97be0d;font-size:20px"><i class="fa fa-eye"></i> {{ $broadcast->view_count ? $broadcast->view_count : 0 }}</span>
                                                     @if(!empty($broadcast->description))
                                                     <p class="short-desc">{{ $broadcast->description }}</p>
                                                     @endif
@@ -170,7 +171,6 @@
                                     </video>
                                 @else
                                     <video
-                                        style="max-width:720px;max-height:720px;"
                                         id="my_recorded_player_{{ $broadcast->id }}"
                                         class="video-js vjs-big-play-centered"
                                         controls

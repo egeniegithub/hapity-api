@@ -71,6 +71,17 @@
     <script src="{{ asset('assets/js/bootstrap.min.js')}}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/video.min.js') }}"></script>
     <script src="{{ asset('assets/video-js-7.7.4/videojs-http-streaming.min.js') }}"></script>
-
+    <script>
+        document.querySelector('video').addEventListener('play',  evt => {
+            var my_request;
+            my_request = $.ajax({
+                url: "{{ route('broadcast.update.view.count', $broadcast->id) }}",
+                type: 'GET'
+            });
+            my_request.done(function(response){
+                console.log(response);
+            });
+        });
+    </script>
 </body>
 </html>

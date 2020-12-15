@@ -343,7 +343,7 @@
                                 @if($video_file_name)
                                         @if($broadcast->status == 'online')
                                             <video
-                                                style="max-width:720px;max-height:720px;margin: auto;"
+                                                style="margin: auto;"
                                                 id="my_live_player_{{ $broadcast->id }}"
                                                 class="video-js vjs-big-play-centered"
                                                 controls
@@ -361,7 +361,7 @@
                                             </video>
                                         @else
                                             <video
-                                                style="max-width:720px;max-height:720px;margin: auto;"
+                                                style="margin: auto;"
                                                 id="my_recorded_player_{{ $broadcast->id }}"
                                                 class="video-js vjs-big-play-centered"
                                                 controls
