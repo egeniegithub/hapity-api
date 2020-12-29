@@ -106,11 +106,11 @@
                                         @if(in_array($format, $allowedExtensions))
                                             <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
                                         @else
-                                            <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
+                                            <img id="preview-{{$broadcast->id}}" onerror="updatePreview({{$broadcast->id}})" src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
                                         @endif
 
                                     @else
-                                        <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ getBroadcastThumbnail($broadcast) }}" alt="{{ $b_title }}" />
+                                        <img id="preview-{{$broadcast->id}}" onerror="updatePreview({{$broadcast->id}})" src="{{ getBroadcastThumbnail($broadcast) }}" alt="{{ $b_title }}" />
                                     @endif
                                             <span class="play-report-icon">
                                                 <i class="fa fa-play"></i>
@@ -188,7 +188,7 @@
                             <div class="row">
                                 <div class="col-xs-12 text-center">
                                     <div style="width: 50px; height: 50px; display:inline-block;">
-                                        <img src="{{ $broadcast->file_exists ? asset('images/document-tick-icon.png') : asset('images/document-remove-icon.png') }}" class="img-responsive" />
+                                        <img id="fileexist-{{$broadcast->id}}" src="{{ asset('images/document-tick-icon.png') }}" class="img-responsive" />
                                     </div>
                                 </div>
                             </div>
@@ -441,6 +441,12 @@
                 return false;
             }
         }).setHeader('<em> Delete Broadcast</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});
+    }
+    function updatePreview(id){
+        console.log(id)
+        $('#preview-'+id).attr('src','{{ asset("images/default001.jpg")}}');
+        $('#fileexist-'+id).attr('src', '{{ asset("images/document-remove-icon.png")}}');
+        this.onerror=null;
     }
 
     </script>

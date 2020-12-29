@@ -466,16 +466,16 @@ class BroadcastsController extends Controller
             $broadcastObj['user_id'] = $user['id'];
             $broadcastObj['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictuers/' . $user['profile']['profile_picture']) : '';
 
-            $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
-            $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
-            $ext = $ext == 'mp4' ? '' : '.mp4';
-            $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
+            // $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
+            // $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
+            // $ext = $ext == 'mp4' ? '' : '.mp4';
+            // $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
 
-            if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename)) || $broadcast->status == 'online') {
+            //if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename)) || $broadcast->status == 'online') {
                 $broadcasts[] = $broadcastObj;
-            }else if(file_exists(base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename))){
-                $broadcasts[] = $broadcastObj;
-            }
+            // }else if(file_exists(base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename))){
+            //     $broadcasts[] = $broadcastObj;
+            // }
 
         }
 

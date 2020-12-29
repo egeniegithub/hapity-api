@@ -23,7 +23,7 @@ class AdminBroadcastController extends Controller
         $inputData = $request->all();
         $data = Broadcast::with(['user'=>function($q) {
             $q->select('id','username');
-            
+
         },
         'user.plugins',
         'metaInfo' => function($q){
@@ -33,7 +33,7 @@ class AdminBroadcastController extends Controller
             $data = $data->whereHas('user', function (Builder $query) use($inputData) {
                 $query->where('username', 'like', "%" . trim($inputData['username']) . "%");
             });
-        }  
+        }
         if (isset($inputData['search']) || isset($inputData['datetimes'])) {
             if (isset($inputData['search']) && $inputData['search'] != '') {
                 $data = $data->where(function($query) use ($inputData){
@@ -50,26 +50,26 @@ class AdminBroadcastController extends Controller
                 $data = $data->whereBetween('created_at', [$from, $to]);
             }
         }
-        
+
         $broadcasts = $data->orderBy('created_at','desc')->paginate(20);
-        foreach ($broadcasts as $key => $broadcast) {
-            $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);        
-            if($broadcast->is_antmedia){
-                $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-                if(file_exists($video_path)) {
-                    $broadcasts[$key]['file_exists'] = true;
-                }else{
-                    $broadcasts[$key]['file_exists'] = false;
-                } 
-                    
-            }else{
-                if(file_exists($wowza_path)){
-                    //$broadcst = check_file_exist($broadcast,$wowza_path);
-                    $broadcasts[$key]['file_exists'] = true;
-                    $broadcasts[$key] = $broadcast;
-                }
-            }
-        }
+        // foreach ($broadcasts as $key => $broadcast) {
+        //     $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);
+        //     if($broadcast->is_antmedia){
+        //         $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+        //         if(file_exists($video_path)) {
+        //             $broadcasts[$key]['file_exists'] = true;
+        //         }else{
+        //             $broadcasts[$key]['file_exists'] = false;
+        //         }
+
+        //     }else{
+        //         if(file_exists($wowza_path)){
+        //             //$broadcst = check_file_exist($broadcast,$wowza_path);
+        //             $broadcasts[$key]['file_exists'] = true;
+        //             $broadcasts[$key] = $broadcast;
+        //         }
+        //     }
+        // }
         // dd($broadcasts);
         return view('admin.all-broadcast', compact('broadcasts'));
     }
