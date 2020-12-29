@@ -106,11 +106,11 @@
                                         @if(in_array($format, $allowedExtensions))
                                             <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
                                         @else
-                                            <img id="preview-{{$broadcast->id}}" onerror="updatePreview({{$broadcast->id}})" src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
+                                            <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
                                         @endif
 
                                     @else
-                                        <img id="preview-{{$broadcast->id}}" onerror="updatePreview({{$broadcast->id}})" src="{{ getBroadcastThumbnail($broadcast) }}" alt="{{ $b_title }}" />
+                                        <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ getBroadcastThumbnail($broadcast) }}" alt="{{ $b_title }}" />
                                     @endif
                                             <span class="play-report-icon">
                                                 <i class="fa fa-play"></i>
@@ -188,7 +188,7 @@
                             <div class="row">
                                 <div class="col-xs-12 text-center">
                                     <div style="width: 50px; height: 50px; display:inline-block;">
-                                        <img id="fileexist-{{$broadcast->id}}" src="{{ asset('images/document-tick-icon.png') }}" class="img-responsive" />
+                                        <img id="fileexist{{$broadcast->id }}" src="{{ asset("images/document-remove-icon.png")}}" class="img-responsive" />
                                     </div>
                                 </div>
                             </div>
@@ -348,6 +348,7 @@
                                                 class="video-js vjs-big-play-centered"
                                                 controls
                                                 preload="auto"
+                                                bid="{{ $broadcast->id }}"
                                                 poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast) }}"
                                                 data-setup='{"fluid": false}'>
                                                 <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' }}" type="application/x-mpegURL"></source>
@@ -366,6 +367,7 @@
                                                 class="video-js vjs-big-play-centered"
                                                 controls
                                                 preload="auto"
+                                                bid="{{ $broadcast->id }}"
                                                 poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast) }}"
                                                 data-setup='{"fluid": false}'>
                                                 @if($broadcast->is_antmedia)
@@ -442,12 +444,25 @@
             }
         }).setHeader('<em> Delete Broadcast</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});
     }
-    function updatePreview(id){
-        console.log(id)
-        $('#preview-'+id).attr('src','{{ asset("images/default001.jpg")}}');
-        $('#fileexist-'+id).attr('src', '{{ asset("images/document-remove-icon.png")}}');
-        this.onerror=null;
-    }
+    $("video source").each(function(){
 
+        var url = $(this).attr('src');
+        var that = $(this);
+        var id = that.parent().attr('bid');
+        console.log(id);
+        $.ajax({
+            url: url,
+            type:'HEAD',
+            error: function()
+            {
+                console.log("not exist: "+url)
+            },
+            success: function()
+            {
+                console.log("Exists: "+url)
+                $('#fileexist'+id).attr('src', '{{ asset("images/document-tick-icon.png") }}');
+            }
+        });
+    })
     </script>
 @endpush
