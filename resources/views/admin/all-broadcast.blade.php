@@ -139,13 +139,13 @@
                                         );
                                     @endphp
                                         @if(in_array($format, $allowedExtensions))
-                                            <img src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
+                                            <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ $thumbnail_image }}" alt="{{ $b_title }}" />
                                         @else
-                                            <img src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
+                                            <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ asset('images/broadcasts/' . $broadcast->user_id . '/' . $thumbnail_image) }}" alt="{{ $b_title }}" />
                                         @endif
 
                                     @else
-                                        <img src="{{ getBroadcastThumbnail($broadcast) }}" alt="{{ $b_title }}" />
+                                        <img onerror="this.onerror=null;this.src='/images/default001.jpg';" src="{{ getBroadcastThumbnail($broadcast) }}" alt="{{ $b_title }}" />
                                     @endif
                                             <span class="play-report-icon">
                                                 <i class="fa fa-play"></i>
@@ -459,7 +459,6 @@
             },
             success: function()
             {
-                console.log("Exists: "+url)
                 $('#fileexist'+id).attr('src', '{{ asset("images/document-tick-icon.png") }}');
             }
         });
