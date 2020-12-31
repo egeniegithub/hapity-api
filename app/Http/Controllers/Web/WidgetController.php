@@ -73,8 +73,9 @@ class WidgetController extends Controller
             $data['broadcast'] = $broadcast = Broadcast::find($data['b_id']);
             //if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
-                    $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-                    if(file_exists($video_path)) {
+                    //$video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+                    $videoUrl = $broadcast->stream_url.".mp4";
+                    if(url_exists($videoUrl)) {
                         $broadcast->status = "offline";
                         $broadcast->save();
                     }

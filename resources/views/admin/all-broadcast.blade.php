@@ -447,6 +447,7 @@
     $("video source").each(function(){
 
         var url = $(this).attr('src');
+        url.replace(".m3u8",".mp4");
         var that = $(this);
         var id = that.parent().attr('bid');
         console.log(id);
@@ -460,6 +461,7 @@
             success: function()
             {
                 $('#fileexist'+id).attr('src', '{{ asset("images/document-tick-icon.png") }}');
+                that.attr('src',url)
             }
         });
     })

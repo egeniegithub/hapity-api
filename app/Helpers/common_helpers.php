@@ -174,3 +174,11 @@ function getBroadcastThumbnail($broadcast){
     //     return asset('images/default001.jpg');
     // }
 }
+function url_exists($url){
+    $headers=get_headers($url);
+    if(stripos($headers[0],"200 OK")){
+     return true;
+    } else {
+     return false;
+    }
+ }
