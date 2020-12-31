@@ -176,7 +176,7 @@ function getBroadcastThumbnail($broadcast){
 }
 function url_exists($url){
     $headers=get_headers($url);
-    if(stripos($headers[0],"200 OK")){
+    if(stripos($headers[0],"200")){
      return true;
     } else {
      return false;
