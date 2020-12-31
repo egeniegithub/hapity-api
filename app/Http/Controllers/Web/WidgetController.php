@@ -78,6 +78,7 @@ class WidgetController extends Controller
                     if(url_exists($videoUrl)) {
                         $broadcast->status = "offline";
                         $broadcast->save();
+                        $broadcast->stream_url = $videoUrl;
                     }
                 }
                 return view('widget.ant_media.widget', $data);

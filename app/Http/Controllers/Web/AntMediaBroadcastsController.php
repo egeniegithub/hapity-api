@@ -399,6 +399,7 @@ class AntMediaBroadcastsController extends Controller
                     if(url_exists($videoUrl)) {
                         $broadcast->status = "offline";
                         $broadcast->save();
+                        $broadcast->stream_url = $videoUrl;
                     }
                 }
                 return view('ant_media_broadcasts.view-broadcast', compact('broadcast'));
