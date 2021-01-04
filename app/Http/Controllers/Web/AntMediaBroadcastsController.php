@@ -29,8 +29,8 @@ class AntMediaBroadcastsController extends Controller
             $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);
             if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
-                    $video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-                    if(file_exists($video_path)) {
+                    $videoUrl = $broadcast->stream_url."_720p.mp4";
+                    if(url_exists($videoUrl)) {
                         $broadcast->status = "offline";
                         $broadcast->save();
                     }
