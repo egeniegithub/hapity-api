@@ -140,7 +140,7 @@
 				<div class="row">
 					<div class="col-md-5">
 						<div class="copyrights-content">
-							<p>Hapity® is a registered trademark. <a href="{{route('privacy-policy')}}">Privacy and Terms</a><br> &copy;{{ date('Y')}} All Rights Reserved. </p>
+							<p>Hapity<sup>©</sup> is a registered trademark. <a href="{{route('privacy-policy')}}">Privacy and Terms</a><br> &copy;{{ date('Y')}} All Rights Reserved. </p>
 						</div>
 					</div>
 				</div>
