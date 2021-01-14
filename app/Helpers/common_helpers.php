@@ -179,12 +179,12 @@ function getBroadcastThumbnail($broadcast)
 }
 function url_exists($url)
 {
-    // $headers=get_headers($url);
-    // if(stripos($headers[0],"200")){
-    //  return true;
-    // } else {
-    //  return false;
-    // }
+    $headers=@get_headers($url);
+    if(isset($headers[0]) && stripos($headers[0],"200")){
+     return true;
+    } else {
+     return false;
+    }
     return false;
 }
 
