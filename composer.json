@@ -21,7 +21,7 @@
         "laravel/tinker": "^1.0",
         "twbs/bootstrap": "^4.3",
         "tymon/jwt-auth": "^1.0",
-        "wowza/wse-rest-library-php": "dev-master"
+        "league/flysystem-aws-s3-v3":"~1.0"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",
@@ -41,13 +41,13 @@
             "dont-discover": []
         }
     },
-    "autoload": {               
+    "autoload": {
         "psr-4": {
             "App\\": "app/"
         },
         "files": [
             "app/Helpers/PluginFunctions.php",
-            "app/Helpers/common_helpers.php"   
+            "app/Helpers/common_helpers.php"
         ]
         ,
         "classmap": [

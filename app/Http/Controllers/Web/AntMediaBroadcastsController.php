@@ -12,6 +12,7 @@ use GuzzleHttp\RequestOptions;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
 class AntMediaBroadcastsController extends Controller
@@ -240,9 +241,10 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->timestamp = date('Y-m-d H:i:s');
                 $broadcast->filename = $broadcast_video;
                 $broadcast->video_name = !empty($broadcast_video) ? $broadcast_video : '';
-                $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
+                $broadcast->stream_url = AWS_S3_URL . $broadcast_video;
                 $broadcast->share_url = '';
                 $broadcast->is_antmedia = 1;
+                $broadcast->is_s3 = 1;
                 $broadcast->save();
 
                 $broadcast->share_url = route('broadcast.view', [$broadcast->id]);
@@ -289,7 +291,7 @@ class AntMediaBroadcastsController extends Controller
 
     public function upload_video(Request $request)
     {
-        $file_info = $this->handle_video_file_upload($request);
+        $file_info = handle_video_file_upload($request);
 
         echo $file_info['file_name'];
     }
@@ -351,41 +353,6 @@ class AntMediaBroadcastsController extends Controller
         $image->save($image_absolute_path);
     }
 
-    private function handle_video_file_upload($request)
-    {
-        $to_return = [];
-        if ($request->hasFile('broadcast_video')) {
-
-            $video_file = $request->file('broadcast_video');
-            $video_original_name = $video_file->getClientOriginalName();
-            $ext = $video_file->getClientOriginalExtension();
-
-            $temp_path = storage_path('temp');
-
-            $file_name = "stream_" . time() . $ext;
-            $antmedia_path = base_path('antmedia_store');
-
-            $output_file_name = "stream_" . time() . ".mp4";
-
-            $video_path = $video_file->move($temp_path, $file_name);
-
-            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
-
-            ffmpeg_upload_file_path($video_path->getRealPath(), $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
-
-            $stream_url = '';
-
-            $to_return = [
-                'file_original_name' => $video_original_name,
-                'file_name' => $output_file_name,
-                'file_path' => $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name,
-                'file_stream_url' => $stream_url,
-                'file_server' => ANT_MEDIA_SERVER_STAGING_URL,
-            ];
-        }
-
-        return $to_return;
-    }
 
     public function view_broadcast($broadcast_id){
 

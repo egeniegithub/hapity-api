@@ -1,25 +1,25 @@
 @extends('layouts.app')
 @section('content')
-    <div class="container">          
+    <div class="container">
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <h1 class="broadcast-heading">Lets Create Something Awesome<br /><small>Edit Broadcast</small></h1>
             </div>
         </div>
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2 text-center">    
-                <div class="panel panel-default panel-success" style="border-color: #97be0d;">                    
-                    <div class="panel-body">                        
+            <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2 text-center">
+                <div class="panel panel-default panel-success" style="border-color: #97be0d;">
+                    <div class="panel-body">
                         <div class="row" id="live-stream-container">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                                 <div class="embed-responsive embed-responsive-16by9">
                                     <video id="localVideo" autoplay="autoplay" muted="muted" controls="controls" playsinline=""></video>
-                                </div>  
+                                </div>
                             </div>
                         </div>
                         <div class="row" id="recorded-stream-container">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                                <div class="embed-responsive embed-responsive-16by9">                                    
+                                <div class="embed-responsive embed-responsive-16by9">
                                     <video
                                         id="my_recorded_player_{{ $broadcast->id }}"
                                         class="video-js vjs-big-play-centered"
@@ -27,7 +27,7 @@
                                         preload="auto"
                                         poster="{{ asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) }}"
                                         data-setup='{"fluid": true}'>
-                                        <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
+                                        <source src="{{ getVideoUrl($broadcast) }}" type="video/mp4"></source>
                                         <p class="vjs-no-js">
                                             To view this video please enable JavaScript, and consider upgrading to a
                                             web browser that
@@ -36,15 +36,15 @@
                                             </a>
                                         </p>
                                     </video>
-                                </div>  
+                                </div>
                             </div>
-                        </div>                        
-                    </div>                      
-                </div>                 
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-       
-                
+
+
         <div class="row" id="form_container">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
                 <form id="broadcast_form" enctype="multipart/form-data" method="POST">
@@ -117,8 +117,8 @@
                 <span class="label label-success" id="broadcastingInfo" style="font-size: 14px; display: none;">Publishing</span>
             </div>
         </div>
-            
-       
+
+
         <br />
         <br />
         <br />
@@ -130,7 +130,7 @@
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
-    
+
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard_theme_circles.min.css') }}" rel="stylesheet">
 
@@ -146,7 +146,7 @@
     <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
-    
+
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/jquery.validate.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.1/dist/additional-methods.min.js"></script>
 
@@ -205,7 +205,7 @@
                         res =  response.status ?  response : JSON.parse(response);
 
                         if(res.status == 'success'){
-                            window.location = "{{ route('broadcasts.index') }}";                               
+                            window.location = "{{ route('broadcasts.index') }}";
                         }
                     });
 
@@ -216,7 +216,7 @@
                     my_request.always(function(){
 
                     });
-                
+
                 }
             });
 
@@ -228,7 +228,7 @@
             FilePond.registerPlugin(FilePondPluginFileValidateSize);
             FilePond.registerPlugin(FilePondPluginFileValidateType);
 
-         
+
 
             const image_uploader = FilePond.create(document.querySelector('#broadcast_image'), {
                 allowFileSizeValidation: true,
@@ -237,14 +237,14 @@
                 allowImageExifOrientation: true,
                 allowImageCrop: true,
                 server: {
-                    
+
                     process: {
                         url: "{{ route('broadcasts.upload_image') }}",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         method: 'POST',
-                        withCredentials: false,  
+                        withCredentials: false,
                         onload: (response) => {
                             $('#image_upload_loader').hide();
                             $('#broadcast_image_name').val(response);
@@ -258,7 +258,7 @@
                             return formData;
                         }
                     }
-                    
+
                 }
             });
 
@@ -269,14 +269,14 @@
                 allowImageExifOrientation: true,
                 allowImageCrop: true,
                 server: {
-                    
+
                     process: {
                         url: "{{ route('broadcasts.upload_video') }}",
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
                         method: 'POST',
-                        withCredentials: false,  
+                        withCredentials: false,
                         onload: (response) => {
                             $('#video_upload_loader').hide();
                             $('#broadcast_video_name').val(response);
@@ -290,46 +290,46 @@
                             return formData;
                         }
                     }
-                    
+
                 }
             });
 
         });
-        
-        
-     
-        
+
+
+
+
 
 
         var token = "null";
-    
+
         var start_publish_button = document.getElementById("start_publish_button");
         var stop_publish_button = document.getElementById("stop_publish_button");
-        
+
         var screen_share_checkbox = document.getElementById("screen_share_checkbox");
         var install_extension_link = document.getElementById("install_chrome_extension_link");
-    
+
         var streamNameBox = document.getElementById("stream_name");
-        
+
         var streamId;
-        
+
         function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),
                 sURLVariables = sPageURL.split('&'),
                 sParameterName,
                 i;
-    
+
             for (i = 0; i < sURLVariables.length; i++) {
                 sParameterName = sURLVariables[i].split('=');
-    
+
                 if (sParameterName[0] === sParam) {
                     return sParameterName[1] === undefined ? true : sParameterName[1];
                 }
             }
         };
-        
-                
-    
+
+
+
         function startPublishing() {
             var ts = Math.round((new Date()).getTime() / 1000);
             var name = 'stream_' + ts;
@@ -354,7 +354,7 @@
                 my_request.done(function(response) {
                     if(response == 'success'){
                         $('#form_container').hide();
-                        webRTCAdaptor.publish(name, token);    
+                        webRTCAdaptor.publish(name, token);
                     }
                 });
 
@@ -365,17 +365,17 @@
                 my_request.always(function(){
 
                 });
-                
+
             }
             */
         }
-    
+
         function stopPublishing() {
 
             $('.broadcast-overlay').show();
             webRTCAdaptor.stop($('#stream_name').val());
         }
-        
+
         function enableDesktopCapture(enable) {
             if (enable == true) {
                 webRTCAdaptor.switchDesktopCapture($('#stream_name').val());
@@ -384,9 +384,9 @@
                 webRTCAdaptor.switchVideoCapture($('#stream_name').val());
             }
         }
-        
+
         function startAnimation() {
-    
+
             $("#broadcastingInfo").fadeIn(800, function () {
               $("#broadcastingInfo").fadeOut(800, function () {
                 var state = webRTCAdaptor.signallingState($('#stream_name').val());
@@ -398,17 +398,17 @@
                 }
               });
             });
-    
+
           }
-    
+
         var pc_config = null;
-    
+
         var sdpConstraints = {
             OfferToReceiveAudio : false,
             OfferToReceiveVideo : false
-    
+
         };
-        
+
         var mediaConstraints = {
             video : true,
             audio : true
@@ -417,17 +417,17 @@
         var host = "{{ ANTMEDIA_HOST }}";
         var port = '5443';
         var appName = '{{ WEBRTC_APP }}/';
-    
+
         //var appName = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
         //var path =  location.hostname + ":" + location.port + appName + "websocket";
         var path =  `${host}:${port}/{{ WEBRTC_APP }}/websocket`;
         var websocketURL =  "ws://" + path;
-        
+
         if (location.protocol.startsWith("https")) {
             websocketURL = "wss://" + path;
         }
-        
-        
+
+
         var webRTCAdaptor = new WebRTCAdaptor({
             websocket_url : websocketURL,
             mediaConstraints : mediaConstraints,
@@ -479,12 +479,12 @@
                     //currentOutgoingBitrate - kbits/sec
                     console.log("Average outgoing bitrate " + obj.averageOutgoingBitrate + " kbits/sec"
                             + " Current outgoing bitrate: " + obj.currentOutgoingBitrate + " kbits/sec");
-                     
+
                 }
             },
             callbackError : function(error, message) {
                 //some of the possible errors, NotFoundError, SecurityError,PermissionDeniedError
-                
+
                 /*
                 console.log("error callback: " +  JSON.stringify(error));
                 var errorMessage = JSON.stringify(error);
@@ -508,10 +508,10 @@
                     errorMessage = "Video/Audio is required";
                 }
                 */
-            
+
                 //alertify.error(errorMessage);
                 console.log(error, message);
-                
+
             }
         });
     </script>

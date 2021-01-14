@@ -2,6 +2,7 @@
 
 use App\PluginId;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 if (!function_exists('ffmpeg_upload_file_path')) {
     function ffmpeg_upload_file_path($source_file_path, $final_path = '')
@@ -18,49 +19,50 @@ if (!function_exists('ffmpeg_upload_file_path')) {
             Log::channel('ffmpeg_logs')->info('ffprobe:  ' . $ffprobe_command);
             Log::channel('ffmpeg_logs')->info('ffprobe Result:  ' . $shell_exec);
 
-//            if (intval($shell_exec) == 90) {
-                $commands = '';
-                $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
+            //            if (intval($shell_exec) == 90) {
+            $commands = '';
+            $commands .= 'ffmpeg -y -i "' . $source_file_path . '" -vf "transpose=1,transpose=2" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
 
-                $shell_exec = shell_exec($commands);
-                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
-                Log::channel('ffmpeg_logs')->info($commands);
-                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
-//            } else {
-//                $commands = '';
-//                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
-//
-//                $shell_exec = shell_exec($commands);
-//                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
-//                Log::channel('ffmpeg_logs')->info($commands);
-//                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
-//
-//            }
+            $shell_exec = shell_exec($commands);
+            Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
+            Log::channel('ffmpeg_logs')->info($commands);
+            Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
+            //            } else {
+            //                $commands = '';
+            //                $commands .= 'ffmpeg -i "' . $source_file_path . '" -f mp4 -vcodec libx264 -preset fast -profile:v main -acodec aac "' . $final_path . '" -hide_banner &> /dev/null' . PHP_EOL;
+            //
+            //                $shell_exec = shell_exec($commands);
+            //                Log::channel('ffmpeg_logs')->info(PHP_EOL . PHP_EOL);
+            //                Log::channel('ffmpeg_logs')->info($commands);
+            //                Log::channel('ffmpeg_logs')->info(PHP_EOL . 'End ============================================================================================================');
+            //
+            //            }
         }
     }
 }
 
 
-if(!function_exists('post_url_for_admin_broadcast')){
-    function post_url_for_admin_broadcast($user_id,$broadcast_id,$share_url){
+if (!function_exists('post_url_for_admin_broadcast')) {
+    function post_url_for_admin_broadcast($user_id, $broadcast_id, $share_url)
+    {
         $share_url = '';
-        $post_share_url = PluginId::where('user_id',$user_id)->orderBy('id','DESC')->first();
-        if(!empty($post_share_url)){
+        $post_share_url = PluginId::where('user_id', $user_id)->orderBy('id', 'DESC')->first();
+        if (!empty($post_share_url)) {
             $url = parse_url($post_share_url->url);
-            $post_url = $url['scheme'].'://'.$url['host'];
+            $post_url = $url['scheme'] . '://' . $url['host'];
             $post_type = $post_share_url->type;
-            if(!empty($post_url) && !empty($post_type)){
-                if($post_type == 'wordpress'){
-                    $share_url = $post_url.'/?p='.$broadcast_id;
-                }elseif($post_type == 'drupal'){
-                    $share_url = $post_url.'/node'.'/'.$broadcast_id;
-                }elseif($post_type == 'joomla'){
-                    $share_url = $post_url.'/?post='.$broadcast_id;
+            if (!empty($post_url) && !empty($post_type)) {
+                if ($post_type == 'wordpress') {
+                    $share_url = $post_url . '/?p=' . $broadcast_id;
+                } elseif ($post_type == 'drupal') {
+                    $share_url = $post_url . '/node' . '/' . $broadcast_id;
+                } elseif ($post_type == 'joomla') {
+                    $share_url = $post_url . '/?post=' . $broadcast_id;
                 }
-            }else{
+            } else {
                 $share_url = !empty($share_url) ? $share_url : route('broadcast.view', $broadcast_id);
             }
-        }else{
+        } else {
             $share_url = !empty($share_url) ? $share_url : route('broadcast.view', $broadcast_id);
         }
         return $share_url;
@@ -150,14 +152,15 @@ if (!function_exists('check_file_exist')) {
         return $broadcast;
     }
 }
-function getBroadcastThumbnail($broadcast){
+function getBroadcastThumbnail($broadcast)
+{
     $broadcast_key = $broadcast->filename;
-    $broadcast_key = str_replace("_720p.mp4","",$broadcast_key);
-    $broadcast_key = str_replace(".mp4","",$broadcast_key);
-    if($broadcast->resolution){
-        $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP."/previews/".$broadcast_key.".png";
-    }else{
-        $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP."/previews/".$broadcast_key.".png";
+    $broadcast_key = str_replace("_720p.mp4", "", $broadcast_key);
+    $broadcast_key = str_replace(".mp4", "", $broadcast_key);
+    if ($broadcast->resolution) {
+        $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP . "/previews/" . $broadcast_key . ".png";
+    } else {
+        $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP . "/previews/" . $broadcast_key . ".png";
     }
     return $thumbnail_url;
     //$headers = @get_headers($thumbnail_url);
@@ -174,11 +177,62 @@ function getBroadcastThumbnail($broadcast){
     //     return asset('images/default001.jpg');
     // }
 }
-function url_exists($url){
-    $headers=get_headers($url);
-    if(stripos($headers[0],"200")){
-     return true;
-    } else {
-     return false;
+function url_exists($url)
+{
+    // $headers=get_headers($url);
+    // if(stripos($headers[0],"200")){
+    //  return true;
+    // } else {
+    //  return false;
+    // }
+    return false;
+}
+
+function handle_video_file_upload($request)
+{
+    $to_return = [];
+    if ($request->hasFile('broadcast_video')) {
+
+        $video_file = $request->file('broadcast_video');
+        $video_original_name = $video_file->getClientOriginalName();
+        $ext = $video_file->getClientOriginalExtension();
+
+        $temp_path = storage_path('temp');
+
+        $file_name = "stream_" . time() . $ext;
+        $antmedia_path = base_path('antmedia_store');
+
+        $output_file_name = "stream_" . time() . ".mp4";
+
+        $video_path = $video_file->move($temp_path, $file_name);
+
+        copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
+
+        ffmpeg_upload_file_path($video_path->getRealPath(), $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
+        $result = Storage::disk('s3')->put($output_file_name, file_get_contents($antmedia_path . DIRECTORY_SEPARATOR . $output_file_name), 'public');
+        $stream_url = '';
+        unlink($video_path->getRealPath());
+        unlink($antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
+        $to_return = [
+            'file_original_name' => $video_original_name,
+            'file_name' => $output_file_name,
+            'file_path' => $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name,
+            'file_stream_url' => $stream_url,
+            'file_server' => ANT_MEDIA_SERVER_STAGING_URL,
+        ];
     }
- }
+
+    return $to_return;
+}
+function getVideoUrl($broadcast){
+    if($broadcast->is_s3){
+        return AWS_S3_URL.pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+    }else if($broadcast->is_antmedia){
+        if($broadcast->resolution)
+            return ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+         else
+            return ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+    }else{
+        return ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+    }
+}

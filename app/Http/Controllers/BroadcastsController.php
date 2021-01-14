@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Image;
 use App\UserProfile;
+use Illuminate\Support\Facades\Storage;
 
 class BroadcastsController extends Controller
 {
@@ -68,7 +69,7 @@ class BroadcastsController extends Controller
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
         $broadcast->save();
 
-        $stream_video_info = $this->handle_video_file_upload($request);
+        $stream_video_info = handle_video_file_upload($request);
         if (!empty($stream_video_info)) {
             $broadcast->stream_url = $stream_video_info['file_stream_url'];
             $broadcast->filename = $stream_video_info['file_name'];
@@ -289,7 +290,7 @@ class BroadcastsController extends Controller
 
         $broadcast->save();
 
-        $stream_video_info = $this->handle_video_file_upload($request);
+        $stream_video_info = handle_video_file_upload($request);
         Log::log('info', 'video file info: ' . json_encode($stream_video_info));
 
         if (!empty($stream_video_info)) {
@@ -573,44 +574,6 @@ class BroadcastsController extends Controller
 
         }
 
-    }
-
-    private function handle_video_file_upload($request)
-    {
-        $to_return = [];
-        if ($request->hasFile('video')) {
-
-            $video_file = $request->file('video');
-            $video_original_name = $video_file->getClientOriginalName();
-            $ext = $video_file->getClientOriginalExtension();
-
-            $temp_path = storage_path('temp');
-
-            $file_name = "stream_" . time() . $ext;
-            $antmedia_path = base_path('antmedia_store');
-
-
-            $output_file_name = "stream_" . time() . ".mp4";
-
-            $video_path = $video_file->move($temp_path, $file_name);
-
-            copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
-
-            ffmpeg_upload_file_path($video_path->getRealPath(), $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
-
-            $stream_url = '';
-
-            $to_return = [
-                'file_original_name' => $video_original_name,
-                'file_name' => $output_file_name,
-                'file_path' => $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name,
-                'file_stream_url' => $stream_url,
-                'file_server' => ANT_MEDIA_SERVER_STAGING_URL,
-            ];
-        }
-
-
-        return $to_return;
     }
 
     public function download(Request $request)

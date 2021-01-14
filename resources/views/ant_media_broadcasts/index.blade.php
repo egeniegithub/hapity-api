@@ -177,15 +177,7 @@
                                         preload="auto"
                                         poster="{{ !empty($broadcast->broadcast_image) ?  asset('images/broadcasts/' . Auth::id() . '/' . $broadcast->broadcast_image) : getBroadcastThumbnail($broadcast) }}"
                                         data-setup='{"fluid": false}'>
-                                        @if($broadcast->is_antmedia)
-                                            @if($broadcast->resolution)
-                                                <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
-                                            @else
-                                                <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
-                                            @endif
-                                        @else
-                                            <source src="{{ ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' }}" type="video/mp4"></source>
-                                        @endif
+                                        <source src="{{ getVideoUrl($broadcast) }}" type="video/mp4"></source>
                                         <p class="vjs-no-js">
                                             To view this video please enable JavaScript, and consider upgrading to a
                                             web browser that
