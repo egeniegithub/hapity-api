@@ -212,7 +212,6 @@ function handle_video_file_upload($request)
         $result = Storage::disk('s3')->put($output_file_name, file_get_contents($antmedia_path . DIRECTORY_SEPARATOR . $output_file_name), 'public');
         $stream_url = '';
         unlink($video_path->getRealPath());
-        unlink($antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
         $to_return = [
             'file_original_name' => $video_original_name,
             'file_name' => $output_file_name,

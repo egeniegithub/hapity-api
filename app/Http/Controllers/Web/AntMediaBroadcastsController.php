@@ -268,6 +268,8 @@ class AntMediaBroadcastsController extends Controller
                 if($request->input('stream_to_youtube') == "yes"){
                     $yt_msg = $this->uploadVideoOnYoutube($broadcast);
                 }
+                $antmedia_path = base_path('antmedia_store');
+                unlink($antmedia_path . DIRECTORY_SEPARATOR . $broadcast->video_name);
                 echo json_encode(array_merge(['status' => 'success', 'broadcast_id' => $broadcast->id],$yt_msg));
                 exit();
 
