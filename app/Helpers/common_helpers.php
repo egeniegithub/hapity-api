@@ -177,8 +177,9 @@ function getBroadcastThumbnail($broadcast)
     //     return asset('images/default001.jpg');
     // }
 }
-function url_exists($url)
+function url_exists($broadcast)
 {
+    $url = getVideoUrl($broadcast);
     $headers=@get_headers($url);
     if(isset($headers[0]) && stripos($headers[0],"200")){
      return true;

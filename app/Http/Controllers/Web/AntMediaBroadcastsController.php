@@ -27,22 +27,14 @@ class AntMediaBroadcastsController extends Controller
         $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
 
         foreach ($broadcasts as $key => $broadcast) {
-            $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);
             if($broadcast->is_antmedia){
                 if($broadcast->status == "online" && ($key == 0 || $key == 1)){
-                    $videoUrl = $broadcast->stream_url."_720p.mp4";
-                    if(url_exists($videoUrl)) {
+                    if(url_exists($broadcast)) {
                         $broadcast->status = "offline";
                         $broadcast->save();
                     }
                 }
                 $broadcasts[$key]['file_exists'] = true;
-            }else{
-                if(file_exists($wowza_path)){
-                    //$broadcst = check_file_exist($broadcast,$wowza_path);
-                    $broadcasts[$key] = $broadcast;
-                    $broadcasts[$key]['file_exists'] = true;
-                }
             }
         }
 
@@ -366,11 +358,9 @@ class AntMediaBroadcastsController extends Controller
             //if($broadcast->is_antmedia){
                 if($broadcast->status == "online"){
                     //$video_path = base_path('antmedia_store').'/'. pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-                    $videoUrl = $broadcast->stream_url."_720p.mp4";
-                    if(url_exists($videoUrl)) {
+                    if(url_exists($broadcast)) {
                         $broadcast->status = "offline";
                         $broadcast->save();
-                        $broadcast->stream_url = $videoUrl;
                     }
                 }
                 return view('ant_media_broadcasts.view-broadcast', compact('broadcast'));

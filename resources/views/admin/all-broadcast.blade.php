@@ -442,7 +442,6 @@
         url.replace(".m3u8",".mp4");
         var that = $(this);
         var id = that.parent().attr('bid');
-        console.log(id);
         $.ajax({
             url: url,
             type:'HEAD',
