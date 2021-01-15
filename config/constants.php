@@ -26,7 +26,7 @@ else
 
 define('ANT_MEDIA_SERVER_STAGING_IP', 'http://34.255.219.25:5080/');
 define('ANT_MEDIA_SERVER_STAGING_URL', 'https://'.ANTMEDIA_HOST.':5443/');
-define('AWS_S3_URL', 'https://'.env("AWS_BUCKET").'.s3.'.env("AWS_DEFAULT_REGION").'.amazonaws.com/streams/');
+define('AWS_S3_URL', 'https://'.env("AWS_BUCKET").'.s3.'.env("AWS_DEFAULT_REGION").'.amazonaws.com/');
 
 define('WEBRTC_APP', 'LiveApp');
 define('ADAPTIVE_APP', 'WebRTCAppEE');

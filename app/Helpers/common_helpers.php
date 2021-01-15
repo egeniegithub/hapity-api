@@ -157,11 +157,16 @@ function getBroadcastThumbnail($broadcast)
     $broadcast_key = $broadcast->filename;
     $broadcast_key = str_replace("_720p.mp4", "", $broadcast_key);
     $broadcast_key = str_replace(".mp4", "", $broadcast_key);
-    if ($broadcast->resolution) {
-        $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP . "/previews/" . $broadcast_key . ".png";
-    } else {
-        $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP . "/previews/" . $broadcast_key . ".png";
+    if($broadcast->is_s3){
+        $thumbnail_url = AWS_S3_URL.'previews/'. $broadcast_key . ".png";
+    }else{
+        if ($broadcast->resolution) {
+            $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP . "/previews/" . $broadcast_key . ".png";
+        } else {
+            $thumbnail_url = ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP . "/previews/" . $broadcast_key . ".png";
+        }
     }
+
     return $thumbnail_url;
     //$headers = @get_headers($thumbnail_url);
 
@@ -226,7 +231,7 @@ function handle_video_file_upload($request)
 }
 function getVideoUrl($broadcast){
     if($broadcast->is_s3){
-        return AWS_S3_URL.pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+        return AWS_S3_URL.'streams/'.pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
     }else if($broadcast->is_antmedia){
         if($broadcast->resolution)
             return ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
