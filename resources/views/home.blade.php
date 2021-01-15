@@ -9,7 +9,7 @@
             <div class="col-xs-12 col-sm-9 col-md-9 col-lg-9">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                        <h1 class="broadcast-heading">Dashoboard<br /><small>Manage Your Broadcasts</small></h1>
+                        <h1 class="broadcast-heading">Dashboard<br /><small>Manage Your Broadcasts</small></h1>
                     </div>
                 </div>
             </div>
