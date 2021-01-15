@@ -64,6 +64,7 @@ class BroadcastsController extends Controller
         $broadcast->video_name = '';
         $broadcast->status = 'offline';
         $broadcast->is_antmedia = 1;
+        $broadcast->is_s3 = 1;
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);
@@ -178,6 +179,7 @@ class BroadcastsController extends Controller
         $broadcast->stream_url = $stream_url;
         $broadcast->status = 'online';
         $broadcast->is_antmedia = $is_antmedia;
+        $broadcast->is_s3 = 1;
         $broadcast->save();
 
         $broadcast->share_url = route('broadcast.view', $broadcast->id);

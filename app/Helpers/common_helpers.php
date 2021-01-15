@@ -209,7 +209,7 @@ function handle_video_file_upload($request)
         copy($temp_path . DIRECTORY_SEPARATOR . $file_name, $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
 
         ffmpeg_upload_file_path($video_path->getRealPath(), $antmedia_path . DIRECTORY_SEPARATOR . $output_file_name);
-        $result = Storage::disk('s3')->put($output_file_name, file_get_contents($antmedia_path . DIRECTORY_SEPARATOR . $output_file_name), 'public');
+        $result = Storage::disk('s3')->put('streams/'.$output_file_name, file_get_contents($antmedia_path . DIRECTORY_SEPARATOR . $output_file_name), 'public');
         $stream_url = '';
         unlink($video_path->getRealPath());
         $to_return = [

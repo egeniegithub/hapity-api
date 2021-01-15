@@ -111,6 +111,7 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . $request->input('stream_name');
                 $broadcast->share_url = '';
                 $broadcast->is_antmedia = 1;
+                $broadcast->is_s3 = 1;
                 $broadcast->resolution = '720p';
                 $broadcast_type = "Browser";
                 if(!empty($request->input('broadcast_type'))){
@@ -177,6 +178,7 @@ class AntMediaBroadcastsController extends Controller
                     $broadcast->video_name = $broadcast_video;
                     $broadcast->stream_url = ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast_video, PATHINFO_FILENAME);
                     $broadcast->is_antmedia = 1;
+                    $broadcast->is_s3 = 1;
                     if(!empty($request->input('broadcast_type')))
                         $broadcast->broadcast_type = $request->input('broadcast_type');
                     $broadcast->save();
