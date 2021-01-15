@@ -429,31 +429,11 @@ class BroadcastsController extends Controller
         $broadcasts = [];
 
         foreach ($allUserBroadcast as $key => $broadcast) {
-            if($broadcast->is_antmedia){
-
-                if ($broadcast->status == 'online') {
-                    $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
-                }else if($broadcast->resolution)
-                    $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
-                else
-                    $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
-
+            if ($broadcast->status == 'online') {
+                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.m3u8' : '';
             }else{
-                $stream_url = !empty($broadcast->video_name) ? ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4' : '';
-
-                // $ext = pathinfo($broadcast->filename, PATHINFO_EXTENSION);
-                // $filename = pathinfo($broadcast->filename, PATHINFO_FILENAME);
-                // $stream_file = $filename . '.mp4';
-                // $vod_app = env('APP_ENV') == 'staging' ? 'stage_vod' : 'vod';
-                // $stream_url = 'http://52.18.33.132:1935/'.$vod_app.'/' . $ext . ':' . $stream_file . '/playlist.m3u8';
-
-                // if ($broadcast->status == 'online') {
-                //     $live_app = env('APP_ENV') == 'staging' ? 'stage_live' : 'live';
-                //     $stream_url = 'https://media.hapity.com/'.$live_app.'/' . $filename . '/playlist.m3u8';
-                // }
+                $stream_url = getVideoUrl($broadcast);
             }
-
-
             $broadcastObj = [];
             $broadcastObj['id'] = $broadcast->id;
             $broadcastObj['geo_location'] = $broadcast->geo_location;
@@ -468,17 +448,7 @@ class BroadcastsController extends Controller
             $broadcastObj['username'] = $user['username'];
             $broadcastObj['user_id'] = $user['id'];
             $broadcastObj['profile_picture'] = !empty($user['profile']['profile_picture']) ? asset('images/profile_pictuers/' . $user['profile']['profile_picture']) : '';
-
-            // $wowza_path = base_path('wowza_store') . DIRECTORY_SEPARATOR;
-            // $ext = pathinfo($broadcast->video_name, PATHINFO_EXTENSION);
-            // $ext = $ext == 'mp4' ? '' : '.mp4';
-            // $broadcast_stream_file_path = $wowza_path . $broadcast->video_name . $ext;
-
-            //if (file_exists(base_path("antmedia_store" . DIRECTORY_SEPARATOR . $broadcast->filename)) || $broadcast->status == 'online') {
-                $broadcasts[] = $broadcastObj;
-            // }else if(file_exists(base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename))){
-            //     $broadcasts[] = $broadcastObj;
-            // }
+            $broadcasts[] = $broadcastObj;
 
         }
 
