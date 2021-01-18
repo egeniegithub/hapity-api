@@ -230,14 +230,14 @@ function handle_video_file_upload($request)
     return $to_return;
 }
 function getVideoUrl($broadcast){
-    if($broadcast->is_s3){
+    //if($broadcast->is_s3){
         return AWS_S3_URL.'streams/'.pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-    }else if($broadcast->is_antmedia){
-        if($broadcast->resolution)
-            return ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-         else
-            return ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-    }else{
-        return ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
-    }
+    // }else if($broadcast->is_antmedia){
+    //     if($broadcast->resolution)
+    //         return ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+    //      else
+    //         return ANT_MEDIA_SERVER_STAGING_URL . ADAPTIVE_APP .'/streams/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+    // }else{
+    //     return ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
+    // }
 }
