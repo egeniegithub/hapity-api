@@ -106,7 +106,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <button type="button" onclick="" class="btn btn-lg btn-success" id="update_button">Update</button>
-                <button type="button" onclick="" class="btn btn-lg btn-success" id="record_new_button">Record New</button>
+                {{-- <button type="button" onclick="" class="btn btn-lg btn-success" id="record_new_button">Record New</button> --}}
                 <button type="button" onclick="startPublishing()" class="btn btn-lg btn-success" id="start_publish_button">Start Publishing</button>
                 <button type="button" onclick="stopPublishing()" class="btn btn-lg btn-success" id="stop_publish_button" disabled="disabled">Stop Publishing</button>
                 <button type="button" onclick="" class="btn btn-lg btn-default" id="cancel_button">Cancel</button>
