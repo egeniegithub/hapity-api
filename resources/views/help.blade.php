@@ -293,7 +293,7 @@
               <h4>Guide for OBS</h4>
             </div>
             <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}('assets/'); ?>/home/images/play-video.png" alt="Video Frame"> -->
-                <video id="video3" controls poster="{{asset('assets')}}/images/obs.png" src="{{asset('assets')}}/videos/Hapity-OBS Tutorial-HD 1080p.mov"></video>
+                <video id="video3" controls poster="{{asset('assets')}}/images/obs.png" src="{{asset('assets')}}/videos/Hapity-OBS-Tutorial-HD-1080p.mov"></video>
             </div>
            <div class="transcript-bottom text-center">
               <a href="javascript::void()">
@@ -308,7 +308,7 @@
               <h4>Guide for YouTube Integration</h4>
             </div>
             <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}('assets/'); ?>/home/images/play-video.png" alt="Video Frame"> -->
-                <video id="video3" controls poster="{{asset('assets')}}/images/youtube.png" src="{{asset('assets')}}/videos/Hapity-YT Tutorial-HD 1080p.mov"></video>
+                <video id="video3" controls poster="{{asset('assets')}}/images/youtube.png" src="{{asset('assets')}}/videos/Hapity-YT-Tutorial-HD-1080p.mov"></video>
             </div>
             <div class="transcript-bottom text-center">
               <a href="javascript::void()">
