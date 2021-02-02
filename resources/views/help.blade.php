@@ -1,6 +1,6 @@
 @extends('layouts.app')
   @push('css')
-    <!-- ------------Recommend Videos------------- --> 
+    <!-- ------------Recommend Videos------------- -->
 <style>
 /** New help page **/
 .video-heading.text-center {
@@ -61,7 +61,7 @@
     border-top: 1px solid #c8c8c8;
 }
 .transcript-bottom span{
-    font-size: 14px;  
+    font-size: 14px;
 }
 .transcript-bottom:hover{
     background-color: #d3d3d3;
@@ -83,7 +83,7 @@
     margin-bottom: 0px;
 }
 .img-w-100{width: 100%;}
-.download-guide a, 
+.download-guide a,
 .download-plugin a,
 .transcript-bottom a{color:#391751 !important; text-decoration: none;}
 .font-bold{font-weight:bold;}
@@ -129,7 +129,7 @@
           <div class="video-heading text-center">
             <h4>Integrate with Wordpress</h4>
           </div>
-           <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}home/images/play-video.png" alt="Video Frame"> --> 
+           <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}home/images/play-video.png" alt="Video Frame"> -->
                 <video id="video1" controls poster="{{asset('assets')}}/images/integrate-with-wordpress.jpg"
              src="{{asset('assets')}}/videos/How-To-WordPress_Edit03-Vimeo_720p.mov"></video>
                 </div>
@@ -141,7 +141,7 @@
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
-                    </ul>                  
+                    </ul>
                   </a>
                 </div>
               </div>
@@ -174,7 +174,7 @@
           <div class="video-heading text-center">
             <h4>Integrate with Drupal</h4>
           </div>
-         <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> --> 
+         <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('assets/')}}home/images/play-video.png" alt="Video Frame"> -->
                     <video id="video2" controls poster="{{asset('assets')}}/images/integrate-with-drupal.jpg" src="{{asset('assets')}}/videos/How_To_Drupal_Edit03-Vimeo_720p.mov"></video>
                 </div>
           <div class="download-buttons-stuff">
@@ -185,7 +185,7 @@
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
-                    </ul>                  
+                    </ul>
                   </a>
                 </div>
               </div>
@@ -218,7 +218,7 @@
           <div class="video-heading text-center">
             <h4>Integrate with Joomla</h4>
           </div>
-          <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}('assets/'); ?>/home/images/play-video.png" alt="Video Frame"> --> 
+          <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}('assets/'); ?>/home/images/play-video.png" alt="Video Frame"> -->
                     <video id="video3" controls poster="{{asset('assets')}}/images/integrate-with-joomla.jpg" src="{{asset('assets')}}/videos/How-To_Joomla_Edit03_Vimeo_720p.mov"></video>
                 </div>
           <div class="download-buttons-stuff">
@@ -229,7 +229,7 @@
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
-                    </ul>                  
+                    </ul>
                   </a>
                 </div>
               </div>
@@ -263,7 +263,7 @@
             <h4>Guide for other websites</h4>
           </div>
              <img src="{{asset('assets')}}/images/guide-for-other-websites.jpg" class="img-w-100">
-     
+
           <div class="download-buttons-stuff">
             <div class="row no-margin">
               <div class="col-md-12 no-padding">
@@ -272,7 +272,7 @@
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
-                    </ul>                  
+                    </ul>
                   </a>
                 </div>
               </div>
@@ -287,6 +287,36 @@
           </div>
         </div>
         <!-- Guide for Other Websites - Ends Here  -->
+        <!-- Guide for OBS - Starts Here  -->
+        <div class="col-md-6 video-lg">
+            <div class="video-heading text-center">
+              <h4>Guide for OBS</h4>
+            </div>
+            <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}('assets/'); ?>/home/images/play-video.png" alt="Video Frame"> -->
+                <video id="video3" controls poster="{{asset('assets')}}/images/obs.png" src="{{asset('assets')}}/videos/Hapity-OBS Tutorial-HD 1080p.mov"></video>
+            </div>
+           <div class="transcript-bottom text-center">
+              <a href="javascript::void()">
+                <p><h4><span>Transcript</span></h4></p>
+              </a>
+            </div>
+          </div>
+          <!-- Guide for OBS - Ends Here  -->
+          <!-- Guide for YouTube Integration - Starts Here  -->
+        <div class="col-md-6 video-lg">
+            <div class="video-heading text-center">
+              <h4>Guide for YouTube Integration</h4>
+            </div>
+            <div class="slide-vector embed-responsive embed-responsive-16by9"> <!-- <img src="{{asset('/')}}('assets/'); ?>/home/images/play-video.png" alt="Video Frame"> -->
+                <video id="video3" controls poster="{{asset('assets')}}/images/youtube.png" src="{{asset('assets')}}/videos/Hapity-YT Tutorial-HD 1080p.mov"></video>
+            </div>
+            <div class="transcript-bottom text-center">
+              <a href="javascript::void()">
+                <p><h4><span>Transcript</span></h4></p>
+              </a>
+            </div>
+          </div>
+          <!-- Guide for Other Websites - Ends Here  -->
       </div>
     </div>
     <!-- Section - How to use Hapity  -->
@@ -298,14 +328,14 @@
           </div>
         </div>
       </div>
-      
+
       <div class="row">
         <!-- Guide for Mobiles - Starts Here  -->
         <div class="col-md-4 video-lg">
           <div class="video-heading text-center">
             <h4>Guide for Mobiles</h4>
           </div>
-            <div class="slide-vector embed-responsive embed-responsive-16by9"> 
+            <div class="slide-vector embed-responsive embed-responsive-16by9">
                     <video id="video4" controls poster="{{asset('assets')}}/images/guide-for-mobiles.jpg" src="{{asset('assets')}}/videos/Hapity_Mobile_Guide_Edit02-Vimeo_720p.mov"></video>
                 </div>
           <div class="download-buttons-stuff">
@@ -316,10 +346,10 @@
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
-                    </ul>                  
+                    </ul>
                   </a>
                 </div>
-              </div> 
+              </div>
 
             </div>
           </div>
@@ -339,7 +369,7 @@
           <div class="video-heading text-center">
             <h4>Broadcasting from your PC</h4>
           </div>
-            <div class="slide-vector embed-responsive embed-responsive-16by9"> 
+            <div class="slide-vector embed-responsive embed-responsive-16by9">
                 <video id="video5" controls poster="{{asset('assets')}}/images/broadcasting-from-your-pc.jpg" src="{{asset('assets')}}/videos/Hapity_PC_Guide_Edit02-Vimeo_720p.mov"></video>
             </div>
           <div class="download-buttons-stuff">
@@ -350,7 +380,7 @@
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
-                    </ul>                  
+                    </ul>
                   </a>
                 </div>
               </div>
@@ -374,7 +404,7 @@
             <h4>Guide for enabling flash</h4>
           </div>
            <img src="{{asset('assets')}}/images/guide-for-enabling-flash.jpg" class="img-w-100">
-        
+
           <div class="download-buttons-stuff">
             <div class="row no-margin">
               <div class="col-md-12 no-padding">
@@ -383,7 +413,7 @@
                     <ul>
                       <li><img src="{{asset('assets')}}/images/download-guide.png" alt="logo"></li>
                       <li><h4>Download Guide</h4></li>
-                    </ul>                  
+                    </ul>
                   </a>
                 </div>
               </div>
@@ -411,10 +441,10 @@
         </button>
         <div class="modal-content">
             <div class="modal-body video-body">
-              <div class="slide-vector embed-responsive embed-responsive-16by9"> 
+              <div class="slide-vector embed-responsive embed-responsive-16by9">
                     <video id="video1" controls poster="{{asset('assets')}}/videos/default-video.jpg" src="{{asset('assets')}}/videos/How-To-WordPress_Edit03-Vimeo_720p.mov"></video>
                 </div>
-    
+
             </div>
         </div>
     </div>
@@ -426,7 +456,7 @@
         </button>
         <div class="modal-content">
             <div class="modal-body video-body">
-              <div class="slide-vector embed-responsive embed-responsive-16by9"> 
+              <div class="slide-vector embed-responsive embed-responsive-16by9">
                     <video id="video2" controls poster="{{asset('assets')}}/videos/default-video.jpg" src="{{asset('assets')}}/videos/How_To_Drupal_Edit03-Vimeo_720p.mov"></video>
                 </div>
 
@@ -456,10 +486,10 @@
         </button>
         <div class="modal-content">
             <div class="modal-body video-body">
-              <div class="slide-vector embed-responsive embed-responsive-16by9"> 
+              <div class="slide-vector embed-responsive embed-responsive-16by9">
                     <video id="video4" controls poster="{{asset('assets')}}/videos/default-video.jpg" src="{{asset('assets')}}/videos/Hapity_Mobile_Guide_Edit02-Vimeo_720p.mov"></video>
                 </div>
-  
+
             </div>
         </div>
     </div>
@@ -498,7 +528,7 @@
         $('#video3')[0].pause();
         $('#video4')[0].pause();
         $('#video5')[0].pause();
-        
+
         $('#video1')[0].currentTime = 0;
         $('#video2')[0].currentTime = 0;
         $('#video3')[0].currentTime = 0;
