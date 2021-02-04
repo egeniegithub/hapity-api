@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/fancyapps/fancybox@3.5.7/dist/jquery.fancybox.min.css" />
 <link href="{{ asset('assets/video-js-7.7.4/video-js.min.css') }}" rel="stylesheet" />
 <script type="text/javascript" src="https://player.wowza.com/player/latest/wowzaplayer.min.js"></script>
+<script src="{{ asset('assets/ckeditor/ckeditor.js') }}"></script>
 
 @php
     $ipArr = array(0 => '52.18.33.132', 1 => '52.17.132.36');
@@ -178,6 +179,7 @@
 
                             <p>  <span class="reportdate">Timestamp :</span> <span class="report-result-display"> <?php echo date("Y-d-m H:i:s", strtotime($broadcast->timestamp));?> </span></p>
                             <p>  <span class="reportdate">Date :</span> <span class="report-result-display"> <?php echo date("d M Y", strtotime($broadcast->created_at));?> </span></p>
+                            <p>  <span class="reportdate">Video Size :</span> <span class="report-result-display"> <?php echo formatBytes($broadcast->broadcast_size, 0);?> </span></p>
                             <hr />
                             {{-- <pre>
                                 @php echo json_encode($broadcast, JSON_PRETTY_PRINT) @endphp
@@ -208,7 +210,7 @@
                                     <form method="post" action="{{ route('admin.deletebroadcast') }}" id="form-{{ $broadcast->id }}">
                                         @csrf
                                         <input type="hidden" name="broadcast_id" value="{{ $broadcast->id }}">
-
+                                        <input type="hidden" name="broadcast_delete_reason" id="broadcast_delete_reason" value="">
                                         <input type="button" name="" class="btn btn-danger delete-block-bc del-all-bc-single" value="Delete" onclick="confirmDelete({{ $broadcast->id }})">
                                     </form>
                                 </div>
@@ -403,6 +405,33 @@
             </div>
         </div>
         <!--Right Content Area End-->
+
+        <!-- Modal -->
+        <div class="modal fade" id="deleteReasonModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Video Reason</h5>
+                        <button type="button" class="close save_reason" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea1">Modify Reason</label>
+                                <textarea class="form-control ckeditor" id="video_delete_reason" rows="8"><?php echo html_entity_decode('&lt;p&gt;WDear.&lt;/p&gt;&lt;p&gt;This email is just for your information that we are deleting your video because it takes so much space on our server and we have a shortage of space on the server..&lt;/p&gt;&lt;p&gt;Regards: Hapity.&lt;/p&gt;'); ?>
+                                </textarea>
+                                <input type="hidden" id="selected_delete_video_id" value="">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary save_reason" data-dismiss="modal">Save Reason</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 @endsection
 
 @push('admin-script')
@@ -429,13 +458,29 @@
         function confirmDelete(broadcast_id){
             alertify.confirm('Are you sure you want to delete? ',function(e){
             if(e) {
-                $('#form-'+broadcast_id).submit();
-                return true;
+                setTimeout(function(){ delete_video_reason(broadcast_id); }, 0);
             } else {
                 return false;
             }
         }).setHeader('<em> Delete Broadcast</em> ').set('labels', {ok:'Yes', cancel:'Cancel'});
     }
+
+    function delete_video_reason (broadcast_id) {
+        jQuery.noConflict();
+        $('#selected_delete_video_id').val(broadcast_id);
+        $('#deleteReasonModal').modal('show');
+    }
+
+    $('.save_reason').on('click', function () {
+        var delete_reason = CKEDITOR.instances.video_delete_reason.getData();
+        var broadcast_id = $('#selected_delete_video_id').val();
+
+        $('#broadcast_delete_reason').val(delete_reason);
+        
+        $('#form-'+broadcast_id).submit();
+        return true; 
+    });
+
     $("video source").each(function(){
 
         var url = $(this).attr('src');

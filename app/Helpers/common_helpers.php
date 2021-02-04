@@ -241,3 +241,34 @@ function getVideoUrl($broadcast){
     //     return ANT_MEDIA_SERVER_STAGING_URL . WEBRTC_APP .'/streams/wowza/' . pathinfo($broadcast->video_name, PATHINFO_FILENAME) . '.mp4';
     // }
 }
+
+function get_video_size ($broadcast)
+{
+    $url = getVideoUrl($broadcast);
+    $headers = @get_headers($url, 1);
+
+    // echo '<pre>';
+    // print_r($headers);
+    // return $url;
+
+
+    if(isset($headers) && !empty($headers) && stripos($headers[0],"200")){
+        return $headers['Content-Length'];
+    } else {
+        return 0;
+    }
+}
+
+function formatBytes($bytes, $precision = 2) { 
+    $units = array('B', 'KB', 'MB', 'GB', 'TB'); 
+
+    $bytes = max($bytes, 0); 
+    $pow = floor(($bytes ? log($bytes) : 0) / log(1024)); 
+    $pow = min($pow, count($units) - 1); 
+
+    // Uncomment one of the following alternatives
+    $bytes /= pow(1024, $pow);
+    // $bytes /= (1 << (10 * $pow)); 
+
+    return round($bytes, $precision) . ' ' . $units[$pow]; 
+} 

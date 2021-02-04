@@ -10,6 +10,8 @@ use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Mail;
 
 class AdminBroadcastController extends Controller
 {
@@ -52,6 +54,24 @@ class AdminBroadcastController extends Controller
         }
 
         $broadcasts = $data->orderBy('created_at','desc')->paginate(20);
+
+        // Broadcast video size start *Aleem Shaukat*
+        foreach ($broadcasts as $key => $broadcast) {
+            if ($broadcast->broadcast_size == 0) {
+                $broadcast_size = get_video_size($broadcast);
+                //
+                $data_to_update = array();
+                $data_to_update['broadcast_size'] = $broadcast_size;
+                //
+                Broadcast::whereId($broadcast->id)->update($data_to_update);
+                //
+                $broadcast->broadcast_size = $broadcast_size;
+                $broadcast->save();
+            } 
+        }
+        // Broadcast video size end *Aleem Shaukat*
+
+        
         // foreach ($broadcasts as $key => $broadcast) {
         //     $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);
         //     if($broadcast->is_antmedia){
@@ -77,8 +97,10 @@ class AdminBroadcastController extends Controller
     {
         try {
             $broadcast_id = $request->broadcast_id;
+
             $user_id = Auth::user()->id;
             $broadcast = Broadcast::findOrFail($broadcast_id);
+
             if (isset($broadcast) && !empty($broadcast->filename)) {
                 $file_path = base_path('wowza_store' . DIRECTORY_SEPARATOR . $broadcast->filename);
                 if (file_exists($file_path)) {
@@ -99,11 +121,34 @@ class AdminBroadcastController extends Controller
             }
             Broadcast::find($broadcast_id)->delete();
             ReportBroadcast::where('broadcast_id', $broadcast_id)->delete();
+
+            // Send email on delete video start *Aleem Shaukat*
+            $delete_reason = $request->broadcast_delete_reason;
+            $broadcast_user_id = $broadcast->user_id;
+            $broadcast_user = User::find($broadcast_user_id);
+            $broadcast_user_name = $broadcast_user->name;
+            $broadcast_user_email = $broadcast_user->email;
+
+            $email = $broadcast_user_email;
+
+            $data = array(
+                'name' => $broadcast_user_name,
+                'email' => $broadcast_user_email,
+                'message' => $delete_reason,
+            );
+
+            Mail::send('emails/delete_videos', ['data' => $data], function ($message) use ($email) {
+                $message->to($email, 'chris@hapity.com')->subject('Delete Video');
+            });
+            // Send email on delete video end *Aleem Shaukat*
         } catch (Exception $e) {
             return back()->withError($e->getMessage())->withInput();
         }
 
         return back()->with('flash_message', 'Broadcast Deleted Successfully ');
     }
+
+
+  
 
 }
