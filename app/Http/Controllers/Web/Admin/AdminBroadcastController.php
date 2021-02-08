@@ -72,11 +72,11 @@ class AdminBroadcastController extends Controller
                 //
                 $broadcast->broadcast_size = $broadcast_size;
                 $broadcast->save();
-            } 
+            }
         }
         // Broadcast video size end *Aleem Shaukat*
 
-        
+
         // foreach ($broadcasts as $key => $broadcast) {
         //     $wowza_path = base_path("antmedia_store/wowza" . DIRECTORY_SEPARATOR . $broadcast->filename);
         //     if($broadcast->is_antmedia){
@@ -108,12 +108,12 @@ class AdminBroadcastController extends Controller
                 $s3Client = new S3Client([
                     'region' => 'eu-west-1',
                     'version' => 'latest',
-                    'scheme' => 'http',
-                    'http'    => [
-                        'cert' => false,
-                         'verify' => false,
-                         'connect_timeout' => 5
-                    ]
+                    //'scheme' => 'https',
+                    // 'https'    => [
+                    //     'cert' => false,
+                    //      'verify' => false,
+                    //      'connect_timeout' => 5
+                    // ]
                 ]);
 
                 $result = $s3Client->deleteObject([
@@ -123,7 +123,7 @@ class AdminBroadcastController extends Controller
             } catch (S3Exception $e) {
                 echo $e->getMessage() . "\n";
             }
-            
+
 // echo '<pre>';
 // print_r($s3Client);
 // $s3Client->deleteObject("hapitymedia", 'stream_1611059315_720p.mp4');
@@ -181,6 +181,6 @@ class AdminBroadcastController extends Controller
     }
 
 
-  
+
 
 }
