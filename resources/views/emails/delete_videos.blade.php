@@ -20,7 +20,7 @@
             </tr>
             <tr>
                 <td style="border:1px solid; font-size:16px;padding:5px;">Message</td>
-                <td style="border:1px solid; font-size:16px;padding:5px;">{{ $data['message'] }}</td>
+                <td style="border:1px solid; font-size:16px;padding:5px;">Dear {{ $data['name'] }}, <br><br> {{ $data['message'] }} <br><br> Regards: hapity</td>
             </tr>
         </table> 
 	</div>

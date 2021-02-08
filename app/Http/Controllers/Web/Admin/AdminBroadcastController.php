@@ -103,33 +103,6 @@ class AdminBroadcastController extends Controller
         try {
             $broadcast_id = $request->broadcast_id;
 
-            try {
-                //Create a S3Client
-                $s3Client = new S3Client([
-                    'region' => 'eu-west-1',
-                    'version' => 'latest',
-                    //'scheme' => 'https',
-                    // 'https'    => [
-                    //     'cert' => false,
-                    //      'verify' => false,
-                    //      'connect_timeout' => 5
-                    // ]
-                ]);
-
-                $result = $s3Client->deleteObject([
-                    'Bucket' => 'hapitymedia',
-                    'Key' => 'stream_1611059315_720p.mp4',
-                ]);
-            } catch (S3Exception $e) {
-                echo $e->getMessage() . "\n";
-            }
-
-// echo '<pre>';
-// print_r($s3Client);
-// $s3Client->deleteObject("hapitymedia", 'stream_1611059315_720p.mp4');
-
-           die('dog');
-
             $user_id = Auth::user()->id;
             $broadcast = Broadcast::findOrFail($broadcast_id);
 
@@ -155,6 +128,24 @@ class AdminBroadcastController extends Controller
             ReportBroadcast::where('broadcast_id', $broadcast_id)->delete();
 
             // Send email on delete video start *Aleem Shaukat*
+
+            $aws_item_key = 'streams/'.$broadcast->filename;
+
+            try {
+                //Create a S3Client
+                $s3Client = new S3Client([
+                    'region' => 'eu-west-1',
+                    'version' => 'latest'
+                ]);
+
+                $result = $s3Client->deleteObject([
+                    'Bucket' => 'hapitymedia',
+                    'Key' => $aws_item_key
+                ]);
+            } catch (S3Exception $e) {
+                echo $e->getMessage() . "\n";
+            }
+
             $delete_reason = $request->broadcast_delete_reason;
             $broadcast_user_id = $broadcast->user_id;
             $broadcast_user = User::find($broadcast_user_id);
