@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Web\Admin;
 
+require_once  __DIR__.'/../../../../../vendor/autoload.php';
 use App\Broadcast;
 use App\Http\Controllers\Controller;
 use App\ReportBroadcast;
@@ -12,6 +13,10 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
+// use Aws\S3;
+use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
+
 
 class AdminBroadcastController extends Controller
 {
@@ -97,6 +102,33 @@ class AdminBroadcastController extends Controller
     {
         try {
             $broadcast_id = $request->broadcast_id;
+
+            try {
+                //Create a S3Client
+                $s3Client = new S3Client([
+                    'region' => 'eu-west-1',
+                    'version' => 'latest',
+                    'scheme' => 'http',
+                    'http'    => [
+                        'cert' => false,
+                         'verify' => false,
+                         'connect_timeout' => 5
+                    ]
+                ]);
+
+                $result = $s3Client->deleteObject([
+                    'Bucket' => 'hapitymedia',
+                    'Key' => 'stream_1611059315_720p.mp4',
+                ]);
+            } catch (S3Exception $e) {
+                echo $e->getMessage() . "\n";
+            }
+            
+// echo '<pre>';
+// print_r($s3Client);
+// $s3Client->deleteObject("hapitymedia", 'stream_1611059315_720p.mp4');
+
+           die('dog');
 
             $user_id = Auth::user()->id;
             $broadcast = Broadcast::findOrFail($broadcast_id);
