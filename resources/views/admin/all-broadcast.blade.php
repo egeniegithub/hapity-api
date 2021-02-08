@@ -472,7 +472,7 @@
     }
 
     $('.save_reason').on('click', function () {
-        var delete_reason = CKEDITOR.instances.video_delete_reason.getData();
+        var delete_reason = $('#video_delete_reason').val();
         var broadcast_id = $('#selected_delete_video_id').val();
 
         $('#broadcast_delete_reason').val(delete_reason);
