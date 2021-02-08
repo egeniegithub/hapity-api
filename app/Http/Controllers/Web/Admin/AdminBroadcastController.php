@@ -161,7 +161,7 @@ class AdminBroadcastController extends Controller
             );
 
             Mail::send('emails/delete_videos', ['data' => $data], function ($message) use ($email) {
-                $message->to($email, 'chris@hapity.com')->subject('Delete Video');
+                $message->to($email, 'chris@hapity.com')->subject('Your Video Deleted on Hapity');
             });
             // Send email on delete video end *Aleem Shaukat*
         } catch (Exception $e) {
