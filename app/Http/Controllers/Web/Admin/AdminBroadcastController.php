@@ -145,7 +145,8 @@ class AdminBroadcastController extends Controller
             } catch (S3Exception $e) {
                 echo $e->getMessage() . "\n";
             }
-
+            if(empty($broadcast->title))
+                $broadcast->title = 'Untitled';
             $delete_reason = str_replace("[video_title]", $broadcast->title,$request->broadcast_delete_reason);
             $broadcast_user_id = $broadcast->user_id;
             $broadcast_user = User::find($broadcast_user_id);
