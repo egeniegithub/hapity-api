@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web\Admin;
 require_once  __DIR__.'/../../../../../vendor/autoload.php';
 use App\Broadcast;
 use App\Http\Controllers\Controller;
+use App\Mail\DeleteVideo;
 use App\ReportBroadcast;
 use App\User;
 use Exception;
@@ -160,10 +161,10 @@ class AdminBroadcastController extends Controller
                 'email' => $broadcast_user_email,
                 'message' => $delete_reason,
             );
-
-            Mail::send('emails/delete_videos', ['data' => $data], function ($message) use ($email) {
-                $message->to($email, 'chris@hapity.com')->subject('Your Video Deleted on Hapity');
-            });
+            Mail::to($email)->send(new DeleteVideo($data));
+            // Mail::send(['html' => 'emails.delete_videos'], ['data' => $data], function ($message) use ($email) {
+            //     $message->to($email, 'chris@hapity.com')->subject('Your Video Deleted on Hapity');
+            // });
             // Send email on delete video end *Aleem Shaukat*
         } catch (Exception $e) {
             return back()->withError($e->getMessage())->withInput();
