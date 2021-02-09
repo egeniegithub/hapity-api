@@ -420,7 +420,7 @@
                         <form>
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Modify Reason</label>
-                                <textarea class="form-control" id="video_delete_reason" rows="8"><?php echo html_entity_decode('This email is just for your information that we are deleting your video because it takes so much space on our server and we have a shortage of space on the server.'); ?>
+                                <textarea class="form-control" id="video_delete_reason" rows="8"><?php echo html_entity_decode('We would like to inform you that your [video_title] has been deleted from Hapity Platform because, it violates our fair use policy.  For more info please read our Privacy Policy (link to https://www.hapity.com/privacy-policy).'); ?>
                                 </textarea>
                                 <input type="hidden" id="selected_delete_video_id" value="">
                             </div>
@@ -476,9 +476,9 @@
         var broadcast_id = $('#selected_delete_video_id').val();
 
         $('#broadcast_delete_reason').val(delete_reason);
-        
+
         $('#form-'+broadcast_id).submit();
-        return true; 
+        return true;
     });
 
     $("video source").each(function(){

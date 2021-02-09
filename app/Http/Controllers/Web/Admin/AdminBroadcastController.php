@@ -146,7 +146,7 @@ class AdminBroadcastController extends Controller
                 echo $e->getMessage() . "\n";
             }
 
-            $delete_reason = $request->broadcast_delete_reason;
+            $delete_reason = str_replace("[video_title]", $broadcast->title,$request->broadcast_delete_reason);
             $broadcast_user_id = $broadcast->user_id;
             $broadcast_user = User::find($broadcast_user_id);
             $broadcast_user_name = $broadcast_user->name;
