@@ -420,7 +420,7 @@
                         <form>
                             <div class="form-group">
                                 <label for="exampleFormControlTextarea1">Modify Reason</label>
-                                <textarea class="form-control" id="video_delete_reason" rows="8"><?php echo html_entity_decode('We would like to inform you that your [video_title] has been deleted from Hapity Platform because, it violates our fair use policy.  For more info please read our <a hrf="https://www.hapity.com/privacy-policy">Privacy Policy</a>'); ?>
+                                <textarea class="form-control" id="video_delete_reason" rows="8"><?php echo html_entity_decode('We would like to inform you that your [video_title] has been deleted from Hapity Platform because, it violates our fair use policy.'); ?>
                                 </textarea>
                                 <input type="hidden" id="selected_delete_video_id" value="">
                             </div>

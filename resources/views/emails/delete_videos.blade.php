@@ -8,7 +8,10 @@
 </head>
 <body bgcolor="#fff" style="margin:0; margin-top:10px; padding: 40px;">
     <p>Dear {{ $data['name'] }},</p>
-    <p>{{ $data['message'] }}</p>
+    <p>{{ $data['message'] }}
+    <br>
+    For more info please read our <a hrf="https://www.hapity.com/privacy-policy">Privacy Policy</a>
+    </p>
     <p>Thanks,<br>Hapity Support Team</p>
 </body>
 </html>
