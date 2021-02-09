@@ -10,7 +10,7 @@
     <p>Dear {{ $data['name'] }},</p>
     <p>{{ $data['message'] }}
     <br>
-    For more info please read our <a hrf="https://www.hapity.com/privacy-policy">Privacy Policy</a>
+    For more info please read our <a href="https://www.hapity.com/privacy-policy">Privacy Policy</a>
     </p>
     <p>Thanks,<br>Hapity Support Team</p>
 </body>
