@@ -2,6 +2,7 @@
 
 use Closure;
 use Illuminate\Contracts\Routing\Middleware;
+use Illuminate\Support\Facades\Route;
 
 // If Laravel >= 5.2 then delete 'use' and 'implements' of deprecated Middleware interface.
 class AddHeaders
@@ -9,8 +10,10 @@ class AddHeaders
     public function handle($request, Closure $next)
     {
         $response = $next($request);
-        $response->header("X-Frame-Options", "DENY");
-        $response->header("Content-Security-Policy", "frame-ancestors 'none'");
+        if(Route::currentRouteName() != "widget.index"){
+            $response->header("X-Frame-Options", "DENY");
+            $response->header("Content-Security-Policy", "frame-ancestors 'none'");
+        }
 
         return $response;
     }
