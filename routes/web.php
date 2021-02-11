@@ -26,6 +26,9 @@ Route::get('route/for/check/php/info/version/details', function(){
  */
 
 Route::get('/', 'Web\HomeController@index')->name('home');
+Route::get('stream-live-on-youTube-with-hapity', function () {
+    return view('stream-live-on-youtube');
+});
 Route::get('help', 'Web\HelpController@index')->name('help');
 Route::get('privacy-policy', 'Web\PrivacyController@index')->name('privacy-policy');
 Route::get('about', 'Web\ContactusController@index')->name('about');
