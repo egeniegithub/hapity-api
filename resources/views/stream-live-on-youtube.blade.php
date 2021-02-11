@@ -120,8 +120,8 @@
     <div class="container">
     <div class="row">
         <div class="col-md-12">
-            <div class="main-heading text-center">
-                <h1 class="page_title text-center pur-col font-bold">Stream Live on YouTube with Hapity!</h1>
+            <div class="main-heading">
+                <h1 class="page_title pur-col font-bold">Stream Live on YouTube with Hapity!</h1>
                 <h2>Livestreaming to YouTube Has Never Been Easier</h2>
                 <p>Don’t you miss the days when everyone could start a livestream on YouTube? It was so easy. But, nooooo, nooooo, YouTube had to go and make it hard which is a real shame for the rest of us who love to livestream</p>
                 <p>We have the solution and -- wait for it -- it’s free.</p>
