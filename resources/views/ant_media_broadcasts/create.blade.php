@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
+        <?php if(strpos($_SERVER["HTTP_USER_AGENT"], 'Chrome/89.0')){ ?>
+            <h1>We are experiencing some issues due to Chrome 89 updates. Please use our mobile app for better experience</h1>
+        <?php }else{ ?>
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
                 <h1 class="broadcast-heading">Lets Create Something Awesome<br /><small>A New Broadcast</small></h1>
@@ -10,14 +13,17 @@
             <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8 col-md-offset-2 col-lg-offset-2 text-center">
                 <div class="panel panel-default panel-success" style="border-color: #97be0d;">
                     <div class="panel-body">
-                        <div class="broadcast-overlay"><span>Click Start Publishing</span></div>
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                                <div class="embed-responsive embed-responsive-16by9">
-                                    <video id="localVideo" autoplay="autoplay" muted="muted" controls="controls" playsinline=""></video>
+
+                            <div class="broadcast-overlay"><span>Click Start Publishing</span></div>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                        <video id="localVideo" autoplay="autoplay" muted="muted" controls="controls" playsinline=""></video>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+
+
                     </div>
                 </div>
             </div>
@@ -97,7 +103,7 @@
                 <span class="label label-success" id="broadcastingInfo" style="font-size: 14px; display: none;">Publishing</span>
             </div>
         </div>
-
+        <?php } ?>
 
         <br />
         <br />
