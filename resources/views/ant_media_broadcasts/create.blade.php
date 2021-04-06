@@ -34,6 +34,11 @@
                     <input type="hidden" value="" id="broadcast_image_name" name="broadcast_image_name"  />
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <p style="color:red">For best broadcasting experience please use our mobile applications. Broadcast can be interrupted using web browser due to multiple factors</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
                                 <input data-rule-required="true" class="form-control" type="text" value="" id="broadcast_title" name="broadcast_title" placeholder="Title" />
                             </div>
