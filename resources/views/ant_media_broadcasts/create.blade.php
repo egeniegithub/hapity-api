@@ -1,8 +1,10 @@
 @extends('layouts.app')
 @section('content')
     <div class="container">
-        <?php if(strpos($_SERVER["HTTP_USER_AGENT"], 'Chrome/89.0')){ ?>
-            <h1>We are experiencing some issues due to Chrome 89 updates. Please use our mobile app for better experience</h1>
+        <?php 
+        $browser = getBrowser();
+        if(isset($browser['name']) && $browser['name'] == 'Google Chrome' && isset($browser['version']) && ((int)$browser['version']) > 89){ ?>
+            <h1>We are experiencing some issues due to Chrome <?= (int)$browser['version'] ?> updates. Please use our mobile app for better experience</h1>
         <?php }else{ ?>
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
