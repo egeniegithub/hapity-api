@@ -22,14 +22,14 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                <input data-rule-required="true" class="form-control" type="text" value="{{ old('broadcast_title') }}" id="broadcast_title" name="broadcast_title" placeholder="Title" />
+                                <input data-rule-required="true" class="form-control" type="text" value="{{ old('broadcast_title') }}" id="broadcast_title" name="broadcast_title" placeholder="Title" maxlength="100"/>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                <textarea class="form-control" id="broadcast_description" name="broadcast_description" placeholder="Description">{{ old('broadcast_description') }}</textarea>
+                                <textarea class="form-control" id="broadcast_description" name="broadcast_description" placeholder="Description" maxlength="5000">{{ old('broadcast_description') }}</textarea>
                             </div>
                         </div>
                     </div>
@@ -67,10 +67,21 @@
                                 <div class="form-group label-cstm">
                                     <div class="styled-input-single">
                                         <input type="checkbox" name="stream_to_youtube" id="stream_to_youtube" value="yes"/>
-                                        <label for="stream_to_youtube">Stream to youtube</label>
+                                        <label for="stream_to_youtube">Stream to YouTube</label>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group" id="privacy_status_wrapper" style="display:none">
+                                    <label for="stream_to_youtube">YouTube Privacy Status</label>
+                                    <select name="privacy_status" id="privacy_status" class="form-control">
+                                        <option value="public">Public</option>
+                                        <option value="private">Private</option>
+                                        <option value="unlisted">Unlisted</option>
+                                    </select>
+                                </div>
+                            </div>
+
                         @endif
                     </div>
                 </form>
@@ -165,6 +176,19 @@
                 return browserName+" "+browserVersion;
 
             }
+            $("#stream_to_youtube").change(function(){
+                if($(this).is(":checked")){
+                    $("#privacy_status_wrapper").css("display","block");
+                }else{
+                    $("#privacy_status_wrapper").css("display","none");
+                }
+            });
+            if($("#stream_to_youtube").is(":checked")){
+                $("#privacy_status_wrapper").css("display","block");
+            }else{
+                $("#privacy_status_wrapper").css("display","none");
+            }
+            
             $('#image_upload_loader').hide();
             $('#video_upload_loader').hide();
             $("#update_button").attr("disabled", true);

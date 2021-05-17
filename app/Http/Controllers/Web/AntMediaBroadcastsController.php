@@ -270,7 +270,7 @@ class AntMediaBroadcastsController extends Controller
                 break;
             case 'publish_on_youtube':
                 $broadcast = Broadcast::find($request->input('broadcast_id'));
-                $this->createBroadcastOnYoutube($broadcast);
+                $this->createBroadcastOnYoutube($broadcast,$request->input('privacy_status'));
 
                 break;
         }
@@ -391,7 +391,7 @@ class AntMediaBroadcastsController extends Controller
         return view('ant_media_broadcasts.list_obs_keys', ['broadcasts' => $broadcasts]);
     }
 
-    private function createBroadcastOnYoutube($broadcast){
+    private function createBroadcastOnYoutube($broadcast,$privacy_status){
         $client = new \Google_Client();
         $client->setClientId(env('OAUTH2_CLIENT_ID'));
         $client->setClientSecret(env('OAUTH2_CLIENT_SECRET'));
@@ -446,7 +446,7 @@ class AntMediaBroadcastsController extends Controller
                 // broadcast's status to "private".
                 $status = new \Google_Service_YouTube_LiveBroadcastStatus();
                 $status->setLifeCycleStatus('live');
-                $status->setPrivacyStatus('public');
+                $status->setPrivacyStatus(request()->input('privacy_status'));
 
                 //content details
                 $broadcastContentDetails = new \Google_Service_YouTube_LiveBroadcastContentDetails();
@@ -491,7 +491,7 @@ class AntMediaBroadcastsController extends Controller
                     Auth::user()->profile->youtube_auth_info = json_encode($token_info);
                     Auth::user()->profile->save();
                     $first_time = false;
-                    return $this->createBroadcastOnYoutube($broadcast);
+                    return $this->createBroadcastOnYoutube($broadcast,$privacy_status);
                 }
             }
             // else if($youtube_stream_log && $youtube_error_code == 400){
@@ -504,22 +504,22 @@ class AntMediaBroadcastsController extends Controller
                 $client = new Client();
                 $stream_key = str_replace("_720p.mp4","",$broadcast->video_name);
                 $resp = $client->request('POST',ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$stream_key."/endpoint?rtmpUrl=".$rtmp_endpoint);
-                echo json_encode(["status" => "success", "msg" => "Stream is live now on youtube as well"]);
+                echo json_encode(["status" => "success", "msg" => "Stream is live now on YouTube as well"]);
             }else if($youtube_error_code == 401){
-                echo json_encode(["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because your youtube access has been revoked. Please connect youtube account in setting and try again"]);
+                echo json_encode(["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on YouTube because your YouTube access has been revoked. Please connect youtube account in setting and try again"]);
                 Auth::user()->profile->youtube_auth_info = NULL;
                 Auth::user()->profile->save();
             }else if(!empty(json_decode($youtube_stream_log)->error->message)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
-                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error->message ]);
+                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on YouTube because, ".json_decode($youtube_stream_log)->error->message ]);
             }else if(!empty(json_decode($youtube_stream_log)->error_description)){
                 Auth::user()->profile->youtube_auth_info = NULL;
                 Auth::user()->profile->save();
-                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".json_decode($youtube_stream_log)->error_description ]);
+                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on YouTube because, ".json_decode($youtube_stream_log)->error_description ]);
 
             }else if(!empty($youtube_stream_log)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
-                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on youtube because, ".$youtube_stream_log ]);
+                echo json_encode( ["status" => "failed", "msg" => "Stream cannot be posted on YouTube because, ".$youtube_stream_log ]);
             }
             $broadcast->save();
         }
@@ -541,7 +541,7 @@ class AntMediaBroadcastsController extends Controller
         if($client->getAccessToken()){
             $youtube_stream_log =  "";
             $youtube_error_code = 200;
-            $youtube_response_msg =  ["yt_status" => "success", "yt_msg" => "Video could not be uploaded to your youtube channel, try again"];
+            $youtube_response_msg =  ["yt_status" => "success", "yt_msg" => "Video could not be uploaded to your YouTube channel, try again"];
             try {
 
                 // Define service object for making API requests.
@@ -558,7 +558,7 @@ class AntMediaBroadcastsController extends Controller
 
                 // Add 'status' object to the $video object.
                 $videoStatus = new \Google_Service_YouTube_VideoStatus();
-                $videoStatus->setPrivacyStatus('public');
+                $videoStatus->setPrivacyStatus(request()->input('privacy_status'));
                 $video->setStatus($videoStatus);
 
                 // TODO: For this request to work, you must replace "YOUR_FILE"
@@ -605,16 +605,16 @@ class AntMediaBroadcastsController extends Controller
             }
 
             if($youtube_error_code == 401){
-                $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because your youtube access has been revoked. Please connect youtube account in setting and try again"];
+                $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on YouTube because your YouTube access has been revoked. Please connect YouTube account in setting and try again"];
                 Auth::user()->profile->youtube_auth_info = NULL;
                 Auth::user()->profile->save();
             }else if(!empty($youtube_stream_log)){
                 $broadcast->youtube_stream_log = $youtube_stream_log;
                 $error_log = json_decode($youtube_stream_log);
                 if(isset($error_log->error->message)){
-                    $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because : ". strip_tags($error_log->error->message)];
+                    $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on YouTube because : ". strip_tags($error_log->error->message)];
                 }else{
-                    $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on youtube because : ".$youtube_stream_log];
+                    $youtube_response_msg = ["yt_status" => "failed", "yt_msg" => "Video could not be uploaded on YouTube because : ".$youtube_stream_log];
                 }
             }
             $broadcast->save();

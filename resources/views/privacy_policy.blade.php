@@ -27,7 +27,7 @@
 		<!-- ARM Privacy Policy Start -->
 		<div class="hapity-term-conditions">
             <p class="text-title">INTRODUCTION</p>
-			<h2>Last updated: 13 July 2019</h2>
+			<h2>Last updated: 05 May 2021</h2>
 			<p>These terms and conditions (referred to hereafter as “Terms”) govern your access to and use of the Hapity services, including any Hapity mobile applications and websites (collectively referred to as “Services” or “Hapity”), and any videos, live videos, information, text, graphics, photographs or other materials uploaded, downloaded or appearing on the Services (collectively referred to as “Content”). Your access to and use of the Services is conditional upon your acceptance of these Terms and by accessing and/or using the Services you agree to be bound by these Terms.</p>
 
 			<p class="text-title">BASIC TERMS</p>
@@ -44,7 +44,16 @@ You are responsible for your use of the Services, for any Content you post to th
 
 			<p>By using the Services you consent to the collection and use of this information, including the transfer of this information to the United Kingdom and/or other countries for storage, processing and use by Hapity. Provision of the Services to you may require you to be provided with certain communications, such as service announcements and administrative messages. You may not be able to opt out of receiving these communications, which are considered part of the Services and your account.
 			</p><br>
-
+			<p class="text-title">YouTube PRIVACY POLICY</p>
+			<p>You can publish and upload your streams into your YouTube channel so you are also agreeing to be bound by the YouTube Terms of Service.<br>
+			Hapity uses YoTube API Services to publish your stream to your YouTube channel .<br>
+			Link to YouTube's <a href="https://www.youtube.com/t/terms">Terms of Service</a><br>
+			Link to Google <a href="https://policies.google.com/privacy">Privacy Policy</a><br>
+			Hapity only use your personal public info on google for signIn.<br>
+			Hapity does not share your information with any internal or external parties.<br>
+			Hapity does not store, access, collect information directly or indirectly on or from users’ devices including by placing, accessing or recognizing cookies or similar technology on users' devices or browsers.<br>
+			You can revoke your account’s access from google <a href="https://security.google.com/settings/security/permissions">settings</a>. <br>
+			</p>
 			<p class="text-title">ACCESS CREDENTIALS</p>
 			<p>You are responsible for safeguarding the password and/or any other access credentials you use to access the Services. You are also responsible for all activities or actions of your account. We encourage you to use “strong” passwords (for example, by using combinations of upper- and lower-case characters, numbers and symbols) with your account and with any other accounts (such as an SNS Account or e-mail) that you may use in connection with the Service. Hapity cannot and will not be liable for any loss or damage arising from your failure to comply with these requirements.</p>
 

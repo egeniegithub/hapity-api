@@ -15,7 +15,7 @@
 <li><a href="https://blog.hapity.com/">Blog</a></li>
 <li><a href="{{route('help')}}">Help</a></li>
 <li><a href="{{route('about')}}">Contact</a></li>
-<li><a href="{{url('stream-live-on-youTube-with-hapity')}}">Youtube</a></li>
+<li><a href="{{url('stream-live-on-youTube-with-hapity')}}">YouTube</a></li>
 
 @if(Auth::check())
 <li><a href="{{route('logout')}}" class="sign_in">Logout</a></li>

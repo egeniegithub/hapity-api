@@ -80,10 +80,10 @@
                                                 </div>
                                                 <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                                                     <h3 class="broadcast-title">{{ $broadcast->title }}</h3>
-                                                    <span title="views" style="color: #97be0d;font-size:20px"><i class="fa fa-eye"></i> {{ $broadcast->view_count ? $broadcast->view_count : 0 }}</span>
+                                                    <!-- <span title="views" style="color: #97be0d;font-size:20px"><i class="fa fa-eye"></i> {{ $broadcast->view_count ? $broadcast->view_count : 0 }}</span>
                                                     @if(!empty($broadcast->description))
                                                     <p class="short-desc">{{ $broadcast->description }}</p>
-                                                    @endif
+                                                    @endif -->
                                                 </div>
                                                 <div class="col-xs-1 col-sm-1 col-md-1 col-lg-1 text-right">
                                                     <ul class="bordcast-edit-actions">

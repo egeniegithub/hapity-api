@@ -155,5 +155,5 @@
 @endsection
 @push('css')
     <meta name="description" content="If you’re looking for great software that allows you to livestream to YouTube, Hapity.com is just the product. Why not try this WordPress plugin today?">
-    <meta name="keywords" content="Hapity, Livestream, Livestream to Youtube, video stream to youtube, video stream, video streaming software, stream video to Youtube, wordpress plugin">
+    <meta name="keywords" content="Hapity, Livestream, Livestream to Youtube, video stream to YouTube, video stream, video streaming software, stream video to YouTube, wordpress plugin">
 @endpush

@@ -84,8 +84,18 @@
                             <div class="form-group label-cstm">
                                 <div class="styled-input-single">
                                     <input type="checkbox" name="stream_to_youtube" id="stream_to_youtube" value="yes"/>
-                                    <label for="stream_to_youtube">Stream to youtube</label>
+                                    <label for="stream_to_youtube">Stream to YouTube</label>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group" id="privacy_status_wrapper" style="display:none">
+                                <label for="stream_to_youtube">YouTube Privacy Status</label>
+                                <select name="privacy_status" id="privacy_status" class="form-control">
+                                    <option value="public">Public</option>
+                                    <option value="private">Private</option>
+                                    <option value="unlisted">Unlisted</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -142,6 +152,20 @@
     <script src="{{ asset('assets/webrtc/webrtc_adaptor.js') }}"></script>
     <script>
         $(document).ready(function(){
+
+            $("#stream_to_youtube").change(function(){
+                if($(this).is(":checked")){
+                    $("#privacy_status_wrapper").css("display","block");
+                }else{
+                    $("#privacy_status_wrapper").css("display","none");
+                }
+            });
+            if($("#stream_to_youtube").is(":checked")){
+                $("#privacy_status_wrapper").css("display","block");
+            }else{
+                $("#privacy_status_wrapper").css("display","none");
+            }
+
             FilePond.registerPlugin(FilePondPluginImagePreview);
             FilePond.registerPlugin(FilePondPluginImageCrop);
             FilePond.registerPlugin(FilePondPluginImageEdit);
@@ -270,6 +294,7 @@
                                     'perform_action': 'publish_on_youtube',
                                     '_token': '{{ csrf_token() }}',
                                     'broadcast_id': res.broadcast_id,
+                                    'privacy_status': $("#privacy_status").val(),
                                 }
                             });
                             my_req.done(function(response) {

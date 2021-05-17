@@ -167,7 +167,7 @@ class SettingController extends Controller
         }
          // Check to ensure that the access token was successfully acquired.
          if(!empty(Auth::user()->profile->youtube_auth_info) && !empty(json_decode(Auth::user()->profile->youtube_auth_info)->refresh_token)){
-            return 'Your Youtube account is connected to Hapity<br> <a href="'.url("settings?revoke=true").'"> Revoke Access</a>';
+            return 'Your YouTube account is connected to Hapity<br> <a href="'.url("settings?revoke=true").'"> Revoke Access</a>';
           }else{
             // If the user hasn't authorized the app, initiate the OAuth flow
             $state = mt_rand();
@@ -175,7 +175,7 @@ class SettingController extends Controller
             $_SESSION['state'] = $state;
 
             $authUrl = $client->createAuthUrl();
-            return '<a href="'.$authUrl.'"><img src="'.asset('images/btn_google_signin_dark_normal_web.png').'" /><br> Connect your Youtube account with Hapity</a>';
+            return '<a href="'.$authUrl.'"><img src="'.asset('images/btn_google_signin_dark_normal_web.png').'" /><br> Connect your YouTube account with Hapity</a>';
           }
 
     }
