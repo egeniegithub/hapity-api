@@ -270,7 +270,7 @@ class AntMediaBroadcastsController extends Controller
                 break;
             case 'publish_on_youtube':
                 $broadcast = Broadcast::find($request->input('broadcast_id'));
-                $this->createBroadcastOnYoutube($broadcast,$request->input('privacy_status'));
+                $this->createBroadcastOnYoutube($broadcast);
 
                 break;
         }
@@ -391,7 +391,7 @@ class AntMediaBroadcastsController extends Controller
         return view('ant_media_broadcasts.list_obs_keys', ['broadcasts' => $broadcasts]);
     }
 
-    private function createBroadcastOnYoutube($broadcast,$privacy_status){
+    private function createBroadcastOnYoutube($broadcast){
         $client = new \Google_Client();
         $client->setClientId(env('OAUTH2_CLIENT_ID'));
         $client->setClientSecret(env('OAUTH2_CLIENT_SECRET'));
@@ -491,7 +491,7 @@ class AntMediaBroadcastsController extends Controller
                     Auth::user()->profile->youtube_auth_info = json_encode($token_info);
                     Auth::user()->profile->save();
                     $first_time = false;
-                    return $this->createBroadcastOnYoutube($broadcast,$privacy_status);
+                    return $this->createBroadcastOnYoutube($broadcast);
                 }
             }
             // else if($youtube_stream_log && $youtube_error_code == 400){
