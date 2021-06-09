@@ -23,6 +23,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
                                 <input data-rule-required="true" class="form-control" type="text" value="{{ old('broadcast_title') }}" id="broadcast_title" name="broadcast_title" placeholder="Title" maxlength="100"/>
+                                <small>Max 100 characters allowed</small>
                             </div>
                         </div>
                     </div>
@@ -30,6 +31,7 @@
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
                                 <textarea class="form-control" id="broadcast_description" name="broadcast_description" placeholder="Description" maxlength="5000">{{ old('broadcast_description') }}</textarea>
+                                <small>Max 5000 characters allowed</small>
                             </div>
                         </div>
                     </div>
