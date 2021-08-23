@@ -58,6 +58,7 @@
         </div>
       </div>
       <div class="about-ContactForm-wrapepr-new">
+          <h4 style="text-align: center"><b>Helpdesk is aware of your question. We usually reply weekdays within 24 hours</b></h4>
         <h2>SEND US A MESSAGE</h2>
         <form  method="post" action="{{route('contact.us.send.email')}}">
         	@csrf
