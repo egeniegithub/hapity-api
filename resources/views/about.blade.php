@@ -57,6 +57,7 @@
           @endif
         </div>
       </div>
+
         <h4 style="text-align: center"><b>Helpdesk is aware of your question. We usually reply weekdays within 24 hours</b></h4>
         <div class="about-ContactForm-wrapepr-new">
         <h2>SEND US A MESSAGE</h2>
