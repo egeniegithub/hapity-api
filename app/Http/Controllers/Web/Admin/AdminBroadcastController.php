@@ -125,15 +125,16 @@ class AdminBroadcastController extends Controller
                     }
                 }
             }
-            Broadcast::find($broadcast_id)->delete();
-            ReportBroadcast::where('broadcast_id', $broadcast_id)->delete();
+            //Broadcast::find($broadcast_id)->delete();
+            //ReportBroadcast::where('broadcast_id', $broadcast_id)->delete();
 
             // Send email on delete video start *Aleem Shaukat*
 
-            $aws_item_key = 'streams/'.$broadcast->filename;
+            //$aws_item_key = 'streams/'.$broadcast->filename;
+            $file_path = 'streams/'.$broadcast->filename;
 
             try {
-                //Create a S3Client
+                /*//Create a S3Client
                 $s3Client = new S3Client([
                     'region' => 'eu-west-1',
                     'version' => 'latest'
@@ -142,7 +143,15 @@ class AdminBroadcastController extends Controller
                 $result = $s3Client->deleteObject([
                     'Bucket' => 'hapitymedia',
                     'Key' => $aws_item_key
-                ]);
+                ]);*/
+
+                $response = Storage::disk('s3')->delete($file_path);
+
+                if ($response == false){
+                    $message = 'But something went wrong on s3 while deleting';
+                }else{
+                    $message = '';
+                }
             } catch (S3Exception $e) {
                 echo $e->getMessage() . "\n";
             }
@@ -169,7 +178,7 @@ class AdminBroadcastController extends Controller
             return back()->withError($e->getMessage())->withInput();
         }
 
-        return back()->with('flash_message', 'Broadcast Deleted Successfully ');
+        return back()->with('flash_message', 'Broadcast Deleted Successfully. '.$message);
     }
 
 
