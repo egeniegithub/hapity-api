@@ -125,8 +125,8 @@ class AdminBroadcastController extends Controller
                     }
                 }
             }
-            //Broadcast::find($broadcast_id)->delete();
-            //ReportBroadcast::where('broadcast_id', $broadcast_id)->delete();
+            Broadcast::find($broadcast_id)->delete();
+            ReportBroadcast::where('broadcast_id', $broadcast_id)->delete();
 
             // Send email on delete video start *Aleem Shaukat*
 
