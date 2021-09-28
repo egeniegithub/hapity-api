@@ -190,7 +190,7 @@
             }else{
                 $("#privacy_status_wrapper").css("display","none");
             }
-            
+
             $('#image_upload_loader').hide();
             $('#video_upload_loader').hide();
             $("#update_button").attr("disabled", true);
@@ -285,7 +285,7 @@
 
             const video_uploader = FilePond.create(document.querySelector('#broadcast_video'), {
                 allowFileSizeValidation: true,
-                maxFileSize: '100MB',
+                maxFileSize: '1024MB',
                 acceptedFileTypes: ['video/*'],
                 allowImageExifOrientation: true,
                 allowImageCrop: true,

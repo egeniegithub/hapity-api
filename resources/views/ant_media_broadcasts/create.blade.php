@@ -2,8 +2,11 @@
 @section('content')
     <div class="container">
         <div class="row">
+            <h3 class="mt-2">Remaining Time
+                <time id="countdown">90:00</time>
+            </h3>
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                <h1 class="broadcast-heading">Lets Create Something Awesome<br /><small>A New Broadcast</small></h1>
+                <h1 class="broadcast-heading">Lets Create Something Awesome<br/><small>A New Broadcast</small></h1>
             </div>
         </div>
         <div class="row">
@@ -11,39 +14,39 @@
                 <div class="panel panel-default panel-success" style="border-color: #97be0d;">
                     <div class="panel-body">
 
-                            <div class="broadcast-overlay"><span>Click Start Publishing</span></div>
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                                    <div class="embed-responsive embed-responsive-16by9">
-                                        <video id="localVideo" autoplay="autoplay" muted="muted" controls="controls" playsinline=""></video>
-                                    </div>
+                        <div class="broadcast-overlay"><span>Click Start Publishing</span></div>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                                <div class="embed-responsive embed-responsive-16by9">
+                                    <video id="localVideo" autoplay="autoplay" muted="muted" controls="controls"
+                                           playsinline=""></video>
                                 </div>
                             </div>
-
-
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-
         <div class="row" id="form_container">
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-md-offset-3 col-lg-offset-3">
                 <form id="broadcast_form" enctype="multipart/form-data" method="POST">
                     {{ csrf_field() }}
-                    <input type="hidden" value="start_broadcast" id="perform_action" name="perform_action" />
-                    <input type="hidden" value="" id="stream_name" name="stream_name" />
-                    <input type="hidden" value="" id="broadcast_id" name="broadcast_id" />
-                    <input type="hidden" value="" id="broadcast_image_name" name="broadcast_image_name"  />
+                    <input type="hidden" value="start_broadcast" id="perform_action" name="perform_action"/>
+                    <input type="hidden" value="" id="stream_name" name="stream_name"/>
+                    <input type="hidden" value="" id="broadcast_id" name="broadcast_id"/>
+                    <input type="hidden" value="" id="broadcast_image_name" name="broadcast_image_name"/>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <p style="color:red">For best broadcasting experience please use our mobile applications. Broadcast can be interrupted using web browser due to multiple factors</p>
+                            <p style="color:red">For best broadcasting experience please use our mobile applications.
+                                Broadcast can be interrupted using web browser due to multiple factors</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                <input data-rule-required="true" class="form-control" type="text" value="" id="broadcast_title" name="broadcast_title" placeholder="Title" maxlength="100"/>
+                                <input data-rule-required="true" class="form-control" type="text" value=""
+                                       id="broadcast_title" name="broadcast_title" placeholder="Title" maxlength="100"/>
                                 <small>Max 100 characters allowed</small>
                             </div>
                         </div>
@@ -51,7 +54,8 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                <textarea class="form-control" id="broadcast_description" name="broadcast_description" placeholder="Description" maxlength="5000"></textarea>
+                                <textarea class="form-control" id="broadcast_description" name="broadcast_description"
+                                          placeholder="Description" maxlength="5000"></textarea>
                                 <small>Max 5000 characters allowed</small>
                             </div>
                         </div>
@@ -59,7 +63,8 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="form-group">
-                                <input type="file" value="" id="broadcast_image" name="broadcast_image" placeholder="Please select broadcast image" />
+                                <input type="file" value="" id="broadcast_image" name="broadcast_image"
+                                       placeholder="Please select broadcast image"/>
                             </div>
                         </div>
                     </div>
@@ -68,7 +73,8 @@
                             @if(Auth::user()->hasPlugin(Auth::user()->id))
                                 <div class="form-group label-cstm">
                                     <div class="styled-input-single">
-                                        <input type="checkbox" name="post_plugin" id="embed" value="false" onclick="$(this).val(this.checked ? 'true' : 'false')" />
+                                        <input type="checkbox" name="post_plugin" id="embed" value="false"
+                                               onclick="$(this).val(this.checked ? 'true' : 'false')"/>
                                         <label for="embed">Embed into website</label>
                                     </div>
                                 </div>
@@ -76,35 +82,40 @@
                         </div>
                     </div>
                     @if(!empty(Auth::user()->profile->youtube_auth_info) && !empty(json_decode(Auth::user()->profile->youtube_auth_info)->refresh_token))
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group label-cstm">
-                                <div class="styled-input-single">
-                                    <input type="checkbox" name="stream_to_youtube" id="stream_to_youtube" value="yes"/>
-                                    <label for="stream_to_youtube">Stream to YouTube</label>
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group label-cstm">
+                                    <div class="styled-input-single">
+                                        <input type="checkbox" name="stream_to_youtube" id="stream_to_youtube"
+                                               value="yes"/>
+                                        <label for="stream_to_youtube">Stream to YouTube</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group" id="privacy_status_wrapper" style="display:none">
+                                    <label for="stream_to_youtube">YouTube Privacy Status</label>
+                                    <select name="privacy_status" id="privacy_status" class="form-control">
+                                        <option value="public">Public</option>
+                                        <option value="private">Private</option>
+                                        <option value="unlisted">Unlisted</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="form-group" id="privacy_status_wrapper" style="display:none">
-                                <label for="stream_to_youtube">YouTube Privacy Status</label>
-                                <select name="privacy_status" id="privacy_status" class="form-control">
-                                    <option value="public">Public</option>
-                                    <option value="private">Private</option>
-                                    <option value="unlisted">Unlisted</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
                     @endif
                 </form>
             </div>
         </div>
-        <hr />
+        <hr/>
         <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                <button type="button" onclick="startPublishing()" class="btn btn-lg btn-success" id="start_publish_button">Start Publishing</button>
-                <button type="button" onclick="stopPublishing()" class="btn btn-lg btn-success" id="stop_publish_button" disabled="disabled">Stop Publishing</button>
+                <button type="button" onclick="startPublishing()" class="btn btn-lg btn-success"
+                        id="start_publish_button">Start Publishing
+                </button>
+                <button type="button" onclick="stopPublishing()" class="btn btn-lg btn-success" id="stop_publish_button"
+                        disabled="disabled">Stop Publishing
+                </button>
             </div>
         </div>
         <div class="row">
@@ -112,18 +123,20 @@
                 <span class="label label-success" id="broadcastingInfo" style="font-size: 14px; display: none;">Publishing</span>
             </div>
         </div>
-        
-        <br />
-        <br />
-        <br />
+
+        <br/>
+        <br/>
+        <br/>
     </div>
 @endsection
 
 @push('css')
     <link href="https://unpkg.com/filepond/dist/filepond.css" rel="stylesheet">
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+          rel="stylesheet">
     <link href="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css" rel="stylesheet">
-    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css" rel="stylesheet">
+    <link href="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css"
+          rel="stylesheet">
 
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard.min.css') }}" rel="stylesheet">
     <link href="{{ asset('assets/smart-wizard/css/smart_wizard_theme_circles.min.css') }}" rel="stylesheet">
@@ -132,12 +145,15 @@
 @endpush
 
 @push('script')
-    <script src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
+    <script
+        src="https://unpkg.com/filepond-plugin-image-exif-orientation/dist/filepond-plugin-image-exif-orientation.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-preview/dist/filepond-plugin-image-preview.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-crop/dist/filepond-plugin-image-crop.js"></script>
     <script src="https://unpkg.com/filepond-plugin-image-edit/dist/filepond-plugin-image-edit.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
-    <script src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
+    <script
+        src="https://unpkg.com/filepond-plugin-file-validate-size/dist/filepond-plugin-file-validate-size.js"></script>
+    <script
+        src="https://unpkg.com/filepond-plugin-file-validate-type/dist/filepond-plugin-file-validate-type.js"></script>
 
     <script src="https://unpkg.com/filepond/dist/filepond.js"></script>
 
@@ -147,19 +163,19 @@
     <script src="{{ asset('assets/webrtc/adapter-latest.js') }}"></script>
     <script src="{{ asset('assets/webrtc/webrtc_adaptor.js') }}"></script>
     <script>
-        $(document).ready(function(){
+        $(document).ready(function () {
 
-            $("#stream_to_youtube").change(function(){
-                if($(this).is(":checked")){
-                    $("#privacy_status_wrapper").css("display","block");
-                }else{
-                    $("#privacy_status_wrapper").css("display","none");
+            $("#stream_to_youtube").change(function () {
+                if ($(this).is(":checked")) {
+                    $("#privacy_status_wrapper").css("display", "block");
+                } else {
+                    $("#privacy_status_wrapper").css("display", "none");
                 }
             });
-            if($("#stream_to_youtube").is(":checked")){
-                $("#privacy_status_wrapper").css("display","block");
-            }else{
-                $("#privacy_status_wrapper").css("display","none");
+            if ($("#stream_to_youtube").is(":checked")) {
+                $("#privacy_status_wrapper").css("display", "block");
+            } else {
+                $("#privacy_status_wrapper").css("display", "none");
             }
 
             FilePond.registerPlugin(FilePondPluginImagePreview);
@@ -203,10 +219,6 @@
         });
 
 
-
-
-
-
         var token = "null";
         var current_camera_status = '';
         var start_publish_button = document.getElementById("start_publish_button");
@@ -218,6 +230,10 @@
         var streamNameBox = document.getElementById("stream_name");
 
         var streamId;
+
+        // time limit for stream
+        var seconds = 5400;
+        var countdownTimer = 0;
 
         function getUrlParameter(sParam) {
             var sPageURL = decodeURIComponent(window.location.search.substring(1)),
@@ -235,17 +251,16 @@
         };
 
 
-
         function startPublishing() {
-            if(current_camera_status == 'NotAllowedError'){
+            if (current_camera_status == 'NotAllowedError') {
                 alert('Permissions have not been granted to use your camera and microphone, Please refresh the page and grant permissions to start the stream');
                 return 0;
             }
-            if(current_camera_status == 'AbortError'){
+            if (current_camera_status == 'AbortError') {
                 alert('Your antivirus is blocking the access of camera and microphone, Please allow camera and microphone access from your antivirus and refresh the page');
                 return 0;
             }
-            if(current_camera_status == 'NotReadableError'){
+            if (current_camera_status == 'NotReadableError') {
                 alert('Some other application/browser is using your camera. Please close that application and refresh the page to start the stream');
                 return 0;
             }
@@ -253,21 +268,22 @@
                 alert('Camera or Mic are not found or not allowed in your device');
                 return 0;
             }
-            if(current_camera_status == "OverconstrainedError" || current_camera_status == "ConstraintNotSatisfiedError") {
+            if (current_camera_status == "OverconstrainedError" || current_camera_status == "ConstraintNotSatisfiedError") {
                 alert('There is no device found that fits your video and audio constraints. You may change video and audio constraints');
                 return 0;
             }
             var ts = Math.round((new Date()).getTime() / 1000);
             var name = 'stream_' + ts;
+            var countdownTimer = setInterval('secondPassed()', 1000);
             $('#stream_name').val(name);
 
             $('#broadcast_form').validate();
 
-            if($('#broadcast_form').valid()) {
+            if ($('#broadcast_form').valid()) {
                 $('.broadcast-overlay').hide();
 
                 var form_data = $('#broadcast_form').serialize();
-                form_data += "&meta_info=" + checkbrowser()+"&error_log="+JSON.stringify(current_camera_status);
+                form_data += "&meta_info=" + checkbrowser() + "&error_log=" + JSON.stringify(current_camera_status);
                 var my_request;
                 my_request = $.ajax({
                     url: "{{ route('broadcasts.ajax') }}",
@@ -275,15 +291,15 @@
                     data: form_data
                 });
 
-                my_request.done(function(response) {
-                    res =  response.status ?  response : JSON.parse(response);
+                my_request.done(function (response) {
+                    res = response.status ? response : JSON.parse(response);
 
-                    if(res.status == 'success'){
+                    if (res.status == 'success') {
                         $('#form_container').hide();
                         $('#broadcast_id').val(res.broadcast_id);
                         webRTCAdaptor.publish(name, token);
-                        if($('#stream_to_youtube:checked').length > 0){
-                           my_req =  $.ajax({
+                        if ($('#stream_to_youtube:checked').length > 0) {
+                            my_req = $.ajax({
                                 url: "{{ route('broadcasts.ajax') }}",
                                 method: 'POST',
                                 data: {
@@ -293,26 +309,43 @@
                                     'privacy_status': $("#privacy_status").val(),
                                 }
                             });
-                            my_req.done(function(response) {
-                                res2 =  response.status ?  response : JSON.parse(response);
-                                if(res2.status == "success")
+                            my_req.done(function (response) {
+                                res2 = response.status ? response : JSON.parse(response);
+                                if (res2.status == "success")
                                     alertify.success(res2.msg);
                                 else
                                     alertify.warning(res2.msg);
                             });
                         }
-
+                        secondPassed();
                     }
                 });
 
-                my_request.error(function(){
+                my_request.error(function () {
                     alertify.error('Something went wrong!');
                 });
 
-                my_request.always(function(){
+                my_request.always(function () {
 
                 });
 
+            }
+        }
+
+        function secondPassed() {
+            var minutes = Math.round((seconds - 30) / 60),
+                remainingSeconds = seconds % 60;
+
+            if (remainingSeconds < 10) {
+                remainingSeconds = "0" + remainingSeconds;
+            }
+
+            $('#countdown').html(minutes + ":" + remainingSeconds);
+            if (seconds == 0) {
+                clearInterval(countdownTimer);
+                stopPublishing();
+            } else {
+                seconds--;
             }
         }
 
@@ -333,11 +366,11 @@
                 }
             });
 
-            my_request.done(function(){
+            my_request.done(function () {
                 window.location = "{{ route('broadcasts.index') }}";
             });
 
-            my_request.always(function(){
+            my_request.always(function () {
 
             });
         }
@@ -345,8 +378,7 @@
         function enableDesktopCapture(enable) {
             if (enable == true) {
                 webRTCAdaptor.switchDesktopCapture($('#stream_name').val());
-            }
-            else {
+            } else {
                 webRTCAdaptor.switchVideoCapture($('#stream_name').val());
             }
         }
@@ -354,30 +386,30 @@
         function startAnimation() {
 
             $("#broadcastingInfo").fadeIn(800, function () {
-              $("#broadcastingInfo").fadeOut(800, function () {
-                var state = webRTCAdaptor.signallingState($('#stream_name').val());
-                if (state != null && state != "closed") {
-                    var iceState = webRTCAdaptor.iceConnectionState($('#stream_name').val());
-                    if (iceState != null && iceState != "failed" && iceState != "disconnected") {
-                          startAnimation();
+                $("#broadcastingInfo").fadeOut(800, function () {
+                    var state = webRTCAdaptor.signallingState($('#stream_name').val());
+                    if (state != null && state != "closed") {
+                        var iceState = webRTCAdaptor.iceConnectionState($('#stream_name').val());
+                        if (iceState != null && iceState != "failed" && iceState != "disconnected") {
+                            startAnimation();
+                        }
                     }
-                }
-              });
+                });
             });
 
-          }
+        }
 
         var pc_config = null;
 
         var sdpConstraints = {
-            OfferToReceiveAudio : false,
-            OfferToReceiveVideo : false
+            OfferToReceiveAudio: false,
+            OfferToReceiveVideo: false
 
         };
 
         var mediaConstraints = {
-            video : true,
-            audio : true
+            video: true,
+            audio: true
         };
 
         var host = "{{ ANTMEDIA_HOST }}";
@@ -386,8 +418,8 @@
 
         //var appName = location.pathname.substring(0, location.pathname.lastIndexOf("/")+1);
         //var path =  location.hostname + ":" + location.port + appName + "websocket";
-        var path =  `${host}:${port}/{{ WEBRTC_APP }}/websocket`;
-        var websocketURL =  "wss://" + path;
+        var path = `${host}:${port}/{{ WEBRTC_APP }}/websocket`;
+        var websocketURL = "wss://" + path;
 
         if (location.protocol.startsWith("https")) {
             websocketURL = "wss://" + path;
@@ -395,13 +427,13 @@
 
 
         var webRTCAdaptor = new WebRTCAdaptor({
-            websocket_url : websocketURL,
-            mediaConstraints : mediaConstraints,
-            peerconnection_config : pc_config,
-            sdp_constraints : sdpConstraints,
-            localVideoId : "localVideo",
-            debug:true,
-            callback : function(info, obj) {
+            websocket_url: websocketURL,
+            mediaConstraints: mediaConstraints,
+            peerconnection_config: pc_config,
+            sdp_constraints: sdpConstraints,
+            localVideoId: "localVideo",
+            debug: true,
+            callback: function (info, obj) {
                 if (info == "initialized") {
                     console.log("initialized");
                     start_publish_button.disabled = false;
@@ -417,38 +449,32 @@
                     console.log("publish finished");
                     start_publish_button.disabled = false;
                     stop_publish_button.disabled = true;
-                }
-                else if (info == "screen_share_extension_available") {
+                } else if (info == "screen_share_extension_available") {
                     screen_share_checkbox.disabled = false;
                     console.log("screen share extension available");
                     install_extension_link.style.display = "none";
-                }
-                else if (info == "screen_share_stopped") {
+                } else if (info == "screen_share_stopped") {
                     console.log("screen share stopped");
-                }
-                else if (info == "closed") {
+                } else if (info == "closed") {
                     //console.log("Connection closed");
                     if (typeof obj != "undefined") {
                         console.log("Connecton closed: " + JSON.stringify(obj));
                     }
-                }
-                else if (info == "pong") {
+                } else if (info == "pong") {
                     //ping/pong message are sent to and received from server to make the connection alive all the time
                     //It's especially useful when load balancer or firewalls close the websocket connection due to inactivity
-                }
-                else if (info == "refreshConnection") {
+                } else if (info == "refreshConnection") {
                     startPublishing();
-                }
-                else if (info == "updated_stats") {
+                } else if (info == "updated_stats") {
                     //obj is the PeerStats which has fields
-                     //averageOutgoingBitrate - kbits/sec
+                    //averageOutgoingBitrate - kbits/sec
                     //currentOutgoingBitrate - kbits/sec
                     console.log("Average outgoing bitrate " + obj.averageOutgoingBitrate + " kbits/sec"
-                            + " Current outgoing bitrate: " + obj.currentOutgoingBitrate + " kbits/sec");
+                        + " Current outgoing bitrate: " + obj.currentOutgoingBitrate + " kbits/sec");
 
                 }
             },
-            callbackError : function(error, message) {
+            callbackError: function (error, message) {
                 //some of the possible errors, NotFoundError, SecurityError,PermissionDeniedError
                 current_camera_status = error;
                 var errorMessage = JSON.stringify(error);
@@ -458,19 +484,15 @@
                 var errorMessage = JSON.stringify(error);
                 if (error.indexOf("NotFoundError") != -1) {
                     errorMessage = "Camera or Mic are not found or not allowed in your device";
-                }
-                else if (error.indexOf("NotReadableError") != -1 || error.indexOf("TrackStartError") != -1) {
+                } else if (error.indexOf("NotReadableError") != -1 || error.indexOf("TrackStartError") != -1) {
                     errorMessage = "Camera or Mic is being used by some other process that does not let read the devices";
-                }
-                else if(error.indexOf("OverconstrainedError") != -1 || error.indexOf("ConstraintNotSatisfiedError") != -1) {
+                } else if (error.indexOf("OverconstrainedError") != -1 || error.indexOf("ConstraintNotSatisfiedError") != -1) {
                     errorMessage = "There is no device found that fits your video and audio constraints. You may change video and audio constraints"
-                }
-                else if (error.indexOf("NotAllowedError") != -1 || error.indexOf("PermissionDeniedError") != -1) {
+                } else if (error.indexOf("NotAllowedError") != -1 || error.indexOf("PermissionDeniedError") != -1) {
                     errorMessage = "You are not allowed to access camera and mic.";
-                }
-                else if (error.indexOf("TypeError") != -1) {
+                } else if (error.indexOf("TypeError") != -1) {
                     errorMessage = "Video/Audio is required";
-                }else if(error.indexOf("WebSocketNotConnected ") != -1){
+                } else if (error.indexOf("WebSocketNotConnected ") != -1) {
                     errorMessage = "WebSocketNotConnected";
                 }
                 my_request = $.ajax({
@@ -488,48 +510,49 @@
 
             }
         });
+
         function checkbrowser() {
-                var navUserAgent = navigator.userAgent;
-                var browserName  = navigator.appName;
-                var browserVersion  = ''+parseFloat(navigator.appVersion);
-                var majorVersion = parseInt(navigator.appVersion,10);
-                var tempNameOffset,tempVersionOffset,tempVersion;
+            var navUserAgent = navigator.userAgent;
+            var browserName = navigator.appName;
+            var browserVersion = '' + parseFloat(navigator.appVersion);
+            var majorVersion = parseInt(navigator.appVersion, 10);
+            var tempNameOffset, tempVersionOffset, tempVersion;
 
 
-                if ((tempVersionOffset=navUserAgent.indexOf("Opera"))!=-1) {
+            if ((tempVersionOffset = navUserAgent.indexOf("Opera")) != -1) {
                 browserName = "Opera";
-                browserVersion = navUserAgent.substring(tempVersionOffset+6);
-                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1)
-                browserVersion = navUserAgent.substring(tempVersionOffset+8);
-                } else if ((tempVersionOffset=navUserAgent.indexOf("MSIE"))!=-1) {
+                browserVersion = navUserAgent.substring(tempVersionOffset + 6);
+                if ((tempVersionOffset = navUserAgent.indexOf("Version")) != -1)
+                    browserVersion = navUserAgent.substring(tempVersionOffset + 8);
+            } else if ((tempVersionOffset = navUserAgent.indexOf("MSIE")) != -1) {
                 browserName = "Microsoft Internet Explorer";
-                browserVersion = navUserAgent.substring(tempVersionOffset+5);
-                } else if ((tempVersionOffset=navUserAgent.indexOf("Chrome"))!=-1) {
+                browserVersion = navUserAgent.substring(tempVersionOffset + 5);
+            } else if ((tempVersionOffset = navUserAgent.indexOf("Chrome")) != -1) {
                 browserName = "Chrome";
-                browserVersion = navUserAgent.substring(tempVersionOffset+7);
-                } else if ((tempVersionOffset=navUserAgent.indexOf("Safari"))!=-1) {
+                browserVersion = navUserAgent.substring(tempVersionOffset + 7);
+            } else if ((tempVersionOffset = navUserAgent.indexOf("Safari")) != -1) {
                 browserName = "Safari";
-                browserVersion = navUserAgent.substring(tempVersionOffset+7);
-                if ((tempVersionOffset=navUserAgent.indexOf("Version"))!=-1)
-                browserVersion = navUserAgent.substring(tempVersionOffset+8);
-                } else if ((tempVersionOffset=navUserAgent.indexOf("Firefox"))!=-1) {
+                browserVersion = navUserAgent.substring(tempVersionOffset + 7);
+                if ((tempVersionOffset = navUserAgent.indexOf("Version")) != -1)
+                    browserVersion = navUserAgent.substring(tempVersionOffset + 8);
+            } else if ((tempVersionOffset = navUserAgent.indexOf("Firefox")) != -1) {
                 browserName = "Firefox";
-                browserVersion = navUserAgent.substring(tempVersionOffset+8);
-                } else if ( (tempNameOffset=navUserAgent.lastIndexOf(' ')+1) < (tempVersionOffset=navUserAgent.lastIndexOf('/')) ) {
-                browserName = navUserAgent.substring(tempNameOffset,tempVersionOffset);
-                browserVersion = navUserAgent.substring(tempVersionOffset+1);
-                if (browserName.toLowerCase()==browserName.toUpperCase()) {
-                browserName = navigator.appName;
+                browserVersion = navUserAgent.substring(tempVersionOffset + 8);
+            } else if ((tempNameOffset = navUserAgent.lastIndexOf(' ') + 1) < (tempVersionOffset = navUserAgent.lastIndexOf('/'))) {
+                browserName = navUserAgent.substring(tempNameOffset, tempVersionOffset);
+                browserVersion = navUserAgent.substring(tempVersionOffset + 1);
+                if (browserName.toLowerCase() == browserName.toUpperCase()) {
+                    browserName = navigator.appName;
                 }
-                }
-
-                // trim version
-                if ((tempVersion=browserVersion.indexOf(";"))!=-1)
-                browserVersion=browserVersion.substring(0,tempVersion);
-                if ((tempVersion=browserVersion.indexOf(" "))!=-1)
-                browserVersion=browserVersion.substring(0,tempVersion);
-                return browserName+" "+browserVersion;
-
             }
+
+            // trim version
+            if ((tempVersion = browserVersion.indexOf(";")) != -1)
+                browserVersion = browserVersion.substring(0, tempVersion);
+            if ((tempVersion = browserVersion.indexOf(" ")) != -1)
+                browserVersion = browserVersion.substring(0, tempVersion);
+            return browserName + " " + browserVersion;
+
+        }
     </script>
 @endpush
