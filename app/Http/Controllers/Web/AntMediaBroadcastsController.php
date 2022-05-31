@@ -17,6 +17,98 @@ use Intervention\Image\Facades\Image;
 
 class AntMediaBroadcastsController extends Controller
 {
+    public function testTime()
+    {
+        // url test-time
+
+        //echo date("Y-m-d H:i:s", substr("1625229514294", 0, 10));
+
+        $stream_id = 'stream_000000000';
+        $broadcast_title = 'broadcast_000000000';
+
+        $client = new Client();
+        $url = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/create";
+        $client = new Client([
+            'headers' => [ 'Content-Type' => 'application/json' ]
+        ]);
+        $stdClass = new \stdClass();
+        $stdClass->name = $broadcast_title;
+        $stdClass->streamId = $stream_id;
+        $response = $client->post($url,
+            [
+                'body' => json_encode($stdClass),
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ]
+            ]);
+
+        $decoded_response = json_decode($response->getBody());
+        dd($decoded_response);
+
+        $client = new Client();
+        $url = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/list/0/50";
+        $client = new Client([
+            'headers' => [ 'Content-Type' => 'application/json' ]
+        ]);
+        $response = $client->get($url,
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ]
+            ]);
+
+        $decoded_response = json_decode($response->getBody());
+        dd($decoded_response);
+        /*echo "<pre>";
+        print_r($decoded_response);
+        die();*/
+    }
+
+    public function testDelete()
+    {
+        // url test-delete
+
+        $url = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/list/0/50";
+        $client = new Client([
+            'headers' => [ 'Content-Type' => 'application/json' ]
+        ]);
+        $response = $client->get($url,
+            [
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ]
+            ]);
+
+        $decoded_response = json_decode($response->getBody());
+
+        if (!empty($decoded_response)){
+            foreach ($decoded_response as $key => $value){
+                if($value->status == 'broadcasting'){
+
+                    $start_time = date("Y-m-d H:i:s", substr($value->startTime, 0, 10));
+                    $current_time = date("Y-m-d H:i:s");
+                    $total_time = strtotime($current_time) - strtotime($start_time);
+
+                    echo "<br>";
+                    echo 'total time elapsed '.$total_time;
+
+                    if ($total_time >= 20){
+                        $url = ANT_MEDIA_SERVER_STAGING_URL.WEBRTC_APP."/rest/v2/broadcasts/".$value->streamId;
+                        $response1 = $client->request('Delete',$url);
+                        $decoded_response1 = json_decode($response1->getBody());
+                        dd($decoded_response1);
+                    }
+                }else{
+                    echo "<br>";
+                    echo $key.' not broadcasting';
+                }
+            }
+            die();
+        }else{
+            echo "no stream";
+        }
+    }
+
     public function index(Request $request)
     {
         $view_data = [];
@@ -24,7 +116,7 @@ class AntMediaBroadcastsController extends Controller
         $user = User::with(['profile', 'plugins'])->where('id', Auth::id())->first()->toArray();
         $view_data['user'] = $user;
 
-        $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->orderBy('id', 'DESC')->get();
+        $broadcasts = Broadcast::with(['user'])->where('user_id', Auth::user()->id)->where('is_deleted', 0)->orderBy('id', 'DESC')->get();
 
         foreach ($broadcasts as $key => $broadcast) {
             if($broadcast->is_antmedia){

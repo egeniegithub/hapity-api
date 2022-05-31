@@ -51,6 +51,8 @@ Route::group([
 ], function ($router) {
     Route::get('/dashboard', 'Web\DashboardController@index')->name('user.dashboard');
 
+    Route::get('test-time', 'Web\AntMediaBroadcastsController@testTime')->name('testTime');
+    Route::get('test-delete', 'Web\AntMediaBroadcastsController@testDelete')->name('testDelete');
     Route::get('settings', 'Web\SettingController@settings')->name('settings');
     Route::post('user/save_setting', 'Web\SettingController@save_settings')->name('settgins.save');
     Route::get('check_username', 'Web\SettingController@check_username')->name('check_username');
