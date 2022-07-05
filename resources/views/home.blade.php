@@ -99,19 +99,6 @@
                                     </a>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                    <a href="{{ route('broadcasts.list_obs_keys') }}" class="btn btn-block btn-lg">
-                                        <div class="panel panel-success">
-                                            <div class="panel-body text-center" style="padding: 60px; color: #97be0d">
-                                                <i class="fa fa-fw fa-5x fa-key"></i>
-                                                <h3>OBS Stream Keys<br><small>Create OBS Broadcast Keys</small></h3>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <a href="{{ route('settings') }}" class="btn btn-block btn-lg">
                                         <div class="panel panel-success">
                                             <div class="panel-body text-center" style="padding: 60px; color: #97be0d">
@@ -121,6 +108,18 @@
                                         </div>
                                     </a>
                                 </div>
+                            </div>
+                            <div class="row">
+                                {{--<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                                    <a href="{{ route('broadcasts.list_obs_keys') }}" class="btn btn-block btn-lg">
+                                        <div class="panel panel-success">
+                                            <div class="panel-body text-center" style="padding: 60px; color: #97be0d">
+                                                <i class="fa fa-fw fa-5x fa-key"></i>
+                                                <h3>OBS Stream Keys<br><small>Create OBS Broadcast Keys</small></h3>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>--}}
                                 <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                                     <a href="{{ route('resetpassword') }}" class="btn btn-block btn-lg">
                                         <div class="panel panel-success">

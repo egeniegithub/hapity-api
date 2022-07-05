@@ -200,8 +200,10 @@ class AntMediaBroadcastsController extends Controller
                 $broadcast_type = "Browser";
                 if(!empty($request->input('broadcast_type'))){
                     $broadcast->broadcast_type = $request->input('broadcast_type');
-                    if($request->input('broadcast_type') == "OBS")
+                    if($request->input('broadcast_type') == "OBS"){
+                        return redirect()->back()->with('message_error', 'Sorry! Due to abuse of system we are temporarily disabling OBS feature');
                         $broadcast_type = "OBS";
+                    }
 
                     if($request->input('stream_to_youtube') == "yes"){
                         $client = new Client();
@@ -467,20 +469,20 @@ class AntMediaBroadcastsController extends Controller
 
     public function createOBSKey(Request $request)
     {
-        $view_data = [];
-
-        return view('ant_media_broadcasts.create_obs_broadcast', $view_data);
+        return redirect()->back()->with('message_error', 'Sorry! Due to abuse of system we are temporarily disabling OBS feature');
+        /*$view_data = [];
+        return view('ant_media_broadcasts.create_obs_broadcast', $view_data);*/
     }
     public function listOBSKeys(Request $request)
     {
-        $broadcasts = Broadcast::with(['user'])
+        return redirect()->back()->with('message_error', 'Sorry! Due to abuse of system we are temporarily disabling OBS feature');
+        /*$broadcasts = Broadcast::with(['user'])
             ->where('user_id', Auth::user()->id)
             ->where('broadcast_type', "OBS")
             ->where('status', "online")
             ->orderBy('id', 'DESC')
             ->paginate(20);
-
-        return view('ant_media_broadcasts.list_obs_keys', ['broadcasts' => $broadcasts]);
+        return view('ant_media_broadcasts.list_obs_keys', ['broadcasts' => $broadcasts]);*/
     }
 
     private function createBroadcastOnYoutube($broadcast){
