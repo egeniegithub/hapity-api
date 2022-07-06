@@ -35,6 +35,10 @@ class ContactusController extends Controller
                         ->withInput($request->all());
         }
 
+        if ($request->check == 'on'){
+            return back()->with('flash_message','Email Send Successfully ');
+        }
+
         $email = $request->email;
 
         $data = array(
@@ -45,8 +49,7 @@ class ContactusController extends Controller
         Mail::send('emails/contactus', ['data' => $data], function ($message) use ($email) {
             $message->to(CONTACTUS_SEND_TO_EMAIL, $email)->subject('Contact Us');
         });
-        return back()->with('flash_message','Email Send Successfully ');
-        return "Your email has been sent successfully";
+        return back()->with('flash_message','Email sent Successfully ');
     }
 
 }
