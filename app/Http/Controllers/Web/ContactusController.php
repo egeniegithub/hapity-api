@@ -65,6 +65,7 @@ class ContactusController extends Controller
             ->groupBy('email')
             ->orderBy('b.timestamp', 'Desc')
             ->pluck('email')->toArray();
+        dd($users);
         Mail::send('emails/shut_down_notification', ['data' => 'Registration closed'], function ($message) {
             $message->to('shakoorha@gmail.com')->subject('Important! Shutdown Notification');
         });
