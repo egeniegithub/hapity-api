@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -52,4 +53,18 @@ class ContactusController extends Controller
         return back()->with('flash_message','Email sent Successfully ');
     }
 
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function shutDownNotification()
+    {
+        //$users = User::pluck('email')->toArray();
+        Mail::send('emails/shut_down_notification', ['data' => 'registration closed'], function ($message) {
+            $message->to(['shakoorha@gmail.com', 'ashakoor646@gmail.com'])->subject('Contact Us');
+        });
+        /*Mail::send('emails/shut_down_notification', ['data' => 'registration closed'], function ($message) use ($users) {
+            $message->to($users)->subject('Contact Us');
+        });*/
+        return back()->with('flash_message','Email sent Successfully ');
+    }
 }

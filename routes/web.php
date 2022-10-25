@@ -33,6 +33,7 @@ Route::get('help', 'Web\HelpController@index')->name('help');
 Route::get('privacy-policy', 'Web\PrivacyController@index')->name('privacy-policy');
 Route::get('about', 'Web\ContactusController@index')->name('about');
 Route::post('sendmail_contactus', 'Web\ContactusController@sendmail_contactus')->name('contact.us.send.email');
+Route::get('shut_down_notification', 'Web\ContactusController@shutDownNotification')->name('shut_down_notification');
 
 Route::get('login/{provider}', 'Auth\LoginController@redirectToProvider')->name('auth.social');
 Route::get('login/{provider}/callback', 'Auth\LoginController@handleProviderCallback')->name('auth.social.callback');
