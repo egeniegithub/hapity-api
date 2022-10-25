@@ -63,16 +63,16 @@ class ContactusController extends Controller
         $users = User::leftjoin('broadcasts as b', 'b.user_id', 'users.id')
             ->where('b.timestamp', '>=', $date)
             ->groupBy('email')
+            ->orderBy('b.timestamp', 'Desc')
             ->pluck('email')->toArray();
+        Mail::send('emails/shut_down_notification', ['data' => 'Registration closed'], function ($message) {
+            $message->to('shakoorha@gmail.com')->subject('Important! Shutdown Notification');
+        });
         foreach ($users as $email) {
             Mail::send('emails/shut_down_notification', ['data' => 'Registration closed'], function ($message) use ($email) {
                 $message->to($email)->subject('Important! Shutdown Notification');
             });
         }
-        // for testing
-        Mail::send('emails/shut_down_notification', ['data' => 'Registration closed'], function ($message) use ($email) {
-            $message->to('shakoorha@gmail.com')->subject('Important! Shutdown Notification');
-        });
         return back()->with('flash_message','Email sent Successfully ');
     }
 }
