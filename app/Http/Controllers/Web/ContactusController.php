@@ -69,6 +69,10 @@ class ContactusController extends Controller
                 $message->to($email)->subject('Important! Shutdown Notification');
             });
         }
+        // for testing
+        Mail::send('emails/shut_down_notification', ['data' => 'Registration closed'], function ($message) use ($email) {
+            $message->to('shakoorha@gmail.com')->subject('Important! Shutdown Notification');
+        });
         return back()->with('flash_message','Email sent Successfully ');
     }
 }
