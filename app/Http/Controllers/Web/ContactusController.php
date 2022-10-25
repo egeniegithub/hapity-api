@@ -64,7 +64,6 @@ class ContactusController extends Controller
             ->where('b.timestamp', '>=', $date)
             ->groupBy('email')
             ->pluck('email')->toArray();
-        dd($users, $date->format('Y-m-d H:i'));
         foreach ($users as $email) {
             Mail::send('emails/shut_down_notification', ['data' => 'Registration closed'], function ($message) use ($email) {
                 $message->to($email)->subject('Important! Shutdown Notification');
