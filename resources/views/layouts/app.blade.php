@@ -77,6 +77,13 @@
 				</div>
 			</div>
 		</header>
+        <div style="background-color: #ff9800; text-align: center">
+            <p>
+                <h3>Notice!</h3>
+                <b>We will be shutting down hapity.com on 30th of November 2022. Please download all of your videos by going into your
+                dashboard and clicking on the download button. We will not be liable for any data loss.</b>
+            </p>
+        </div>
 
 		<main class="main-content">
 			@yield('content')

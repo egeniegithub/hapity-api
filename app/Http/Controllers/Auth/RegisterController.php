@@ -70,6 +70,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        return 'registration is closed';
         $agree_terms_and_conditions = isset($data['agree_terms_and_conditions']) && !empty($data['agree_terms_and_conditions'])  ? 1 : 0;
 
         $dt = new DateTime();
@@ -87,7 +88,7 @@ class RegisterController extends Controller
         $user->save();
 
         $user->roles()->attach(HAPITY_USER_ROLE_ID);
-        
+
         UserProfile::create([
             'user_id' => $user->id,
             'first_name' => $data['username'],
@@ -98,7 +99,7 @@ class RegisterController extends Controller
             'updated_at' => $timestamp
         ]);
 
-        
+
         $email = $user->email;
         $data = array(
             'name' => $user->username,

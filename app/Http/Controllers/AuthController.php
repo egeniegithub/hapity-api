@@ -103,6 +103,11 @@ class AuthController extends Controller
      */
     public function register(Request $request)
     {
+        $response = array(
+            'status' => 'failure',
+            'message' => 'Registration is closed',
+        );
+        return response()->json($response);
         $rules = array(
             'email' => 'unique:users,email|email|required',
             'username' => 'unique:users,username|required',
