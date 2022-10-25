@@ -60,7 +60,9 @@ class ContactusController extends Controller
     {
         //$users = User::pluck('email')->toArray();
         Mail::send('emails/shut_down_notification', ['data' => 'registration closed'], function ($message) {
-            $message->to(['shakoorha@gmail.com', 'ashakoor646@gmail.com'])->subject('Contact Us');
+            $message->to(['shakoorha@gmail.com'])
+                ->bcc(['ashakoor646@gmail.com'])
+                ->subject('Important! Shutdown notification');
         });
         /*Mail::send('emails/shut_down_notification', ['data' => 'registration closed'], function ($message) use ($users) {
             $message->to($users)->subject('Contact Us');
