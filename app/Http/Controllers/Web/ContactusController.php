@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -58,8 +59,12 @@ class ContactusController extends Controller
      */
     public function shutDownNotification()
     {
-        $users = User::pluck('email')->toArray();
-        dd($users);
+        $date = Carbon::now()->subYears(2);
+        $users = User::leftjoin('broadcasts as b', 'b.user_id', 'users.id')
+            ->where('b.timestamp', '>=', $date)
+            ->groupBy('email')
+            ->pluck('email')->toArray();
+        dd($users, $date->format('Y-m-d H:i'));
         foreach ($users as $email) {
             Mail::send('emails/shut_down_notification', ['data' => 'Registration closed'], function ($message) use ($email) {
                 $message->to($email)->subject('Important! Shutdown Notification');
